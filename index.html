@@ -2,12 +2,13 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>A FANTÁSTICA FÁBRICA DE CHOCOLATE</title>
   
   <!-- SDKs do Firebase (Versão Compatível via CDN) -->
   <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-database-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-analytics-compat.js"></script>
 
   <style>
     /* ===================================================
@@ -49,7 +50,8 @@
       flex-direction: column;
       align-items: center;
       min-height: 100vh;
-      padding: 25px 15px;
+      padding: 20px 12px;
+      overflow-x: hidden;
     }
 
     .app-container {
@@ -59,8 +61,10 @@
       border-radius: 18px;
       box-shadow: 0 12px 35px rgba(74, 44, 42, 0.15);
       border: 1px solid var(--border-color);
-      padding: 28px;
+      padding: 24px 20px;
       position: relative;
+      box-sizing: border-box;
+      word-wrap: break-word;
     }
 
     header {
@@ -263,6 +267,8 @@
       border-radius: 12px;
       border: 1px solid var(--border-color);
       margin-bottom: 24px;
+      box-sizing: border-box;
+      max-width: 100%;
     }
 
     .form-section h3 {
@@ -326,6 +332,7 @@
       background: #ffffff;
       color: var(--text-main);
       outline: none;
+      max-width: 100%;
     }
 
     input:disabled, select:disabled {
@@ -349,6 +356,7 @@
       padding: 8px 12px;
       border-radius: 8px;
       border: 1px solid var(--border-color);
+      flex-wrap: wrap;
     }
 
     /* CARD DE PRODUTO / CONTEÚDO */
@@ -358,6 +366,8 @@
       border-radius: 12px;
       padding: 16px;
       margin-bottom: 16px;
+      box-sizing: border-box;
+      max-width: 100%;
     }
 
     /* BOX DE ANÁLISE DE MARGEM / TERMÔMETRO DE PREÇO */
@@ -367,6 +377,8 @@
       border-radius: 12px;
       padding: 16px;
       margin-top: 14px;
+      box-sizing: border-box;
+      max-width: 100%;
     }
 
     .margin-analysis-title {
@@ -387,6 +399,7 @@
       font-size: 0.88rem;
       margin-top: 6px;
       line-height: 1.4;
+      word-break: break-word;
     }
 
     .badge-danger { background: var(--danger-bg); color: var(--danger-text); border: 1px solid #ef9a9a; }
@@ -442,6 +455,8 @@
       padding: 20px;
       margin-bottom: 18px;
       box-shadow: 0 4px 12px rgba(74, 44, 42, 0.06);
+      box-sizing: border-box;
+      max-width: 100%;
     }
 
     .perfil-header {
@@ -451,6 +466,8 @@
       border-bottom: 2px solid var(--border-color);
       padding-bottom: 12px;
       margin-bottom: 14px;
+      flex-wrap: wrap;
+      gap: 10px;
     }
 
     .perfil-title {
@@ -478,11 +495,13 @@
       margin-bottom: 6px;
     }
 
-    /* Tabelas */
+    /* Tabelas e Responsividade */
     .table-wrapper {
       overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
       border-radius: 10px;
       border: 1px solid var(--border-color);
+      max-width: 100%;
     }
 
     table {
@@ -490,6 +509,7 @@
       border-collapse: collapse;
       text-align: left;
       font-size: 0.88rem;
+      min-width: 500px;
     }
 
     th {
@@ -497,6 +517,7 @@
       color: #ffffff;
       padding: 12px 14px;
       font-weight: 600;
+      white-space: nowrap;
     }
 
     td {
@@ -526,6 +547,7 @@
       font-size: 0.75rem;
       font-weight: 700;
       text-transform: uppercase;
+      white-space: nowrap;
     }
 
     .badge-pago { background: var(--success-bg); color: var(--success-text); }
@@ -539,6 +561,7 @@
       padding: 4px 8px;
       border-radius: 4px;
       font-weight: 600;
+      white-space: nowrap;
     }
 
     .btn-edit { color: var(--choc-milk); }
@@ -560,11 +583,14 @@
     }
 
     .log-item {
-      padding: 8px 12px;
+      padding: 10px 12px;
       border-bottom: 1px solid var(--border-color);
       font-size: 0.85rem;
       display: flex;
       justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
     }
 
     footer {
@@ -591,6 +617,100 @@
     .btn-clear-footer:hover {
       background: var(--choc-milk);
       color: #ffffff;
+    }
+
+    /* ===================================================
+       AJUSTES DE RESPONSIVIDADE PARA SMARTPHONES (CELULAR)
+       =================================================== */
+    @media (max-width: 640px) {
+      body {
+        padding: 10px 6px;
+      }
+
+      .app-container {
+        padding: 16px 12px;
+        border-radius: 14px;
+      }
+
+      header h1 {
+        font-size: 1.5rem;
+        letter-spacing: 1px;
+      }
+
+      .user-select-bar {
+        width: 100%;
+        justify-content: center;
+        margin-bottom: 14px;
+      }
+
+      .dashboard-3 {
+        grid-template-columns: 1fr;
+        gap: 10px;
+      }
+
+      .dash-card {
+        padding: 12px 14px;
+      }
+
+      .dash-value {
+        font-size: 1.3rem;
+      }
+
+      .hero-card .dash-value {
+        font-size: 1.6rem;
+      }
+
+      .tabs-nav {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 6px;
+        border-bottom: none;
+      }
+
+      .tab-btn {
+        padding: 10px 8px;
+        font-size: 0.85rem;
+        border-radius: 8px;
+        text-align: center;
+        background: var(--card-sub-bg);
+        border: 1px solid var(--border-color);
+      }
+
+      .tab-btn.active {
+        background: var(--choc-dark);
+        color: #ffffff;
+      }
+
+      .form-section {
+        padding: 14px 12px;
+      }
+
+      .form-grid {
+        grid-template-columns: 1fr;
+        gap: 10px;
+      }
+
+      .fornecedor-perfil-card {
+        padding: 14px 12px;
+      }
+
+      .perfil-header {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .perfil-badge-total {
+        font-size: 0.82rem;
+        padding: 4px 10px;
+      }
+
+      table {
+        font-size: 0.8rem;
+      }
+
+      th, td {
+        padding: 8px 10px;
+      }
     }
   </style>
 </head>
@@ -773,7 +893,7 @@
           </div>
 
           <div class="calc-info" id="pedido-calc-preview">
-            Cálculo estimado: R\$ 0,00
+            Cálculo estimado: R$ 0,00
           </div>
 
           <button type="submit" class="btn-submit" id="btn-pedido-submit">Salvar Pedido</button>
@@ -980,27 +1100,30 @@
 
   <script>
     /* ---------------------------------------------------
-       1. CONFIGURAÇÃO DO FIREBASE (SUBSTITUA AQUI SEU PROJETO)
+       1. CONFIGURAÇÃO DO FIREBASE COM SUAS CHAVE REAIS
        --------------------------------------------------- */
-     const firebaseConfig = {
-    apiKey: "AIzaSyDpQE3OCdrAhWNWe4n06F4YkvG-yZFyffE",
-    authDomain: "fabricadechocolate-7a294.firebaseapp.com",
-    projectId: "fabricadechocolate-7a294",
-    storageBucket: "fabricadechocolate-7a294.firebasestorage.app",
-    messagingSenderId: "136719887706",
-    appId: "1:136719887706:web:d8394a0963bdfb769b1763",
-    measurementId: "G-9L28X6JJR0"
-  };
+    const firebaseConfig = {
+      apiKey: "AIzaSyDpQE3OCdrAhWNWe4n06F4YkvG-yZFyffE",
+      authDomain: "fabricadechocolate-7a294.firebaseapp.com",
+      projectId: "fabricadechocolate-7a294",
+      storageBucket: "fabricadechocolate-7a294.firebasestorage.app",
+      messagingSenderId: "136719887706",
+      appId: "1:136719887706:web:d8394a0963bdfb769b1763",
+      measurementId: "G-9L28X6JJR0",
+      databaseURL: "https://fabricadechocolate-7a294-default-rtdb.firebaseio.com"
+    };
 
     let useFirebase = false;
 
     try {
-      if (typeof firebase !== 'undefined' && firebaseConfig.apiKey !== "SUA_API_KEY_AQUI") {
+      if (typeof firebase !== 'undefined') {
         firebase.initializeApp(firebaseConfig);
+        if (firebase.analytics) firebase.analytics();
         useFirebase = true;
+        console.log("🔥 Firebase conectado com sucesso à Fábrica de Chocolate!");
       }
     } catch (e) {
-      console.log("Firebase não configurado ainda. Usando modo LocalStorage.");
+      console.log("Firebase não disponível ou offline. Operando em modo LocalStorage.", e);
     }
 
     const STORAGE_KEY = 'fabrica_v16_data';
@@ -1407,7 +1530,7 @@
       const qtdTotal = qtdPrincipal + qtdDependentes;
 
       if (!prodId || qtdTotal <= 0) {
-        previewEl.innerText = 'Cálculo estimado: R\$ 0,00';
+        previewEl.innerText = 'Cálculo estimado: R$ 0,00';
         return;
       }
 
@@ -1456,7 +1579,7 @@
         const tr = document.createElement('tr');
         tr.className = 'order-row-clickable';
         tr.innerHTML = `
-          <td><strong>${ped.cliente || 'Sem Nome'}</strong> ${numDeps > 0 ? `<small style="color:var(--choc-milk);">(+\${numDeps} dep.)</small>` : ''}</td>
+          <td><strong>${ped.cliente || 'Sem Nome'}</strong> ${numDeps > 0 ? `<small style="color:var(--choc-milk);">(+${numDeps} dep.)</small>` : ''}</td>
           <td>${prodNome}</td>
           <td><strong>${qtdTotal} g/un</strong></td>
           <td>${formatarMoeda(custoTotalPedido)}</td>
@@ -1494,7 +1617,7 @@
               <p><strong>Pedido Principal:</strong> ${ped.cliente || 'Cliente'} (${ped.qtdPrincipal || 0} g/un)</p>
               <div style="margin:6px 0;"><strong>Rateio / Dependentes:</strong> ${dependentesHtml}</div>
               <div style="margin:6px 0;">${envioHtml}</div>
-              ${ped.observacoes ? `<p style="margin-top:4px;"><strong>Obs:</strong> \${ped.observacoes}</p>` : ''}
+              ${ped.observacoes ? `<p style="margin-top:4px;"><strong>Obs:</strong> ${ped.observacoes}</p>` : ''}
             </div>
           </td>
         `;
@@ -1596,7 +1719,7 @@
       document.getElementById('form-pedido').reset();
       document.getElementById('pedido-id').value = '';
       document.getElementById('dependentes-list').innerHTML = '';
-      document.getElementById('pedido-calc-preview').innerText = 'Cálculo estimado: R\$ 0,00';
+      document.getElementById('pedido-calc-preview').innerText = 'Cálculo estimado: R$ 0,00';
       document.getElementById('pedido-envio').value = 'Retirada';
       alternarCamposEnvio();
 
@@ -1765,7 +1888,7 @@
 
           if (prodsF.length === 0) {
             htmlProdutosList = '<em>Nenhum produto cadastrado.</em>';
-            htmlDetalhamentoPedidos = '<p style="color:var(--text-muted); font-style:italic;">Sem produtos ou pedidos lançados.</p>';
+            htmlDetalhamentoPedidos = '<p style="color:var(--text-muted); font-style:italic; padding:10px;">Sem produtos ou pedidos lançados.</p>';
           } else {
             htmlProdutosList = '<ul style="list-style:none; display:flex; flex-direction:column; gap:6px;">' + prodsF.map(p => {
               let metasTxt = '';
@@ -1781,14 +1904,16 @@
               const subtotalProduto = volumeTotal * custoUnit;
               custoProdutosAteAgora += subtotalProduto;
 
-              let metaInfo = metaAtingida ? ` <span style="color:var(--success-text); font-weight:700;">(🟢 Desconto ≥${metaAtingida.qtdMin}g)</span>` : '';
+              let metaInfo = metaAtingida ? ` <span style="color:var(--success-text); font-weight:700;">(🟢 Desc. ≥${metaAtingida.qtdMin}g)</span>` : '';
+              let volumeTxt = volumeTotal > 0 ? `<strong>${volumeTotal} g/un</strong>` : `<span style="color:var(--text-muted); font-style:italic;">⏳ Sem vendas</span>`;
+              let subtotalTxt = volumeTotal > 0 ? `<strong>${formatarMoeda(subtotalProduto)}</strong>` : `<span style="color:var(--text-muted); font-style:italic;">R$ 0,00</span>`;
 
               detalheItems.push(`
                 <tr style="font-size:0.85rem;">
                   <td><strong>${p.nome}</strong></td>
-                  <td><strong>${volumeTotal} g/un</strong></td>
+                  <td>${volumeTxt}</td>
                   <td>${formatarMoeda(custoUnit)}/g ${metaInfo}</td>
-                  <td><strong>${formatarMoeda(subtotalProduto)}</strong></td>
+                  <td>${subtotalTxt}</td>
                 </tr>
               `);
             });
@@ -1908,7 +2033,7 @@
 
       if (!prodId) {
         fornInput.value = '';
-        custoInput.value = 'R\$ 0,00';
+        custoInput.value = 'R$ 0,00';
         infoMetaLbl.innerText = '🔒 Escolha um produto acima.';
         document.getElementById('produto-id').value = '';
         document.getElementById('produto-venda').value = '';
@@ -1971,9 +2096,9 @@
       const badgeContainer = document.getElementById('sim-badge-container');
 
       if (!prodId) {
-        simCustoEl.innerText = 'R\$ 0,00/g';
-        simVendaEl.innerText = 'R\$ 0,00/g';
-        simLucroEl.innerText = 'R\$ 0,00';
+        simCustoEl.innerText = 'R$ 0,00/g';
+        simVendaEl.innerText = 'R$ 0,00/g';
+        simLucroEl.innerText = 'R$ 0,00';
         badgeContainer.innerHTML = '<div class="margin-badge badge-warning">💡 Selecione um produto e informe o preço para analisar a margem.</div>';
         return;
       }
@@ -2131,7 +2256,7 @@
       document.getElementById('produto-id').value = '';
       document.getElementById('produto-select').value = '';
       document.getElementById('produto-fornecedor-nome').value = '';
-      document.getElementById('produto-custo-efetivo-display').value = 'R\$ 0,00';
+      document.getElementById('produto-custo-efetivo-display').value = 'R$ 0,00';
       document.getElementById('faixas-preco-list').innerHTML = '';
 
       document.getElementById('form-produto-title').innerText = '🏷️ Precificação de Produtos';
@@ -2170,8 +2295,39 @@
           let custoTotalProdsFornecedor = 0;
 
           if (prodsFornec.length === 0) {
-            htmlProds = '<p style="color:var(--text-muted); font-style:italic;">Nenhum produto cadastrado para este fornecedor.</p>';
+            htmlProds = '<p style="color:var(--text-muted); font-style:italic; padding:10px;">Nenhum produto cadastrado para este fornecedor.</p>';
           } else {
+            const linhasProds = prodsFornec.map(p => {
+              const { custoUnit, metaAtingida, volumeTotal } = obterCustoEfetivoProduto(p.id);
+              const subtotal = volumeTotal * custoUnit;
+
+              totalGramaFornecedor += volumeTotal;
+              custoTotalProdsFornecedor += subtotal;
+
+              let statusMeta = '— Base Standard';
+              if (metaAtingida) {
+                statusMeta = `<span style="color:var(--success-text); font-weight:700;">🟢 Desconto ≥${metaAtingida.qtdMin}g</span>`;
+              }
+
+              let volumeFormatado = volumeTotal > 0 
+                ? `<strong>${volumeTotal} g/un</strong>` 
+                : `<span style="color:var(--text-muted); font-style:italic;">⏳ Sem vendas</span>`;
+
+              let subtotalFormatado = volumeTotal > 0 
+                ? `<strong>${formatarMoeda(subtotal)}</strong>` 
+                : `<span style="color:var(--text-muted); font-style:italic;">R$ 0,00</span>`;
+
+              return `
+                <tr>
+                  <td><strong>${p.nome}</strong></td>
+                  <td>${volumeFormatado}</td>
+                  <td>${formatarMoeda(custoUnit)}/g</td>
+                  <td>${statusMeta}</td>
+                  <td>${subtotalFormatado}</td>
+                </tr>
+              `;
+            }).join('');
+
             htmlProds = `
               <div class="table-wrapper" style="margin-top:8px;">
                 <table>
@@ -2185,51 +2341,30 @@
                     </tr>
                   </thead>
                   <tbody>
-                    ${prodsFornec.map(p => {
-                      const { custoUnit, metaAtingida, volumeTotal } = obterCustoEfetivoProduto(p.id);
-                      const subtotal = volumeTotal * custoUnit;
-
-                      totalGramaFornecedor += volumeTotal;
-                      custoTotalProdsFornecedor += subtotal;
-
-                      let statusMeta = '— Base Standard';
-                      if (metaAtingida) {
-                        statusMeta = `<span style="color:var(--success-text); font-weight:700;">🟢 Desconto ≥\${metaAtingida.qtdMin}g</span>`;
-                      }
-
-                      return `
-                        <tr>
-                          <td><strong>\${p.nome}</strong></td>
-                          <td><strong>\${volumeTotal} g/un</strong></td>
-                          <td>\${formatarMoeda(custoUnit)}/g</td>
-                          <td>\${statusMeta}</td>
-                          <td><strong>\${formatarMoeda(subtotal)}</strong></td>
-                        </tr>
-                      `;
-                    }).join('')}
+                    ${linhasProds}
                   </tbody>
                 </table>
               </div>
             `;
           }
 
-          const totalFinalFornecedor = custoTotalProdsFornecedor + parseFloat(f.frete);
+          const totalFinalFornecedor = custoTotalProdsFornecedor + parseFloat(f.frete || 0);
 
           const card = document.createElement('div');
           card.className = 'form-section';
           card.style.background = '#ffffff';
           card.innerHTML = `
-            <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:2px solid var(--border-color); padding-bottom:8px;">
+            <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:2px solid var(--border-color); padding-bottom:8px; flex-wrap:wrap; gap:8px;">
               <h4 style="color:var(--choc-dark); font-size:1.1rem;">📦 Fornecedor: ${f.nome}</h4>
-              <span style="background:var(--choc-dark); color:#fff; padding:4px 12px; border-radius:20px; font-weight:700;">
+              <span style="background:var(--choc-dark); color:#fff; padding:4px 12px; border-radius:20px; font-weight:700; font-size:0.9rem;">
                 Total a Pagar: ${formatarMoeda(totalFinalFornecedor)}
               </span>
             </div>
             <div style="margin-top:10px;">
               ${htmlProds}
-              <div style="display:flex; justify-content:space-between; margin-top:10px; font-weight:600; font-size:0.9rem; background:var(--card-sub-bg); padding:10px; border-radius:8px;">
-                <span>Saída do Fornecedor: <strong>${totalGramaFornecedor} g/un</strong></span>
-                <span>Produtos: ${formatarMoeda(custoTotalProdsFornecedor)} + Frete: ${formatarMoeda(f.frete)}</span>
+              <div style="display:flex; justify-content:space-between; margin-top:10px; font-weight:600; font-size:0.88rem; background:var(--card-sub-bg); padding:10px; border-radius:8px; flex-wrap:wrap; gap:8px;">
+                <span>Saída Total do Fornecedor: <strong>${totalGramaFornecedor} g/un</strong></span>
+                <span>Produtos: ${formatarMoeda(custoTotalProdsFornecedor)} + Frete: ${formatarMoeda(f.frete || 0)}</span>
               </div>
             </div>
           `;
@@ -2243,7 +2378,7 @@
       containerLogs.innerHTML = '';
 
       if (!appData.logs || appData.logs.length === 0) {
-        containerLogs.innerHTML = '<div style="padding:10px; text-align:center; color:var(--text-muted); font-style:italic;">Nenhuma alteração registrada ainda.</div>';
+        containerLogs.innerHTML = '<div style="padding:12px; text-align:center; color:var(--text-muted); font-style:italic;">Nenhuma alteração registrada ainda. Os registros de Ramom e Monique aparecerão aqui.</div>';
       } else {
         appData.logs.forEach(log => {
           containerLogs.innerHTML += `
