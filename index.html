@@ -1,42 +1,51 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <!-- Favicon / Ícone da Página -->
-  <link rel="icon" href="fcicon.ico?v=2" type="image/x-icon">
-  <link rel="shortcut icon" href="fcicon.ico?v=2">
-
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>A FANTÁSTICA FÁBRICA DE CHOCOLATE</title>
   
+  <!-- Favicon / Ícone da Página -->
+  <link rel="icon" href="fcicon.ico?v=2" type="image/x-icon">
+  <link rel="shortcut icon" href="fcicon.ico?v=2">
+
   <!-- SDKs do Firebase (Versão Compatível via CDN) -->
   <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-database-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-analytics-compat.js"></script>
 
+  <!-- Biblioteca html2pdf para geração de PDF dos Relatórios -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+
   <style>
     /* ===================================================
-       PALETA DE CORES E IDENTIDADE VISUAL (Cacau & Flat)
+       PALETA DE CORES TONS PASTÉIS (Harmonizada com final_fabrica.png)
        =================================================== */
     :root {
-      --bg-cream: #f5ebe6;         /* Fundo Creme Suave */
-      --card-bg: #ffffff;          /* Fundo dos Containers */
-      --card-sub-bg: #faf4f0;      /* Fundo de Destaques/Forms */
-      --choc-dark: #4a2c2a;        /* Chocolate Amargo (Cor Principal) */
-      --choc-milk: #7c594c;        /* Chocolate ao Leite (Destaques) */
-      --choc-accent: #8c5a4a;      /* Tom de Ação e Botões Secundários */
-      --border-color: #e0d0c7;     /* Bordas Suaves */
-      --text-main: #332221;
-      --text-muted: #66524e;
-      --success-bg: #e8f5e9;
-      --success-text: #2e7d32;
-      --warning-bg: #fff8e1;
-      --warning-text: #b78103;
-      --danger-bg: #ffebee;
-      --danger-text: #c62828;
-      --info-bg: #e3f2fd;
-      --info-text: #1565c0;
-      --muted-btn-bg: #eddcd3;
+      --bg-cream: #f4eee5;            /* Pergaminho Pastel Suave (Fundo da Logo) */
+      --card-bg: #ffffff;             /* Fundo dos Cards e Containers */
+      --card-sub-bg: #f9f5ef;         /* Creme Pastel para Destaques/Forms */
+      --choc-dark: #4a2c1d;           /* Chocolate Amargo Elegante (Texto Principal) */
+      --choc-milk: #7a5338;           /* Chocolate ao Leite (Subtítulos e Destaques) */
+      --choc-accent: #8c6239;         /* Tom Cacau/Aço Terracota para Ações */
+      --border-color: #e2d5c3;        /* Borda Suave Pastel */
+      --text-main: #332219;           /* Texto Escuro */
+      --text-muted: #6e594b;          /* Texto Atenuado */
+      
+      /* Tons de Erva / Folhas Pastel (Extraídos da Logo) */
+      --herb-green: #4d683a;          /* Verde Erva Pastel */
+      --herb-green-light: #eaf0e6;    /* Fundo Verde Pastel Suave */
+
+      /* Badges e Status com tons mais pastéis e suaves */
+      --success-bg: #eaf0e6;
+      --success-text: #3b572a;
+      --warning-bg: #fdf6e7;
+      --warning-text: #946817;
+      --danger-bg: #fcebe9;
+      --danger-text: #ad2c20;
+      --info-bg: #ebf3f9;
+      --info-text: #1e537d;
+      --muted-btn-bg: #e8dcd0;
     }
 
     * {
@@ -48,7 +57,7 @@
 
     body {
       background-color: var(--bg-cream);
-      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120' viewBox='0 0 120 120'%3E%3Cg fill='%237c594c' fill-opacity='0.06'%3E%3Cpath d='M15 15h30v25H15zM48 15h30v25H48zM15 43h30v25H15zM48 43h30v25H48z'/%3E%3C/g%3E%3Cg fill='%23487e49' fill-opacity='0.05'%3E%3Cpath d='M95 70c-10 0-18 8-18 18 0 2.5.5 5 1.5 7.2L75 99l3.8-1c2.2 1 4.7 1.5 7.2 1.5 10 0 18-8 18-18s-8-12-9-12.5c-1-5-5-9-10-9z'/%3E%3C/g%3E%3C/svg%3E");
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120' viewBox='0 0 120 120'%3E%3Cg fill='%237a5338' fill-opacity='0.04'%3E%3Cpath d='M15 15h30v25H15zM48 15h30v25H48zM15 43h30v25H15zM48 43h30v25H48z'/%3E%3C/g%3E%3Cg fill='%234d683a' fill-opacity='0.04'%3E%3Cpath d='M95 70c-10 0-18 8-18 18 0 2.5.5 5 1.5 7.2L75 99l3.8-1c2.2 1 4.7 1.5 7.2 1.5 10 0 18-8 18-18s-8-12-9-12.5c-1-5-5-9-10-9z'/%3E%3C/g%3E%3C/svg%3E");
       color: var(--text-main);
       display: flex;
       flex-direction: column;
@@ -63,7 +72,7 @@
       max-width: 980px;
       background: var(--card-bg);
       border-radius: 18px;
-      box-shadow: 0 12px 35px rgba(74, 44, 42, 0.15);
+      box-shadow: 0 12px 35px rgba(74, 44, 42, 0.12);
       border: 1px solid var(--border-color);
       padding: 24px 20px;
       position: relative;
@@ -71,34 +80,30 @@
       word-wrap: break-word;
     }
 
-    
-    /* Estilo do Logo do Cabeçalho Responsivo */
+    header {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    /* Container e Imagem Responsiva da Logo */
     .header-logo-container {
       width: 100%;
-      max-width: 680px;
-      margin: 0 auto 15px auto;
-      text-align: center;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-bottom: 12px;
     }
 
     .header-logo-img {
       width: 100%;
-      height: auto;
-      max-height: 280px;
+      max-width: 924px;              /* Largura exata do card do Lucro Líquido */
+      height: auto !important;       /* Mantém a proporção sem achatar */
+      display: block;
+      margin: 0 auto;
+      border-radius: 14px;
+      box-shadow: 0 4px 15px rgba(74, 44, 42, 0.10);
+      border: 1px solid var(--border-color);
       object-fit: contain;
-      border-radius: 16px;
-      box-shadow: 0 8px 25px rgba(74, 44, 42, 0.25);
-      border: 2px solid var(--border-color);
-      background: #2b1816;
-      transition: transform 0.3s ease;
-    }
-
-    .header-logo-img:hover {
-      transform: scale(1.01);
-    }
-
-    header {
-      text-align: center;
-      margin-bottom: 20px;
     }
 
     .user-select-bar {
@@ -106,32 +111,13 @@
       justify-content: flex-end;
       align-items: center;
       gap: 8px;
-      margin-bottom: 12px;
+      margin-bottom: 14px;
       background: var(--card-sub-bg);
       padding: 8px 14px;
       border-radius: 20px;
       border: 1px solid var(--border-color);
       width: fit-content;
       margin-left: auto;
-    }
-
-    .brand-tag {
-      font-style: italic;
-      font-size: 0.95rem;
-      color: var(--choc-milk);
-      letter-spacing: 1px;
-      display: block;
-      margin-bottom: 2px;
-      text-transform: lowercase;
-    }
-
-    header h1 {
-      font-family: 'Georgia', 'Cambria', serif;
-      font-size: 2.2rem;
-      color: var(--choc-dark);
-      font-weight: 700;
-      letter-spacing: 2px;
-      text-transform: uppercase;
     }
 
     /* 3 DISPLAYS DASHBOARD */
@@ -159,7 +145,7 @@
 
     .dash-card.hero-card {
       grid-column: 1 / -1;
-      background: #f4eae4;
+      background: #f6efe7;
       border-color: var(--choc-milk);
       text-align: center;
     }
@@ -211,7 +197,7 @@
       padding: 14px 18px;
       text-align: center;
       margin-bottom: 24px;
-      box-shadow: 0 4px 12px rgba(74, 44, 42, 0.06);
+      box-shadow: 0 4px 12px rgba(74, 44, 42, 0.05);
     }
 
     .rateio-tag {
@@ -296,8 +282,6 @@
       border-radius: 12px;
       border: 1px solid var(--border-color);
       margin-bottom: 24px;
-      box-sizing: border-box;
-      max-width: 100%;
     }
 
     .form-section h3 {
@@ -338,7 +322,7 @@
 
     .input-prefix-group .prefix {
       padding: 10px 12px;
-      background: #eee4de;
+      background: #efe6dc;
       color: var(--choc-dark);
       font-weight: 700;
       font-size: 0.88rem;
@@ -361,18 +345,17 @@
       background: #ffffff;
       color: var(--text-main);
       outline: none;
-      max-width: 100%;
     }
 
     input:disabled, select:disabled {
-      background: #f0e6e0;
-      color: #66524e;
+      background: #f3eae1;
+      color: #6e594b;
       cursor: not-allowed;
     }
 
     input:focus, select:focus, textarea:focus {
       border-color: var(--choc-milk);
-      box-shadow: 0 0 0 3px rgba(124, 89, 76, 0.15);
+      box-shadow: 0 0 0 3px rgba(122, 83, 56, 0.15);
     }
 
     textarea { resize: vertical; min-height: 60px; }
@@ -385,7 +368,6 @@
       padding: 8px 12px;
       border-radius: 8px;
       border: 1px solid var(--border-color);
-      flex-wrap: wrap;
     }
 
     /* CARD DE PRODUTO / CONTEÚDO */
@@ -395,8 +377,6 @@
       border-radius: 12px;
       padding: 16px;
       margin-bottom: 16px;
-      box-sizing: border-box;
-      max-width: 100%;
     }
 
     /* BOX DE ANÁLISE DE MARGEM / TERMÔMETRO DE PREÇO */
@@ -406,8 +386,6 @@
       border-radius: 12px;
       padding: 16px;
       margin-top: 14px;
-      box-sizing: border-box;
-      max-width: 100%;
     }
 
     .margin-analysis-title {
@@ -428,13 +406,12 @@
       font-size: 0.88rem;
       margin-top: 6px;
       line-height: 1.4;
-      word-break: break-word;
     }
 
-    .badge-danger { background: var(--danger-bg); color: var(--danger-text); border: 1px solid #ef9a9a; }
-    .badge-warning { background: var(--warning-bg); color: var(--warning-text); border: 1px solid #ffe082; }
-    .badge-success { background: var(--success-bg); color: var(--success-text); border: 1px solid #a5d6a7; }
-    .badge-info { background: var(--info-bg); color: var(--info-text); border: 1px solid #90caf9; }
+    .badge-danger { background: var(--danger-bg); color: var(--danger-text); border: 1px solid #f5c6cb; }
+    .badge-warning { background: var(--warning-bg); color: var(--warning-text); border: 1px solid #ffeba8; }
+    .badge-success { background: var(--success-bg); color: var(--success-text); border: 1px solid #c3e6cb; }
+    .badge-info { background: var(--info-bg); color: var(--info-text); border: 1px solid #b8daff; }
 
     .btn-secondary {
       background: var(--muted-btn-bg);
@@ -448,7 +425,7 @@
       margin-top: 6px;
     }
 
-    .btn-secondary:hover { background: #e0cecf; }
+    .btn-secondary:hover { background: #dfcfc1; }
 
     .btn-submit {
       background: var(--choc-dark);
@@ -483,45 +460,16 @@
       border-radius: 14px;
       padding: 20px;
       margin-bottom: 18px;
-      box-shadow: 0 4px 12px rgba(74, 44, 42, 0.06);
-      box-sizing: border-box;
-      max-width: 100%;
+      box-shadow: 0 4px 12px rgba(74, 44, 42, 0.05);
     }
 
-    .perfil-
-    /* Estilo do Logo do Cabeçalho Responsivo */
-    .header-logo-container {
-      width: 100%;
-      max-width: 680px;
-      margin: 0 auto 15px auto;
-      text-align: center;
-    }
-
-    .header-logo-img {
-      width: 100%;
-      height: auto;
-      max-height: 280px;
-      object-fit: contain;
-      border-radius: 16px;
-      box-shadow: 0 8px 25px rgba(74, 44, 42, 0.25);
-      border: 2px solid var(--border-color);
-      background: #2b1816;
-      transition: transform 0.3s ease;
-    }
-
-    .header-logo-img:hover {
-      transform: scale(1.01);
-    }
-
-    header {
+    .perfil-header {
       display: flex;
       justify-content: space-between;
       align-items: center;
       border-bottom: 2px solid var(--border-color);
       padding-bottom: 12px;
       margin-bottom: 14px;
-      flex-wrap: wrap;
-      gap: 10px;
     }
 
     .perfil-title {
@@ -549,21 +497,21 @@
       margin-bottom: 6px;
     }
 
-    /* Tabelas e Responsividade */
+    /* Tabelas e Responsividade em Dispositivos Móveis */
     .table-wrapper {
       overflow-x: auto;
       -webkit-overflow-scrolling: touch;
       border-radius: 10px;
       border: 1px solid var(--border-color);
-      max-width: 100%;
+      margin-bottom: 12px;
     }
 
     table {
       width: 100%;
+      min-width: 600px;
       border-collapse: collapse;
       text-align: left;
       font-size: 0.88rem;
-      min-width: 500px;
     }
 
     th {
@@ -571,7 +519,6 @@
       color: #ffffff;
       padding: 12px 14px;
       font-weight: 600;
-      white-space: nowrap;
     }
 
     td {
@@ -586,7 +533,7 @@
     .order-row-clickable { cursor: pointer; }
 
     .order-details-box {
-      background: #faf6f3;
+      background: #faf5ef;
       border-left: 4px solid var(--choc-milk);
       padding: 12px 16px;
       margin: 8px 0;
@@ -601,11 +548,11 @@
       font-size: 0.75rem;
       font-weight: 700;
       text-transform: uppercase;
-      white-space: nowrap;
     }
 
     .badge-pago { background: var(--success-bg); color: var(--success-text); }
     .badge-pendente { background: var(--warning-bg); color: var(--warning-text); }
+    .badge-socio { background: #efe4f5; color: #5b2c6f; border: 1px solid #d3b5e5; }
 
     .btn-action {
       background: none;
@@ -615,7 +562,6 @@
       padding: 4px 8px;
       border-radius: 4px;
       font-weight: 600;
-      white-space: nowrap;
     }
 
     .btn-edit { color: var(--choc-milk); }
@@ -637,15 +583,53 @@
     }
 
     .log-item {
-      padding: 10px 12px;
+      padding: 8px 12px;
       border-bottom: 1px solid var(--border-color);
       font-size: 0.85rem;
       display: flex;
       justify-content: space-between;
-      align-items: center;
-      gap: 8px;
-      flex-wrap: wrap;
     }
+
+    /* QUADROS DE COMPARATIVO DE MÊS NO RELATÓRIO */
+    .report-comparative-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 12px;
+      margin-top: 14px;
+      margin-bottom: 16px;
+    }
+
+    .comp-card {
+      background: #ffffff;
+      border: 1px solid var(--border-color);
+      border-radius: 10px;
+      padding: 12px 14px;
+      text-align: center;
+    }
+
+    .comp-title {
+      font-size: 0.78rem;
+      font-weight: 700;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      margin-bottom: 4px;
+    }
+
+    .comp-val {
+      font-size: 1.2rem;
+      font-weight: 800;
+      color: var(--choc-dark);
+    }
+
+    .comp-diff {
+      font-size: 0.78rem;
+      font-weight: 700;
+      margin-top: 4px;
+    }
+
+    .diff-up { color: var(--success-text); }
+    .diff-down { color: var(--danger-text); }
+    .diff-equal { color: var(--text-muted); }
 
     footer {
       margin-top: 24px;
@@ -657,7 +641,7 @@
     }
 
     .btn-clear-footer {
-      background: #ede4df;
+      background: #eee4dc;
       color: var(--choc-dark);
       border: 1px solid var(--border-color);
       padding: 10px 20px;
@@ -673,123 +657,18 @@
       color: #ffffff;
     }
 
-    /* ===================================================
-       AJUSTES DE RESPONSIVIDADE PARA SMARTPHONES (CELULAR)
-       =================================================== */
-    @media (max-width: 640px) {
-      body {
-        padding: 10px 6px;
-      }
-
-      .app-container {
-        padding: 16px 12px;
-        border-radius: 14px;
-      }
-
-      header h1 {
-        font-size: 1.5rem;
-        letter-spacing: 1px;
-      }
-
-      .user-select-bar {
-        width: 100%;
-        justify-content: center;
-        margin-bottom: 14px;
-      }
-
-      .dashboard-3 {
-        grid-template-columns: 1fr;
-        gap: 10px;
-      }
-
-      .dash-card {
-        padding: 12px 14px;
-      }
-
-      .dash-value {
-        font-size: 1.3rem;
-      }
-
-      .hero-card .dash-value {
-        font-size: 1.6rem;
-      }
-
-      .tabs-nav {
-        display: grid;
-        grid-template-columns: repeat(2, 1fr);
-        gap: 6px;
-        border-bottom: none;
-      }
-
-      .tab-btn {
-        padding: 10px 8px;
-        font-size: 0.85rem;
-        border-radius: 8px;
-        text-align: center;
-        background: var(--card-sub-bg);
-        border: 1px solid var(--border-color);
-      }
-
-      .tab-btn.active {
-        background: var(--choc-dark);
-        color: #ffffff;
-      }
-
-      .form-section {
-        padding: 14px 12px;
-      }
-
-      .form-grid {
-        grid-template-columns: 1fr;
-        gap: 10px;
-      }
-
-      .fornecedor-perfil-card {
-        padding: 14px 12px;
-      }
-
-      .perfil-
-    /* Estilo do Logo do Cabeçalho Responsivo */
-    .header-logo-container {
-      width: 100%;
-      max-width: 680px;
-      margin: 0 auto 15px auto;
-      text-align: center;
-    }
-
-    .header-logo-img {
-      width: 100%;
-      height: auto;
-      max-height: 280px;
-      object-fit: contain;
-      border-radius: 16px;
-      box-shadow: 0 8px 25px rgba(74, 44, 42, 0.25);
-      border: 2px solid var(--border-color);
-      background: #2b1816;
-      transition: transform 0.3s ease;
-    }
-
-    .header-logo-img:hover {
-      transform: scale(1.01);
-    }
-
-    header {
-        flex-direction: column;
-        align-items: flex-start;
-      }
-
-      .perfil-badge-total {
-        font-size: 0.82rem;
-        padding: 4px 10px;
-      }
-
-      table {
-        font-size: 0.8rem;
-      }
-
-      th, td {
-        padding: 8px 10px;
-      }
+    /* REGRAS DE ADAPTAÇÃO PARA CELULAR (RESPONSIVIDADE) */
+    @media (max-width: 768px) {
+      body { padding: 10px 6px; }
+      .app-container { padding: 16px 12px; border-radius: 14px; }
+      .dashboard-3 { grid-template-columns: 1fr; }
+      .form-grid { grid-template-columns: 1fr; }
+      .user-select-bar { width: 100%; justify-content: center; }
+      .tabs-nav { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
+      .tab-btn { width: 100%; text-align: center; border-radius: 8px; padding: 10px 8px; font-size: 0.88rem; }
+      .perfil-header { flex-direction: column; align-items: flex-start; gap: 8px; }
+      .perfil-badge-total { align-self: flex-start; }
+      .header-logo-img { max-height: 140px; }
     }
   </style>
 </head>
@@ -806,9 +685,13 @@
       </select>
     </div>
 
+    <!-- CABEÇALHO COM A LOGO DA FONTE final_fabrica.png -->
     <header>
       <div class="header-logo-container">
-        <img src="logo_fabrica_chocolate_1200x400.png" alt="A Fantástica Fábrica de Chocolate" class="header-logo-img" onerror="this.onerror=null; this.src='Gemini_Generated_Image_dnabx7dnabx7dnab.png';">
+        <img src="final_fabrica.png" 
+             alt="A Fantástica Fábrica de Chocolate" 
+             class="header-logo-img"
+             onerror="this.src='logo_fabrica_chocolate_1200x400.png'">
       </div>
     </header>
 
@@ -899,7 +782,7 @@
       <button class="tab-btn active" onclick="switchTab('pedidos')">🛒 Pedidos</button>
       <button class="tab-btn" onclick="switchTab('fornecedores')">📦 Fornecedores</button>
       <button class="tab-btn" onclick="switchTab('produtos')">🍬 Produtos</button>
-      <button class="tab-btn" onclick="switchTab('relatorio')">📊 Relatório</button>
+      <button class="tab-btn" onclick="switchTab('relatorio')">📊 Relatório & Rateio</button>
     </div>
 
     <!-- ABA 1: PEDIDOS -->
@@ -910,8 +793,29 @@
           <input type="hidden" id="pedido-id">
           
           <div class="form-grid">
+            
+            <!-- SELEÇÃO DE CATEGORIA DO PEDIDO (CLIENTE vs SÓCIO) -->
+            <div class="form-group full-width" style="background:#ffffff; padding:10px 14px; border-radius:10px; border:1px solid var(--border-color);">
+              <label style="font-size:0.9rem; color:var(--choc-dark); font-weight:800; display:block; margin-bottom:4px;">
+                🎯 Categoria / Destino do Pedido:
+              </label>
+              <div style="display:flex; gap:16px; flex-wrap:wrap; margin-top:4px;">
+                <label style="display:flex; align-items:center; gap:6px; font-weight:700; cursor:pointer;">
+                  <input type="radio" name="pedido-categoria-tipo" value="Cliente" checked onchange="alternarTipoCategoriaPedido()">
+                  🛒 Pedido de Cliente (Venda Normal)
+                </label>
+                <label style="display:flex; align-items:center; gap:6px; font-weight:700; color:#5b2c6f; cursor:pointer;">
+                  <input type="radio" name="pedido-categoria-tipo" value="Socio" onchange="alternarTipoCategoriaPedido()">
+                  👑 Consumo Próprio dos Sócios (Ramom / Monique)
+                </label>
+              </div>
+              <small id="help-categoria-pedido" style="display:block; color:var(--text-muted); font-size:0.78rem; margin-top:4px;">
+                Venda comercial com preço faturado para o cliente.
+              </small>
+            </div>
+
             <div class="form-group">
-              <label for="pedido-cliente">Cliente</label>
+              <label for="pedido-cliente" id="lbl-pedido-cliente">Cliente</label>
               <input type="text" id="pedido-cliente" placeholder="Ex: João">
             </div>
 
@@ -943,7 +847,7 @@
             </div>
 
             <div class="form-group">
-              <label for="pedido-envio">Forma de Envio</label>
+              <label for="pedido-envio" onchange="alternarCamposEnvio()">Forma de Envio</label>
               <select id="pedido-envio" onchange="alternarCamposEnvio()">
                 <option value="Retirada">Retirada em Mãos</option>
                 <option value="Entrega por Conta">Entrega por Conta</option>
@@ -985,11 +889,11 @@
         <table>
           <thead>
             <tr>
-              <th>Cliente</th>
+              <th>Cliente / Categoria</th>
               <th>Produto</th>
               <th>Total g/un</th>
-              <th>Custo Est.</th>
-              <th>Valor Total</th>
+              <th>Custo Est. (Forn.)</th>
+              <th>Valor Cobrado</th>
               <th>Envio</th>
               <th>Status</th>
               <th>Ações</th>
@@ -1152,20 +1056,128 @@
       </div>
     </div>
 
-    <!-- ABA 4: RELATÓRIO E HISTÓRICO DE LOGS -->
+    <!-- ABA 4: RELATÓRIO E RATEIO MENSAL DAS SÓCIAS -->
     <div id="tab-relatorio" class="tab-content">
+      
+      <!-- CONTROLES DO GERADOR DE RELATÓRIO DE RATEIO -->
       <div class="form-section">
-        <h3>📊 Relatório por Fornecedor</h3>
-        <p style="font-size:0.88rem; color:var(--text-muted); margin-bottom:12px;">
-          Consolidado com a quantidade total vendida e os valores devidos a cada fornecedor.
-        </p>
+        <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px; margin-bottom:14px;">
+          <div>
+            <h3 style="margin-bottom:2px;">📊 Central de Fechamento & Rateio Mensal</h3>
+            <p style="font-size:0.85rem; color:var(--text-muted);">Consolidação de lucro, despesas, clientes e pagamentos de fornecedores com comparativo de meses.</p>
+          </div>
+          <div style="display:flex; gap:10px; align-items:center; flex-wrap:wrap;">
+            <select id="relatorio-select-mes" style="padding:8px; font-weight:700;">
+              <option value="0">Janeiro</option>
+              <option value="1">Fevereiro</option>
+              <option value="2">Março</option>
+              <option value="3">Abril</option>
+              <option value="4">Maio</option>
+              <option value="5">Junho</option>
+              <option value="6">Julho</option>
+              <option value="7">Agosto</option>
+              <option value="8">Setembro</option>
+              <option value="9">Outubro</option>
+              <option value="10">Novembro</option>
+              <option value="11">Dezembro</option>
+            </select>
+            <input type="number" id="relatorio-select-ano" value="2026" style="width:90px; padding:8px; font-weight:700;">
+            <button class="btn-secondary" style="margin:0;" onclick="gerarRelatorioRateio()">🔄 Gerar / Recalcular Rateio</button>
+          </div>
+        </div>
 
-        <div id="container-relatorio-geral"></div>
+        <div style="display:flex; gap:10px; flex-wrap:wrap; margin-bottom:16px;">
+          <button class="btn-submit" style="margin:0; flex:1;" onclick="salvarRateioNoHistorico()">🔒 Salvar / Fechar Rateio no Histórico</button>
+          <button class="btn-secondary" style="margin:0; background:#e3f2fd; color:#1565c0; border-color:#90caf9;" onclick="baixarRelatorioPDF()">📥 Baixar Relatório em PDF</button>
+        </div>
+
+        <!-- CONSULTA DE HISTÓRICO DE RATEIOS -->
+        <div style="background:#ffffff; padding:10px 14px; border-radius:10px; border:1px solid var(--border-color); display:flex; align-items:center; gap:10px; flex-wrap:wrap;">
+          <span style="font-size:0.85rem; font-weight:700; color:var(--choc-dark);">📂 Consultar Rateios Anteriores Salvos:</span>
+          <select id="select-historico-rateios" style="flex:1; padding:6px;" onchange="carregarRateioSalvoDoHistorico(this.value)">
+            <option value="">Selecione um mês salvo no histórico...</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- ÁREA IMPRESSA DO RELATÓRIO DO MÊS (EXPORTÁVEL EM PDF) -->
+      <div id="area-relatorio-impressao" style="background:#ffffff; padding:20px; border-radius:14px; border:2px solid var(--border-color); margin-bottom:24px;">
+        <div style="text-align:center; border-bottom:2px solid var(--choc-milk); padding-bottom:12px; margin-bottom:16px;">
+          <h2 style="color:var(--choc-dark); font-family:'Georgia', serif; font-size:1.5rem;">A FANTÁSTICA FÁBRICA DE CHOCOLATE</h2>
+          <h3 id="rel-titulo-mes-ano" style="color:var(--choc-milk); font-size:1.1rem; margin-top:4px;">FECHAMENTO & RATEIO - MÊS / ANO</h3>
+          <small style="color:var(--text-muted);" id="rel-data-geracao">Relatório consolidado gerado no sistema</small>
+        </div>
+
+        <!-- 1. QUADROS COMPARATIVOS COM O MÊS ANTERIOR -->
+        <h4 style="color:var(--choc-dark); margin-bottom:8px;">📈 Comparativo com o Mês Anterior</h4>
+        <div class="report-comparative-grid" id="rel-comparativo-container">
+          <div class="comp-card">
+            <div class="comp-title">Faturamento Total</div>
+            <div class="comp-val" id="comp-val-fat">R$ 0,00</div>
+            <div class="comp-diff" id="comp-diff-fat">--</div>
+          </div>
+          <div class="comp-card">
+            <div class="comp-title">Lucro Líquido</div>
+            <div class="comp-val" id="comp-val-lucro">R$ 0,00</div>
+            <div class="comp-diff" id="comp-diff-lucro">--</div>
+          </div>
+          <div class="comp-card">
+            <div class="comp-title">Clientes Atendidos</div>
+            <div class="comp-val" id="comp-val-cli">0</div>
+            <div class="comp-diff" id="comp-diff-cli">--</div>
+          </div>
+          <div class="comp-card">
+            <div class="comp-title">Volume Vendido</div>
+            <div class="comp-val" id="comp-val-vol">0 g/un</div>
+            <div class="comp-diff" id="comp-diff-vol">--</div>
+          </div>
+        </div>
+
+        <!-- 2. RESUMO FINANCEIRO E RATEIO SÓCIOS -->
+        <h4 style="color:var(--choc-dark); margin-top:16px; margin-bottom:8px;">💰 Resumo Financeiro & Divisão do Rateio</h4>
+        <div style="background:var(--card-sub-bg); padding:14px; border-radius:10px; border:1px solid var(--border-color); margin-bottom:18px;">
+          <div style="display:flex; justify-content:space-between; margin-bottom:6px;">
+            <span>(+) Faturamento Total Vendas Clientes:</span>
+            <strong id="rel-val-faturamento-total" style="color:var(--success-text);">R$ 0,00</strong>
+          </div>
+          <div style="display:flex; justify-content:space-between; margin-bottom:6px;">
+            <span>(-) Custos Totais de Fornecedores & Fretes:</span>
+            <strong id="rel-val-custos-fornecedores" style="color:var(--danger-text);">R$ 0,00</strong>
+          </div>
+          <div style="display:flex; justify-content:space-between; margin-bottom:6px;">
+            <span>(-) Custo Consumo Próprio dos Sócios:</span>
+            <strong id="rel-val-custos-socios" style="color:#5b2c6f;">R$ 0,00</strong>
+          </div>
+          <hr style="border:none; border-top:1px solid var(--border-color); margin:8px 0;">
+          <div style="display:flex; justify-content:space-between; font-size:1.1rem; font-weight:800; margin-bottom:10px;">
+            <span>(=) Lucro Líquido a Distribuir:</span>
+            <strong id="rel-val-lucro-liquido" style="color:var(--choc-dark);">R$ 0,00</strong>
+          </div>
+
+          <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; background:#ffffff; padding:10px; border-radius:8px; border:1px solid var(--border-color); text-align:center;">
+            <div>
+              <span style="font-size:0.8rem; color:var(--text-muted);">Parte do Ramom</span>
+              <div id="rel-rateio-ramom" style="font-size:1.1rem; font-weight:800; color:var(--choc-dark);">R$ 0,00</div>
+            </div>
+            <div>
+              <span style="font-size:0.8rem; color:var(--text-muted);">Parte da Monique</span>
+              <div id="rel-rateio-monique" style="font-size:1.1rem; font-weight:800; color:var(--choc-dark);">R$ 0,00</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 3. RELATÓRIO DE CLIENTES DO MÊS -->
+        <h4 style="color:var(--choc-dark); margin-top:16px; margin-bottom:8px;">👥 Clientes e Pedidos do Mês</h4>
+        <div id="rel-tabela-clientes-container"></div>
+
+        <!-- 4. RELATÓRIO DE FORNECEDORES E COMPRAS DO MÊS -->
+        <h4 style="color:var(--choc-dark); margin-top:20px; margin-bottom:8px;">📦 Fornecedores e Pagamentos do Mês</h4>
+        <div id="rel-tabela-fornecedores-container"></div>
       </div>
 
       <!-- HISTÓRICO DE ALTERAÇÕES DOS SÓCIOS -->
       <div class="form-section" style="background:#ffffff; margin-top:20px;">
-        <h3 style="color:var(--choc-dark); font-size:1rem; margin-bottom:10px;">📝 Histórico de Alterações dos Sócios</h3>
+        <h3 style="color:var(--choc-dark); font-size:1rem; margin-bottom:10px;">📝 Log de Alterações dos Sócios</h3>
         <div id="container-logs-historico" style="max-height:250px; overflow-y:auto; border:1px solid var(--border-color); border-radius:8px;"></div>
       </div>
     </div>
@@ -1180,7 +1192,7 @@
 
   <script>
     /* ---------------------------------------------------
-       1. CONFIGURAÇÃO DO FIREBASE COM SUAS CHAVE REAIS
+       1. CONFIGURAÇÃO DO FIREBASE COM SUAS CHAVES REAIS
        --------------------------------------------------- */
     const firebaseConfig = {
       apiKey: "AIzaSyDpQE3OCdrAhWNWe4n06F4YkvG-yZFyffE",
@@ -1200,13 +1212,12 @@
         firebase.initializeApp(firebaseConfig);
         if (firebase.analytics) firebase.analytics();
         useFirebase = true;
-        console.log("🔥 Firebase conectado com sucesso à Fábrica de Chocolate!");
       }
     } catch (e) {
-      console.log("Firebase não disponível ou offline. Operando em modo LocalStorage.", e);
+      console.log("Firebase não conectado. Usando modo LocalStorage.");
     }
 
-    const STORAGE_KEY = 'fabrica_v16_data';
+    const STORAGE_KEY = 'fabrica_v18_data';
 
     function carregarDadosIniciais() {
       const data = localStorage.getItem(STORAGE_KEY);
@@ -1224,6 +1235,7 @@
         ],
         pedidos: [],
         logs: [],
+        historicoRateios: {},
         configLucro: { splitRamom: 50 }
       };
     }
@@ -1285,6 +1297,7 @@
         ],
         pedidos: [],
         logs: [],
+        historicoRateios: {},
         configLucro: { splitRamom: 50 }
       };
       salvarDados("Limpou todos os dados do sistema.");
@@ -1390,7 +1403,12 @@
 
       document.getElementById(`tab-${tabName}`).classList.add('active');
 
-      if (tabName === 'relatorio') renderizarRelatorio();
+      if (tabName === 'relatorio') {
+        const hoje = new Date();
+        document.getElementById('relatorio-select-mes').value = hoje.getMonth();
+        document.getElementById('relatorio-select-ano').value = hoje.getFullYear();
+        gerarRelatorioRateio();
+      }
     }
 
     function toggleDashPanel(panelId) {
@@ -1491,11 +1509,13 @@
             let qtdTotal = (parseFloat(ped.qtdPrincipal) || 0);
             if (ped.dependentes) ped.dependentes.forEach(d => qtdTotal += (parseFloat(d.qtd) || 0));
 
-            const precoVendaUnit = calcularPrecoVendaCliente(prod, qtdTotal);
             const { custoUnit } = obterCustoEfetivoProduto(prod.id);
-
-            faturamento += (qtdTotal * precoVendaUnit);
             custoProdutos += (qtdTotal * custoUnit);
+
+            if (ped.categoriaTipo !== 'Socio') {
+              const precoVendaUnit = calcularPrecoVendaCliente(prod, qtdTotal);
+              faturamento += (qtdTotal * precoVendaUnit);
+            }
           }
         });
       }
@@ -1520,16 +1540,17 @@
             let qtdTotal = (parseFloat(ped.qtdPrincipal) || 0);
             if (ped.dependentes) ped.dependentes.forEach(d => qtdTotal += (parseFloat(d.qtd) || 0));
 
-            const precoVendaUnit = calcularPrecoVendaCliente(prod, qtdTotal);
             const { custoUnit } = obterCustoEfetivoProduto(prod.id);
-
-            const valorPedido = qtdTotal * precoVendaUnit;
-            faturamento += valorPedido;
-
-            if (ped.status === 'Pago') faturamentoPago += valorPedido;
-            else faturamentoPendente += valorPedido;
-
             custoProdutos += (qtdTotal * custoUnit);
+
+            if (ped.categoriaTipo !== 'Socio') {
+              const precoVendaUnit = calcularPrecoVendaCliente(prod, qtdTotal);
+              const valorPedido = qtdTotal * precoVendaUnit;
+              faturamento += valorPedido;
+
+              if (ped.status === 'Pago') faturamentoPago += valorPedido;
+              else faturamentoPendente += valorPedido;
+            }
           }
         });
       }
@@ -1576,8 +1597,29 @@
     }
 
     /* ---------------------------------------------------
-       6. GESTÃO DE PEDIDOS
+       6. GESTÃO DE PEDIDOS & CATEGORIA DOS SÓCIOS
        --------------------------------------------------- */
+    function alternarTipoCategoriaPedido() {
+      const radios = document.getElementsByName('pedido-categoria-tipo');
+      let tipo = 'Cliente';
+      for (let r of radios) { if (r.checked) tipo = r.value; }
+
+      const lblCliente = document.getElementById('lbl-pedido-cliente');
+      const inputCliente = document.getElementById('pedido-cliente');
+      const helpMsg = document.getElementById('help-categoria-pedido');
+
+      if (tipo === 'Socio') {
+        lblCliente.innerText = "Sócio Responsável";
+        inputCliente.placeholder = "Ex: Ramom ou Monique";
+        helpMsg.innerText = "⚠️ Pedido para consumo próprio do sócio. Valor de venda zerado (R$ 0,00). Apenas a saída e o custo do fornecedor são contabilizados.";
+      } else {
+        lblCliente.innerText = "Cliente";
+        inputCliente.placeholder = "Ex: João";
+        helpMsg.innerText = "Venda comercial normal faturada para o cliente.";
+      }
+      atualizarCalculoPedido();
+    }
+
     function alternarCamposEnvio() {
       const tipo = document.getElementById('pedido-envio').value;
       const container = document.getElementById('container-detalhes-entrega');
@@ -1602,6 +1644,10 @@
       const qtdPrincipal = parseFloat(document.getElementById('pedido-qtd-principal').value) || 0;
       const previewEl = document.getElementById('pedido-calc-preview');
 
+      const radios = document.getElementsByName('pedido-categoria-tipo');
+      let tipoCategoria = 'Cliente';
+      for (let r of radios) { if (r.checked) tipoCategoria = r.value; }
+
       let qtdDependentes = 0;
       document.querySelectorAll('.dep-qtd').forEach(input => {
         qtdDependentes += (parseFloat(input.value) || 0);
@@ -1617,10 +1663,16 @@
       const produto = appData.produtos.find(p => p.id === prodId);
       if (!produto) return;
 
-      const precoVendaUnit = calcularPrecoVendaCliente(produto, qtdTotal);
-      const valorTotal = qtdTotal * precoVendaUnit;
+      const { custoUnit } = obterCustoEfetivoProduto(produto.id);
+      const custoTotalForn = qtdTotal * custoUnit;
 
-      previewEl.innerText = `Total: ${qtdTotal} g/un (${qtdPrincipal}g Princ. + ${qtdDependentes}g Dep.) x ${formatarMoeda(precoVendaUnit)} = ${formatarMoeda(valorTotal)}`;
+      if (tipoCategoria === 'Socio') {
+        previewEl.innerText = `👑 Consumo Sócio: ${qtdTotal} g/un | Preço Venda: R$ 0,00 | Custo Fornecedor: ${formatarMoeda(custoTotalForn)}`;
+      } else {
+        const precoVendaUnit = calcularPrecoVendaCliente(produto, qtdTotal);
+        const valorTotal = qtdTotal * precoVendaUnit;
+        previewEl.innerText = `Total: ${qtdTotal} g/un (${qtdPrincipal}g Princ. + ${qtdDependentes}g Dep.) x ${formatarMoeda(precoVendaUnit)} = ${formatarMoeda(valorTotal)} (Custo Forn: ${formatarMoeda(custoTotalForn)})`;
+      }
     }
 
     function renderizarPedidos() {
@@ -1647,23 +1699,32 @@
         let custoTotalPedido = 0;
 
         if (prod) {
-          const precoUnit = calcularPrecoVendaCliente(prod, qtdTotal);
-          valorTotalPedido = qtdTotal * precoUnit;
-
           const { custoUnit } = obterCustoEfetivoProduto(prod.id);
           custoTotalPedido = qtdTotal * custoUnit;
+
+          if (ped.categoriaTipo !== 'Socio') {
+            const precoUnit = calcularPrecoVendaCliente(prod, qtdTotal);
+            valorTotalPedido = qtdTotal * precoUnit;
+          }
         }
 
-        const statusClass = ped.status === 'Pago' ? 'badge-pago' : 'badge-pendente';
+        let statusClass = ped.status === 'Pago' ? 'badge-pago' : 'badge-pendente';
+        let clienteDisplay = `<strong>${ped.cliente || 'Sem Nome'}</strong>`;
+
+        if (ped.categoriaTipo === 'Socio') {
+          clienteDisplay += ` <span class="badge badge-socio">👑 Consumo Sócio</span>`;
+        } else if (numDeps > 0) {
+          clienteDisplay += ` <small style="color:var(--choc-milk);">(+${numDeps} dep.)</small>`;
+        }
 
         const tr = document.createElement('tr');
         tr.className = 'order-row-clickable';
         tr.innerHTML = `
-          <td><strong>${ped.cliente || 'Sem Nome'}</strong> ${numDeps > 0 ? `<small style="color:var(--choc-milk);">(+${numDeps} dep.)</small>` : ''}</td>
+          <td>${clienteDisplay}</td>
           <td>${prodNome}</td>
           <td><strong>${qtdTotal} g/un</strong></td>
           <td>${formatarMoeda(custoTotalPedido)}</td>
-          <td><strong>${formatarMoeda(valorTotalPedido)}</strong></td>
+          <td><strong>${ped.categoriaTipo === 'Socio' ? 'R$ 0,00' : formatarMoeda(valorTotalPedido)}</strong></td>
           <td>${ped.tipoEnvio || 'Retirada'}</td>
           <td><span class="badge ${statusClass}">${ped.status || 'Pendente'}</span></td>
           <td>
@@ -1694,6 +1755,7 @@
           <td colspan="8" style="background:#fdfaf8; padding:12px 20px;">
             <div class="order-details-box">
               <h4 style="color:var(--choc-dark); margin-bottom:6px;">📋 Detalhes do Pedido - ${ped.cliente || 'Cliente'}</h4>
+              <p><strong>Categoria:</strong> ${ped.categoriaTipo === 'Socio' ? '👑 Consumo Próprio dos Sócios' : '🛒 Pedido de Cliente'}</p>
               <p><strong>Pedido Principal:</strong> ${ped.cliente || 'Cliente'} (${ped.qtdPrincipal || 0} g/un)</p>
               <div style="margin:6px 0;"><strong>Rateio / Dependentes:</strong> ${dependentesHtml}</div>
               <div style="margin:6px 0;">${envioHtml}</div>
@@ -1725,6 +1787,10 @@
       const horario = document.getElementById('pedido-horario').value.trim();
       const observacoes = document.getElementById('pedido-obs').value.trim();
 
+      const radios = document.getElementsByName('pedido-categoria-tipo');
+      let categoriaTipo = 'Cliente';
+      for (let r of radios) { if (r.checked) categoriaTipo = r.value; }
+
       const dependentes = [];
       document.querySelectorAll('#dependentes-list .faixa-row').forEach(row => {
         const n = row.querySelector('.dep-nome').value.trim();
@@ -1737,24 +1803,26 @@
         cliente,
         produtoId,
         qtdPrincipal,
+        categoriaTipo,
         dependentes,
         status,
         tipoEnvio,
         endereco: tipoEnvio === 'Entrega por Conta' ? endereco : '',
         dia: tipoEnvio === 'Entrega por Conta' ? dia : '',
         horario: tipoEnvio === 'Entrega por Conta' ? horario : '',
-        observacoes
+        observacoes,
+        dataCriacao: new Date().toISOString()
       };
 
       let acaoLog = "";
       if (id) {
         const idx = appData.pedidos.findIndex(p => p.id === id);
         if (idx !== -1) appData.pedidos[idx] = objPedido;
-        acaoLog = `Atualizou o pedido do cliente "${cliente}".`;
+        acaoLog = `Atualizou o pedido de "${cliente}" (${categoriaTipo}).`;
       } else {
         if (!appData.pedidos) appData.pedidos = [];
         appData.pedidos.push(objPedido);
-        acaoLog = `Registrou novo pedido para "${cliente}".`;
+        acaoLog = `Registrou pedido para "${cliente}" (${categoriaTipo}).`;
       }
 
       cancelarEdicaoPedido();
@@ -1771,6 +1839,12 @@
       document.getElementById('pedido-qtd-principal').value = ped.qtdPrincipal;
       document.getElementById('pedido-status').value = ped.status;
       document.getElementById('pedido-envio').value = ped.tipoEnvio;
+
+      const radios = document.getElementsByName('pedido-categoria-tipo');
+      for (let r of radios) {
+        r.checked = (r.value === (ped.categoriaTipo || 'Cliente'));
+      }
+      alternarTipoCategoriaPedido();
 
       alternarCamposEnvio();
 
@@ -1801,6 +1875,11 @@
       document.getElementById('dependentes-list').innerHTML = '';
       document.getElementById('pedido-calc-preview').innerText = 'Cálculo estimado: R$ 0,00';
       document.getElementById('pedido-envio').value = 'Retirada';
+
+      const radios = document.getElementsByName('pedido-categoria-tipo');
+      if (radios.length > 0) radios[0].checked = true;
+      alternarTipoCategoriaPedido();
+
       alternarCamposEnvio();
 
       document.getElementById('form-pedido-title').innerText = 'Novo Pedido';
@@ -1815,7 +1894,7 @@
       if (!confirm(`Deseja excluir o pedido de "${ped.cliente}"?`)) return;
 
       appData.pedidos = appData.pedidos.filter(p => p.id !== id);
-      salvarDados(`Excluiu o pedido do cliente "${ped.cliente}".`);
+      salvarDados(`Excluiu o pedido de "${ped.cliente}".`);
     }
 
     /* ---------------------------------------------------
@@ -1941,7 +2020,7 @@
       if (id) {
         const idx = appData.fornecedores.findIndex(f => f.id === id);
         if (idx !== -1) appData.fornecedores[idx] = objFornecedor;
-        acaoLog = `Atualizou dados do fornecedor "${nome}".`;
+        acaoLog = `Atualizou o fornecedor "${nome}".`;
       } else {
         if (!appData.fornecedores) appData.fornecedores = [];
         appData.fornecedores.push(objFornecedor);
@@ -1968,7 +2047,7 @@
 
           if (prodsF.length === 0) {
             htmlProdutosList = '<em>Nenhum produto cadastrado.</em>';
-            htmlDetalhamentoPedidos = '<p style="color:var(--text-muted); font-style:italic; padding:10px;">Sem produtos ou pedidos lançados.</p>';
+            htmlDetalhamentoPedidos = '<p style="color:var(--text-muted); font-style:italic;">Sem produtos ou pedidos lançados.</p>';
           } else {
             htmlProdutosList = '<ul style="list-style:none; display:flex; flex-direction:column; gap:6px;">' + prodsF.map(p => {
               let metasTxt = '';
@@ -1984,16 +2063,14 @@
               const subtotalProduto = volumeTotal * custoUnit;
               custoProdutosAteAgora += subtotalProduto;
 
-              let metaInfo = metaAtingida ? ` <span style="color:var(--success-text); font-weight:700;">(🟢 Desc. ≥${metaAtingida.qtdMin}g)</span>` : '';
-              let volumeTxt = volumeTotal > 0 ? `<strong>${volumeTotal} g/un</strong>` : `<span style="color:var(--text-muted); font-style:italic;">⏳ Sem vendas</span>`;
-              let subtotalTxt = volumeTotal > 0 ? `<strong>${formatarMoeda(subtotalProduto)}</strong>` : `<span style="color:var(--text-muted); font-style:italic;">R$ 0,00</span>`;
+              let metaInfo = metaAtingida ? ` <span style="color:var(--success-text); font-weight:700;">(🟢 Desconto ≥${metaAtingida.qtdMin}g)</span>` : '';
 
               detalheItems.push(`
                 <tr style="font-size:0.85rem;">
                   <td><strong>${p.nome}</strong></td>
-                  <td>${volumeTxt}</td>
+                  <td><strong>${volumeTotal} g/un</strong></td>
                   <td>${formatarMoeda(custoUnit)}/g ${metaInfo}</td>
-                  <td>${subtotalTxt}</td>
+                  <td><strong>${formatarMoeda(subtotalProduto)}</strong></td>
                 </tr>
               `);
             });
@@ -2317,7 +2394,7 @@
       }
 
       cancelarEdicaoProduto();
-      salvarDados(`Ajustou a precificação do produto "${pNome}".`);
+      salvarDados(`Ajustou precificação do produto "${pNome}".`);
     }
 
     function editarProduto(id) {
@@ -2358,117 +2435,347 @@
     }
 
     /* ---------------------------------------------------
-       9. ABA RELATÓRIO E HISTÓRICO DE LOGS
+       9. GERADOR DE RELATÓRIOS MENSAL, COMPARATIVO E HISTÓRICO
        --------------------------------------------------- */
-    function renderizarRelatorio() {
-      const container = document.getElementById('container-relatorio-geral');
-      container.innerHTML = '';
+    const NORMES_MESES = ["Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"];
 
-      if (!appData.fornecedores || appData.fornecedores.length === 0) {
-        container.innerHTML = '<div class="empty-state">Nenhum fornecedor cadastrado.</div>';
-      } else {
-        appData.fornecedores.forEach(f => {
-          const prodsFornec = appData.produtos.filter(p => p.fornecedorId === f.id);
+    function gerarRelatorioRateio() {
+      const mesIdx = parseInt(document.getElementById('relatorio-select-mes').value);
+      const ano = parseInt(document.getElementById('relatorio-select-ano').value);
 
-          let htmlProds = '';
-          let totalGramaFornecedor = 0;
-          let custoTotalProdsFornecedor = 0;
+      document.getElementById('rel-titulo-mes-ano').innerText = `FECHAMENTO & RATEIO DE ${NORMES_MESES[mesIdx].toUpperCase()} DE ${ano}`;
+      document.getElementById('rel-data-geracao').innerText = `Consolidado gerado em ${new Date().toLocaleDateString('pt-BR')} às ${new Date().toLocaleTimeString('pt-BR', {hour:'2-digit', minute:'2-digit'})}`;
 
-          if (prodsFornec.length === 0) {
-            htmlProds = '<p style="color:var(--text-muted); font-style:italic; padding:10px;">Nenhum produto cadastrado para este fornecedor.</p>';
-          } else {
-            const linhasProds = prodsFornec.map(p => {
-              const { custoUnit, metaAtingida, volumeTotal } = obterCustoEfetivoProduto(p.id);
-              const subtotal = volumeTotal * custoUnit;
+      let faturamentoTotal = 0;
+      let faturamentoPago = 0;
+      let faturamentoPendente = 0;
+      let custosFornecedoresTotal = 0;
+      let custosConsumoSociosTotal = 0;
+      let clientesMap = {};
+      let fornecedoresMap = {};
+      let totalVolumeGeral = 0;
 
-              totalGramaFornecedor += volumeTotal;
-              custoTotalProdsFornecedor += subtotal;
+      if (appData.pedidos) {
+        appData.pedidos.forEach(ped => {
+          let dataPed = ped.dataCriacao ? new Date(ped.dataCriacao) : new Date();
+          let pedMes = dataPed.getMonth();
+          let pedAno = dataPed.getFullYear();
 
-              let statusMeta = '— Base Standard';
-              if (metaAtingida) {
-                statusMeta = `<span style="color:var(--success-text); font-weight:700;">🟢 Desconto ≥${metaAtingida.qtdMin}g</span>`;
+          if (pedMes === mesIdx && pedAno === ano) {
+            const prod = appData.produtos.find(p => p.id === ped.produtoId);
+            let qtdTotal = (parseFloat(ped.qtdPrincipal) || 0);
+            if (ped.dependentes) ped.dependentes.forEach(d => qtdTotal += (parseFloat(d.qtd) || 0));
+            totalVolumeGeral += qtdTotal;
+
+            let custoForn = 0;
+            let precoVenda = 0;
+
+            if (prod) {
+              const { custoUnit } = obterCustoEfetivoProduto(prod.id);
+              custoForn = qtdTotal * custoUnit;
+
+              if (ped.categoriaTipo === 'Socio') {
+                custosConsumoSociosTotal += custoForn;
+              } else {
+                precoVenda = qtdTotal * calcularPrecoVendaCliente(prod, qtdTotal);
+                faturamentoTotal += precoVenda;
+                if (ped.status === 'Pago') faturamentoPago += precoVenda;
+                else faturamentoPendente += precoVenda;
               }
 
-              let volumeFormatado = volumeTotal > 0 
-                ? `<strong>${volumeTotal} g/un</strong>` 
-                : `<span style="color:var(--text-muted); font-style:italic;">⏳ Sem vendas</span>`;
+              if (!fornecedoresMap[prod.fornecedorId]) {
+                const fObj = appData.fornecedores.find(f => f.id === prod.fornecedorId);
+                fornecedoresMap[prod.fornecedorId] = {
+                  nome: fObj ? fObj.nome : 'Desconhecido',
+                  frete: fObj ? parseFloat(fObj.frete) || 0 : 0,
+                  produtos: {}
+                };
+              }
+              if (!fornecedoresMap[prod.fornecedorId].produtos[prod.id]) {
+                fornecedoresMap[prod.fornecedorId].produtos[prod.id] = {
+                  nome: prod.nome,
+                  qtdTotal: 0,
+                  subtotalCusto: 0
+                };
+              }
+              fornecedoresMap[prod.fornecedorId].produtos[prod.id].qtdTotal += qtdTotal;
+              fornecedoresMap[prod.fornecedorId].produtos[prod.id].subtotalCusto += custoForn;
+              custosFornecedoresTotal += custoForn;
+            }
 
-              let subtotalFormatado = volumeTotal > 0 
-                ? `<strong>${formatarMoeda(subtotal)}</strong>` 
-                : `<span style="color:var(--text-muted); font-style:italic;">R$ 0,00</span>`;
+            let keyCli = (ped.cliente || 'Sem Nome') + '_' + (ped.categoriaTipo || 'Cliente');
+            if (!clientesMap[keyCli]) {
+              clientesMap[keyCli] = {
+                nome: ped.cliente || 'Sem Nome',
+                categoria: ped.categoriaTipo || 'Cliente',
+                qtdTotalG: 0,
+                valorCobrado: 0,
+                pedidosCount: 0
+              };
+            }
+            clientesMap[keyCli].qtdTotalG += qtdTotal;
+            clientesMap[keyCli].valorCobrado += (ped.categoriaTipo === 'Socio' ? 0 : precoVenda);
+            clientesMap[keyCli].pedidosCount++;
+          }
+        });
+      }
 
-              return `
+      const freteTotalFornecedores = appData.fornecedores ? appData.fornecedores.reduce((acc, f) => acc + (parseFloat(f.frete) || 0), 0) : 0;
+      const despesaTotalRealFornecedores = custosFornecedoresTotal + freteTotalFornecedores;
+
+      const lucroLiquidoReal = faturamentoTotal - (despesaTotalRealFornecedores + custosConsumoSociosTotal);
+
+      document.getElementById('rel-val-faturamento-total').innerText = formatarMoeda(faturamentoTotal);
+      document.getElementById('rel-val-custos-fornecedores').innerText = formatarMoeda(despesaTotalRealFornecedores);
+      document.getElementById('rel-val-custos-socios').innerText = formatarMoeda(custosConsumoSociosTotal);
+      document.getElementById('rel-val-lucro-liquido').innerText = formatarMoeda(lucroLiquidoReal);
+
+      const splitVal = (appData.configLucro && appData.configLucro.splitRamom !== undefined) ? appData.configLucro.splitRamom : 50;
+      const partRamom = lucroLiquidoReal * (splitVal / 100);
+      const partMonique = lucroLiquidoReal * ((100 - splitVal) / 100);
+
+      document.getElementById('rel-rateio-ramom').innerText = formatarMoeda(partRamom);
+      document.getElementById('rel-rateio-monique').innerText = formatarMoeda(partMonique);
+
+      // COMPARATIVO COM MÊS ANTERIOR
+      let mesAntIdx = mesIdx - 1;
+      let anoAnt = ano;
+      if (mesAntIdx < 0) { mesAntIdx = 11; anoAnt = ano - 1; }
+
+      let keyAnt = `${anoAnt}_${mesAntIdx}`;
+      let dadosAnt = (appData.historicoRateios && appData.historicoRateios[keyAnt]) ? appData.historicoRateios[keyAnt] : null;
+
+      document.getElementById('comp-val-fat').innerText = formatarMoeda(faturamentoTotal);
+      document.getElementById('comp-val-lucro').innerText = formatarMoeda(lucroLiquidoReal);
+      const numClientesAtendidos = Object.keys(clientesMap).length;
+      document.getElementById('comp-val-cli').innerText = numClientesAtendidos;
+      document.getElementById('comp-val-vol').innerText = `${totalVolumeGeral} g/un`;
+
+      if (dadosAnt) {
+        atualizarElemDiff('comp-diff-fat', faturamentoTotal, dadosAnt.faturamentoTotal, true);
+        atualizarElemDiff('comp-diff-lucro', lucroLiquidoReal, dadosAnt.lucroLiquidoReal, true);
+        atualizarElemDiff('comp-diff-cli', numClientesAtendidos, dadosAnt.numClientesAtendidos, false);
+        atualizarElemDiff('comp-diff-vol', totalVolumeGeral, dadosAnt.totalVolumeGeral, false);
+      } else {
+        document.getElementById('comp-diff-fat').innerHTML = '<span class="diff-equal">-- Sem dados do mês ant.</span>';
+        document.getElementById('comp-diff-lucro').innerHTML = '<span class="diff-equal">-- Sem dados do mês ant.</span>';
+        document.getElementById('comp-diff-cli').innerHTML = '<span class="diff-equal">-- Sem dados do mês ant.</span>';
+        document.getElementById('comp-diff-vol').innerHTML = '<span class="diff-equal">-- Sem dados do mês ant.</span>';
+      }
+
+      // TABELA DE CLIENTES DO RELATÓRIO
+      const containerCli = document.getElementById('rel-tabela-clientes-container');
+      containerCli.innerHTML = '';
+
+      if (Object.keys(clientesMap).length === 0) {
+        containerCli.innerHTML = '<div class="empty-state">Nenhum pedido de cliente registrado neste mês.</div>';
+      } else {
+        let rowsCli = '';
+        for (let k in clientesMap) {
+          let c = clientesMap[k];
+          let badgeCat = c.categoria === 'Socio' ? '<span class="badge badge-socio">👑 Consumo Sócio</span>' : '<span class="badge badge-pago">🛒 Cliente</span>';
+          rowsCli += `
+            <tr>
+              <td><strong>${c.nome}</strong></td>
+              <td>${badgeCat}</td>
+              <td><strong>${c.qtdTotalG} g/un</strong></td>
+              <td><strong>${formatarMoeda(c.valorCobrado)}</strong></td>
+            </tr>
+          `;
+        }
+        containerCli.innerHTML = `
+          <div class="table-wrapper">
+            <table>
+              <thead>
                 <tr>
-                  <td><strong>${p.nome}</strong></td>
-                  <td>${volumeFormatado}</td>
-                  <td>${formatarMoeda(custoUnit)}/g</td>
-                  <td>${statusMeta}</td>
-                  <td>${subtotalFormatado}</td>
+                  <th>Nome do Cliente / Sócio</th>
+                  <th>Categoria</th>
+                  <th>Volume Total Comprado</th>
+                  <th>Valor Total Faturado</th>
                 </tr>
-              `;
-            }).join('');
+              </thead>
+              <tbody>
+                ${rowsCli}
+              </tbody>
+            </table>
+          </div>
+        `;
+      }
 
-            htmlProds = `
-              <div class="table-wrapper" style="margin-top:8px;">
+      // TABELA DE FORNECEDORES DO RELATÓRIO
+      const containerForn = document.getElementById('rel-tabela-fornecedores-container');
+      containerForn.innerHTML = '';
+
+      if (!appData.fornecedores || appData.fornecedores.length === 0) {
+        containerForn.innerHTML = '<div class="empty-state">Nenhum fornecedor cadastrado.</div>';
+      } else {
+        let htmlFornBlocks = '';
+        appData.fornecedores.forEach(f => {
+          let fData = fornecedoresMap[f.id];
+          let subtotalProdsForn = 0;
+          let prodRows = '';
+
+          const prodsForn = appData.produtos.filter(p => p.fornecedorId === f.id);
+          prodsForn.forEach(p => {
+            let itemData = (fData && fData.produtos[p.id]) ? fData.produtos[p.id] : { qtdTotal: 0, subtotalCusto: 0 };
+            subtotalProdsForn += itemData.subtotalCusto;
+
+            let qtdTexto = itemData.qtdTotal > 0 ? `<strong>${itemData.qtdTotal} g/un</strong>` : '<span style="color:var(--text-muted); font-style:italic;">⏳ Sem vendas</span>';
+            let subtotalTexto = itemData.subtotalCusto > 0 ? `<strong>${formatarMoeda(itemData.subtotalCusto)}</strong>` : '<span style="color:var(--text-muted); font-style:italic;">R$ 0,00 (Aguardando pedidos)</span>';
+
+            prodRows += `
+              <tr>
+                <td><strong>${p.nome}</strong></td>
+                <td>${qtdTexto}</td>
+                <td>${subtotalTexto}</td>
+              </tr>
+            `;
+          });
+
+          const totalDevidoForn = subtotalProdsForn + (parseFloat(f.frete) || 0);
+
+          htmlFornBlocks += `
+            <div style="background:var(--card-sub-bg); border:1px solid var(--border-color); border-radius:10px; padding:12px; margin-bottom:12px;">
+              <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+                <strong style="color:var(--choc-dark); font-size:1rem;">📦 Fornecedor: ${f.nome}</strong>
+                <span style="font-weight:800; color:var(--choc-dark);">Total Devido: ${formatarMoeda(totalDevidoForn)} (Prods: ${formatarMoeda(subtotalProdsForn)} + Frete: ${formatarMoeda(f.frete)})</span>
+              </div>
+              <div class="table-wrapper">
                 <table>
                   <thead>
                     <tr>
-                      <th>Produto</th>
-                      <th>Qtd Totais Saídas</th>
-                      <th>Custo Unitário</th>
-                      <th>Desconto Atingido</th>
-                      <th>Subtotal Devido</th>
+                      <th>Produto Vendido pelo Fornecedor</th>
+                      <th>Quantidade Saída no Mês</th>
+                      <th>Valor a Pagar ao Fornecedor</th>
                     </tr>
                   </thead>
                   <tbody>
-                    ${linhasProds}
+                    ${prodRows}
                   </tbody>
                 </table>
               </div>
-            `;
-          }
-
-          const totalFinalFornecedor = custoTotalProdsFornecedor + parseFloat(f.frete || 0);
-
-          const card = document.createElement('div');
-          card.className = 'form-section';
-          card.style.background = '#ffffff';
-          card.innerHTML = `
-            <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:2px solid var(--border-color); padding-bottom:8px; flex-wrap:wrap; gap:8px;">
-              <h4 style="color:var(--choc-dark); font-size:1.1rem;">📦 Fornecedor: ${f.nome}</h4>
-              <span style="background:var(--choc-dark); color:#fff; padding:4px 12px; border-radius:20px; font-weight:700; font-size:0.9rem;">
-                Total a Pagar: ${formatarMoeda(totalFinalFornecedor)}
-              </span>
-            </div>
-            <div style="margin-top:10px;">
-              ${htmlProds}
-              <div style="display:flex; justify-content:space-between; margin-top:10px; font-weight:600; font-size:0.88rem; background:var(--card-sub-bg); padding:10px; border-radius:8px; flex-wrap:wrap; gap:8px;">
-                <span>Saída Total do Fornecedor: <strong>${totalGramaFornecedor} g/un</strong></span>
-                <span>Produtos: ${formatarMoeda(custoTotalProdsFornecedor)} + Frete: ${formatarMoeda(f.frete || 0)}</span>
-              </div>
             </div>
           `;
-
-          container.appendChild(card);
         });
+        containerForn.innerHTML = htmlFornBlocks;
       }
 
-      // RENDERIZAR HISTÓRICO DE LOGS
-      const containerLogs = document.getElementById('container-logs-historico');
-      containerLogs.innerHTML = '';
+      atualizarSelectHistoricoRateios();
+    }
 
-      if (!appData.logs || appData.logs.length === 0) {
-        containerLogs.innerHTML = '<div style="padding:12px; text-align:center; color:var(--text-muted); font-style:italic;">Nenhuma alteração registrada ainda. Os registros de Ramom e Monique aparecerão aqui.</div>';
+    function atualizarElemDiff(elemId, valAtual, valAnt, isMoeda) {
+      const el = document.getElementById(elemId);
+      const diff = valAtual - valAnt;
+      if (diff > 0) {
+        let txtDiff = isMoeda ? `+${formatarMoeda(diff)}` : `+${diff}`;
+        let pct = valAnt > 0 ? ` (+${((diff/valAnt)*100).toFixed(1)}%)` : '';
+        el.innerHTML = `<span class="diff-up">🟢 Superior (${txtDiff}${pct})</span>`;
+      } else if (diff < 0) {
+        let txtDiff = isMoeda ? formatarMoeda(diff) : diff;
+        let pct = valAnt > 0 ? ` (${((diff/valAnt)*100).toFixed(1)}%)` : '';
+        el.innerHTML = `<span class="diff-down">🔴 Inferior (${txtDiff}${pct})</span>`;
       } else {
-        appData.logs.forEach(log => {
-          containerLogs.innerHTML += `
-            <div class="log-item">
-              <span><strong>👤 ${log.usuario}:</strong> ${log.acao}</span>
-              <span style="color:var(--text-muted); font-size:0.78rem;">${log.dataHora}</span>
-            </div>
-          `;
+        el.innerHTML = '<span class="diff-equal">🟡 Igual ao mês passado</span>';
+      }
+    }
+
+    function salvarRateioNoHistorico() {
+      const mesIdx = parseInt(document.getElementById('relatorio-select-mes').value);
+      const ano = parseInt(document.getElementById('relatorio-select-ano').value);
+
+      const key = `${ano}_${mesIdx}`;
+      if (!appData.historicoRateios) appData.historicoRateios = {};
+
+      let faturamentoTotal = 0;
+      let custosFornecedoresTotal = 0;
+      let custosConsumoSociosTotal = 0;
+      let clientesSet = new Set();
+      let totalVolumeGeral = 0;
+
+      if (appData.pedidos) {
+        appData.pedidos.forEach(ped => {
+          let dataPed = ped.dataCriacao ? new Date(ped.dataCriacao) : new Date();
+          if (dataPed.getMonth() === mesIdx && dataPed.getFullYear() === ano) {
+            const prod = appData.produtos.find(p => p.id === ped.produtoId);
+            let qtdTotal = (parseFloat(ped.qtdPrincipal) || 0);
+            if (ped.dependentes) ped.dependentes.forEach(d => qtdTotal += (parseFloat(d.qtd) || 0));
+            totalVolumeGeral += qtdTotal;
+
+            if (prod) {
+              const { custoUnit } = obterCustoEfetivoProduto(prod.id);
+              let custoForn = qtdTotal * custoUnit;
+
+              if (ped.categoriaTipo === 'Socio') {
+                custosConsumoSociosTotal += custoForn;
+              } else {
+                let precoVenda = qtdTotal * calcularPrecoVendaCliente(prod, qtdTotal);
+                faturamentoTotal += precoVenda;
+              }
+              custosFornecedoresTotal += custoForn;
+            }
+            clientesSet.add(ped.cliente || 'Sem Nome');
+          }
         });
       }
+
+      const freteTotalFornecedores = appData.fornecedores ? appData.fornecedores.reduce((acc, f) => acc + (parseFloat(f.frete) || 0), 0) : 0;
+      const despesaTotalRealFornecedores = custosFornecedoresTotal + freteTotalFornecedores;
+      const lucroLiquidoReal = faturamentoTotal - (despesaTotalRealFornecedores + custosConsumoSociosTotal);
+
+      appData.historicoRateios[key] = {
+        mesIdx,
+        ano,
+        nomeMes: NORMES_MESES[mesIdx],
+        faturamentoTotal,
+        despesaTotalRealFornecedores,
+        custosConsumoSociosTotal,
+        lucroLiquidoReal,
+        numClientesAtendidos: clientesSet.size,
+        totalVolumeGeral,
+        dataFechamento: new Date().toISOString()
+      };
+
+      salvarDados(`Fechou e salvou no histórico o rateio de ${NORMES_MESES[mesIdx]}/${ano}.`);
+      alert(`✅ Rateio de ${NORMES_MESES[mesIdx]}/${ano} salvo com sucesso no histórico!`);
+      atualizarSelectHistoricoRateios();
+    }
+
+    function atualizarSelectHistoricoRateios() {
+      const select = document.getElementById('select-historico-rateios');
+      if (!select) return;
+
+      select.innerHTML = '<option value="">Selecione um mês salvo no histórico...</option>';
+      if (appData.historicoRateios) {
+        for (let k in appData.historicoRateios) {
+          let h = appData.historicoRateios[k];
+          select.innerHTML += `<option value="${k}">${h.nomeMes} / ${h.ano} - Lucro: ${formatarMoeda(h.lucroLiquidoReal)}</option>`;
+        }
+      }
+    }
+
+    function carregarRateioSalvoDoHistorico(key) {
+      if (!key || !appData.historicoRateios || !appData.historicoRateios[key]) return;
+      let h = appData.historicoRateios[key];
+
+      document.getElementById('relatorio-select-mes').value = h.mesIdx;
+      document.getElementById('relatorio-select-ano').value = h.ano;
+      gerarRelatorioRateio();
+    }
+
+    function baixarRelatorioPDF() {
+      const element = document.getElementById('area-relatorio-impressao');
+      const mesText = document.getElementById('relatorio-select-mes').options[document.getElementById('relatorio-select-mes').selectedIndex].text;
+      const anoText = document.getElementById('relatorio-select-ano').value;
+
+      const opt = {
+        margin:       [10, 10, 10, 10],
+        filename:     `Relatorio_Rateio_${mesText}_${anoText}.pdf`,
+        image:        { type: 'jpeg', quality: 0.98 },
+        html2canvas:  { scale: 2, useCORS: true },
+        jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
+      };
+
+      html2pdf().set(opt).from(element).save();
     }
 
     /* ---------------------------------------------------
@@ -2480,6 +2787,23 @@
       renderizarPedidos();
       atualizarDashboard();
       atualizarInformativoRateio();
+
+      const containerLogs = document.getElementById('container-logs-historico');
+      if (containerLogs) {
+        containerLogs.innerHTML = '';
+        if (!appData.logs || appData.logs.length === 0) {
+          containerLogs.innerHTML = '<div style="padding:10px; text-align:center; color:var(--text-muted); font-style:italic;">Nenhuma alteração registrada ainda.</div>';
+        } else {
+          appData.logs.forEach(log => {
+            containerLogs.innerHTML += `
+              <div class="log-item">
+                <span><strong>👤 ${log.usuario}:</strong> ${log.acao}</span>
+                <span style="color:var(--text-muted); font-size:0.78rem;">${log.dataHora}</span>
+              </div>
+            `;
+          });
+        }
+      }
     }
 
     document.addEventListener('DOMContentLoaded', () => {
