@@ -14,27 +14,26 @@
   <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-database-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-analytics-compat.js"></script>
 
-  <!-- Biblioteca para Geração de PDF -->
+  <!-- Biblioteca para Exportação de Relatório em PDF -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 
   <style>
     /* ===================================================
-       PALETA DE CORES TERROSAS & PASTÉIS (Pergaminho & Cacau)
+       PALETA DE CORES E IDENTIDADE VISUAL (Pergaminho & Cacau)
        =================================================== */
     :root {
-      --bg-cream: #f4eee5;         /* Fundo Pergaminho Pastel Suave */
+      --bg-cream: #f4eee5;         /* Fundo Pergaminho Suave */
       --card-bg: #ffffff;          /* Fundo dos Containers */
       --card-sub-bg: #f9f5ef;      /* Fundo de Destaques/Forms */
-      --choc-dark: #4a2c1d;        /* Chocolate Amargo (Cor Principal) */
-      --choc-milk: #7a5338;        /* Chocolate ao Leite (Destaques) */
-      --choc-accent: #8c6239;      /* Tom de Ação e Botões Secundários */
-      --herb-green: #4d683a;       /* Verde Erva Pastel */
-      --herb-green-bg: #eaf0e6;    /* Fundo Verde Erva Suave */
-      --border-color: #e2d5c3;     /* Bordas Amadeiradas Suaves */
-      --text-main: #332221;
-      --text-muted: #66524e;
+      --choc-dark: #4a2c1d;        /* Chocolate Amargo / Cacau */
+      --choc-milk: #7a5338;        /* Chocolate ao Leite Suave */
+      --choc-accent: #8c6239;      /* Tom Terracota / Ação */
+      --border-color: #e2d5c3;     /* Borda Amadeirada Pastel */
+      --text-main: #33221f;
+      --text-muted: #6b564a;
       --success-bg: #eaf0e6;
-      --success-text: #2e5120;
+      --success-text: #2d5a27;
+      --herb-green: #4d683a;       /* Verde Erva Pastel */
       --warning-bg: #fff8e1;
       --warning-text: #b78103;
       --danger-bg: #ffebee;
@@ -76,15 +75,44 @@
       word-wrap: break-word;
     }
 
+    /* BARRA DISCRETA DE SELEÇÃO DE PERFIL */
+    .user-select-bar {
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 14px;
+      background: var(--card-sub-bg);
+      padding: 6px 14px;
+      border-radius: 20px;
+      border: 1px solid var(--border-color);
+      width: fit-content;
+      margin-left: auto;
+    }
+
+    .user-select-bar label {
+      font-size: 0.82rem;
+      font-weight: 700;
+      color: var(--choc-dark);
+    }
+
+    .user-select-bar select {
+      padding: 4px 8px;
+      font-size: 0.82rem;
+      font-weight: 700;
+      color: var(--choc-dark);
+      background: #ffffff;
+      border: 1px solid var(--border-color);
+      border-radius: 6px;
+      outline: none;
+      cursor: pointer;
+    }
+
+    /* CABEÇALHO E LOGO */
     header {
       text-align: center;
       margin-bottom: 20px;
-    }
-
-    .header-logo-container {
-      width: 100%;
-      max-width: 924px;
-      margin: 0 auto;
+      padding: 0;
     }
 
     .header-logo-img {
@@ -94,44 +122,14 @@
       display: block;
       margin: 0 auto;
       border-radius: 14px;
-      box-shadow: 0 4px 15px rgba(74, 44, 29, 0.12);
+      box-shadow: 0 4px 15px rgba(74, 44, 29, 0.1);
     }
 
-    .user-select-bar {
-      display: flex;
-      justify-content: flex-end;
-      align-items: center;
-      gap: 8px;
-      margin-bottom: 16px;
-      background: var(--card-sub-bg);
-      padding: 8px 14px;
-      border-radius: 20px;
-      border: 1px solid var(--border-color);
-      width: fit-content;
-      margin-left: auto;
-    }
-
-    .user-select-bar label {
-      font-size: 0.85rem;
-      font-weight: 600;
-      color: var(--choc-milk);
-    }
-
-    .user-select-bar select {
-      border: 1px solid var(--border-color);
-      border-radius: 12px;
-      padding: 4px 10px;
-      background: #ffffff;
-      color: var(--choc-dark);
-      font-weight: 700;
-      font-size: 0.88rem;
-    }
-
-    /* DASHBOARD */
-    .dashboard-grid {
+    /* PAINÉIS CLÁSSICOS DO DASHBOARD */
+    .dashboard-3 {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
-      gap: 12px;
+      gap: 16px;
       margin-bottom: 24px;
     }
 
@@ -141,8 +139,8 @@
       border-radius: 14px;
       padding: 16px;
       text-align: center;
-      transition: transform 0.2s ease, box-shadow 0.2s ease;
       cursor: pointer;
+      transition: transform 0.2s, box-shadow 0.2s;
     }
 
     .dash-card:hover {
@@ -150,21 +148,10 @@
       box-shadow: 0 6px 16px rgba(74, 44, 29, 0.08);
     }
 
-    .dash-card.full-width {
+    .dash-card.card-accent {
+      background: #f4eae0;
+      border-color: var(--choc-milk);
       grid-column: 1 / -1;
-      background: linear-gradient(135deg, #4a2c1d 0%, #633c28 100%);
-      color: #ffffff;
-      border: none;
-    }
-
-    .dash-card.full-width .dash-title,
-    .dash-card.full-width .dash-sub {
-      color: #f4eee5;
-    }
-
-    .dash-card.full-width .dash-value {
-      color: #ffffff;
-      font-size: 2rem;
     }
 
     .dash-title {
@@ -172,110 +159,60 @@
       text-transform: uppercase;
       letter-spacing: 0.5px;
       color: var(--text-muted);
-      font-weight: 700;
       margin-bottom: 6px;
+      font-weight: 700;
     }
 
     .dash-value {
-      font-size: 1.45rem;
+      font-size: 1.5rem;
       font-weight: 800;
       color: var(--choc-dark);
-      margin-bottom: 4px;
     }
 
-    .dash-sub {
+    .dash-subtext {
       font-size: 0.78rem;
       color: var(--text-muted);
+      margin-top: 4px;
     }
 
     .dash-detail-panel {
-      display: none;
-      grid-column: 1 / -1;
-      background: #ffffff;
-      border: 1px solid var(--border-color);
+      background: var(--card-sub-bg);
+      border: 1px dashed var(--border-color);
       border-radius: 12px;
       padding: 16px;
-      margin-top: -4px;
-      margin-bottom: 12px;
+      margin-top: -10px;
+      margin-bottom: 20px;
+      display: none;
     }
 
-    .socios-split-container {
-      margin-top: 12px;
-      background: rgba(255, 255, 255, 0.15);
-      padding: 12px;
-      border-radius: 10px;
-    }
-
-    .socios-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 12px;
-      margin-top: 8px;
-    }
-
-    .socio-box {
-      background: rgba(255, 255, 255, 0.2);
-      padding: 8px 12px;
-      border-radius: 8px;
-      text-align: center;
-    }
-
-    .socio-name {
-      font-size: 0.85rem;
-      font-weight: 700;
-    }
-
-    .socio-val {
-      font-size: 1.15rem;
-      font-weight: 800;
-    }
-
-    /* NAVEGAÇÃO DE ABAS RETRÁTEIS */
+    /* ABAS DE NAVEGAÇÃO RETRÁTEIS */
     .tabs-nav {
       display: flex;
       border-bottom: 2px solid var(--border-color);
       gap: 8px;
-      margin-bottom: 20px;
+      margin-bottom: 24px;
       flex-wrap: wrap;
     }
 
     .tab-btn {
-      background: var(--card-sub-bg);
-      border: 1px solid var(--border-color);
-      padding: 12px 20px;
+      background: transparent;
+      border: none;
+      padding: 10px 20px;
       font-size: 0.95rem;
-      font-weight: 600;
+      font-weight: 700;
       color: var(--choc-milk);
       cursor: pointer;
-      border-radius: 10px 10px 0 0;
+      border-radius: 8px 8px 0 0;
       transition: all 0.2s ease;
-      user-select: none;
-      -webkit-tap-highlight-color: transparent;
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
     }
 
     .tab-btn:hover {
       background: var(--bg-cream);
-      color: var(--choc-dark);
     }
 
     .tab-btn.active {
       background: var(--choc-dark);
       color: #ffffff;
-      border-color: var(--choc-dark);
-      box-shadow: 0 4px 10px rgba(74, 44, 29, 0.2);
-    }
-
-    .tab-btn .toggle-icon {
-      font-size: 0.75rem;
-      margin-left: 4px;
-      transition: transform 0.2s ease;
-    }
-
-    .tab-btn.active .toggle-icon {
-      transform: rotate(180deg);
     }
 
     .tab-content {
@@ -286,7 +223,7 @@
       display: block;
     }
 
-    /* FORMULÁRIOS & SEÇÕES */
+    /* SEÇÃO DE FORMULÁRIOS */
     .form-section {
       background: var(--card-sub-bg);
       border: 1px solid var(--border-color);
@@ -298,15 +235,15 @@
     .form-section h3 {
       font-size: 1.1rem;
       color: var(--choc-dark);
-      margin-bottom: 16px;
+      margin-bottom: 14px;
       display: flex;
       align-items: center;
-      gap: 8px;
+      justify-content: space-between;
     }
 
     .form-grid {
       display: grid;
-      grid-template-columns: repeat(2, 1fr);
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
       gap: 14px;
     }
 
@@ -320,84 +257,114 @@
       grid-column: 1 / -1;
     }
 
-    label {
-      font-size: 0.88rem;
-      font-weight: 600;
+    .form-group label {
+      font-size: 0.85rem;
+      font-weight: 700;
       color: var(--text-main);
     }
 
-    input, select, textarea {
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
       padding: 10px 12px;
       border: 1px solid var(--border-color);
       border-radius: 8px;
-      font-size: 0.92rem;
+      font-size: 0.9rem;
       background: #ffffff;
       color: var(--text-main);
-      width: 100%;
-
-    }
-
-    input:focus, select:focus, textarea:focus {
       outline: none;
-      border-color: var(--choc-milk);
-      box-shadow: 0 0 0 3px rgba(122, 83, 56, 0.15);
     }
 
-    textarea {
-      resize: vertical;
-      min-height: 70px;
+    .form-group input:focus,
+    .form-group select:focus,
+    .form-group textarea:focus {
+      border-color: var(--choc-dark);
     }
 
+    /* SELETOR COMPACTO DE CATEGORIA DO PEDIDO */
+    .categoria-selector-box {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 14px;
+      background: #ffffff;
+      padding: 6px;
+      border-radius: 10px;
+      border: 1px solid var(--border-color);
+    }
+
+    .cat-btn {
+      flex: 1;
+      padding: 8px 12px;
+      border: 1px solid transparent;
+      border-radius: 8px;
+      background: transparent;
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: var(--text-muted);
+      cursor: pointer;
+      transition: all 0.2s ease;
+      text-align: center;
+    }
+
+    .cat-btn.active-cliente {
+      background: var(--herb-green-bg);
+      border-color: var(--herb-green);
+      color: var(--herb-green);
+    }
+
+    .cat-btn.active-socio {
+      background: #f3e8ff;
+      border-color: #7e22ce;
+      color: #6b21a8;
+    }
+
+    /* BOTÕES */
     .btn-submit {
       background: var(--choc-dark);
       color: #ffffff;
       border: none;
-      padding: 12px 20px;
-      border-radius: 8px;
+      padding: 11px 22px;
       font-weight: 700;
-      font-size: 0.95rem;
+      border-radius: 8px;
       cursor: pointer;
-      transition: background 0.2s ease;
-      margin-top: 10px;
-      width: 100%;
+      font-size: 0.92rem;
+      transition: background 0.2s;
     }
 
     .btn-submit:hover {
-      background: #362015;
+      background: #361f1e;
     }
 
     .btn-secondary {
-      background: var(--card-sub-bg);
+      background: var(--muted-btn-bg);
       color: var(--choc-dark);
       border: 1px solid var(--border-color);
-      padding: 8px 14px;
-      border-radius: 6px;
-      font-weight: 600;
-      font-size: 0.85rem;
+      padding: 8px 16px;
+      font-weight: 700;
+      border-radius: 8px;
       cursor: pointer;
+      font-size: 0.85rem;
     }
 
-    .btn-cancel {
-      background: var(--muted-btn-bg);
-      color: var(--text-main);
-      border: 1px solid var(--border-color);
-      padding: 12px 20px;
-      border-radius: 8px;
-      font-weight: 600;
-      font-size: 0.95rem;
+    .btn-action {
+      padding: 5px 10px;
+      border-radius: 6px;
+      font-size: 0.78rem;
+      font-weight: 700;
       cursor: pointer;
-      margin-top: 10px;
-      width: 100%;
+      border: none;
+      margin-right: 4px;
     }
+
+    .btn-edit { background: #e0f2fe; color: #0369a1; }
+    .btn-delete { background: #fee2e2; color: #b91c1c; }
 
     /* TABELAS */
     .table-wrapper {
       overflow-x: auto;
-      -webkit-overflow-scrolling: touch;
-      border-radius: 10px;
+      border-radius: 12px;
       border: 1px solid var(--border-color);
-      max-width: 100%;
-      margin-top: 12px;
+      background: #ffffff;
     }
 
     table {
@@ -405,31 +372,34 @@
       border-collapse: collapse;
       text-align: left;
       font-size: 0.88rem;
-      background: #ffffff;
     }
 
     th {
       background: var(--card-sub-bg);
       color: var(--choc-dark);
       font-weight: 700;
-      padding: 12px;
-      border-bottom: 2px solid var(--border-color);
+      padding: 12px 14px;
+      border-bottom: 1px solid var(--border-color);
       white-space: nowrap;
     }
 
     td {
-      padding: 12px;
-      border-bottom: 1px solid var(--border-color);
-      vertical-align: middle;
+      padding: 12px 14px;
+      border-bottom: 1px solid #f2e9e1;
     }
 
-    tr:last-child td {
-      border-bottom: none;
+    tr.order-row-clickable {
+      cursor: pointer;
+      transition: background 0.15s;
     }
 
-    .badge-status {
+    tr.order-row-clickable:hover {
+      background: #faf4ee;
+    }
+
+    .badge {
       display: inline-block;
-      padding: 4px 8px;
+      padding: 3px 8px;
       border-radius: 12px;
       font-size: 0.75rem;
       font-weight: 700;
@@ -437,129 +407,82 @@
 
     .badge-pago { background: var(--success-bg); color: var(--success-text); }
     .badge-pendente { background: var(--warning-bg); color: var(--warning-text); }
-    .badge-socio { background: #f3e5f5; color: #6a1b9a; border: 1px solid #d1c4e9; }
+    .badge-socio { background: #f3e8ff; color: #6b21a8; }
 
-    .action-btns {
-      display: flex;
-      gap: 6px;
-    }
-
-    .btn-icon {
-      background: none;
-      border: none;
-      cursor: pointer;
-      font-size: 1.1rem;
-      padding: 4px;
-      border-radius: 4px;
-    }
-
-    .btn-icon:hover {
-      background: var(--card-sub-bg);
-    }
-
-    .calc-info {
-      background: #ffffff;
-      border: 1px dashed var(--border-color);
-      padding: 10px 14px;
-      border-radius: 8px;
-      font-size: 0.88rem;
-      margin-top: 8px;
-      color: var(--choc-milk);
-    }
-
-    .faixa-row {
-      display: flex;
-      gap: 8px;
+    /* JANELA MODAL (IMPORTAR DO WHATSAPP) */
+    .modal-backdrop {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(45, 28, 20, 0.55);
+      backdrop-filter: blur(3px);
+      display: none;
       align-items: center;
-      margin-bottom: 8px;
+      justify-content: center;
+      z-index: 9999;
+      padding: 16px;
     }
 
-    .empty-state {
-      text-align: center;
-      padding: 24px;
-      color: var(--text-muted);
-      font-style: italic;
-    }
-
-    /* ESTILOS ESPECÍFICOS DO RELATÓRIO */
-    .report-card-summary {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 12px;
-      margin-bottom: 20px;
-    }
-
-    .report-stat {
+    .modal-card {
       background: #ffffff;
+      border-radius: 16px;
       border: 1px solid var(--border-color);
-      border-radius: 10px;
-      padding: 14px;
-      text-align: center;
+      max-width: 650px;
+      width: 100%;
+      max-height: 90vh;
+      overflow-y: auto;
+      padding: 24px;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.25);
     }
 
-    .report-stat-title {
-      font-size: 0.78rem;
-      text-transform: uppercase;
-      font-weight: 700;
-      color: var(--text-muted);
-      margin-bottom: 4px;
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 16px;
+      border-bottom: 1px solid var(--border-color);
+      padding-bottom: 12px;
     }
 
-    .report-stat-val {
-      font-size: 1.2rem;
-      font-weight: 800;
+    .modal-header h3 {
+      font-size: 1.15rem;
       color: var(--choc-dark);
+      display: flex;
+      align-items: center;
+      gap: 8px;
     }
 
-    .report-stat-diff {
-      font-size: 0.75rem;
-      margin-top: 4px;
-      font-weight: 600;
-    }
-
-    .diff-up { color: var(--success-text); }
-    .diff-down { color: var(--danger-text); }
-
-    footer {
-      text-align: center;
-      margin-top: 30px;
-      padding-top: 16px;
-      border-top: 1px solid var(--border-color);
-    }
-
-    .btn-clear-footer {
-      background: var(--danger-bg);
-      color: var(--danger-text);
-      border: 1px solid #ffcdd2;
-      padding: 8px 16px;
-      border-radius: 8px;
-      font-size: 0.82rem;
-      font-weight: 600;
+    .btn-close-modal {
+      background: transparent;
+      border: none;
+      font-size: 1.3rem;
       cursor: pointer;
+      color: var(--text-muted);
     }
 
-    @media (max-width: 600px) {
-      .dashboard-grid {
-        grid-template-columns: 1fr;
-      }
-      .report-card-summary {
-        grid-template-columns: 1fr 1fr;
-      }
-      .form-grid {
+    /* RESPONSIVIDADE NO CELULAR */
+    @media (max-width: 650px) {
+      .dashboard-3 {
         grid-template-columns: 1fr;
       }
       .tabs-nav {
         display: grid;
         grid-template-columns: repeat(2, 1fr);
-        gap: 8px;
-        border-bottom: none;
+        gap: 6px;
       }
       .tab-btn {
-        padding: 12px 8px;
-        font-size: 0.88rem;
-        border-radius: 10px;
-        justify-content: center;
-        width: 100%;
+        padding: 10px 6px;
+        font-size: 0.85rem;
+        border-radius: 8px;
+        text-align: center;
+        background: var(--card-sub-bg);
+        border: 1px solid var(--border-color);
+      }
+      .tab-btn.active {
+        background: var(--choc-dark);
+        color: #ffffff;
       }
     }
   </style>
@@ -568,226 +491,206 @@
 
   <div class="app-container">
 
-    <!-- SELETOR DE SÓCIO RESPONSÁVEL -->
+    <!-- SELEÇÃO DE PERFIL DO SÓCIO -->
     <div class="user-select-bar">
-      <label for="current-user-select">👤 Usuário Ativo:</label>
-      <select id="current-user-select" onchange="alterarUsuarioAtivo(this.value)">
-        <option value="Ramom">Ramom</option>
-        <option value="Monique">Monique</option>
+      <label for="select-usuario-atual">👥 Perfil do Sócio:</label>
+      <select id="select-usuario-atual" onchange="salvarUsuarioAtual(this.value)">
+        <option value="Ramom">Ramom (Sócio)</option>
+        <option value="Monique">Monique (Sócio)</option>
       </select>
     </div>
 
-    <!-- HEADER LOGO -->
-    <header style="padding: 0; margin-bottom: 20px; text-align: center;">
-      <div class="header-logo-container">
-        <img src="final_fabrica.png" 
-             alt="A Fantástica Fábrica de Chocolate" 
-             class="header-logo-img"
-             onerror="this.src='logo_fabrica_chocolate_1200x400.png'">
-      </div>
+    <!-- LOGO OFICIAL -->
+    <header>
+      <img src="final_fabrica.png" alt="A Fantástica Fábrica de Chocolate" class="header-logo-img">
     </header>
 
-    <!-- DASHBOARD PRINCIPAL -->
-    <div class="dashboard-grid">
-      
-      <div class="dash-card full-width">
-        <div class="dash-title">LUCRO LÍQUIDO DA FÁBRICA</div>
-        <div class="dash-value" id="dash-lucro-liquido">R$ 0,00</div>
-        <div class="dash-sub">Dedução de custos de fornecedores e envios das vendas globais</div>
+    <!-- DASHBOARD DE 3 PAINÉIS CLÁSSICOS -->
+    <div class="dashboard-3">
+      <div class="dash-card" onclick="toggleDashPanel('panel-faturar')">
+        <div class="dash-title">💰 Faturar Clientes</div>
+        <div class="dash-value" id="dash-faturamento-total">R$ 0,00</div>
+        <div class="dash-subtext" id="dash-faturamento-sub">0 pedidos registrados</div>
+      </div>
 
-        <!-- DIVISÃO DOS SÓCIOS -->
-        <div class="socios-split-container">
-          <div style="font-size: 0.82rem; margin-bottom: 6px;">
-            Divisão do Lucro: 
-            <input type="range" id="split-range" min="0" max="100" value="50" oninput="atualizarDivisaoSocios(this.value)" style="width: 120px; vertical-align: middle;">
-            <span id="split-label">50% / 50%</span>
-          </div>
+      <div class="dash-card" onclick="toggleDashPanel('panel-fornecedores')">
+        <div class="dash-title">📦 Custos de Produção</div>
+        <div class="dash-value" id="dash-custo-fornecedores">R$ 0,00</div>
+        <div class="dash-subtext">Insumos de fornecedores</div>
+      </div>
 
-          <div class="socios-grid">
-            <div class="socio-box">
-              <div class="socio-name">Ramom (<span id="pct-ramom">50</span>%)</div>
-              <div class="socio-val" id="val-lucro-ramom">R$ 0,00</div>
-            </div>
-            <div class="socio-box">
-              <div class="socio-name">Monique (<span id="pct-monique">50</span>%)</div>
-              <div class="socio-val" id="val-lucro-monique">R$ 0,00</div>
-            </div>
+      <div class="dash-card card-accent" onclick="toggleDashPanel('panel-lucro')">
+        <div class="dash-title">🍫 Lucro Líquido da Fábrica</div>
+        <div class="dash-value" id="dash-lucro-liquido" style="font-size:1.8rem; color:var(--herb-green);">R$ 0,00</div>
+        <div class="dash-subtext" id="dash-lucro-divisao">Divisão dos Sócios: Ramom R$ 0,00 | Monique R$ 0,00</div>
+      </div>
+    </div>
+
+    <!-- PAINÉIS EXPAN SÍVEIS DO DASHBOARD -->
+    <div id="panel-faturar" class="dash-detail-panel">
+      <h4 style="color:var(--choc-dark); margin-bottom:8px;">📊 Detalhamento de Faturamento</h4>
+      <div id="panel-faturar-conteudo" style="font-size:0.88rem; color:var(--text-muted);">Carregando dados...</div>
+    </div>
+
+    <div id="panel-fornecedores" class="dash-detail-panel">
+      <h4 style="color:var(--choc-dark); margin-bottom:8px;">📦 Resumo por Fornecedor</h4>
+      <div id="panel-fornecedores-conteudo" style="font-size:0.88rem; color:var(--text-muted);">Carregando dados...</div>
+    </div>
+
+    <div id="panel-lucro" class="dash-detail-panel">
+      <h4 style="color:var(--choc-dark); margin-bottom:8px;">⚙️ Divisão de Lucro dos Sócios</h4>
+      <div style="display:flex; flex-direction:column; gap:10px; font-size:0.88rem;">
+        <div>
+          <label style="font-weight:700;">Porcentagem Ramom vs Monique:</label>
+          <div style="display:flex; align-items:center; gap:10px; margin-top:4px;">
+            <input type="range" id="slider-split-socios" min="0" max="100" value="50" oninput="atualizarDivisaoSocios(this.value)" style="flex:1;">
+            <span id="label-split-val" style="font-weight:800; color:var(--choc-dark);">50% Ramom / 50% Monique</span>
           </div>
         </div>
+        <div id="panel-lucro-conteudo" style="color:var(--text-muted);">Calculando...</div>
       </div>
-
-      <div class="dash-card" onclick="toggleDashPanel('panel-vendas')">
-        <div class="dash-title">FATURAMENTO TOTAL</div>
-        <div class="dash-value" id="dash-faturamento">R$ 0,00</div>
-        <div class="dash-sub" id="dash-faturamento-sub">0 pedidos registrados</div>
-      </div>
-
-      <div class="dash-card" onclick="toggleDashPanel('panel-volume')">
-        <div class="dash-title">VOLUME TOTAL VENDIDO</div>
-        <div class="dash-value" id="dash-volume">0 g/un</div>
-        <div class="dash-sub">Total acumulado de produtos</div>
-      </div>
-
-      <div class="dash-card" onclick="toggleDashPanel('panel-pendente')">
-        <div class="dash-title">PENDENTE DE RECEBIMENTO</div>
-        <div class="dash-value" id="dash-pendente" style="color:var(--warning-text);">R$ 0,00</div>
-        <div class="dash-sub" id="dash-pendente-sub">0 pedidos a receber</div>
-      </div>
-
-      <!-- PAINÉIS DE DETALHES CLICÁVEIS -->
-      <div class="dash-detail-panel" id="panel-vendas">
-        <h4 style="color:var(--choc-dark); margin-bottom:8px;">📊 Detalhamento de Faturamento</h4>
-        <div id="detail-faturamento-content">Carregando...</div>
-      </div>
-
-      <div class="dash-detail-panel" id="panel-volume">
-        <h4 style="color:var(--choc-dark); margin-bottom:8px;">🍬 Volume Vendido por Produto</h4>
-        <div id="detail-volume-content">Carregando...</div>
-      </div>
-
-      <div class="dash-detail-panel" id="panel-pendente">
-        <h4 style="color:var(--choc-dark); margin-bottom:8px;">⏳ Pedidos Pendentes de Pagamento</h4>
-        <div id="detail-pendente-content">Carregando...</div>
-      </div>
-
     </div>
 
     <!-- NAVEGAÇÃO DE ABAS RETRÁTEIS -->
     <div class="tabs-nav">
-      <button type="button" class="tab-btn active" data-tab="pedidos" onclick="switchTab('pedidos', this)">
-        <span>🛒 Pedidos</span> <span class="toggle-icon">▼</span>
-      </button>
-      <button type="button" class="tab-btn" data-tab="fornecedores" onclick="switchTab('fornecedores', this)">
-        <span>📦 Fornecedores</span> <span class="toggle-icon">▼</span>
-      </button>
-      <button type="button" class="tab-btn" data-tab="produtos" onclick="switchTab('produtos', this)">
-        <span>🍬 Produtos</span> <span class="toggle-icon">▼</span>
-      </button>
-      <button type="button" class="tab-btn" data-tab="relatorio" onclick="switchTab('relatorio', this)">
-        <span>📊 Relatório & Rateio</span> <span class="toggle-icon">▼</span>
-      </button>
+      <button class="tab-btn active" data-tab="pedidos" onclick="toggleTab('pedidos')">🛒 Pedidos</button>
+      <button class="tab-btn" data-tab="fornecedores" onclick="toggleTab('fornecedores')">📦 Fornecedores</button>
+      <button class="tab-btn" data-tab="produtos" onclick="toggleTab('produtos')">🍬 Produtos</button>
+      <button class="tab-btn" data-tab="relatorio" onclick="toggleTab('relatorio')">📊 Relatório & Rateio</button>
     </div>
 
-    <!-- ==================== TAB 1: PEDIDOS ==================== -->
+    <!-- ABA 1: PEDIDOS -->
     <div id="tab-pedidos" class="tab-content active">
       <div class="form-section">
-        <h3 id="form-pedido-title">Novo Pedido</h3>
+        <h3 id="form-pedido-title">
+          <span>Novo Pedido</span>
+          <button type="button" class="btn-secondary" onclick="abrirModalImportarWhatsApp()" style="background:var(--herb-green); color:#ffffff; border:none; padding:7px 14px; font-weight:700; border-radius:8px; cursor:pointer;">
+            📱 Importar do WhatsApp
+          </button>
+        </h3>
+
+        <!-- CATEGORIA DO PEDIDO -->
+        <div class="form-group full-width" style="margin-bottom:12px;">
+          <label>🏷️ Categoria do Pedido:</label>
+          <div class="categoria-selector-box">
+            <button type="button" id="cat-btn-cliente" class="cat-btn active-cliente" onclick="selecionarCategoriaPedido('Cliente')">
+              🛒 Cliente (Venda Normal)
+            </button>
+            <button type="button" id="cat-btn-socio" class="cat-btn" onclick="selecionarCategoriaPedido('Socio')">
+              👑 Consumo Próprio (Sócios)
+            </button>
+          </div>
+          <input type="hidden" id="pedido-categoria" value="Cliente">
+        </div>
+
         <form id="form-pedido" onsubmit="salvarPedido(event)">
           <input type="hidden" id="pedido-id">
-          
-          <!-- TIPO / CATEGORIA DO PEDIDO -->
-          <div class="form-group full-width" style="background: var(--card-sub-bg); padding: 12px 16px; border-radius: 10px; border: 1px solid var(--border-color); margin-bottom: 12px;">
-            <label style="font-weight: 700; color: var(--choc-dark); margin-bottom: 8px; display: block;">Tipo / Categoria do Pedido:</label>
-            <div style="display: flex; gap: 20px; flex-wrap: wrap;">
-              <label style="cursor: pointer; display: flex; align-items: center; gap: 8px; font-weight: 600; color: var(--text-main);">
-                <input type="radio" name="pedido-categoria" value="cliente" checked onchange="alternarTipoCategoriaPedido()">
-                <span>🛒 Pedido de Cliente (Venda Normal)</span>
-              </label>
-              <label style="cursor: pointer; display: flex; align-items: center; gap: 8px; font-weight: 600; color: var(--choc-dark);">
-                <input type="radio" name="pedido-categoria" value="socio" onchange="alternarTipoCategoriaPedido()">
-                <span>👑 Consumo Próprio dos Sócios (Ramom / Monique)</span>
-              </label>
-            </div>
-          </div>
 
           <div class="form-grid">
-            <div class="form-group" id="wrapper-pedido-cliente">
-              <label for="pedido-cliente" id="label-pedido-cliente">Cliente</label>
-              <input type="text" id="pedido-cliente" placeholder="Ex: João Silva">
+            <div class="form-group">
+              <label for="pedido-cliente">Nome do Cliente / Sócio</label>
+              <input type="text" id="pedido-cliente" placeholder="Ex: João ou Ramom" required>
             </div>
 
             <div class="form-group">
               <label for="pedido-produto">Produto</label>
-              <select id="pedido-produto" onchange="atualizarCalculoPedido()">
+              <select id="pedido-produto" onchange="atualizarCalculoPedido()" required>
                 <option value="">Selecione um produto...</option>
               </select>
             </div>
 
             <div class="form-group">
               <label for="pedido-qtd-principal">Quantidade (g/un)</label>
-              <input type="number" id="pedido-qtd-principal" min="1" value="1" oninput="atualizarCalculoPedido()">
+              <input type="number" id="pedido-qtd-principal" min="1" value="1" oninput="atualizarCalculoPedido()" required>
             </div>
 
-            <!-- Lista Dinâmica de Dependentes -->
+            <!-- Lista Dinâmica de Dependentes/Rateio -->
             <div class="form-group full-width">
-              <label>Rateio / Dependentes (Opcional)</label>
+              <label>Rateio / Dependentes do Pedido</label>
               <div id="dependentes-list" style="display:flex; flex-direction:column; gap:8px; margin-top:4px;"></div>
-              <button type="button" class="btn-secondary" onclick="adicionarLinhaDependente()">+ Adicionar Dependente</button>
+              <button type="button" class="btn-secondary" style="margin-top:6px;" onclick="adicionarLinhaDependente()">+ Adicionar Dependente/Adicional</button>
             </div>
 
-            <!-- STATUS DO PEDIDO (Ocultado quando Sócio) -->
-            <div class="form-group" id="wrapper-pedido-status">
-              <label for="pedido-status">Status do Pedido</label>
-              <select id="pedido-status">
-                <option value="Pendente">Pendente</option>
-                <option value="Pago">Pago</option>
-              </select>
-            </div>
+            <!-- CAMPOS EXCLUSIVOS DE CLIENTE (OCULTOS QUANDO SÓCIO) -->
+            <div id="container-campos-cliente" class="form-grid full-width" style="grid-column:1/-1;">
+              <div class="form-group">
+                <label for="pedido-status">Status do Pagamento</label>
+                <select id="pedido-status">
+                  <option value="Pendente">⏳ Pendente</option>
+                  <option value="Pago">🟢 Pago</option>
+                </select>
+              </div>
 
-            <!-- MODO DE ENVIO (Ocultado quando Sócio) -->
-            <div class="form-group" id="wrapper-pedido-envio">
-              <label for="pedido-envio">Modo de Envio</label>
-              <select id="pedido-envio" onchange="alternarCamposEnvio()">
-                <option value="Retirada">Retirada em Mãos</option>
-                <option value="Entrega por Conta">Entrega por Conta</option>
-              </select>
-            </div>
+              <div class="form-group">
+                <label for="pedido-envio">Forma de Envio</label>
+                <select id="pedido-envio" onchange="alternarCamposEnvio()">
+                  <option value="Retirada">Retirada em Mãos</option>
+                  <option value="Entrega por Conta">Entrega por Conta</option>
+                </select>
+              </div>
 
-            <!-- Campos Condicionais de Entrega -->
-            <div id="container-detalhes-entrega" class="form-grid full-width" style="display:none; grid-column:1/-1;">
+              <div id="container-detalhes-entrega" class="form-grid full-width" style="display:none; grid-column:1/-1;">
+                <div class="form-group full-width">
+                  <label for="pedido-endereco">Endereço de Entrega</label>
+                  <input type="text" id="pedido-endereco" placeholder="Rua, número, bairro">
+                </div>
+                <div class="form-group">
+                  <label for="pedido-dia">Dia de Entrega</label>
+                  <input type="text" id="pedido-dia" placeholder="Ex: Sexta-feira">
+                </div>
+                <div class="form-group">
+                  <label for="pedido-horario">Horário</label>
+                  <input type="text" id="pedido-horario" placeholder="Ex: 14h às 18h">
+                </div>
+              </div>
+
               <div class="form-group full-width">
-                <label for="pedido-endereco">Endereço de Entrega</label>
-                <input type="text" id="pedido-endereco" placeholder="Rua, número, bairro">
+                <label for="pedido-obs">Observações</label>
+                <textarea id="pedido-obs" rows="2" placeholder="Preferências ou detalhes adicionais..."></textarea>
               </div>
-              <div class="form-group">
-                <label for="pedido-dia">Dia de Entrega</label>
-                <input type="text" id="pedido-dia" placeholder="Ex: Sexta-feira">
-              </div>
-              <div class="form-group">
-                <label for="pedido-horario">Horário</label>
-                <input type="text" id="pedido-horario" placeholder="Ex: 14h às 18h">
-              </div>
-            </div>
-
-            <!-- OBSERVAÇÕES (Ocultado quando Sócio) -->
-            <div class="form-group full-width" id="wrapper-pedido-obs">
-              <label for="pedido-obs">Observações</label>
-              <textarea id="pedido-obs" placeholder="Preferências ou detalhes do pedido..."></textarea>
             </div>
           </div>
 
-          <div class="calc-info" id="pedido-calc-preview">
+          <div id="pedido-calc-preview" style="background:var(--card-bg); border:1px solid var(--border-color); border-radius:8px; padding:10px 14px; margin:14px 0; font-weight:700; color:var(--choc-dark);">
             Cálculo estimado: R$ 0,00
           </div>
 
-          <button type="submit" class="btn-submit" id="btn-pedido-submit">Salvar Pedido</button>
-          <button type="button" class="btn-cancel" id="btn-pedido-cancel" style="display:none;" onclick="cancelarEdicaoPedido()">Cancelar</button>
+          <div style="display:flex; gap:10px;">
+            <button type="submit" class="btn-submit" id="btn-pedido-submit">Salvar Pedido</button>
+            <button type="button" class="btn-secondary" id="btn-pedido-cancel" style="display:none;" onclick="cancelarEdicaoPedido()">Cancelar Edição</button>
+          </div>
         </form>
       </div>
 
-      <!-- LISTA DE PEDIDOS -->
-      <div class="table-wrapper">
-        <table>
-          <thead>
-            <tr>
-              <th>Cliente</th>
-              <th>Produto</th>
-              <th>Qtd Total</th>
-              <th>Valor Venda</th>
-              <th>Custo Est.</th>
-              <th>Envio</th>
-              <th>Status</th>
-              <th>Ações</th>
-            </tr>
-          </thead>
-          <tbody id="lista-pedidos">
-            <tr><td colspan="8" class="empty-state">Nenhum pedido registrado.</td></tr>
-          </tbody>
-        </table>
+      <!-- TABELA DE PEDIDOS -->
+      <div class="form-section" style="background:#ffffff;">
+        <h3>📋 Pedidos Cadastrados</h3>
+        <p style="font-size:0.82rem; color:var(--text-muted); margin-bottom:12px;">
+          💡 Clique em qualquer linha do pedido para abrir a ficha completa do cliente e ver as quantidades individuais e adicionais!
+        </p>
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr>
+                <th>Cliente / Sócio</th>
+                <th>Produto</th>
+                <th>Qtd Total</th>
+                <th>Custo Prod.</th>
+                <th>Valor Venda</th>
+                <th>Envio</th>
+                <th>Status</th>
+                <th>Ações</th>
+              </tr>
+            </thead>
+            <tbody id="lista-pedidos">
+              <tr><td colspan="8" style="text-align:center; padding:20px; color:var(--text-muted);">Nenhum pedido cadastrado.</td></tr>
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
 
-    <!-- ==================== TAB 2: FORNECEDORES ==================== -->
+    <!-- ABA 2: FORNECEDORES -->
     <div id="tab-fornecedores" class="tab-content">
       <div class="form-section">
         <h3 id="form-fornecedor-title">Cadastrar Fornecedor</h3>
@@ -797,116 +700,115 @@
           <div class="form-grid">
             <div class="form-group">
               <label for="fornecedor-nome">Nome do Fornecedor</label>
-              <input type="text" id="fornecedor-nome" placeholder="Ex: Cacau Premium Co." required>
+              <input type="text" id="fornecedor-nome" placeholder="Ex: Cacau Brasil" required>
             </div>
 
             <div class="form-group">
-              <label for="fornecedor-frete">Valor do Frete Padrão (R$)</label>
-              <input type="number" step="0.01" id="fornecedor-frete" placeholder="0,00" value="0.00">
+              <label for="fornecedor-frete">Custo do Frete Fixado (R$)</label>
+              <input type="number" id="fornecedor-frete" step="0.01" min="0" value="0.00">
             </div>
 
             <div class="form-group full-width">
-              <label>Produtos Fornecidos & Regras de Volume</label>
-              <div id="fornecedor-produtos-container" style="display:flex; flex-direction:column; gap:12px; margin-top:6px;"></div>
-              <button type="button" class="btn-secondary" style="margin-top:8px;" onclick="adicionarBlocoProdutoFornecedor()">+ Adicionar Produto a este Fornecedor</button>
+              <label>Produtos Fornecidos & Descontos por Meta de Volume</label>
+              <div id="container-produtos-fornecedor" style="display:flex; flex-direction:column; gap:12px; margin-top:8px;"></div>
+              <button type="button" class="btn-secondary" style="margin-top:8px;" onclick="adicionarBlocoProdutoFornecedor()">+ Adicionar Produto do Fornecedor</button>
             </div>
           </div>
 
-          <button type="submit" class="btn-submit" id="btn-fornecedor-submit">Salvar Fornecedor</button>
-          <button type="button" class="btn-cancel" id="btn-fornecedor-cancel" style="display:none;" onclick="cancelarEdicaoFornecedor()">Cancelar</button>
+          <div style="display:flex; gap:10px; margin-top:16px;">
+            <button type="submit" class="btn-submit" id="btn-fornecedor-submit">Salvar Fornecedor</button>
+            <button type="button" class="btn-secondary" id="btn-fornecedor-cancel" style="display:none;" onclick="cancelarEdicaoFornecedor()">Cancelar</button>
+          </div>
         </form>
       </div>
 
-      <div class="table-wrapper">
-        <table>
-          <thead>
-            <tr>
-              <th>Fornecedor</th>
-              <th>Frete Base</th>
-              <th>Produtos Associados</th>
-              <th>Ações</th>
-            </tr>
-          </thead>
-          <tbody id="lista-fornecedores">
-            <tr><td colspan="4" class="empty-state">Nenhum fornecedor cadastrado.</td></tr>
-          </tbody>
-        </table>
+      <div class="form-section" style="background:#ffffff;">
+        <h3>📦 Lista de Fornecedores</h3>
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr>
+                <th>Fornecedor</th>
+                <th>Frete</th>
+                <th>Produtos & Metas</th>
+                <th>Ações</th>
+              </tr>
+            </thead>
+            <tbody id="lista-fornecedores">
+              <tr><td colspan="4" style="text-align:center; padding:20px; color:var(--text-muted);">Nenhum fornecedor cadastrado.</td></tr>
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
 
-    <!-- ==================== TAB 3: PRODUTOS & PRECIFICAÇÃO ==================== -->
+    <!-- ABA 3: PRODUTOS & PRECIFICAÇÃO -->
     <div id="tab-produtos" class="tab-content">
       <div class="form-section">
-        <h3 id="form-produto-title">Cadastrar Produto & Tabela de Preço ao Cliente</h3>
+        <h3 id="form-produto-title">Cadastrar Produto & Tabela de Precificação</h3>
         <form id="form-produto" onsubmit="salvarProduto(event)">
           <input type="hidden" id="produto-id">
 
           <div class="form-grid">
             <div class="form-group">
               <label for="produto-nome">Nome do Produto</label>
-              <input type="text" id="produto-nome" placeholder="Ex: Barra Chocolate 70%" required>
+              <input type="text" id="produto-nome" placeholder="Ex: Capulho" required>
             </div>
 
             <div class="form-group">
-              <label for="produto-fornecedor">Fornecedor Origem</label>
-              <select id="produto-fornecedor" required onchange="aoSelecionarProdutoParaPrecificar()">
-                <option value="">Selecione um fornecedor...</option>
+              <label for="produto-fornecedor">Fornecedor Responsável</label>
+              <select id="produto-fornecedor" onchange="aoSelecionarProdutoParaPrecificar()" required>
+                <option value="">Selecione o fornecedor...</option>
               </select>
             </div>
 
-            <!-- SIMULADOR DINÂMICO DE CUSTO -->
-            <div class="form-group full-width" id="box-simulador-custo" style="display:none; background:#ffffff; padding:12px; border-radius:10px; border:1px solid var(--border-color);">
-              <div style="font-weight:700; color:var(--choc-dark); margin-bottom:4px;">💡 Custo Efetivo em Tempo Real</div>
-              <div id="simulador-custo-info" style="font-size:0.88rem; color:var(--text-muted);">
-                Selecione o produto no fornecedor para ver a projeção.
-              </div>
-            </div>
-
-            <!-- FAIXAS DE PREÇO DE VENDA AO CLIENTE -->
             <div class="form-group full-width">
-              <label>Tabela de Preço de Venda por Faixa de Volume (g/un)</label>
-              <div id="faixas-venda-container" style="display:flex; flex-direction:column; gap:8px; margin-top:6px;"></div>
-              <button type="button" class="btn-secondary" style="margin-top:8px;" onclick="adicionarLinhaFaixaVenda()">+ Adicionar Faixa de Preço</button>
+              <label>Tabela de Preço ao Cliente (Faixas por Quantidade)</label>
+              <div id="container-faixas-venda" style="display:flex; flex-direction:column; gap:8px; margin-top:6px;"></div>
+              <button type="button" class="btn-secondary" style="margin-top:6px;" onclick="adicionarLinhaFaixaVenda()">+ Adicionar Faixa de Preço</button>
             </div>
           </div>
 
-          <button type="submit" class="btn-submit" id="btn-produto-submit">Salvar Produto</button>
-          <button type="button" class="btn-cancel" id="btn-produto-cancel" style="display:none;" onclick="cancelarEdicaoProduto()">Cancelar</button>
+          <div style="display:flex; gap:10px; margin-top:16px;">
+            <button type="submit" class="btn-submit" id="btn-produto-submit">Salvar Produto</button>
+            <button type="button" class="btn-secondary" id="btn-produto-cancel" style="display:none;" onclick="cancelarEdicaoProduto()">Cancelar</button>
+          </div>
         </form>
       </div>
 
-      <div class="table-wrapper">
-        <table>
-          <thead>
-            <tr>
-              <th>Produto</th>
-              <th>Fornecedor</th>
-              <th>Custo Efetivo Atual</th>
-              <th>Tabela Venda Cliente</th>
-              <th>Ações</th>
-            </tr>
-          </thead>
-          <tbody id="lista-produtos">
-            <tr><td colspan="5" class="empty-state">Nenhum produto cadastrado.</td></tr>
-          </tbody>
-        </table>
+      <div class="form-section" style="background:#ffffff;">
+        <h3>🍬 Catálogo de Produtos</h3>
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr>
+                <th>Produto</th>
+                <th>Fornecedor</th>
+                <th>Custo Atual</th>
+                <th>Tabela de Venda</th>
+                <th>Ações</th>
+              </tr>
+            </thead>
+            <tbody id="lista-produtos">
+              <tr><td colspan="5" style="text-align:center; padding:20px; color:var(--text-muted);">Nenhum produto cadastrado.</td></tr>
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
 
-    <!-- ==================== TAB 4: RELATÓRIO & RATEIO ==================== -->
+    <!-- ABA 4: RELATÓRIO MENSAL & RATEIO -->
     <div id="tab-relatorio" class="tab-content">
-      
-      <!-- CONTROLES DO FECHAMENTO MENSAL -->
       <div class="form-section">
         <h3>📊 Fechamento Mensal de Rateio</h3>
-        <p style="font-size:0.88rem; color:var(--text-muted); margin-bottom:14px;">
-          Gere o relatório consolidado de faturamento, custos por fornecedor, consumo dos sócios e divisão de lucros.
+        <p style="font-size:0.85rem; color:var(--text-muted); margin-bottom:14px;">
+          Gere o relatório completo de faturamento, custos de fornecedores e lucro líquido do mês desejado para exportação em PDF.
         </p>
 
-        <div style="display:flex; gap:12px; align-items:center; flex-wrap:wrap; margin-bottom:16px;">
+        <div style="display:flex; gap:10px; align-items:center; flex-wrap:wrap; margin-bottom:16px;">
           <div>
-            <label style="font-size:0.82rem; font-weight:700;">Mês de Referência:</label>
-            <select id="relatorio-mes-select" style="padding:6px 10px; width:auto;">
+            <label style="font-size:0.82rem; font-weight:700;">Mês:</label>
+            <select id="relatorio-mes" style="padding:8px; border-radius:6px; border:1px solid var(--border-color);">
               <option value="0">Janeiro</option>
               <option value="1">Fevereiro</option>
               <option value="2">Março</option>
@@ -924,59 +826,74 @@
 
           <div>
             <label style="font-size:0.82rem; font-weight:700;">Ano:</label>
-            <input type="number" id="relatorio-ano-input" value="2026" style="padding:6px 10px; width:90px;">
+            <input type="number" id="relatorio-ano" value="2026" style="padding:8px; width:90px; border-radius:6px; border:1px solid var(--border-color);">
           </div>
 
-          <button class="btn-submit" style="margin-top:0; width:auto; padding:8px 18px;" onclick="gerarRelatorioRateio()">
-            🔄 Gerar / Recalcular Rateio
-          </button>
-
-          <button class="btn-secondary" style="padding:8px 16px;" onclick="baixarRelatorioPDF()">
-            📥 Baixar Relatório em PDF
-          </button>
-
-          <button class="btn-secondary" style="padding:8px 16px; background:#e8f5e9; color:#2e7d32; border-color:#c8e6c9;" onclick="salvarRateioNoHistorico()">
-            🔒 Salvar Fechamento no Histórico
-          </button>
+          <button type="button" class="btn-submit" style="margin-top:16px;" onclick="gerarRelatorioRateio()">🔄 Gerar / Recalcular Mês</button>
+          <button type="button" class="btn-secondary" style="margin-top:16px; background:var(--herb-green); color:#fff; border:none;" onclick="baixarRelatorioPDF()">📥 Baixar Relatório em PDF</button>
         </div>
 
-        <!-- SELETOR DE HISTÓRICO -->
-        <div style="background:#ffffff; padding:10px 14px; border-radius:8px; border:1px solid var(--border-color); display:flex; gap:10px; align-items:center; flex-wrap:wrap;">
-          <span style="font-size:0.85rem; font-weight:700; color:var(--choc-dark);">📂 Consultar Rateios Anteriores Salvos:</span>
-          <select id="historico-rateios-select" onchange="carregarRateioDoHistorico(this.value)" style="padding:4px 8px; width:auto;">
-            <option value="">Selecione um histórico...</option>
-          </select>
+        <div id="area-relatorio-impressao">
+          <div id="container-relatorio-geral">
+            <div style="text-align:center; padding:20px; color:var(--text-muted);">
+              Clique em "Gerar / Recalcular Mês" para visualizar o balanço do período.
+            </div>
+          </div>
         </div>
       </div>
-
-      <!-- ÁREA DE IMPRESSÃO / CONTEÚDO DO RELATÓRIO -->
-      <div id="area-relatorio-impressao">
-        <div id="container-relatorio-geral">
-          <div class="empty-state">Clique em "Gerar / Recalcular Rateio" para visualizar os números do mês.</div>
-        </div>
-      </div>
-
-      <!-- HISTÓRICO DE LOGS DOS SÓCIOS -->
-      <div class="form-section" style="background:#ffffff; margin-top:20px;">
-        <h3 style="color:var(--choc-dark); font-size:1rem; margin-bottom:10px;">📝 Histórico de Alterações dos Sócios</h3>
-        <div id="container-logs-historico" style="max-height:220px; overflow-y:auto; border:1px solid var(--border-color); border-radius:8px;"></div>
-      </div>
-
     </div>
 
+  </div> <!-- /app-container -->
+
+  <!-- JANELA MODAL: IMPORTAR DO WHATSAPP -->
+  <div id="modal-import-whatsapp" class="modal-backdrop">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3>📱 Importar Pedidos do WhatsApp</h3>
+        <button type="button" class="btn-close-modal" onclick="fecharModalImportarWhatsApp()">✕</button>
+      </div>
+
+      <p style="font-size:0.85rem; color:var(--text-muted); margin-bottom:12px;">
+        Cole abaixo a lista de pedidos copiada do grupo do WhatsApp. O sistema identificará automaticamente os clientes, produtos, quantidades e o status do pagamento pelo emoji ✅!
+      </p>
+
+      <div class="form-group full-width" style="margin-bottom:14px;">
+        <label for="whatsapp-import-text">Cole o texto da lista aqui:</label>
+        <textarea id="whatsapp-import-text" rows="6" placeholder="Exemplo:&#10;Capulho Gold 🥦&#10;- Ro - 80g&#10;- Shazam - 60g ✅&#10;- AJ - 15g+10g ✅" oninput="processarTextoWhatsApp()"></textarea>
+      </div>
+
+      <!-- PRÉVIA DA IMPORTAÇÃO -->
+      <div id="whatsapp-preview-area" style="margin-bottom:16px; display:none;">
+        <h4 style="font-size:0.9rem; color:var(--choc-dark); margin-bottom:8px;">🔍 Prévia dos Pedidos Reconhecidos:</h4>
+        <div class="table-wrapper" style="max-height:200px; overflow-y:auto;">
+          <table>
+            <thead>
+              <tr>
+                <th>Cliente</th>
+                <th>Produto Mapeado</th>
+                <th>Quantidade</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody id="whatsapp-preview-tbody"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <div style="display:flex; justify-content:flex-end; gap:10px;">
+        <button type="button" class="btn-secondary" onclick="fecharModalImportarWhatsApp()">Cancelar</button>
+        <button type="button" id="btn-confirmar-importacao" class="btn-submit" style="background:var(--herb-green); opacity:0.5;" disabled onclick="confirmarImportacaoWhatsApp()">
+          ⚠️ Cole uma lista válida para importar
+        </button>
+      </div>
+    </div>
   </div>
 
-  <footer>
-    <button class="btn-clear-footer" onclick="limparDados()">
-      🧹 Limpar Todos os Dados
-    </button>
-  </footer>
-
-  <!-- SCRIPT PRINCIPAL DO SISTEMA -->
+  <!-- JAVASCRIPT PRINCIPAL DO SISTEMA -->
   <script>
-    /* ===================================================
-       1. CONFIGURAÇÃO DO FIREBASE COM SUAS CHAVES REAIS
-       =================================================== */
+    /* ---------------------------------------------------
+       1. CONFIGURAÇÃO DO FIREBASE COM SUAS CHAVE REAIS
+       --------------------------------------------------- */
     const firebaseConfig = {
       apiKey: "AIzaSyDpQE3OCdrAhWNWe4n06F4YkvG-yZFyffE",
       authDomain: "fabricadechocolate-7a294.firebaseapp.com",
@@ -995,441 +912,329 @@
         firebase.initializeApp(firebaseConfig);
         if (firebase.analytics) firebase.analytics();
         useFirebase = true;
-        console.log("🔥 Firebase inicializado com sucesso!");
       }
     } catch (err) {
-      console.warn("⚠️ Não foi possível conectar ao Firebase. Usando armazenamento local (localStorage).", err);
-      useFirebase = false;
+      console.warn("Firebase não inicializado, usando localStorage.", err);
     }
 
-    /* ESTADO GLOBAL DE DADOS */
+    /* ESTADO GLOBAL DA APLICAÇÃO */
     let appData = {
+      usuarioAtual: 'Ramom',
+      splitRamomPct: 50,
       pedidos: [],
       fornecedores: [],
       produtos: [],
-      logs: [],
-      historicoRateios: {},
-      usuarioAtivo: "Ramom",
-      pctRamom: 50
+      historicoRateios: []
     };
 
-    /* ===================================================
-       2. NAVEGAÇÃO DE ABAS RETRÁTEIS E PAINÉIS
-       =================================================== */
-    function switchTab(tabName, clickedBtn) {
-      const targetContent = document.getElementById('tab-' + tabName);
-      if (!targetContent) return;
-
-      const isCurrentlyActive = targetContent.classList.contains('active');
-
-      const btnEl = clickedBtn || document.querySelector(`.tab-btn[data-tab="${tabName}"]`);
-
-      if (isCurrentlyActive) {
-        // RECOLHER / COLLAPSE
-        targetContent.classList.remove('active');
-        if (btnEl) btnEl.classList.remove('active');
-        return;
-      }
-
-      // Ativar a aba clicada e ocultar as outras
-      document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
-      document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
-
-      targetContent.classList.add('active');
-      if (btnEl) btnEl.classList.add('active');
-
-      if (tabName === 'relatorio') {
-        if (typeof gerarRelatorioRateio === 'function') {
-          try {
-            gerarRelatorioRateio();
-          } catch (e) {
-            console.error("Erro ao gerar relatório:", e);
+    /* ---------------------------------------------------
+       2. INICIALIZAÇÃO & PERSISTÊNCIA DE DADOS
+       --------------------------------------------------- */
+    function carregarDadosIniciais() {
+      if (useFirebase) {
+        const dbRef = firebase.database().ref('fabricaData');
+        dbRef.on('value', (snapshot) => {
+          const val = snapshot.val();
+          if (val) {
+            appData = Object.assign(appData, val);
+            renderizarTudo();
+          } else {
+            salvarDados();
           }
+        });
+      } else {
+        const local = localStorage.getItem('fabricaData');
+        if (local) {
+          try {
+            appData = JSON.parse(local);
+          } catch(e) {}
         }
+        renderizarTudo();
+      }
+    }
+
+    function salvarDados() {
+      if (useFirebase) {
+        firebase.database().ref('fabricaData').set(appData);
+      } else {
+        localStorage.setItem('fabricaData', JSON.stringify(appData));
+      }
+    }
+
+    function salvarUsuarioAtual(nome) {
+      appData.usuarioAtual = nome;
+      salvarDados();
+    }
+
+    /* ---------------------------------------------------
+       3. NAVEGAÇÃO DE ABAS RETRÁTEIS
+       --------------------------------------------------- */
+    function toggleTab(tabName) {
+      const targetContent = document.getElementById(`tab-${tabName}`);
+      const targetBtn = document.querySelector(`.tab-btn[data-tab="${tabName}"]`);
+
+      const isAlreadyActive = targetContent.classList.contains('active');
+
+      if (isAlreadyActive) {
+        // Recolhe/Esconde mantendo o estado dos dados
+        targetContent.classList.remove('active');
+        if (targetBtn) targetBtn.classList.remove('active');
+      } else {
+        // Expande/Abre a aba selecionada
+        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+        document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+
+        targetContent.classList.add('active');
+        if (targetBtn) targetBtn.classList.add('active');
+
+        if (tabName === 'relatorio') gerarRelatorioRateio();
       }
     }
 
     function toggleDashPanel(panelId) {
-      const targetPanel = document.getElementById(panelId);
-      if (!targetPanel) return;
-      const isVisible = targetPanel.style.display === 'block';
-
+      const panel = document.getElementById(panelId);
+      const isVisible = panel.style.display === 'block';
       document.querySelectorAll('.dash-detail-panel').forEach(p => p.style.display = 'none');
-
       if (!isVisible) {
-        targetPanel.style.display = 'block';
+        panel.style.display = 'block';
       }
     }
 
-    function alterarUsuarioAtivo(nome) {
-      appData.usuarioAtivo = nome;
-      registrarLog(`Alterou o usuário ativo para ${nome}`);
-      salvarDados();
-    }
-
     function atualizarDivisaoSocios(val) {
-      const pctRamom = parseInt(val) || 50;
+      const pctRamom = parseInt(val);
       const pctMonique = 100 - pctRamom;
+      appData.splitRamomPct = pctRamom;
 
-      appData.pctRamom = pctRamom;
-      document.getElementById('split-label').innerText = `${pctRamom}% / ${pctMonique}%`;
-      document.getElementById('pct-ramom').innerText = pctRamom;
-      document.getElementById('pct-monique').innerText = pctMonique;
-
-      atualizarDashboard();
+      document.getElementById('label-split-val').innerText = `${pctRamom}% Ramom / ${pctMonique}% Monique`;
       salvarDados();
+      atualizarDashboard();
     }
 
-    /* ===================================================
-       3. FORMATADORES E CÁLCULOS FINANCEIROS
-       =================================================== */
     function formatarMoeda(val) {
       const num = parseFloat(val) || 0;
       return num.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
     }
 
-    function registrarLog(acao) {
-      if (!appData.logs) appData.logs = [];
-      const dataHora = new Date().toLocaleString('pt-BR');
-      const usuario = appData.usuarioAtivo || "Ramom";
-      appData.logs.unshift(`[${dataHora}] 👤 ${usuario}: ${acao}`);
-      if (appData.logs.length > 50) appData.logs.pop();
-      renderizarLogs();
-    }
-
-    function renderizarLogs() {
-      const container = document.getElementById('container-logs-historico');
-      if (!container) return;
-      if (!appData.logs || appData.logs.length === 0) {
-        container.innerHTML = '<div style="padding:10px; color:var(--text-muted); font-style:italic;">Nenhuma alteração registrada.</div>';
-        return;
-      }
-      container.innerHTML = appData.logs.map(l => `<div style="padding:6px 10px; border-bottom:1px solid var(--border-color); font-size:0.8rem; color:var(--text-main);">${l}</div>`).join('');
-    }
-
-    /* PRODUTOS & FORNECEDORES: CUSTO EFETIVO */
-    function obterVolumeTotalGeralPorProduto(prodId) {
-      let total = 0;
-      if (!appData.pedidos) return 0;
-
-      appData.pedidos.forEach(p => {
-        if (p.produtoId === prodId) {
-          total += (parseFloat(p.qtdPrincipal) || 0);
-          if (p.dependentes) {
-            p.dependentes.forEach(d => total += (parseFloat(d.qtd) || 0));
-          }
-        }
-      });
-      return total;
-    }
-
-    function obterCustoEfetivoProduto(prodId) {
-      const prod = (appData.produtos || []).find(p => p.id === prodId);
-      if (!prod) return { custoUnit: 0, metaAtingida: null, volumeTotal: 0 };
-
-      const fornec = (appData.fornecedores || []).find(f => f.id === prod.fornecedorId);
-      const volumeTotal = obterVolumeTotalGeralPorProduto(prodId);
-
-      let precoBaseGramo = 0;
-      let metaAtingida = null;
-
-      if (fornec && fornec.produtosAssociados) {
-        const prodAssoc = fornec.produtosAssociados.find(pa => pa.nomeProduto === prod.nome || pa.id === prodId);
-        if (prodAssoc) {
-          precoBaseGramo = parseFloat(prodAssoc.precoBase) || 0;
-          
-          if (prodAssoc.metasVolume && prodAssoc.metasVolume.length > 0) {
-            const metasOrdenadas = [...prodAssoc.metasVolume].sort((a, b) => b.qtdMin - a.qtdMin);
-            for (let m of metasOrdenadas) {
-              if (volumeTotal >= m.qtdMin) {
-                precoBaseGramo = parseFloat(m.precoComDesconto);
-                metaAtingida = m;
-                break;
-              }
+    /* ---------------------------------------------------
+       4. CÁLCULOS FINANCEIROS E METAS DE VOLUME
+       --------------------------------------------------- */
+    function obterVolumeTotalGeralPorProduto(produtoId) {
+      let vol = 0;
+      if (appData.pedidos) {
+        appData.pedidos.forEach(p => {
+          if (p.produtoId === produtoId) {
+            vol += (parseFloat(p.qtdPrincipal) || 0);
+            if (p.dependentes) {
+              p.dependentes.forEach(d => vol += (parseFloat(d.qtd) || 0));
             }
           }
+        });
+      }
+      return vol;
+    }
+
+    function obterCustoEfetivoProduto(produtoId) {
+      const prod = appData.produtos.find(p => p.id === produtoId);
+      if (!prod) return { custoUnit: 0, metaAtingida: null, volumeTotal: 0 };
+
+      const volumeTotal = obterVolumeTotalGeralPorProduto(produtoId);
+      const fornecedor = appData.fornecedores.find(f => f.id === prod.fornecedorId);
+
+      if (!fornecedor || !fornecedor.produtos) {
+        return { custoUnit: 0, metaAtingida: null, volumeTotal };
+      }
+
+      const itemFornec = fornecedor.produtos.find(p => p.produtoId === produtoId);
+      if (!itemFornec) return { custoUnit: 0, metaAtingida: null, volumeTotal };
+
+      let custoUnit = parseFloat(itemFornec.custoBase) || 0;
+      let metaAtingida = null;
+
+      if (itemFornec.metas && itemFornec.metas.length > 0) {
+        const metasOrdenadas = [...itemFornec.metas].sort((a, b) => b.qtdMin - a.qtdMin);
+        for (let m of metasOrdenadas) {
+          if (volumeTotal >= m.qtdMin) {
+            custoUnit = parseFloat(m.custoComDesconto) || custoUnit;
+            metaAtingida = m;
+            break;
+          }
         }
       }
 
-      let fretePorGrama = 0;
-      if (fornec && volumeTotal > 0) {
-        fretePorGrama = (parseFloat(fornec.freteBase) || 0) / volumeTotal;
-      }
-
-      const custoUnit = precoBaseGramo + fretePorGrama;
-      return { custoUnit, metaAtingida, volumeTotal, fretePorGrama, precoBaseGramo };
+      return { custoUnit, metaAtingida, volumeTotal };
     }
 
-    function calcularPrecoVendaCliente(prod, qtdTotal) {
-      if (!prod || !prod.faixasVenda || prod.faixasVenda.length === 0) return 0;
-      const faixasOrdenadas = [...prod.faixasVenda].sort((a, b) => b.qtdMin - a.qtdMin);
-      for (let f of faixasOrdenadas) {
-        if (qtdTotal >= f.qtdMin) {
-          return parseFloat(f.precoUnitario);
+    function calcularPrecoVendaCliente(produto, qtd) {
+      if (!produto || !produto.faixasVenda || produto.faixasVenda.length === 0) return 0;
+      const faixas = [...produto.faixasVenda].sort((a, b) => b.qtdMin - a.qtdMin);
+      for (let f of faixas) {
+        if (qtd >= f.qtdMin) {
+          return parseFloat(f.precoUnit) || 0;
         }
       }
-      return parseFloat(prod.faixasVenda[0].precoUnitario) || 0;
+      return parseFloat(produto.faixasVenda[0].precoUnit) || 0;
     }
 
-    function calcularLucroLiquidoGlobal() {
+    /* ---------------------------------------------------
+       5. ATUALIZAÇÃO DO DASHBOARD
+       --------------------------------------------------- */
+    function atualizarDashboard() {
       let faturamentoTotal = 0;
-      let custoTotalFornecedores = 0;
+      let faturamentoPendente = 0;
+      let qtdPedidosClientes = 0;
+
+      let custoProducaoTotal = 0;
 
       if (appData.pedidos) {
         appData.pedidos.forEach(p => {
-          const prod = (appData.produtos || []).find(pr => pr.id === p.produtoId);
+          const prod = appData.produtos.find(prd => prd.id === p.produtoId);
+
           let qtdTotal = (parseFloat(p.qtdPrincipal) || 0);
           if (p.dependentes) {
             p.dependentes.forEach(d => qtdTotal += (parseFloat(d.qtd) || 0));
           }
 
           if (prod) {
-            const isSocio = p.isSocio || p.categoria === 'socio';
-            if (!isSocio) {
-              const precoUnit = calcularPrecoVendaCliente(prod, qtdTotal);
-              faturamentoTotal += (qtdTotal * precoUnit);
-            }
             const { custoUnit } = obterCustoEfetivoProduto(prod.id);
-            custoTotalFornecedores += (qtdTotal * custoUnit);
+            custoProducaoTotal += (qtdTotal * custoUnit);
+
+            if (p.categoria !== 'Socio') {
+              qtdPedidosClientes++;
+              const precoUnit = calcularPrecoVendaCliente(prod, qtdTotal);
+              const totalVenda = qtdTotal * precoUnit;
+              faturamentoTotal += totalVenda;
+              if (p.status !== 'Pago') {
+                faturamentoPendente += totalVenda;
+              }
+            }
           }
         });
       }
 
-      const lucroLiquido = faturamentoTotal - custoTotalFornecedores;
-      return { faturamentoTotal, custoTotalFornecedores, lucroLiquido };
-    }
+      // Adiciona Fretes dos fornecedores ao custo
+      if (appData.fornecedores) {
+        appData.fornecedores.forEach(f => {
+          custoProducaoTotal += (parseFloat(f.frete) || 0);
+        });
+      }
 
-    /* ===================================================
-       4. DASHBOARD
-       =================================================== */
-    function atualizarDashboard() {
-      const { faturamentoTotal, custoTotalFornecedores, lucroLiquido } = calcularLucroLiquidoGlobal();
+      const lucroLiquido = faturamentoTotal - custoProducaoTotal;
 
-      const elLucro = document.getElementById('dash-lucro-liquido');
-      if (elLucro) elLucro.innerText = formatarMoeda(lucroLiquido);
-
-      const pctRamom = appData.pctRamom || 50;
+      const pctRamom = appData.splitRamomPct || 50;
       const pctMonique = 100 - pctRamom;
-
       const lucroRamom = (lucroLiquido * pctRamom) / 100;
       const lucroMonique = (lucroLiquido * pctMonique) / 100;
 
-      const elRamom = document.getElementById('val-lucro-ramom');
-      const elMonique = document.getElementById('val-lucro-monique');
-      if (elRamom) elRamom.innerText = formatarMoeda(lucroRamom);
-      if (elMonique) elMonique.innerText = formatarMoeda(lucroMonique);
+      document.getElementById('dash-faturamento-total').innerText = formatarMoeda(faturamentoTotal);
+      document.getElementById('dash-faturamento-sub').innerText = `${qtdPedidosClientes} pedidos de clientes (${formatarMoeda(faturamentoPendente)} pendente)`;
 
-      const elFat = document.getElementById('dash-faturamento');
-      const elFatSub = document.getElementById('dash-faturamento-sub');
-      const numPedidos = (appData.pedidos || []).length;
-      if (elFat) elFat.innerText = formatarMoeda(faturamentoTotal);
-      if (elFatSub) elFatSub.innerText = `${numPedidos} pedido(s) registrado(s)`;
+      document.getElementById('dash-custo-fornecedores').innerText = formatarMoeda(custoProducaoTotal);
 
-      let volumeTotalGeral = 0;
-      let valorPendente = 0;
-      let numPendentes = 0;
+      const elLucro = document.getElementById('dash-lucro-liquido');
+      elLucro.innerText = formatarMoeda(lucroLiquido);
+      elLucro.style.color = lucroLiquido >= 0 ? 'var(--herb-green)' : 'var(--danger-text)';
 
-      (appData.pedidos || []).forEach(p => {
-        const prod = (appData.produtos || []).find(pr => pr.id === p.produtoId);
-        let qtdTotal = (parseFloat(p.qtdPrincipal) || 0);
-        if (p.dependentes) {
-          p.dependentes.forEach(d => qtdTotal += (parseFloat(d.qtd) || 0));
-        }
+      document.getElementById('dash-lucro-divisao').innerText = `Divisão dos Sócios: Ramom ${formatarMoeda(lucroRamom)} (${pctRamom}%) | Monique ${formatarMoeda(lucroMonique)} (${pctMonique}%)`;
 
-        volumeTotalGeral += qtdTotal;
+      // Preenche detalhamento nos painéis expansíveis
+      document.getElementById('panel-faturar-conteudo').innerHTML = `
+        <p><strong>Faturamento Bruto Real:</strong> ${formatarMoeda(faturamentoTotal)}</p>
+        <p><strong>Total Recebido (Pago):</strong> ${formatarMoeda(faturamentoTotal - faturamentoPendente)}</p>
+        <p><strong>Total Pendente:</strong> ${formatarMoeda(faturamentoPendente)}</p>
+      `;
 
-        const isSocio = p.isSocio || p.categoria === 'socio';
-        if (!isSocio && p.status === 'Pendente') {
-          numPendentes++;
-          if (prod) {
-            const precoUnit = calcularPrecoVendaCliente(prod, qtdTotal);
-            valorPendente += (qtdTotal * precoUnit);
-          }
-        }
-      });
-
-      const elVol = document.getElementById('dash-volume');
-      if (elVol) elVol.innerText = `${volumeTotalGeral} g/un`;
-
-      const elPend = document.getElementById('dash-pendente');
-      const elPendSub = document.getElementById('dash-pendente-sub');
-      if (elPend) elPend.innerText = formatarMoeda(valorPendente);
-      if (elPendSub) elPendSub.innerText = `${numPendentes} pedido(s) pendente(s)`;
-
-      // Preencher detalhes dos painéis
-      preencherDetalhesDashboard(faturamentoTotal, valorPendente);
+      document.getElementById('panel-lucro-conteudo').innerHTML = `
+        <p><strong>Lucro Total da Fábrica:</strong> ${formatarMoeda(lucroLiquido)}</p>
+        <p><strong>Parte do Ramom (${pctRamom}%):</strong> ${formatarMoeda(lucroRamom)}</p>
+        <p><strong>Parte da Monique (${pctMonique}%):</strong> ${formatarMoeda(lucroMonique)}</p>
+      `;
     }
 
-    function preencherDetalhesDashboard(faturamentoTotal, valorPendente) {
-      const pFat = document.getElementById('detail-faturamento-content');
-      const pVol = document.getElementById('detail-volume-content');
-      const pPend = document.getElementById('detail-pendente-content');
+    /* ---------------------------------------------------
+       6. GESTÃO DE PEDIDOS & SELEÇÃO DE CATEGORIA
+       --------------------------------------------------- */
+    function selecionarCategoriaPedido(categoria) {
+      document.getElementById('pedido-categoria').value = categoria;
 
-      if (pFat) {
-        pFat.innerHTML = `
-          <p>Faturamento Bruto: <strong>${formatarMoeda(faturamentoTotal)}</strong></p>
-          <p style="font-size:0.82rem; color:var(--text-muted);">Apenas vendas de clientes (consumo de sócios não entra no faturamento).</p>
-        `;
-      }
+      const btnCliente = document.getElementById('cat-btn-cliente');
+      const btnSocio = document.getElementById('cat-btn-socio');
+      const containerCliente = document.getElementById('container-campos-cliente');
 
-      if (pVol) {
-        if (!appData.produtos || appData.produtos.length === 0) {
-          pVol.innerHTML = '<p class="empty-state">Nenhum produto cadastrado.</p>';
-        } else {
-          pVol.innerHTML = appData.produtos.map(p => {
-            const vol = obterVolumeTotalGeralPorProduto(p.id);
-            return `<div style="display:flex; justify-content:space-between; padding:4px 0; border-bottom:1px solid var(--border-color);">
-              <span>${p.nome}:</span> <strong>${vol} g/un</strong>
-            </div>`;
-          }).join('');
-        }
-      }
-
-      if (pPend) {
-        const pendentes = (appData.pedidos || []).filter(p => !p.isSocio && p.categoria !== 'socio' && p.status === 'Pendente');
-        if (pendentes.length === 0) {
-          pPend.innerHTML = '<p class="empty-state">Nenhum pedido pendente de pagamento 🎉</p>';
-        } else {
-          pPend.innerHTML = pendentes.map(p => `
-            <div style="display:flex; justify-content:space-between; padding:4px 0; border-bottom:1px solid var(--border-color);">
-              <span>${p.cliente}:</span> <strong style="color:var(--warning-text);">${p.status}</strong>
-            </div>
-          `).join('');
-        }
-      }
-    }
-
-    /* ===================================================
-       5. GESTÃO DE PEDIDOS
-       =================================================== */
-    function alternarTipoCategoriaPedido() {
-      const catInput = document.querySelector('input[name="pedido-categoria"]:checked');
-      const categoria = catInput ? catInput.value : 'cliente';
-
-      const wrapperStatus = document.getElementById('wrapper-pedido-status');
-      const wrapperEnvio = document.getElementById('wrapper-pedido-envio');
-      const wrapperObs = document.getElementById('wrapper-pedido-obs');
-      const containerEntrega = document.getElementById('container-detalhes-entrega');
-      const inputCliente = document.getElementById('pedido-cliente');
-      const labelCliente = document.getElementById('label-pedido-cliente');
-
-      if (categoria === 'socio') {
-        if (wrapperStatus) wrapperStatus.style.display = 'none';
-        if (wrapperEnvio) wrapperEnvio.style.display = 'none';
-        if (wrapperObs) wrapperObs.style.display = 'none';
-        if (containerEntrega) containerEntrega.style.display = 'none';
-
-        if (labelCliente) labelCliente.innerText = 'Sócio (Ramom / Monique)';
-        if (inputCliente) {
-          inputCliente.placeholder = 'Ex: Ramom ou Monique';
-          if (!inputCliente.value.trim() || inputCliente.value === 'João Silva') inputCliente.value = 'Ramom / Monique';
-        }
+      if (categoria === 'Socio') {
+        btnSocio.className = 'cat-btn active-socio';
+        btnCliente.className = 'cat-btn';
+        containerCliente.style.display = 'none';
       } else {
-        if (wrapperStatus) wrapperStatus.style.display = 'block';
-        if (wrapperEnvio) wrapperEnvio.style.display = 'block';
-        if (wrapperObs) wrapperObs.style.display = 'block';
-
-        if (labelCliente) labelCliente.innerText = 'Cliente';
-        if (inputCliente) {
-          inputCliente.placeholder = 'Ex: João Silva';
-          if (inputCliente.value === 'Ramom / Monique') inputCliente.value = '';
-        }
-
-        alternarCamposEnvio();
+        btnCliente.className = 'cat-btn active-cliente';
+        btnSocio.className = 'cat-btn';
+        containerCliente.style.display = 'grid';
       }
-
       atualizarCalculoPedido();
     }
 
     function alternarCamposEnvio() {
       const envio = document.getElementById('pedido-envio').value;
       const container = document.getElementById('container-detalhes-entrega');
-      if (container) {
-        container.style.display = (envio === 'Entrega por Conta') ? 'grid' : 'none';
-      }
+      container.style.display = envio === 'Entrega por Conta' ? 'grid' : 'none';
     }
 
-    function adicionarLinhaDependente(nome = '', qtd = 1) {
+    function adicionarLinhaDependente(nome = '', qtd = '') {
       const list = document.getElementById('dependentes-list');
-      const rowId = 'dep_' + Date.now() + '_' + Math.random().toString(36).substr(2, 4);
-
       const div = document.createElement('div');
       div.className = 'faixa-row';
-      div.id = rowId;
+      div.style.cssText = 'display:flex; gap:8px; align-items:center;';
       div.innerHTML = `
-        <input type="text" class="dep-nome" placeholder="Nome do Dependente" value="${nome}" style="flex:2;">
-        <input type="number" class="dep-qtd" placeholder="Qtd (g/un)" value="${qtd}" min="1" style="flex:1;" oninput="atualizarCalculoPedido()">
-        <button type="button" class="btn-icon" onclick="document.getElementById('${rowId}').remove(); atualizarCalculoPedido();" title="Remover">🗑️</button>
+        <input type="text" class="dep-nome" placeholder="Nome (Ex: Amigo / Extra)" value="${nome}" style="flex:1;">
+        <input type="number" class="dep-qtd" placeholder="Qtd (g/un)" min="1" value="${qtd}" oninput="atualizarCalculoPedido()" style="width:110px;">
+        <button type="button" class="btn-action btn-delete" onclick="this.parentElement.remove(); atualizarCalculoPedido();">✕</button>
       `;
       list.appendChild(div);
       atualizarCalculoPedido();
     }
 
     function atualizarCalculoPedido() {
+      const categoria = document.getElementById('pedido-categoria').value;
       const prodId = document.getElementById('pedido-produto').value;
-      const catInput = document.querySelector('input[name="pedido-categoria"]:checked');
-      const isSocio = catInput && catInput.value === 'socio';
+      const qtdPrincipal = parseFloat(document.getElementById('pedido-qtd-principal').value) || 0;
 
-      const qtdP = parseFloat(document.getElementById('pedido-qtd-principal').value) || 0;
-      let qtdTotal = qtdP;
-
-      document.querySelectorAll('#dependentes-list .faixa-row').forEach(row => {
-        qtdTotal += parseFloat(row.querySelector('.dep-qtd').value) || 0;
+      let qtdTotal = qtdPrincipal;
+      document.querySelectorAll('#dependentes-list .dep-qtd').forEach(input => {
+        qtdTotal += (parseFloat(input.value) || 0);
       });
 
-      const preview = document.getElementById('pedido-calc-preview');
-      if (!preview) return;
+      const calcPreview = document.getElementById('pedido-calc-preview');
 
-      if (!prodId) {
-        preview.innerText = 'Cálculo estimado: R$ 0,00';
+      if (categoria === 'Socio') {
+        calcPreview.innerHTML = `<strong>👑 Consumo Próprio de Sócio:</strong> Venda R$ 0,00 | Total em Estoque: <strong>${qtdTotal} g/un</strong>`;
         return;
       }
 
-      const prod = (appData.produtos || []).find(p => p.id === prodId);
+      const prod = appData.produtos.find(p => p.id === prodId);
       if (!prod) {
-        preview.innerText = 'Cálculo estimado: R$ 0,00';
+        calcPreview.innerText = 'Cálculo estimado: R$ 0,00';
         return;
       }
 
-      const { custoUnit } = obterCustoEfetivoProduto(prod.id);
-      const custoTotal = qtdTotal * custoUnit;
+      const precoUnit = calcularPrecoVendaCliente(prod, qtdTotal);
+      const totalEstimado = qtdTotal * precoUnit;
 
-      if (isSocio) {
-        preview.innerHTML = `👑 <strong>Consumo Próprio Sócio:</strong> Venda = R$ 0,00 | Custo para a Fábrica: <strong>${formatarMoeda(custoTotal)}</strong> (${qtdTotal}g/un)`;
-      } else {
-        const precoUnit = calcularPrecoVendaCliente(prod, qtdTotal);
-        const valorVenda = qtdTotal * precoUnit;
-        const lucro = valorVenda - custoTotal;
-        preview.innerHTML = `Cálculo estimado: Venda <strong>${formatarMoeda(valorVenda)}</strong> | Custo Est.: ${formatarMoeda(custoTotal)} | Lucro: <strong style="color:var(--success-text);">${formatarMoeda(lucro)}</strong> (${qtdTotal}g/un)`;
-      }
+      calcPreview.innerHTML = `Cálculo estimado: <strong>${formatarMoeda(totalEstimado)}</strong> (${qtdTotal} g/un x ${formatarMoeda(precoUnit)}/g)`;
     }
 
     function salvarPedido(e) {
       e.preventDefault();
       const id = document.getElementById('pedido-id').value;
-      const catInput = document.querySelector('input[name="pedido-categoria"]:checked');
-      const categoria = catInput ? catInput.value : 'cliente';
-      const isSocio = (categoria === 'socio');
-
-      let cliente = document.getElementById('pedido-cliente').value.trim();
-      if (!cliente) {
-        cliente = isSocio ? 'Consumo Sócio (Ramom/Monique)' : 'Cliente';
-      }
-
+      const categoria = document.getElementById('pedido-categoria').value;
+      const cliente = document.getElementById('pedido-cliente').value.trim() || 'Cliente';
       const produtoId = document.getElementById('pedido-produto').value;
-      if (!produtoId) {
-        alert('Por favor, selecione um produto.');
-        return;
-      }
-
       const qtdPrincipal = parseFloat(document.getElementById('pedido-qtd-principal').value) || 1;
 
-      const status = isSocio ? 'Pago' : (document.getElementById('pedido-status').value || 'Pendente');
-      const tipoEnvio = isSocio ? 'Consumo Próprio' : (document.getElementById('pedido-envio').value || 'Retirada');
-      const endereco = isSocio ? '' : document.getElementById('pedido-endereco').value.trim();
-      const dia = isSocio ? '' : document.getElementById('pedido-dia').value.trim();
-      const horario = isSocio ? '' : document.getElementById('pedido-horario').value.trim();
-      const observacoes = isSocio ? '' : document.getElementById('pedido-obs').value.trim();
+      const status = categoria === 'Socio' ? 'Pago' : (document.getElementById('pedido-status').value || 'Pendente');
+      const tipoEnvio = categoria === 'Socio' ? 'Retirada' : (document.getElementById('pedido-envio').value || 'Retirada');
+      const endereco = categoria === 'Socio' ? '' : document.getElementById('pedido-endereco').value.trim();
+      const dia = categoria === 'Socio' ? '' : document.getElementById('pedido-dia').value.trim();
+      const horario = categoria === 'Socio' ? '' : document.getElementById('pedido-horario').value.trim();
+      const observacoes = categoria === 'Socio' ? '' : document.getElementById('pedido-obs').value.trim();
 
       const dependentes = [];
       document.querySelectorAll('#dependentes-list .faixa-row').forEach(row => {
@@ -1439,381 +1244,528 @@
       });
 
       const pedidoObj = {
-        id: id || 'ped_' + Date.now(),
-        categoria: categoria,
-        isSocio: isSocio,
-        cliente: cliente,
-        produtoId: produtoId,
-        qtdPrincipal: qtdPrincipal,
-        dependentes: dependentes,
-        status: status,
-        tipoEnvio: tipoEnvio,
-        endereco: endereco,
-        dia: dia,
-        horario: horario,
-        observacoes: observacoes,
-        dataRegistro: new Date().toISOString()
+        id: id || ('ped_' + Date.now() + '_' + Math.random().toString(36).substr(2,4)),
+        categoria,
+        cliente,
+        produtoId,
+        qtdPrincipal,
+        dependentes,
+        status,
+        tipoEnvio,
+        endereco,
+        dia,
+        horario,
+        observacoes,
+        dataCriacao: new Date().toISOString()
       };
-
-      if (!appData.pedidos) appData.pedidos = [];
 
       if (id) {
         const idx = appData.pedidos.findIndex(p => p.id === id);
         if (idx !== -1) appData.pedidos[idx] = pedidoObj;
-        registrarLog(`Editou o pedido de "${cliente}"`);
       } else {
+        if (!appData.pedidos) appData.pedidos = [];
         appData.pedidos.push(pedidoObj);
-        registrarLog(`Cadastrou pedido de "${cliente}" (${isSocio ? 'Consumo Sócio' : 'Cliente'})`);
       }
 
       salvarDados();
-      renderizarTudo();
       cancelarEdicaoPedido();
-    }
-
-    function renderizarPedidos() {
-      const tbody = document.getElementById('lista-pedidos');
-      if (!tbody) return;
-      tbody.innerHTML = '';
-
-      if (!appData.pedidos || appData.pedidos.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="8" class="empty-state">Nenhum pedido registrado.</td></tr>';
-        return;
-      }
-
-      appData.pedidos.forEach(ped => {
-        const prod = (appData.produtos || []).find(p => p.id === ped.produtoId);
-        const prodNome = prod ? prod.nome : 'Não especificado';
-
-        let qtdTotal = (parseFloat(ped.qtdPrincipal) || 0);
-        if (ped.dependentes) {
-          ped.dependentes.forEach(d => qtdTotal += (parseFloat(d.qtd) || 0));
-        }
-
-        const isSocio = ped.isSocio || ped.categoria === 'socio';
-        let valorTotalPedido = 0;
-        let custoTotalPedido = 0;
-
-        if (prod) {
-          if (!isSocio) {
-            const precoUnit = calcularPrecoVendaCliente(prod, qtdTotal);
-            valorTotalPedido = qtdTotal * precoUnit;
-          }
-          const { custoUnit } = obterCustoEfetivoProduto(prod.id);
-          custoTotalPedido = qtdTotal * custoUnit;
-        }
-
-        let badgeStatusHtml = '';
-        if (isSocio) {
-          badgeStatusHtml = '<span class="badge-status badge-socio">👑 Consumo Sócio</span>';
-        } else {
-          const statusClass = ped.status === 'Pago' ? 'badge-pago' : 'badge-pendente';
-          badgeStatusHtml = `<span class="badge-status ${statusClass}">${ped.status}</span>`;
-        }
-
-        const tr = document.createElement('tr');
-        tr.innerHTML = `
-          <td><strong>${ped.cliente}</strong></td>
-          <td>${prodNome}</td>
-          <td>${qtdTotal} g/un</td>
-          <td><strong>${formatarMoeda(valorTotalPedido)}</strong></td>
-          <td>${formatarMoeda(custoTotalPedido)}</td>
-          <td>${ped.tipoEnvio || '—'}</td>
-          <td>${badgeStatusHtml}</td>
-          <td>
-            <div class="action-btns">
-              <button class="btn-icon" onclick="editarPedido('${ped.id}')" title="Editar">✏️</button>
-              <button class="btn-icon" onclick="excluirPedido('${ped.id}')" title="Excluir">🗑️</button>
-            </div>
-          </td>
-        `;
-        tbody.appendChild(tr);
-      });
-    }
-
-    function editarPedido(id) {
-      const ped = (appData.pedidos || []).find(p => p.id === id);
-      if (!ped) return;
-
-      document.getElementById('pedido-id').value = ped.id;
-      document.getElementById('form-pedido-title').innerText = 'Editar Pedido';
-
-      const isSocio = ped.isSocio || ped.categoria === 'socio';
-      const radioSocio = document.querySelector('input[name="pedido-categoria"][value="socio"]');
-      const radioCliente = document.querySelector('input[name="pedido-categoria"][value="cliente"]');
-
-      if (isSocio && radioSocio) radioSocio.checked = true;
-      else if (radioCliente) radioCliente.checked = true;
-
-      alternarTipoCategoriaPedido();
-
-      document.getElementById('pedido-cliente').value = ped.cliente || '';
-      document.getElementById('pedido-produto').value = ped.produtoId || '';
-      document.getElementById('pedido-qtd-principal').value = ped.qtdPrincipal || 1;
-
-      if (!isSocio) {
-        if (document.getElementById('pedido-status')) document.getElementById('pedido-status').value = ped.status || 'Pendente';
-        if (document.getElementById('pedido-envio')) document.getElementById('pedido-envio').value = ped.tipoEnvio || 'Retirada';
-        if (document.getElementById('pedido-endereco')) document.getElementById('pedido-endereco').value = ped.endereco || '';
-        if (document.getElementById('pedido-dia')) document.getElementById('pedido-dia').value = ped.dia || '';
-        if (document.getElementById('pedido-horario')) document.getElementById('pedido-horario').value = ped.horario || '';
-        if (document.getElementById('pedido-obs')) document.getElementById('pedido-obs').value = ped.observacoes || '';
-      }
-
-      const depList = document.getElementById('dependentes-list');
-      depList.innerHTML = '';
-      if (ped.dependentes && ped.dependentes.length > 0) {
-        ped.dependentes.forEach(d => {
-          adicionarLinhaDependente(d.nome, d.qtd);
-        });
-      }
-
-      document.getElementById('btn-pedido-submit').innerText = 'Atualizar Pedido';
-      document.getElementById('btn-pedido-cancel').style.display = 'inline-block';
-
-      document.getElementById('form-pedido').scrollIntoView({ behavior: 'smooth' });
+      renderizarTudo();
     }
 
     function cancelarEdicaoPedido() {
       document.getElementById('pedido-id').value = '';
       document.getElementById('form-pedido').reset();
-      document.getElementById('form-pedido-title').innerText = 'Novo Pedido';
       document.getElementById('dependentes-list').innerHTML = '';
-      
-      const radioCliente = document.querySelector('input[name="pedido-categoria"][value="cliente"]');
-      if (radioCliente) radioCliente.checked = true;
-      alternarTipoCategoriaPedido();
-
+      document.getElementById('form-pedido-title').innerText = 'Novo Pedido';
       document.getElementById('btn-pedido-submit').innerText = 'Salvar Pedido';
       document.getElementById('btn-pedido-cancel').style.display = 'none';
+      selecionarCategoriaPedido('Cliente');
+    }
+
+    function editarPedido(id) {
+      const ped = appData.pedidos.find(p => p.id === id);
+      if (!ped) return;
+
+      document.getElementById('pedido-id').value = ped.id;
+      selecionarCategoriaPedido(ped.categoria || 'Cliente');
+
+      document.getElementById('pedido-cliente').value = ped.cliente || '';
+      document.getElementById('pedido-produto').value = ped.produtoId || '';
+      document.getElementById('pedido-qtd-principal').value = ped.qtdPrincipal || 1;
+
+      if (ped.categoria !== 'Socio') {
+        document.getElementById('pedido-status').value = ped.status || 'Pendente';
+        document.getElementById('pedido-envio').value = ped.tipoEnvio || 'Retirada';
+        document.getElementById('pedido-endereco').value = ped.endereco || '';
+        document.getElementById('pedido-dia').value = ped.dia || '';
+        document.getElementById('pedido-horario').value = ped.horario || '';
+        document.getElementById('pedido-obs').value = ped.observacoes || '';
+        alternarCamposEnvio();
+      }
+
+      const depContainer = document.getElementById('dependentes-list');
+      depContainer.innerHTML = '';
+      if (ped.dependentes) {
+        ped.dependentes.forEach(d => adicionarLinhaDependente(d.nome, d.qtd));
+      }
+
+      document.getElementById('form-pedido-title').innerText = 'Editar Pedido';
+      document.getElementById('btn-pedido-submit').innerText = 'Atualizar Pedido';
+      document.getElementById('btn-pedido-cancel').style.display = 'inline-block';
+
+      // Rola suavemente até o formulário
+      document.getElementById('form-pedido').scrollIntoView({ behavior: 'smooth' });
     }
 
     function excluirPedido(id) {
-      if (confirm('Tem certeza que deseja excluir este pedido?')) {
-        const ped = appData.pedidos.find(p => p.id === id);
-        if (ped) registrarLog(`Excluiu o pedido de "${ped.cliente}"`);
+      if (confirm('Deseja realmente excluir este pedido?')) {
         appData.pedidos = appData.pedidos.filter(p => p.id !== id);
         salvarDados();
         renderizarTudo();
       }
     }
 
-    /* ===================================================
-       6. GESTÃO DE FORNECEDORES
-       =================================================== */
-    function adicionarBlocoProdutoFornecedor(nomeProd = '', precoBase = '', metas = []) {
-      const container = document.getElementById('fornecedor-produtos-container');
-      const blockId = 'fprod_' + Date.now() + '_' + Math.random().toString(36).substr(2, 4);
+    function renderizarPedidos() {
+      const tbody = document.getElementById('lista-pedidos');
+      tbody.innerHTML = '';
 
-      const div = document.createElement('div');
-      div.className = 'form-section';
-      div.id = blockId;
-      div.style.background = '#ffffff';
-      div.style.padding = '12px';
-      div.style.marginBottom = '10px';
+      if (!appData.pedidos || appData.pedidos.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="8" style="text-align:center; padding:20px; color:var(--text-muted);">Nenhum pedido cadastrado.</td></tr>';
+        return;
+      }
 
-      div.innerHTML = `
-        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
-          <strong style="color:var(--choc-dark); font-size:0.9rem;">Produto Fornecido</strong>
-          <button type="button" class="btn-icon" onclick="document.getElementById('${blockId}').remove()" title="Remover Produto">🗑️</button>
-        </div>
-        <div class="form-grid">
-          <div class="form-group">
-            <label>Nome do Produto</label>
-            <input type="text" class="fprod-nome" placeholder="Ex: Barra 70%" value="${nomeProd}" required>
-          </div>
-          <div class="form-group">
-            <label>Preço Base / Grama (R$)</label>
-            <input type="number" step="0.0001" class="fprod-preco-base" placeholder="0,05" value="${precoBase}" required>
-          </div>
-          <div class="form-group full-width">
-            <label>Descontos por Volume (Grama Min e Novo Preço/g)</label>
-            <div class="fprod-metas-container" style="display:flex; flex-direction:column; gap:6px; margin-top:4px;"></div>
-            <button type="button" class="btn-secondary" style="margin-top:6px; font-size:0.78rem;" onclick="adicionarMetaVolumeEmBloco('${blockId}')">+ Adicionar Regra de Desconto</button>
-          </div>
-        </div>
-      `;
-      container.appendChild(div);
+      appData.pedidos.forEach(ped => {
+        const prod = appData.produtos.find(p => p.id === ped.produtoId);
+        const prodNome = prod ? prod.nome : 'Não especificado';
 
-      if (metas && metas.length > 0) {
-        metas.forEach(m => adicionarMetaVolumeEmBloco(blockId, m.qtdMin, m.precoComDesconto));
+        let qtdTotal = (parseFloat(ped.qtdPrincipal) || 0);
+        let numDeps = 0;
+        if (ped.dependentes) {
+          numDeps = ped.dependentes.length;
+          ped.dependentes.forEach(d => qtdTotal += (parseFloat(d.qtd) || 0));
+        }
+
+        let valorTotalPedido = 0;
+        let custoTotalPedido = 0;
+
+        if (prod) {
+          const { custoUnit } = obterCustoEfetivoProduto(prod.id);
+          custoTotalPedido = qtdTotal * custoUnit;
+
+          if (ped.categoria === 'Socio') {
+            valorTotalPedido = 0;
+          } else {
+            const precoUnit = calcularPrecoVendaCliente(prod, qtdTotal);
+            valorTotalPedido = qtdTotal * precoUnit;
+          }
+        }
+
+        let statusBadge = `<span class="badge ${ped.status === 'Pago' ? 'badge-pago' : 'badge-pendente'}">${ped.status || 'Pendente'}</span>`;
+        if (ped.categoria === 'Socio') {
+          statusBadge = `<span class="badge badge-socio">👑 Sócio (R$ 0)</span>`;
+        }
+
+        const tr = document.createElement('tr');
+        tr.className = 'order-row-clickable';
+        tr.innerHTML = `
+          <td><strong>${ped.cliente || 'Sem Nome'}</strong> ${numDeps > 0 ? `<small style="color:var(--choc-milk);">(+${numDeps} adic.)</small>` : ''}</td>
+          <td>${prodNome}</td>
+          <td><strong>${qtdTotal} g/un</strong></td>
+          <td>${formatarMoeda(custoTotalPedido)}</td>
+          <td><strong>${formatarMoeda(valorTotalPedido)}</strong></td>
+          <td>${ped.categoria === 'Socio' ? 'Consumo Próprio' : (ped.tipoEnvio || 'Retirada')}</td>
+          <td>${statusBadge}</td>
+          <td>
+            <button class="btn-action btn-edit" onclick="event.stopPropagation(); editarPedido('${ped.id}')">✏️ Editar</button>
+            <button class="btn-action btn-delete" onclick="event.stopPropagation(); excluirPedido('${ped.id}')">🗑️ Excluir</button>
+          </td>
+        `;
+
+        const trDetails = document.createElement('tr');
+        trDetails.id = `details-ped-${ped.id}`;
+        trDetails.style.display = 'none';
+
+        let dependentesHtml = '<em>Nenhum adicional/rateio registrado.</em>';
+        if (ped.dependentes && ped.dependentes.length > 0) {
+          dependentesHtml = '<ul>' + ped.dependentes.map(d => `<li><strong>${d.nome || 'Adicional'}:</strong> ${d.qtd || 0} g/un</li>`).join('') + '</ul>';
+        }
+
+        trDetails.innerHTML = `
+          <td colspan="8" style="background:#fdfaf8; padding:14px 20px;">
+            <div style="border-left:3px solid var(--choc-dark); padding-left:14px;">
+              <h4 style="color:var(--choc-dark); margin-bottom:6px;">📋 Ficha do Pedido / Cliente - ${ped.cliente || 'Cliente'}</h4>
+              <p><strong>Pedido Principal:</strong> ${ped.cliente || 'Cliente'} (${ped.qtdPrincipal || 0} g/un)</p>
+              <div style="margin:6px 0;"><strong>Rateio / Adicionais Separados:</strong> ${dependentesHtml}</div>
+              <p style="margin-top:4px; font-weight:700; color:var(--choc-dark);">Total Acumulado do Pedido: ${qtdTotal} g/un</p>
+              ${ped.categoria !== 'Socio' && ped.observacoes ? `<p style="margin-top:6px; color:var(--text-muted);"><strong>Obs:</strong> ${ped.observacoes}</p>` : ''}
+            </div>
+          </td>
+        `;
+
+        tr.onclick = () => {
+          const det = document.getElementById(`details-ped-${ped.id}`);
+          det.style.display = det.style.display === 'none' ? 'table-row' : 'none';
+        };
+
+        tbody.appendChild(tr);
+        tbody.appendChild(trDetails);
+      });
+    }
+
+    /* ---------------------------------------------------
+       7. MÓDULO DE IMPORTAÇÃO INTELIGENTE DO WHATSAPP
+       --------------------------------------------------- */
+    let pedidosWhatsAppParsed = [];
+
+    function abrirModalImportarWhatsApp() {
+      document.getElementById('whatsapp-import-text').value = '';
+      document.getElementById('whatsapp-preview-area').style.display = 'none';
+      const btn = document.getElementById('btn-confirmar-importacao');
+      btn.disabled = true;
+      btn.style.opacity = '0.5';
+      btn.innerText = '⚠️ Cole uma lista válida para importar';
+      pedidosWhatsAppParsed = [];
+      document.getElementById('modal-import-whatsapp').style.display = 'flex';
+    }
+
+    function fecharModalImportarWhatsApp() {
+      document.getElementById('modal-import-whatsapp').style.display = 'none';
+    }
+
+    function processarTextoWhatsApp() {
+      const rawText = document.getElementById('whatsapp-import-text').value;
+      const lines = rawText.split('\n').map(l => l.trim()).filter(l => l.length > 0);
+
+      pedidosWhatsAppParsed = [];
+
+      if (lines.length === 0) {
+        document.getElementById('whatsapp-preview-area').style.display = 'none';
+        const btn = document.getElementById('btn-confirmar-importacao');
+        btn.disabled = true;
+        btn.style.opacity = '0.5';
+        btn.innerText = '⚠️ Cole uma lista válida para importar';
+        return;
+      }
+
+      // 1. Identifica Nome do Produto no Cabeçalho
+      let rawProductName = 'Capulho';
+      for (let line of lines) {
+        if (!line.startsWith('-') && !line.toLowerCase().includes('valores') && !line.toLowerCase().includes('fechamento')) {
+          // Remove emojis e caracteres especiais
+          rawProductName = line.replace(/[^a-zA-Z0-9áàâãéèêíïóôõöúçñÁÀÂÃÉÈÊÍÏÓÔÕÖÚÇÑ ]/g, '').trim();
+          break;
+        }
+      }
+
+      // Trata a regra: Se for "Capulho Gold" ou similar, importa como "Capulho"
+      let nomeProdutoNormalizado = rawProductName;
+      if (rawProductName.toLowerCase().includes('capulho')) {
+        nomeProdutoNormalizado = 'Capulho';
+      }
+
+      // Tenta associar com os produtos cadastrados
+      let prodObj = appData.produtos.find(p => p.nome.toLowerCase() === nomeProdutoNormalizado.toLowerCase() || p.nome.toLowerCase().includes(nomeProdutoNormalizado.toLowerCase()));
+      let targetProdutoId = prodObj ? prodObj.id : (appData.produtos[0] ? appData.produtos[0].id : '');
+
+      // 2. Processa as linhas de clientes (ex: - Shazam - 60g ✅)
+      lines.forEach(line => {
+        if (line.startsWith('-') || line.includes('-')) {
+          const isPago = line.includes('✅');
+          const cleanLine = line.replace('✅', '').replace(/^-/, '').trim();
+          const parts = cleanLine.split('-').map(p => p.trim()).filter(p => p.length > 0);
+
+          if (parts.length >= 2) {
+            const clienteNome = parts[0];
+            const qtdStr = parts[1];
+
+            // Analisa quantias compostas (ex: 15g+10g ou 80g)
+            let qtdPrincipal = 0;
+            let dependentes = [];
+
+            if (qtdStr.includes('+')) {
+              const subQtds = qtdStr.split('+').map(s => parseFloat(s.replace(/[^0-9.]/g, '')) || 0);
+              qtdPrincipal = subQtds[0] || 0;
+
+              for (let i = 1; i < subQtds.length; i++) {
+                if (subQtds[i] > 0) {
+                  dependentes.push({
+                    nome: `Adicional Rateio ${i}`,
+                    qtd: subQtds[i]
+                  });
+                }
+              }
+            } else {
+              qtdPrincipal = parseFloat(qtdStr.replace(/[^0-9.]/g, '')) || 0;
+            }
+
+            if (clienteNome && qtdPrincipal > 0) {
+              pedidosWhatsAppParsed.push({
+                cliente: clienteNome,
+                produtoId: targetProdutoId,
+                produtoNomeDisplay: prodObj ? prodObj.nome : nomeProdutoNormalizado,
+                qtdPrincipal,
+                dependentes,
+                status: isPago ? 'Pago' : 'Pendente',
+                categoria: 'Cliente',
+                tipoEnvio: 'Retirada'
+              });
+            }
+          }
+        }
+      });
+
+      // Atualiza a prévia visual
+      const previewArea = document.getElementById('whatsapp-preview-area');
+      const tbody = document.getElementById('whatsapp-preview-tbody');
+      tbody.innerHTML = '';
+
+      if (pedidosWhatsAppParsed.length > 0) {
+        previewArea.style.display = 'block';
+        pedidosWhatsAppParsed.forEach(p => {
+          let totalQtd = p.qtdPrincipal;
+          let depText = '';
+          if (p.dependentes && p.dependentes.length > 0) {
+            p.dependentes.forEach(d => totalQtd += d.qtd);
+            depText = ` (${p.qtdPrincipal}g + ${p.dependentes.map(d=>d.qtd+'g').join('+')})`;
+          }
+
+          const tr = document.createElement('tr');
+          tr.innerHTML = `
+            <td><strong>${p.cliente}</strong></td>
+            <td>${p.produtoNomeDisplay}</td>
+            <td><strong>${totalQtd} g/un</strong> <small style="color:var(--text-muted);">${depText}</small></td>
+            <td><span class="badge ${p.status === 'Pago' ? 'badge-pago' : 'badge-pendente'}">${p.status}</span></td>
+          `;
+          tbody.appendChild(tr);
+        });
+
+        const btn = document.getElementById('btn-confirmar-importacao');
+        btn.disabled = false;
+        btn.style.opacity = '1';
+        btn.innerText = `✅ Confirmar e Importar ${pedidosWhatsAppParsed.length} Pedidos`;
+      } else {
+        previewArea.style.display = 'none';
+        const btn = document.getElementById('btn-confirmar-importacao');
+        btn.disabled = true;
+        btn.style.opacity = '0.5';
+        btn.innerText = '⚠️ Nenhum pedido válido reconhecido';
       }
     }
 
-    function adicionarMetaVolumeEmBloco(blockId, qtdMin = '', preco = '') {
-      const block = document.getElementById(blockId);
-      if (!block) return;
-      const container = block.querySelector('.fprod-metas-container');
-      const rowId = 'meta_' + Date.now() + '_' + Math.random().toString(36).substr(2, 4);
+    function confirmarImportacaoWhatsApp() {
+      if (pedidosWhatsAppParsed.length === 0) return;
+
+      if (!appData.pedidos) appData.pedidos = [];
+
+      pedidosWhatsAppParsed.forEach(p => {
+        appData.pedidos.push({
+          id: 'ped_' + Date.now() + '_' + Math.random().toString(36).substr(2,4),
+          categoria: 'Cliente',
+          cliente: p.cliente,
+          produtoId: p.produtoId,
+          qtdPrincipal: p.qtdPrincipal,
+          dependentes: p.dependentes,
+          status: p.status,
+          tipoEnvio: 'Retirada',
+          dataCriacao: new Date().toISOString()
+        });
+      });
+
+      salvarDados();
+      fecharModalImportarWhatsApp();
+      renderizarTudo();
+      alert(`🎉 Sucesso! ${pedidosWhatsAppParsed.length} pedidos importados do WhatsApp!`);
+    }
+
+    /* ---------------------------------------------------
+       8. GESTÃO DE FORNECEDORES & PRODUTOS EMBUTIDOS
+       --------------------------------------------------- */
+    function adicionarBlocoProdutoFornecedor(prodId = '', custoBase = '', metas = []) {
+      const container = document.getElementById('container-produtos-fornecedor');
+      const blockId = 'fornec_prod_' + Date.now() + '_' + Math.random().toString(36).substr(2,4);
+
+      let optionsProd = '<option value="">Selecione o produto...</option>';
+      if (appData.produtos) {
+        appData.produtos.forEach(p => {
+          optionsProd += `<option value="${p.id}" ${p.id === prodId ? 'selected' : ''}>${p.nome}</option>`;
+        });
+      }
 
       const div = document.createElement('div');
-      div.className = 'faixa-row';
-      div.id = rowId;
+      div.className = 'card-sub-bg';
+      div.id = blockId;
+      div.style.cssText = 'border:1px solid var(--border-color); border-radius:10px; padding:12px; margin-bottom:8px;';
       div.innerHTML = `
-        <input type="number" class="fprod-meta-qtd" placeholder="Qtd Mín. (g)" value="${qtdMin}" style="flex:1;">
-        <input type="number" step="0.0001" class="fprod-meta-preco" placeholder="Novo Preço/g (R$)" value="${preco}" style="flex:1;">
-        <button type="button" class="btn-icon" onclick="document.getElementById('${rowId}').remove()" title="Remover Regra">🗑️</button>
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+          <strong style="color:var(--choc-dark); font-size:0.88rem;">Item Fornecido</strong>
+          <button type="button" class="btn-action btn-delete" onclick="document.getElementById('${blockId}').remove();">✕ Remover Item</button>
+        </div>
+        <div class="form-grid">
+          <div class="form-group">
+            <label>Produto</label>
+            <select class="fornec-prod-id">${optionsProd}</select>
+          </div>
+          <div class="form-group">
+            <label>Custo Base Standard (R$/g)</label>
+            <input type="number" step="0.01" min="0" class="fornec-prod-custo" value="${custoBase}" placeholder="Ex: 3.50">
+          </div>
+        </div>
+        <div style="margin-top:8px;">
+          <label style="font-size:0.8rem; font-weight:700;">Metas de Volume & Desconto Progressivo:</label>
+          <div class="metas-container" style="display:flex; flex-direction:column; gap:6px; margin-top:4px;"></div>
+          <button type="button" class="btn-secondary" style="margin-top:6px; font-size:0.78rem;" onclick="adicionarMetaVolumeEmBloco('${blockId}')">+ Adicionar Meta de Desconto</button>
+        </div>
       `;
+
       container.appendChild(div);
+
+      if (metas && metas.length > 0) {
+        metas.forEach(m => adicionarMetaVolumeEmBloco(blockId, m.qtdMin, m.custoComDesconto));
+      }
+    }
+
+    function adicionarMetaVolumeEmBloco(blockId, qtdMin = '', custo = '') {
+      const block = document.getElementById(blockId);
+      if (!block) return;
+      const metasContainer = block.querySelector('.metas-container');
+
+      const div = document.createElement('div');
+      div.style.cssText = 'display:flex; gap:8px; align-items:center;';
+      div.innerHTML = `
+        <input type="number" class="meta-qtd" placeholder="Qtd Mínima (g)" min="1" value="${qtdMin}" style="flex:1;">
+        <input type="number" step="0.01" class="meta-custo" placeholder="Novo Custo (R$/g)" min="0" value="${custo}" style="flex:1;">
+        <button type="button" class="btn-action btn-delete" onclick="this.parentElement.remove();">✕</button>
+      `;
+      metasContainer.appendChild(div);
     }
 
     function salvarFornecedor(e) {
       e.preventDefault();
       const id = document.getElementById('fornecedor-id').value;
       const nome = document.getElementById('fornecedor-nome').value.trim();
-      const freteBase = parseFloat(document.getElementById('fornecedor-frete').value) || 0;
+      const frete = parseFloat(document.getElementById('fornecedor-frete').value) || 0;
 
-      const produtosAssociados = [];
-      document.querySelectorAll('#fornecedor-produtos-container > .form-section').forEach(block => {
-        const nomeProd = block.querySelector('.fprod-nome').value.trim();
-        const precoBase = parseFloat(block.querySelector('.fprod-preco-base').value) || 0;
+      const produtos = [];
+      document.querySelectorAll('#container-produtos-fornecedor > div').forEach(block => {
+        const prodId = block.querySelector('.fornec-prod-id').value;
+        const custoBase = parseFloat(block.querySelector('.fornec-prod-custo').value) || 0;
 
-        const metasVolume = [];
-        block.querySelectorAll('.fprod-metas-container .faixa-row').forEach(r => {
-          const q = parseFloat(r.querySelector('.fprod-meta-qtd').value) || 0;
-          const p = parseFloat(r.querySelector('.fprod-meta-preco').value) || 0;
-          if (q > 0) metasVolume.push({ qtdMin: q, precoComDesconto: p });
+        const metas = [];
+        block.querySelectorAll('.metas-container > div').forEach(mRow => {
+          const q = parseFloat(mRow.querySelector('.meta-qtd').value) || 0;
+          const c = parseFloat(mRow.querySelector('.meta-custo').value) || 0;
+          if (q > 0) metas.push({ qtdMin: q, custoComDesconto: c });
         });
 
-        if (nomeProd) {
-          produtosAssociados.push({
-            id: 'pa_' + Date.now() + '_' + Math.random().toString(36).substr(2, 4),
-            nomeProduto: nomeProd,
-            precoBase: precoBase,
-            metasVolume: metasVolume
-          });
-        }
+        if (prodId) produtos.push({ produtoId: prodId, custoBase, metas });
       });
 
       const fornecObj = {
-        id: id || 'for_' + Date.now(),
-        nome: nome,
-        freteBase: freteBase,
-        produtosAssociados: produtosAssociados
+        id: id || ('fornec_' + Date.now()),
+        nome,
+        frete,
+        produtos
       };
-
-      if (!appData.fornecedores) appData.fornecedores = [];
 
       if (id) {
         const idx = appData.fornecedores.findIndex(f => f.id === id);
         if (idx !== -1) appData.fornecedores[idx] = fornecObj;
-        registrarLog(`Editou o fornecedor "${nome}"`);
       } else {
+        if (!appData.fornecedores) appData.fornecedores = [];
         appData.fornecedores.push(fornecObj);
-        registrarLog(`Cadastrou o fornecedor "${nome}"`);
       }
 
       salvarDados();
-      renderizarTudo();
       cancelarEdicaoFornecedor();
+      renderizarTudo();
+    }
+
+    function cancelarEdicaoFornecedor() {
+      document.getElementById('fornecedor-id').value = '';
+      document.getElementById('form-fornecedor').reset();
+      document.getElementById('container-produtos-fornecedor').innerHTML = '';
+      document.getElementById('form-fornecedor-title').innerText = 'Cadastrar Fornecedor';
+      document.getElementById('btn-fornecedor-submit').innerText = 'Salvar Fornecedor';
+      document.getElementById('btn-fornecedor-cancel').style.display = 'none';
+    }
+
+    function editarFornecedor(id) {
+      const f = appData.fornecedores.find(item => item.id === id);
+      if (!f) return;
+
+      document.getElementById('fornecedor-id').value = f.id;
+      document.getElementById('fornecedor-nome').value = f.nome || '';
+      document.getElementById('fornecedor-frete').value = f.frete || 0;
+
+      const container = document.getElementById('container-produtos-fornecedor');
+      container.innerHTML = '';
+      if (f.produtos) {
+        f.produtos.forEach(p => adicionarBlocoProdutoFornecedor(p.produtoId, p.custoBase, p.metas));
+      }
+
+      document.getElementById('form-fornecedor-title').innerText = 'Editar Fornecedor';
+      document.getElementById('btn-fornecedor-submit').innerText = 'Atualizar Fornecedor';
+      document.getElementById('btn-fornecedor-cancel').style.display = 'inline-block';
+      document.getElementById('form-fornecedor').scrollIntoView({ behavior: 'smooth' });
+    }
+
+    function excluirFornecedor(id) {
+      if (confirm('Deseja excluir este fornecedor?')) {
+        appData.fornecedores = appData.fornecedores.filter(f => f.id !== id);
+        salvarDados();
+        renderizarTudo();
+      }
     }
 
     function renderizarFornecedores() {
       const tbody = document.getElementById('lista-fornecedores');
-      if (!tbody) return;
       tbody.innerHTML = '';
 
       if (!appData.fornecedores || appData.fornecedores.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="4" class="empty-state">Nenhum fornecedor cadastrado.</td></tr>';
+        tbody.innerHTML = '<tr><td colspan="4" style="text-align:center; padding:20px; color:var(--text-muted);">Nenhum fornecedor cadastrado.</td></tr>';
         return;
       }
 
       appData.fornecedores.forEach(f => {
-        const prodsText = (f.produtosAssociados || []).map(p => `• <strong>${p.nomeProduto}</strong> (R$ ${p.precoBase}/g)`).join('<br>') || 'Nenhum';
+        let prodsText = 'Nenhum produto atrelado.';
+        if (f.produtos && f.produtos.length > 0) {
+          prodsText = f.produtos.map(p => {
+            const prd = appData.produtos.find(item => item.id === p.produtoId);
+            return `<strong>${prd ? prd.nome : 'Produto'}:</strong> R$ ${p.custoBase}/g (${p.metas ? p.metas.length : 0} metas)`;
+          }).join('<br>');
+        }
 
         const tr = document.createElement('tr');
         tr.innerHTML = `
           <td><strong>${f.nome}</strong></td>
-          <td>${formatarMoeda(f.freteBase)}</td>
+          <td>${formatarMoeda(f.frete || 0)}</td>
           <td>${prodsText}</td>
           <td>
-            <div class="action-btns">
-              <button class="btn-icon" onclick="editarFornecedor('${f.id}')" title="Editar">✏️</button>
-              <button class="btn-icon" onclick="excluirFornecedor('${f.id}')" title="Excluir">🗑️</button>
-            </div>
+            <button class="btn-action btn-edit" onclick="editarFornecedor('${f.id}')">✏️ Editar</button>
+            <button class="btn-action btn-delete" onclick="excluirFornecedor('${f.id}')">🗑️ Excluir</button>
           </td>
         `;
         tbody.appendChild(tr);
       });
     }
 
-    function editarFornecedor(id) {
-      const f = (appData.fornecedores || []).find(forn => forn.id === id);
-      if (!f) return;
-
-      document.getElementById('fornecedor-id').value = f.id;
-      document.getElementById('fornecedor-nome').value = f.nome;
-      document.getElementById('fornecedor-frete').value = f.freteBase || 0;
-      document.getElementById('form-fornecedor-title').innerText = 'Editar Fornecedor';
-
-      const container = document.getElementById('fornecedor-produtos-container');
-      container.innerHTML = '';
-      if (f.produtosAssociados) {
-        f.produtosAssociados.forEach(pa => {
-          adicionarBlocoProdutoFornecedor(pa.nomeProduto, pa.precoBase, pa.metasVolume);
-        });
-      }
-
-      document.getElementById('btn-fornecedor-submit').innerText = 'Atualizar Fornecedor';
-      document.getElementById('btn-fornecedor-cancel').style.display = 'inline-block';
-      document.getElementById('form-fornecedor').scrollIntoView({ behavior: 'smooth' });
+    /* ---------------------------------------------------
+       9. GESTÃO DE PRODUTOS & CENTRAL DE PRECIFICAÇÃO
+       --------------------------------------------------- */
+    function aoSelecionarProdutoParaPrecificar() {
+      // Atualiza dropdowns se necessário
     }
 
-    function cancelarEdicaoFornecedor() {
-      document.getElementById('fornecedor-id').value = '';
-      document.getElementById('form-fornecedor').reset();
-      document.getElementById('form-fornecedor-title').innerText = 'Cadastrar Fornecedor';
-      document.getElementById('fornecedor-produtos-container').innerHTML = '';
-      document.getElementById('btn-fornecedor-submit').innerText = 'Salvar Fornecedor';
-      document.getElementById('btn-fornecedor-cancel').style.display = 'none';
-    }
-
-    function excluirFornecedor(id) {
-      if (confirm('Tem certeza que deseja excluir este fornecedor?')) {
-        const f = appData.fornecedores.find(forn => forn.id === id);
-        if (f) registrarLog(`Excluiu o fornecedor "${f.nome}"`);
-        appData.fornecedores = appData.fornecedores.filter(forn => forn.id !== id);
-        salvarDados();
-        renderizarTudo();
-      }
-    }
-
-    /* ===================================================
-       7. GESTÃO DE PRODUTOS & CENTRAL DE PRECIFICAÇÃO
-       =================================================== */
     function adicionarLinhaFaixaVenda(qtdMin = '', precoUnit = '') {
-      const container = document.getElementById('faixas-venda-container');
-      const rowId = 'faixa_' + Date.now() + '_' + Math.random().toString(36).substr(2, 4);
-
+      const container = document.getElementById('container-faixas-venda');
       const div = document.createElement('div');
-      div.className = 'faixa-row';
-      div.id = rowId;
+      div.style.cssText = 'display:flex; gap:8px; align-items:center;';
       div.innerHTML = `
-        <input type="number" class="faixa-qtd" placeholder="Qtd Mín. (g/un)" value="${qtdMin}" style="flex:1;" required>
-        <input type="number" step="0.01" class="faixa-preco" placeholder="Preço Venda Unitário (R$)" value="${precoUnit}" style="flex:1;" required>
-        <button type="button" class="btn-icon" onclick="document.getElementById('${rowId}').remove()" title="Remover Faixa">🗑️</button>
+        <input type="number" class="faixa-qtd" placeholder="Qtd Mínima (g/un)" min="1" value="${qtdMin}" style="flex:1;" required>
+        <input type="number" step="0.01" class="faixa-preco" placeholder="Preço de Venda (R$/g)" min="0" value="${precoUnit}" style="flex:1;" required>
+        <button type="button" class="btn-action btn-delete" onclick="this.parentElement.remove();">✕</button>
       `;
       container.appendChild(div);
-    }
-
-    function aoSelecionarProdutoParaPrecificar() {
-      const fornId = document.getElementById('produto-fornecedor').value;
-      const boxSim = document.getElementById('box-simulador-custo');
-      const infoSim = document.getElementById('simulador-custo-info');
-
-      if (!fornId) {
-        if (boxSim) boxSim.style.display = 'none';
-        return;
-      }
-
-      if (boxSim) boxSim.style.display = 'block';
-      const forn = (appData.fornecedores || []).find(f => f.id === fornId);
-      if (forn && forn.produtosAssociados && forn.produtosAssociados.length > 0) {
-        const p0 = forn.produtosAssociados[0];
-        infoSim.innerHTML = `O fornecedor <strong>${forn.nome}</strong> oferece <strong>${p0.nomeProduto}</strong> a partir de <strong>R$ ${p0.precoBase}/g</strong>.`;
-      } else {
-        infoSim.innerHTML = `O fornecedor selecionado ainda não possui produtos cadastrados.`;
-      }
     }
 
     function salvarProduto(e) {
@@ -1823,566 +1775,254 @@
       const fornecedorId = document.getElementById('produto-fornecedor').value;
 
       const faixasVenda = [];
-      document.querySelectorAll('#faixas-venda-container .faixa-row').forEach(row => {
+      document.querySelectorAll('#container-faixas-venda > div').forEach(row => {
         const q = parseFloat(row.querySelector('.faixa-qtd').value) || 0;
         const p = parseFloat(row.querySelector('.faixa-preco').value) || 0;
-        if (q > 0) faixasVenda.push({ qtdMin: q, precoUnitario: p });
+        if (q > 0) faixasVenda.push({ qtdMin: q, precoUnit: p });
       });
 
       const prodObj = {
-        id: id || 'prod_' + Date.now(),
-        nome: nome,
-        fornecedorId: fornecedorId,
-        faixasVenda: faixasVenda
+        id: id || ('prod_' + Date.now()),
+        nome,
+        fornecedorId,
+        faixasVenda
       };
-
-      if (!appData.produtos) appData.produtos = [];
 
       if (id) {
         const idx = appData.produtos.findIndex(p => p.id === id);
         if (idx !== -1) appData.produtos[idx] = prodObj;
-        registrarLog(`Editou o produto "${nome}"`);
       } else {
+        if (!appData.produtos) appData.produtos = [];
         appData.produtos.push(prodObj);
-        registrarLog(`Cadastrou o produto "${nome}"`);
       }
 
       salvarDados();
-      renderizarTudo();
       cancelarEdicaoProduto();
+      renderizarTudo();
+    }
+
+    function cancelarEdicaoProduto() {
+      document.getElementById('produto-id').value = '';
+      document.getElementById('form-produto').reset();
+      document.getElementById('container-faixas-venda').innerHTML = '';
+      document.getElementById('form-produto-title').innerText = 'Cadastrar Produto & Tabela de Precificação';
+      document.getElementById('btn-produto-submit').innerText = 'Salvar Produto';
+      document.getElementById('btn-produto-cancel').style.display = 'none';
+    }
+
+    function editarProduto(id) {
+      const p = appData.produtos.find(item => item.id === id);
+      if (!p) return;
+
+      document.getElementById('produto-id').value = p.id;
+      document.getElementById('produto-nome').value = p.nome || '';
+      document.getElementById('produto-fornecedor').value = p.fornecedorId || '';
+
+      const container = document.getElementById('container-faixas-venda');
+      container.innerHTML = '';
+      if (p.faixasVenda) {
+        p.faixasVenda.forEach(f => adicionarLinhaFaixaVenda(f.qtdMin, f.precoUnit));
+      }
+
+      document.getElementById('form-produto-title').innerText = 'Editar Produto';
+      document.getElementById('btn-produto-submit').innerText = 'Atualizar Produto';
+      document.getElementById('btn-produto-cancel').style.display = 'inline-block';
+      document.getElementById('form-produto').scrollIntoView({ behavior: 'smooth' });
+    }
+
+    function excluirProduto(id) {
+      if (confirm('Deseja excluir este produto?')) {
+        appData.produtos = appData.produtos.filter(p => p.id !== id);
+        salvarDados();
+        renderizarTudo();
+      }
     }
 
     function renderizarProdutos() {
       const tbody = document.getElementById('lista-produtos');
-      if (!tbody) return;
       tbody.innerHTML = '';
 
+      const selFornec = document.getElementById('produto-fornecedor');
+      const selPedidoProd = document.getElementById('pedido-produto');
+
+      selFornec.innerHTML = '<option value="">Selecione o fornecedor...</option>';
+      selPedidoProd.innerHTML = '<option value="">Selecione um produto...</option>';
+
+      if (appData.fornecedores) {
+        appData.fornecedores.forEach(f => {
+          selFornec.innerHTML += `<option value="${f.id}">${f.nome}</option>`;
+        });
+      }
+
       if (!appData.produtos || appData.produtos.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="5" class="empty-state">Nenhum produto cadastrado.</td></tr>';
+        tbody.innerHTML = '<tr><td colspan="5" style="text-align:center; padding:20px; color:var(--text-muted);">Nenhum produto cadastrado.</td></tr>';
         return;
       }
 
       appData.produtos.forEach(p => {
-        const forn = (appData.fornecedores || []).find(f => f.id === p.fornecedorId);
-        const fornNome = forn ? forn.nome : 'Não informado';
+        selPedidoProd.innerHTML += `<option value="${p.id}">${p.nome}</option>`;
 
-        const { custoUnit, metaAtingida, volumeTotal } = obterCustoEfetivoProduto(p.id);
+        const fornec = appData.fornecedores.find(f => f.id === p.fornecedorId);
+        const { custoUnit } = obterCustoEfetivoProduto(p.id);
 
-        const faixasText = (p.faixasVenda || []).map(f => `• ≥${f.qtdMin}g/un ➔ <strong>${formatarMoeda(f.precoUnitario)}</strong>`).join('<br>') || 'Nenhuma';
-
-        let descMeta = '';
-        if (metaAtingida) {
-          descMeta = `<br><small style="color:var(--success-text); font-weight:700;">🟢 Desconto Ativo (≥${metaAtingida.qtdMin}g)</small>`;
+        let faixasText = 'Sem tabela de venda';
+        if (p.faixasVenda && p.faixasVenda.length > 0) {
+          faixasText = p.faixasVenda.map(f => `≥ ${f.qtdMin}g: <strong>${formatarMoeda(f.precoUnit)}/g</strong>`).join('<br>');
         }
 
         const tr = document.createElement('tr');
         tr.innerHTML = `
           <td><strong>${p.nome}</strong></td>
-          <td>${fornNome}</td>
-          <td>${formatarMoeda(custoUnit)}/g <small>(${volumeTotal}g acumulados)</small>${descMeta}</td>
+          <td>${fornec ? fornec.nome : 'Sem fornecedor'}</td>
+          <td>${formatarMoeda(custoUnit)}/g</td>
           <td>${faixasText}</td>
           <td>
-            <div class="action-btns">
-              <button class="btn-icon" onclick="editarProduto('${p.id}')" title="Editar">✏️</button>
-              <button class="btn-icon" onclick="excluirProduto('${p.id}')" title="Excluir">🗑️</button>
-            </div>
+            <button class="btn-action btn-edit" onclick="editarProduto('${p.id}')">✏️ Editar</button>
+            <button class="btn-action btn-delete" onclick="excluirProduto('${p.id}')">🗑️ Excluir</button>
           </td>
         `;
         tbody.appendChild(tr);
       });
     }
 
-    function editarProduto(id) {
-      const p = (appData.produtos || []).find(prod => prod.id === id);
-      if (!p) return;
+    /* ---------------------------------------------------
+       10. RELATÓRIO DE RATEIO MENSAL E EXPORTAÇÃO PDF
+       --------------------------------------------------- */
+    function gerarRelatorioRateio() {
+      const mes = parseInt(document.getElementById('relatorio-mes').value);
+      const ano = parseInt(document.getElementById('relatorio-ano').value);
 
-      document.getElementById('produto-id').value = p.id;
-      document.getElementById('produto-nome').value = p.nome;
-      document.getElementById('produto-fornecedor').value = p.fornecedorId || '';
-      document.getElementById('form-produto-title').innerText = 'Editar Produto';
+      const container = document.getElementById('container-relatorio-geral');
 
-      const container = document.getElementById('faixas-venda-container');
-      container.innerHTML = '';
-      if (p.faixasVenda) {
-        p.faixasVenda.forEach(f => {
-          adicionarLinhaFaixaVenda(f.qtdMin, f.precoUnitario);
+      let faturamentoMes = 0;
+      let faturamentoPendenteMes = 0;
+      let custoProducaoMes = 0;
+
+      let clientesCount = 0;
+      let volumeTotalMes = 0;
+
+      if (appData.pedidos) {
+        appData.pedidos.forEach(p => {
+          const dt = new Date(p.dataCriacao || Date.now());
+          if (dt.getMonth() === mes && dt.getFullYear() === ano) {
+            const prod = appData.produtos.find(prd => prd.id === p.produtoId);
+
+            let qtdTotal = (parseFloat(p.qtdPrincipal) || 0);
+            if (p.dependentes) {
+              p.dependentes.forEach(d => qtdTotal += (parseFloat(d.qtd) || 0));
+            }
+
+            volumeTotalMes += qtdTotal;
+
+            if (prod) {
+              const { custoUnit } = obterCustoEfetivoProduto(prod.id);
+              custoProducaoMes += (qtdTotal * custoUnit);
+
+              if (p.categoria !== 'Socio') {
+                clientesCount++;
+                const precoUnit = calcularPrecoVendaCliente(prod, qtdTotal);
+                const totalVenda = qtdTotal * precoUnit;
+                faturamentoMes += totalVenda;
+                if (p.status !== 'Pago') faturamentoPendenteMes += totalVenda;
+              }
+            }
+          }
         });
       }
 
-      aoSelecionarProdutoParaPrecificar();
-
-      document.getElementById('btn-produto-submit').innerText = 'Atualizar Produto';
-      document.getElementById('btn-produto-cancel').style.display = 'inline-block';
-      document.getElementById('form-produto').scrollIntoView({ behavior: 'smooth' });
-    }
-
-    function cancelarEdicaoProduto() {
-      document.getElementById('produto-id').value = '';
-      document.getElementById('form-produto').reset();
-      document.getElementById('form-produto-title').innerText = 'Cadastrar Produto & Tabela de Preço ao Cliente';
-      document.getElementById('faixas-venda-container').innerHTML = '';
-      document.getElementById('box-simulador-custo').style.display = 'none';
-      document.getElementById('btn-produto-submit').innerText = 'Salvar Produto';
-      document.getElementById('btn-produto-cancel').style.display = 'none';
-    }
-
-    function excluirProduto(id) {
-      if (confirm('Tem certeza que deseja excluir este produto?')) {
-        const p = appData.produtos.find(prod => prod.id === id);
-        if (p) registrarLog(`Excluiu o produto "${p.nome}"`);
-        appData.produtos = appData.produtos.filter(prod => prod.id !== id);
-        salvarDados();
-        renderizarTudo();
-      }
-    }
-
-    /* ===================================================
-       8. RELATÓRIO MENSAL DE RATEIO & PDF
-       =================================================== */
-    function gerarRelatorioRateio() {
-      const mesSelect = parseInt(document.getElementById('relatorio-mes-select').value);
-      const anoInput = parseInt(document.getElementById('relatorio-ano-input').value) || 2026;
-
-      const container = document.getElementById('container-relatorio-geral');
-      if (!container) return;
-
-      const nomesMeses = ["Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"];
-      const mesNome = nomesMeses[mesSelect];
-
-      // Filtrar pedidos do mês e ano selecionados (com base em dataRegistro)
-      const pedidosMes = (appData.pedidos || []).filter(p => {
-        if (!p.dataRegistro) return true;
-        const d = new Date(p.dataRegistro);
-        return d.getMonth() === mesSelect && d.getFullYear() === anoInput;
-      });
-
-      // Cálculos do Mês Selecionado
-      let faturamentoBrutoMes = 0;
-      let custoFornecedoresMes = 0;
-      let volumeTotalGeralMes = 0;
-      let consumoSociosCustoMes = 0;
-
-      const clientesAtendidos = new Set();
-
-      pedidosMes.forEach(p => {
-        const prod = (appData.produtos || []).find(pr => pr.id === p.produtoId);
-        let qtdTotal = (parseFloat(p.qtdPrincipal) || 0);
-        if (p.dependentes) {
-          p.dependentes.forEach(d => qtdTotal += (parseFloat(d.qtd) || 0));
-        }
-
-        volumeTotalGeralMes += qtdTotal;
-        const isSocio = p.isSocio || p.categoria === 'socio';
-
-        if (!isSocio) {
-          clientesAtendidos.add(p.cliente);
-          if (prod) {
-            const precoUnit = calcularPrecoVendaCliente(prod, qtdTotal);
-            faturamentoBrutoMes += (qtdTotal * precoUnit);
-          }
-        }
-
-        if (prod) {
-          const { custoUnit } = obterCustoEfetivoProduto(prod.id);
-          const custoPed = qtdTotal * custoUnit;
-          custoFornecedoresMes += custoPed;
-          if (isSocio) {
-            consumoSociosCustoMes += custoPed;
-          }
-        }
-      });
-
-      const lucroLiquidoMes = faturamentoBrutoMes - custoFornecedoresMes;
-
-      // Buscar mês anterior para comparativo
-      let mesAnt = mesSelect - 1;
-      let anoAnt = anoInput;
-      if (mesAnt < 0) { mesAnt = 11; anoAnt--; }
-
-      const chaveMesAnt = `${anoAnt}_${mesAnt}`;
-      const rateioAnterior = appData.historicoRateios ? appData.historicoRateios[chaveMesAnt] : null;
-
-      let htmlDiffFat = '— Sem histórico anterior';
-      let htmlDiffLucro = '— Sem histórico anterior';
-      let htmlDiffClientes = '— Sem histórico anterior';
-
-      if (rateioAnterior) {
-        const diffFat = faturamentoBrutoMes - rateioAnterior.faturamentoBruto;
-        const pctDiffFat = rateioAnterior.faturamentoBruto > 0 ? ((diffFat / rateioAnterior.faturamentoBruto) * 100).toFixed(1) : 0;
-        
-        const diffLucro = lucroLiquidoMes - rateioAnterior.lucroLiquido;
-        const pctDiffLucro = rateioAnterior.lucroLiquido > 0 ? ((diffLucro / rateioAnterior.lucroLiquido) * 100).toFixed(1) : 0;
-
-        const diffClientes = clientesAtendidos.size - rateioAnterior.totalClientes;
-
-        htmlDiffFat = diffFat >= 0 
-          ? `<span class="diff-up">🟢 Superior (+${formatarMoeda(diffFat)} | +${pctDiffFat}%)</span>` 
-          : `<span class="diff-down">🔴 Inferior (${formatarMoeda(diffFat)} | ${pctDiffFat}%)</span>`;
-
-        htmlDiffLucro = diffLucro >= 0 
-          ? `<span class="diff-up">🟢 Superior (+${formatarMoeda(diffLucro)} | +${pctDiffLucro}%)</span>` 
-          : `<span class="diff-down">🔴 Inferior (${formatarMoeda(diffLucro)} | ${pctDiffLucro}%)</span>`;
-
-        htmlDiffClientes = diffClientes >= 0
-          ? `<span class="diff-up">🟢 Superior (+${diffClientes} cliente(s))</span>`
-          : `<span class="diff-down">🔴 Inferior (${diffClientes} cliente(s))</span>`;
-      }
-
-      const pctRamom = appData.pctRamom || 50;
+      const lucroLiquidoMes = faturamentoMes - custoProducaoMes;
+      const pctRamom = appData.splitRamomPct || 50;
       const pctMonique = 100 - pctRamom;
+
       const lucroRamom = (lucroLiquidoMes * pctRamom) / 100;
       const lucroMonique = (lucroLiquidoMes * pctMonique) / 100;
 
-      // TABELA DE DETALHAMENTO POR FORNECEDOR
-      let htmlTabelaFornecedores = '';
-      if (!appData.fornecedores || appData.fornecedores.length === 0) {
-        htmlTabelaFornecedores = '<p class="empty-state">Nenhum fornecedor cadastrado.</p>';
-      } else {
-        htmlTabelaFornecedores = `
-          <table>
-            <thead>
-              <tr>
-                <th>Fornecedor</th>
-                <th>Produtos Vencidos/Entregues</th>
-                <th>Volume Vendido</th>
-                <th>Frete Acumulado</th>
-                <th>Total Devido</th>
-              </tr>
-            </thead>
-            <tbody>
-              ${appData.fornecedores.map(f => {
-                const prodsF = (appData.produtos || []).filter(pr => pr.fornecedorId === f.id);
-                let volFornec = 0;
-                let custoTotalFornec = 0;
-
-                const prodsListText = prodsF.map(pr => {
-                  let v = 0;
-                  pedidosMes.forEach(ped => {
-                    if (ped.produtoId === pr.id) {
-                      v += (parseFloat(ped.qtdPrincipal) || 0);
-                      if (ped.dependentes) ped.dependentes.forEach(d => v += (parseFloat(d.qtd) || 0));
-                    }
-                  });
-                  volFornec += v;
-                  const { custoUnit } = obterCustoEfetivoProduto(pr.id);
-                  custoTotalFornec += (v * custoUnit);
-                  return `${pr.nome}: <strong>${v}g/un</strong>`;
-                }).join('<br>') || 'Nenhum';
-
-                return `
-                  <tr>
-                    <td><strong>${f.nome}</strong></td>
-                    <td>${prodsListText}</td>
-                    <td>${volFornec} g/un</td>
-                    <td>${formatarMoeda(f.freteBase || 0)}</td>
-                    <td><strong>${formatarMoeda(custoTotalFornec)}</strong></td>
-                  </tr>
-                `;
-              }).join('')}
-            </tbody>
-          </table>
-        `;
-      }
-
-      // TABELA DE PEDIDOS DOS CLIENTES
-      let htmlTabelaClientes = '';
-      if (pedidosMes.length === 0) {
-        htmlTabelaClientes = '<div class="empty-state">Nenhum pedido cadastrado para este mês de referência.</div>';
-      } else {
-        htmlTabelaClientes = `
-          <table>
-            <thead>
-              <tr>
-                <th>Cliente / Categoria</th>
-                <th>Produto</th>
-                <th>Volume</th>
-                <th>Faturamento</th>
-                <th>Custo Fornec.</th>
-                <th>Status</th>
-              </tr>
-            </thead>
-            <tbody>
-              ${pedidosMes.map(p => {
-                const prod = (appData.produtos || []).find(pr => pr.id === p.produtoId);
-                const prodNome = prod ? prod.nome : '—';
-                let q = (parseFloat(p.qtdPrincipal) || 0);
-                if (p.dependentes) p.dependentes.forEach(d => q += (parseFloat(d.qtd) || 0));
-
-                const isSocio = p.isSocio || p.categoria === 'socio';
-                let vVenda = 0;
-                let cUnit = 0;
-                if (prod) {
-                  if (!isSocio) {
-                    vVenda = q * calcularPrecoVendaCliente(prod, q);
-                  }
-                  cUnit = q * obterCustoEfetivoProduto(prod.id).custoUnit;
-                }
-
-                return `
-                  <tr>
-                    <td><strong>${p.cliente}</strong> ${isSocio ? '<span class="badge-status badge-socio">👑 Sócio</span>' : ''}</td>
-                    <td>${prodNome}</td>
-                    <td>${q} g/un</td>
-                    <td>${formatarMoeda(vVenda)}</td>
-                    <td>${formatarMoeda(cUnit)}</td>
-                    <td><span class="badge-status ${p.status === 'Pago' ? 'badge-pago' : 'badge-pendente'}">${p.status}</span></td>
-                  </tr>
-                `;
-              }).join('')}
-            </tbody>
-          </table>
-        `;
-      }
-
-      container.innerHTML = `
-        <!-- RESUMO DOS NÚMEROS DO MÊS -->
-        <div style="background:var(--card-sub-bg); padding:16px; border-radius:12px; border:1px solid var(--border-color); margin-bottom:20px;">
-          <h4 style="color:var(--choc-dark); margin-bottom:12px; font-size:1.05rem;">
-            📅 Relatório de Rateio — <strong>${mesNome} / ${anoInput}</strong>
-          </h4>
-
-          <div class="report-card-summary">
-            <div class="report-stat">
-              <div class="report-stat-title">Faturamento Bruto</div>
-              <div class="report-stat-val">${formatarMoeda(faturamentoBrutoMes)}</div>
-              <div class="report-stat-diff">${htmlDiffFat}</div>
-            </div>
-
-            <div class="report-stat">
-              <div class="report-stat-title">Custos Fornecedores</div>
-              <div class="report-stat-val" style="color:var(--danger-text);">${formatarMoeda(custoFornecedoresMes)}</div>
-              <div style="font-size:0.75rem; color:var(--text-muted); margin-top:4px;">(Inclui ${formatarMoeda(consumoSociosCustoMes)} sócios)</div>
-            </div>
-
-            <div class="report-stat">
-              <div class="report-stat-title">Lucro Líquido Real</div>
-              <div class="report-stat-val" style="color:var(--success-text);">${formatarMoeda(lucroLiquidoMes)}</div>
-              <div class="report-stat-diff">${htmlDiffLucro}</div>
-            </div>
-
-            <div class="report-stat">
-              <div class="report-stat-title">Clientes Atendidos</div>
-              <div class="report-stat-val">${clientesAtendidos.size}</div>
-              <div class="report-stat-diff">${htmlDiffClientes}</div>
-            </div>
-          </div>
-
-          <!-- DIVISÃO ENTRE SÓCIOS -->
-          <div style="background:#ffffff; padding:14px; border-radius:10px; border:1px solid var(--border-color); text-align:center;">
-            <div style="font-weight:700; color:var(--choc-dark); margin-bottom:6px;">
-              🤝 Divisão do Lucro do Mês (${pctRamom}% / ${pctMonique}%)
-            </div>
-            <div style="display:flex; justify-content:center; gap:30px; font-size:1.1rem; font-weight:800;">
-              <div>Ramom: <span style="color:var(--success-text);">${formatarMoeda(lucroRamom)}</span></div>
-              <div>Monique: <span style="color:var(--success-text);">${formatarMoeda(lucroMonique)}</span></div>
-            </div>
-          </div>
-        </div>
-
-        <!-- DETALHAMENTO DOS FORNECEDORES -->
-        <div style="margin-bottom:20px;">
-          <h4 style="color:var(--choc-dark); margin-bottom:8px;">📦 Consolidado de Fornecedores & Vendas</h4>
-          <div class="table-wrapper">${htmlTabelaFornecedores}</div>
-        </div>
-
-        <!-- DETALHAMENTO DE CLIENTES E PEDIDOS -->
-        <div>
-          <h4 style="color:var(--choc-dark); margin-bottom:8px;">🛒 Relação de Pedidos do Mês</h4>
-          <div class="table-wrapper">${htmlTabelaClientes}</div>
-        </div>
-      `;
-
-      atualizarOpcoesHistoricoSelect();
-    }
-
-    function salvarRateioNoHistorico() {
-      const mesSelect = parseInt(document.getElementById('relatorio-mes-select').value);
-      const anoInput = parseInt(document.getElementById('relatorio-ano-input').value) || 2026;
-      const chave = `${anoInput}_${mesSelect}`;
-
-      const { faturamentoTotal, custoTotalFornecedores, lucroLiquido } = calcularLucroLiquidoGlobal();
-      const clientesAtendidos = new Set((appData.pedidos || []).filter(p => !p.isSocio && p.categoria !== 'socio').map(p => p.cliente)).size;
-
-      if (!appData.historicoRateios) appData.historicoRateios = {};
-
-      appData.historicoRateios[chave] = {
-        mes: mesSelect,
-        ano: anoInput,
-        faturamentoBruto: faturamentoTotal,
-        custoFornecedores: custoTotalFornecedores,
-        lucroLiquido: lucroLiquido,
-        totalClientes: clientesAtendidos,
-        dataSalvo: new Date().toISOString()
-      };
-
-      salvarDados();
-      registrarLog(`Salvou o fechamento de rateio de ${mesSelect + 1}/${anoInput} no histórico`);
-      alert(`✅ Fechamento de Rateio (${mesSelect + 1}/${anoInput}) salvo com sucesso no histórico!`);
-      atualizarOpcoesHistoricoSelect();
-    }
-
-    function atualizarOpcoesHistoricoSelect() {
-      const select = document.getElementById('historico-rateios-select');
-      if (!select) return;
-
-      select.innerHTML = '<option value="">Selecione um histórico...</option>';
       const nomesMeses = ["Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"];
 
-      if (appData.historicoRateios) {
-        Object.keys(appData.historicoRateios).forEach(chave => {
-          const item = appData.historicoRateios[chave];
-          const option = document.createElement('option');
-          option.value = chave;
-          option.innerText = `${nomesMeses[item.mes]} / ${item.ano} — Lucro: ${formatarMoeda(item.lucroLiquido)}`;
-          select.appendChild(option);
-        });
-      }
-    }
+      container.innerHTML = `
+        <div style="background:#ffffff; border:1px solid var(--border-color); border-radius:12px; padding:20px; margin-top:10px;">
+          <h3 style="color:var(--choc-dark); border-bottom:2px solid var(--border-color); padding-bottom:8px; margin-bottom:14px; text-align:center;">
+            🍫 Balanço Financeiro & Rateio dos Sócios — ${nomesMeses[mes]} / ${ano}
+          </h3>
 
-    function carregarRateioDoHistorico(chave) {
-      if (!chave || !appData.historicoRateios || !appData.historicoRateios[chave]) return;
-      const item = appData.historicoRateios[chave];
+          <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(200px, 1fr)); gap:12px; margin-bottom:20px;">
+            <div style="background:var(--card-sub-bg); padding:12px; border-radius:8px; text-align:center;">
+              <span style="font-size:0.8rem; color:var(--text-muted); font-weight:700;">FATURAMENTO BRUTO</span>
+              <div style="font-size:1.3rem; font-weight:800; color:var(--choc-dark);">${formatarMoeda(faturamentoMes)}</div>
+            </div>
 
-      document.getElementById('relatorio-mes-select').value = item.mes;
-      document.getElementById('relatorio-ano-input').value = item.ano;
-      gerarRelatorioRateio();
+            <div style="background:var(--card-sub-bg); padding:12px; border-radius:8px; text-align:center;">
+              <span style="font-size:0.8rem; color:var(--text-muted); font-weight:700;">CUSTOS DE INSUMOS</span>
+              <div style="font-size:1.3rem; font-weight:800; color:var(--danger-text);">${formatarMoeda(custoProducaoMes)}</div>
+            </div>
+
+            <div style="background:var(--herb-green-bg); padding:12px; border-radius:8px; text-align:center;">
+              <span style="font-size:0.8rem; color:var(--herb-green); font-weight:700;">LUCRO LÍQUIDO REAL</span>
+              <div style="font-size:1.3rem; font-weight:800; color:var(--herb-green);">${formatarMoeda(lucroLiquidoMes)}</div>
+            </div>
+          </div>
+
+          <div style="background:var(--card-sub-bg); border:1px solid var(--border-color); border-radius:10px; padding:16px; margin-bottom:16px;">
+            <h4 style="color:var(--choc-dark); margin-bottom:8px;">🤝 Divisão Exata do Rateio entre os Sócios:</h4>
+            <p style="font-size:0.95rem;"><strong>Parte do Ramom (${pctRamom}%):</strong> ${formatarMoeda(lucroRamom)}</p>
+            <p style="font-size:0.95rem; margin-top:4px;"><strong>Parte da Monique (${pctMonique}%):</strong> ${formatarMoeda(lucroMonique)}</p>
+          </div>
+
+          <div style="font-size:0.85rem; color:var(--text-muted); text-align:right;">
+            Relatório gerado em ${new Date().toLocaleDateString('pt-BR')} por ${appData.usuarioAtual || 'Sócio'}
+          </div>
+        </div>
+      `;
     }
 
     function baixarRelatorioPDF() {
-      const elemento = document.getElementById('area-relatorio-impressao');
-      if (!elemento) return;
-
-      const mesSelect = parseInt(document.getElementById('relatorio-mes-select').value);
-      const anoInput = document.getElementById('relatorio-ano-input').value;
-      const nomesMeses = ["Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"];
+      const element = document.getElementById('area-relatorio-impressao');
+      if (!element) return;
 
       const opt = {
         margin:       10,
-        filename:     `relatorio_rateio_${nomesMeses[mesSelect]}_${anoInput}.pdf`,
+        filename:     `relatorio_rateio_${document.getElementById('relatorio-mes').value}_${document.getElementById('relatorio-ano').value}.pdf`,
         image:        { type: 'jpeg', quality: 0.98 },
         html2canvas:  { scale: 2 },
         jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
       };
 
       if (typeof html2pdf !== 'undefined') {
-        html2pdf().set(opt).from(elemento).save();
+        html2pdf().set(opt).from(element).save();
       } else {
-        window.print();
+        alert('Carregando biblioteca PDF... Tente novamente em alguns instantes.');
       }
     }
 
-    /* ===================================================
-       9. PERSISTÊNCIA & INICIALIZAÇÃO
-       =================================================== */
-    function carregarDadosIniciais() {
-      if (useFirebase && firebase.database) {
-        const dbRef = firebase.database().ref('fabrica_chocolate_data');
-        dbRef.on('value', (snapshot) => {
-          const val = snapshot.val();
-          if (val) {
-            appData = val;
-            renderizarTudo();
-          } else {
-            salvarDados();
-          }
-        });
-      } else {
-        const local = localStorage.getItem('fabrica_chocolate_data');
-        if (local) {
-          try {
-            appData = JSON.parse(local);
-          } catch (e) {
-            console.error("Erro ao ler localStorage:", e);
-          }
-        }
-        renderizarTudo();
-      }
-    }
-
-    function salvarDados() {
-      if (useFirebase && firebase.database) {
-        firebase.database().ref('fabrica_chocolate_data').set(appData);
-      } else {
-        localStorage.setItem('fabrica_chocolate_data', JSON.stringify(appData));
-      }
-    }
-
-    function limparDados() {
-      if (confirm('⚠️ ATENÇÃO: Deseja apagar TODOS os pedidos, fornecedores e relatórios? Esta ação não pode ser desfeita.')) {
-        appData = {
-          pedidos: [],
-          fornecedores: [],
-          produtos: [],
-          logs: [],
-          historicoRateios: {},
-          usuarioAtivo: "Ramom",
-          pctRamom: 50
-        };
-        salvarDados();
-        renderizarTudo();
-        alert('🧹 Todos os dados foram apagados com sucesso!');
-      }
-    }
-
-    function atualizarSelectsProdutosEFornecedores() {
-      // Select de fornecedores na aba de produtos
-      const selFornecProd = document.getElementById('produto-fornecedor');
-      if (selFornecProd) {
-        const curVal = selFornecProd.value;
-        selFornecProd.innerHTML = '<option value="">Selecione um fornecedor...</option>';
-        (appData.fornecedores || []).forEach(f => {
-          const opt = document.createElement('option');
-          opt.value = f.id;
-          opt.innerText = f.nome;
-          selFornecProd.appendChild(opt);
-        });
-        selFornecProd.value = curVal;
-      }
-
-      // Select de produtos na aba de pedidos
-      const selProdPed = document.getElementById('pedido-produto');
-      if (selProdPed) {
-        const curVal = selProdPed.value;
-        selProdPed.innerHTML = '<option value="">Selecione um produto...</option>';
-        (appData.produtos || []).forEach(p => {
-          const opt = document.createElement('option');
-          opt.value = p.id;
-          opt.innerText = p.nome;
-          selProdPed.appendChild(opt);
-        });
-        selProdPed.value = curVal;
-      }
-    }
-
+    /* ---------------------------------------------------
+       11. INICIALIZAÇÃO GLOBAL & RENDERIZAÇÃO
+       --------------------------------------------------- */
     function renderizarTudo() {
-      atualizarSelectsProdutosEFornecedores();
-      atualizarDashboard();
-      renderizarPedidos();
-      renderizarFornecedores();
-      renderizarProdutos();
-      renderizarLogs();
-      
-      const userSel = document.getElementById('current-user-select');
-      if (userSel) userSel.value = appData.usuarioAtivo || "Ramom";
-
-      const rangeSplit = document.getElementById('split-range');
-      if (rangeSplit) {
-        rangeSplit.value = appData.pctRamom || 50;
-        atualizarDivisaoSocios(rangeSplit.value);
+      const userSelect = document.getElementById('select-usuario-atual');
+      if (userSelect && appData.usuarioAtual) {
+        userSelect.value = appData.usuarioAtual;
       }
+
+      const slider = document.getElementById('slider-split-socios');
+      if (slider && appData.splitRamomPct !== undefined) {
+        slider.value = appData.splitRamomPct;
+        document.getElementById('label-split-val').innerText = `${appData.splitRamomPct}% Ramom / ${100 - appData.splitRamomPct}% Monique`;
+      }
+
+      renderizarProdutos();
+      renderizarFornecedores();
+      renderizarPedidos();
+      atualizarDashboard();
     }
 
-    /* INICIALIZAÇÃO */
-    window.addEventListener('DOMContentLoaded', () => {
+    window.onload = function() {
       carregarDadosIniciais();
-      
-      // Mês atual no relatório
+
+      // Preenche os selects iniciais de mês/ano
       const agora = new Date();
-      const selMes = document.getElementById('relatorio-mes-select');
-      const inputAno = document.getElementById('relatorio-ano-input');
-      if (selMes) selMes.value = agora.getMonth();
-      if (inputAno) inputAno.value = agora.getFullYear();
-    });
+      document.getElementById('relatorio-mes').value = agora.getMonth();
+      document.getElementById('relatorio-ano').value = agora.getFullYear();
+    };
   </script>
 </body>
 </html>
