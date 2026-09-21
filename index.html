@@ -14,38 +14,33 @@
   <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-database-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-analytics-compat.js"></script>
 
-  <!-- Biblioteca html2pdf para geração de PDF dos Relatórios -->
+  <!-- Biblioteca html2pdf para geração de Relatórios em PDF -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 
   <style>
     /* ===================================================
-       PALETA DE CORES TONS PASTÉIS (Harmonizada com final_fabrica.png)
+       PALETA DE CORES E IDENTIDADE VISUAL PASTEL & TERROSA
        =================================================== */
     :root {
-      --bg-cream: #f4eee5;            /* Pergaminho Pastel Suave (Fundo da Logo) */
-      --card-bg: #ffffff;             /* Fundo dos Cards e Containers */
-      --card-sub-bg: #f9f5ef;         /* Creme Pastel para Destaques/Forms */
-      --choc-dark: #4a2c1d;           /* Chocolate Amargo Elegante (Texto Principal) */
-      --choc-milk: #7a5338;           /* Chocolate ao Leite (Subtítulos e Destaques) */
-      --choc-accent: #8c6239;         /* Tom Cacau/Aço Terracota para Ações */
-      --border-color: #e2d5c3;        /* Borda Suave Pastel */
-      --text-main: #332219;           /* Texto Escuro */
-      --text-muted: #6e594b;          /* Texto Atenuado */
-      
-      /* Tons de Erva / Folhas Pastel (Extraídos da Logo) */
-      --herb-green: #4d683a;          /* Verde Erva Pastel */
-      --herb-green-light: #eaf0e6;    /* Fundo Verde Pastel Suave */
-
-      /* Badges e Status com tons mais pastéis e suaves */
+      --bg-cream: #f4eee5;         /* Fundo Pergaminho Suave */
+      --card-bg: #ffffff;          /* Fundo dos Containers */
+      --card-sub-bg: #f9f5ef;      /* Fundo de Destaques/Forms */
+      --choc-dark: #4a2c1d;        /* Chocolate Amargo (Principal) */
+      --choc-milk: #7a5338;        /* Cacau & Terracota (Destaques) */
+      --choc-accent: #8c6239;      /* Tom de Ação Secundário */
+      --border-color: #e2d5c3;     /* Bordas Suaves Pastel */
+      --text-main: #332221;
+      --text-muted: #6e5d54;
       --success-bg: #eaf0e6;
-      --success-text: #3b572a;
-      --warning-bg: #fdf6e7;
-      --warning-text: #946817;
-      --danger-bg: #fcebe9;
-      --danger-text: #ad2c20;
-      --info-bg: #ebf3f9;
-      --info-text: #1e537d;
-      --muted-btn-bg: #e8dcd0;
+      --success-text: #3d5e2a;
+      --herb-green: #4d683a;
+      --warning-bg: #fdf6e2;
+      --warning-text: #966b0a;
+      --danger-bg: #fcebe8;
+      --danger-text: #b82828;
+      --info-bg: #e8f2f8;
+      --info-text: #1b5b8c;
+      --muted-btn-bg: #ede1d3;
     }
 
     * {
@@ -57,7 +52,7 @@
 
     body {
       background-color: var(--bg-cream);
-      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120' viewBox='0 0 120 120'%3E%3Cg fill='%237a5338' fill-opacity='0.04'%3E%3Cpath d='M15 15h30v25H15zM48 15h30v25H48zM15 43h30v25H15zM48 43h30v25H48z'/%3E%3C/g%3E%3Cg fill='%234d683a' fill-opacity='0.04'%3E%3Cpath d='M95 70c-10 0-18 8-18 18 0 2.5.5 5 1.5 7.2L75 99l3.8-1c2.2 1 4.7 1.5 7.2 1.5 10 0 18-8 18-18s-8-12-9-12.5c-1-5-5-9-10-9z'/%3E%3C/g%3E%3C/svg%3E");
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120' viewBox='0 0 120 120'%3E%3Cg fill='%237a5338' fill-opacity='0.05'%3E%3Cpath d='M15 15h30v25H15zM48 15h30v25H48zM15 43h30v25H15zM48 43h30v25H48z'/%3E%3C/g%3E%3Cg fill='%234d683a' fill-opacity='0.05'%3E%3Cpath d='M95 70c-10 0-18 8-18 18 0 2.5.5 5 1.5 7.2L75 99l3.8-1c2.2 1 4.7 1.5 7.2 1.5 10 0 18-8 18-18s-8-12-9-12.5c-1-5-5-9-10-9z'/%3E%3C/g%3E%3C/svg%3E");
       color: var(--text-main);
       display: flex;
       flex-direction: column;
@@ -65,6 +60,20 @@
       min-height: 100vh;
       padding: 20px 12px;
       overflow-x: hidden;
+      position: relative;
+    }
+
+    /* CANVAS DO EFEITO DE FUMAÇA / INCENSO */
+    #smoke-canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      pointer-events: none;
+      z-index: 9999;
+      opacity: 0.85;
+      transition: opacity 0.3s ease;
     }
 
     .app-container {
@@ -72,45 +81,42 @@
       max-width: 980px;
       background: var(--card-bg);
       border-radius: 18px;
-      box-shadow: 0 12px 35px rgba(74, 44, 42, 0.12);
+      box-shadow: 0 12px 35px rgba(74, 44, 29, 0.12);
       border: 1px solid var(--border-color);
       padding: 24px 20px;
       position: relative;
       box-sizing: border-box;
       word-wrap: break-word;
+      z-index: 2;
     }
 
     header {
       text-align: center;
       margin-bottom: 20px;
+      padding: 0;
     }
 
-    /* Container e Imagem Responsiva da Logo */
     .header-logo-container {
       width: 100%;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      margin-bottom: 12px;
+      max-width: 924px;
+      margin: 0 auto;
     }
 
     .header-logo-img {
       width: 100%;
-      max-width: 924px;              /* Largura exata do card do Lucro Líquido */
-      height: auto !important;       /* Mantém a proporção sem achatar */
+      max-width: 924px;
+      height: auto !important;
       display: block;
       margin: 0 auto;
       border-radius: 14px;
-      box-shadow: 0 4px 15px rgba(74, 44, 42, 0.10);
-      border: 1px solid var(--border-color);
-      object-fit: contain;
+      box-shadow: 0 4px 15px rgba(74, 44, 29, 0.12);
     }
 
     .user-select-bar {
       display: flex;
       justify-content: flex-end;
       align-items: center;
-      gap: 8px;
+      gap: 10px;
       margin-bottom: 14px;
       background: var(--card-sub-bg);
       padding: 8px 14px;
@@ -118,6 +124,7 @@
       border: 1px solid var(--border-color);
       width: fit-content;
       margin-left: auto;
+      flex-wrap: wrap;
     }
 
     /* 3 DISPLAYS DASHBOARD */
@@ -145,7 +152,7 @@
 
     .dash-card.hero-card {
       grid-column: 1 / -1;
-      background: #f6efe7;
+      background: #f4eae0;
       border-color: var(--choc-milk);
       text-align: center;
     }
@@ -197,7 +204,7 @@
       padding: 14px 18px;
       text-align: center;
       margin-bottom: 24px;
-      box-shadow: 0 4px 12px rgba(74, 44, 42, 0.05);
+      box-shadow: 0 4px 12px rgba(74, 44, 29, 0.06);
     }
 
     .rateio-tag {
@@ -257,7 +264,7 @@
     .tab-btn {
       background: transparent;
       border: none;
-      padding: 10px 20px;
+      padding: 10px 18px;
       font-size: 0.95rem;
       font-weight: 600;
       color: var(--choc-milk);
@@ -322,7 +329,7 @@
 
     .input-prefix-group .prefix {
       padding: 10px 12px;
-      background: #efe6dc;
+      background: #eee4de;
       color: var(--choc-dark);
       font-weight: 700;
       font-size: 0.88rem;
@@ -348,8 +355,8 @@
     }
 
     input:disabled, select:disabled {
-      background: #f3eae1;
-      color: #6e594b;
+      background: #f0e6e0;
+      color: #66524e;
       cursor: not-allowed;
     }
 
@@ -408,10 +415,10 @@
       line-height: 1.4;
     }
 
-    .badge-danger { background: var(--danger-bg); color: var(--danger-text); border: 1px solid #f5c6cb; }
-    .badge-warning { background: var(--warning-bg); color: var(--warning-text); border: 1px solid #ffeba8; }
-    .badge-success { background: var(--success-bg); color: var(--success-text); border: 1px solid #c3e6cb; }
-    .badge-info { background: var(--info-bg); color: var(--info-text); border: 1px solid #b8daff; }
+    .badge-danger { background: var(--danger-bg); color: var(--danger-text); border: 1px solid #ef9a9a; }
+    .badge-warning { background: var(--warning-bg); color: var(--warning-text); border: 1px solid #ffe082; }
+    .badge-success { background: var(--success-bg); color: var(--success-text); border: 1px solid #a5d6a7; }
+    .badge-info { background: var(--info-bg); color: var(--info-text); border: 1px solid #90caf9; }
 
     .btn-secondary {
       background: var(--muted-btn-bg);
@@ -425,7 +432,7 @@
       margin-top: 6px;
     }
 
-    .btn-secondary:hover { background: #dfcfc1; }
+    .btn-secondary:hover { background: #e0cecf; }
 
     .btn-submit {
       background: var(--choc-dark);
@@ -460,7 +467,7 @@
       border-radius: 14px;
       padding: 20px;
       margin-bottom: 18px;
-      box-shadow: 0 4px 12px rgba(74, 44, 42, 0.05);
+      box-shadow: 0 4px 12px rgba(74, 44, 29, 0.06);
     }
 
     .perfil-header {
@@ -497,18 +504,84 @@
       margin-bottom: 6px;
     }
 
-    /* Tabelas e Responsividade em Dispositivos Móveis */
+    /* QUADROS DO RELATÓRIO MENSAL DE RATEIO */
+    .report-summary-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+
+    .report-card {
+      background: var(--card-sub-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 10px;
+      padding: 14px;
+      text-align: center;
+    }
+
+    .report-card .title {
+      font-size: 0.78rem;
+      color: var(--choc-milk);
+      font-weight: 800;
+      text-transform: uppercase;
+    }
+
+    .report-card .value {
+      font-size: 1.3rem;
+      color: var(--choc-dark);
+      font-weight: 800;
+      margin-top: 4px;
+    }
+
+    .report-comparison-box {
+      background: #ffffff;
+      border: 2px solid var(--herb-green);
+      border-radius: 12px;
+      padding: 16px;
+      margin-bottom: 20px;
+      box-shadow: 0 4px 12px rgba(77, 104, 58, 0.08);
+    }
+
+    .comp-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 8px 0;
+      border-bottom: 1px dashed var(--border-color);
+      font-size: 0.9rem;
+    }
+
+    .comp-item:last-child { border-bottom: none; }
+
+    .tag-superior {
+      color: var(--success-text);
+      background: var(--success-bg);
+      padding: 2px 8px;
+      border-radius: 12px;
+      font-weight: 700;
+      font-size: 0.8rem;
+    }
+
+    .tag-inferior {
+      color: var(--danger-text);
+      background: var(--danger-bg);
+      padding: 2px 8px;
+      border-radius: 12px;
+      font-weight: 700;
+      font-size: 0.8rem;
+    }
+
+    /* Tabelas */
     .table-wrapper {
       overflow-x: auto;
-      -webkit-overflow-scrolling: touch;
       border-radius: 10px;
       border: 1px solid var(--border-color);
-      margin-bottom: 12px;
+      width: 100%;
     }
 
     table {
       width: 100%;
-      min-width: 600px;
       border-collapse: collapse;
       text-align: left;
       font-size: 0.88rem;
@@ -519,6 +592,7 @@
       color: #ffffff;
       padding: 12px 14px;
       font-weight: 600;
+      white-space: nowrap;
     }
 
     td {
@@ -533,7 +607,7 @@
     .order-row-clickable { cursor: pointer; }
 
     .order-details-box {
-      background: #faf5ef;
+      background: #faf6f3;
       border-left: 4px solid var(--choc-milk);
       padding: 12px 16px;
       margin: 8px 0;
@@ -552,7 +626,7 @@
 
     .badge-pago { background: var(--success-bg); color: var(--success-text); }
     .badge-pendente { background: var(--warning-bg); color: var(--warning-text); }
-    .badge-socio { background: #efe4f5; color: #5b2c6f; border: 1px solid #d3b5e5; }
+    .badge-socio { background: #ede3f2; color: #5e287a; border: 1px solid #d5c0e3; }
 
     .btn-action {
       background: none;
@@ -590,47 +664,6 @@
       justify-content: space-between;
     }
 
-    /* QUADROS DE COMPARATIVO DE MÊS NO RELATÓRIO */
-    .report-comparative-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-      gap: 12px;
-      margin-top: 14px;
-      margin-bottom: 16px;
-    }
-
-    .comp-card {
-      background: #ffffff;
-      border: 1px solid var(--border-color);
-      border-radius: 10px;
-      padding: 12px 14px;
-      text-align: center;
-    }
-
-    .comp-title {
-      font-size: 0.78rem;
-      font-weight: 700;
-      color: var(--text-muted);
-      text-transform: uppercase;
-      margin-bottom: 4px;
-    }
-
-    .comp-val {
-      font-size: 1.2rem;
-      font-weight: 800;
-      color: var(--choc-dark);
-    }
-
-    .comp-diff {
-      font-size: 0.78rem;
-      font-weight: 700;
-      margin-top: 4px;
-    }
-
-    .diff-up { color: var(--success-text); }
-    .diff-down { color: var(--danger-text); }
-    .diff-equal { color: var(--text-muted); }
-
     footer {
       margin-top: 24px;
       width: 100%;
@@ -638,10 +671,11 @@
       display: flex;
       justify-content: center;
       padding-bottom: 20px;
+      z-index: 2;
     }
 
     .btn-clear-footer {
-      background: #eee4dc;
+      background: #ede4df;
       color: var(--choc-dark);
       border: 1px solid var(--border-color);
       padding: 10px 20px;
@@ -657,41 +691,43 @@
       color: #ffffff;
     }
 
-    /* REGRAS DE ADAPTAÇÃO PARA CELULAR (RESPONSIVIDADE) */
+    /* RESPONSIVIDADE PARA SMARTPHONES */
     @media (max-width: 768px) {
       body { padding: 10px 6px; }
-      .app-container { padding: 16px 12px; border-radius: 14px; }
+      .app-container { padding: 16px 12px; border-radius: 12px; }
       .dashboard-3 { grid-template-columns: 1fr; }
-      .form-grid { grid-template-columns: 1fr; }
-      .user-select-bar { width: 100%; justify-content: center; }
-      .tabs-nav { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
-      .tab-btn { width: 100%; text-align: center; border-radius: 8px; padding: 10px 8px; font-size: 0.88rem; }
-      .perfil-header { flex-direction: column; align-items: flex-start; gap: 8px; }
-      .perfil-badge-total { align-self: flex-start; }
-      .header-logo-img { max-height: 140px; }
+      .tabs-nav { display: grid; grid-template-columns: repeat(2, 1fr); gap: 6px; }
+      .tab-btn { text-align: center; border-radius: 8px; padding: 10px; }
+      .user-select-bar { width: 100%; justify-content: space-between; }
+      .report-summary-grid { grid-template-columns: 1fr 1fr; }
     }
   </style>
 </head>
 <body>
 
+  <!-- CANVAS PARA EFEITO DE FUMAÇA / INCENSO -->
+  <canvas id="smoke-canvas"></canvas>
+
   <div class="app-container">
     
-    <!-- SELETOR DE SÓCIO -->
+    <!-- SELETOR DE SÓCIO E TOGGLE DE FUMAÇA -->
     <div class="user-select-bar">
-      <label for="select-usuario-atual" style="font-size:0.8rem; color:var(--choc-dark);">👤 Usuário Atual:</label>
-      <select id="select-usuario-atual" style="padding:4px 8px; font-size:0.85rem; font-weight:700;">
-        <option value="Ramom">Ramom</option>
-        <option value="Monique">Monique</option>
-      </select>
+      <button type="button" id="btn-toggle-smoke" onclick="toggleEfeitoFumaca()" class="btn-action" style="font-size:0.8rem; background:var(--card-bg); border:1px solid var(--border-color); border-radius:12px; padding:4px 10px; color:var(--choc-dark); font-weight:600;">
+        💨 Fumaça: On
+      </button>
+
+      <div style="display:flex; align-items:center; gap:6px;">
+        <label for="select-usuario-atual" style="font-size:0.8rem; color:var(--choc-dark);">👤 Usuário Atual:</label>
+        <select id="select-usuario-atual" style="padding:4px 8px; font-size:0.85rem; font-weight:700;">
+          <option value="Ramom">Ramom</option>
+          <option value="Monique">Monique</option>
+        </select>
+      </div>
     </div>
 
-    <!-- CABEÇALHO COM A LOGO DA FONTE final_fabrica.png -->
     <header>
       <div class="header-logo-container">
-        <img src="final_fabrica.png" 
-             alt="A Fantástica Fábrica de Chocolate" 
-             class="header-logo-img"
-             onerror="this.src='logo_fabrica_chocolate_1200x400.png'">
+        <img src="final_fabrica.png" alt="A Fantástica Fábrica de Chocolate" class="header-logo-img">
       </div>
     </header>
 
@@ -700,7 +736,7 @@
       <!-- DISPLAY 1 -->
       <div class="dash-card" onclick="toggleDashPanel('panel-faturar')">
         <div class="dash-title">
-          <span>FATURAMENTO</span>
+          <span>FATURAMENTO CLIENTES</span>
           <span class="click-hint">🔍 Detalhes</span>
         </div>
         <div class="dash-value" id="dash-faturamento">R$ 0,00</div>
@@ -726,7 +762,7 @@
 
       <!-- PAINEL EXPANSÍVEL 1: FATURAMENTO -->
       <div id="panel-faturar" class="dash-detail-panel">
-        <h4 style="margin-bottom:8px; color:var(--choc-dark);">💰 Faturamento de Pedidos</h4>
+        <h4 style="margin-bottom:8px; color:var(--choc-dark);">💰 Faturamento de Pedidos de Clientes</h4>
         <div style="display:flex; justify-content:space-around; text-align:center;">
           <div>
             <span style="font-size:0.8rem; color:var(--success-text); font-weight:700;">🟢 RECEBIDOS</span>
@@ -793,25 +829,12 @@
           <input type="hidden" id="pedido-id">
           
           <div class="form-grid">
-            
-            <!-- SELEÇÃO DE CATEGORIA DO PEDIDO (CLIENTE vs SÓCIO) -->
-            <div class="form-group full-width" style="background:#ffffff; padding:10px 14px; border-radius:10px; border:1px solid var(--border-color);">
-              <label style="font-size:0.9rem; color:var(--choc-dark); font-weight:800; display:block; margin-bottom:4px;">
-                🎯 Categoria / Destino do Pedido:
-              </label>
-              <div style="display:flex; gap:16px; flex-wrap:wrap; margin-top:4px;">
-                <label style="display:flex; align-items:center; gap:6px; font-weight:700; cursor:pointer;">
-                  <input type="radio" name="pedido-categoria-tipo" value="Cliente" checked onchange="alternarTipoCategoriaPedido()">
-                  🛒 Pedido de Cliente (Venda Normal)
-                </label>
-                <label style="display:flex; align-items:center; gap:6px; font-weight:700; color:#5b2c6f; cursor:pointer;">
-                  <input type="radio" name="pedido-categoria-tipo" value="Socio" onchange="alternarTipoCategoriaPedido()">
-                  👑 Consumo Próprio dos Sócios (Ramom / Monique)
-                </label>
-              </div>
-              <small id="help-categoria-pedido" style="display:block; color:var(--text-muted); font-size:0.78rem; margin-top:4px;">
-                Venda comercial com preço faturado para o cliente.
-              </small>
+            <div class="form-group full-width">
+              <label for="pedido-categoria-tipo">Tipo de Pedido</label>
+              <select id="pedido-categoria-tipo" onchange="alternarTipoCategoriaPedido()">
+                <option value="Cliente">🛒 Pedido de Cliente (Venda Normal)</option>
+                <option value="Socio">👑 Consumo Próprio dos Sócios (Ramom / Monique)</option>
+              </select>
             </div>
 
             <div class="form-group">
@@ -832,14 +855,14 @@
             </div>
 
             <!-- Lista Dinâmica de Dependentes -->
-            <div class="form-group full-width">
+            <div class="form-group full-width" id="container-dependentes-box">
               <label>Rateio / Dependentes</label>
               <div id="dependentes-list" style="display:flex; flex-direction:column; gap:8px; margin-top:4px;"></div>
               <button type="button" class="btn-secondary" onclick="adicionarLinhaDependente()">+ Adicionar Dependente</button>
             </div>
 
-            <div class="form-group">
-              <label for="pedido-status">Status</label>
+            <div class="form-group" id="container-status-pedido">
+              <label for="pedido-status">Status do Pagamento</label>
               <select id="pedido-status">
                 <option value="Pendente">Pendente</option>
                 <option value="Pago">Pago</option>
@@ -847,7 +870,7 @@
             </div>
 
             <div class="form-group">
-              <label for="pedido-envio" onchange="alternarCamposEnvio()">Forma de Envio</label>
+              <label for="pedido-envio">Forma de Envio</label>
               <select id="pedido-envio" onchange="alternarCamposEnvio()">
                 <option value="Retirada">Retirada em Mãos</option>
                 <option value="Entrega por Conta">Entrega por Conta</option>
@@ -889,10 +912,10 @@
         <table>
           <thead>
             <tr>
-              <th>Cliente / Categoria</th>
+              <th>Cliente / Tipo</th>
               <th>Produto</th>
               <th>Total g/un</th>
-              <th>Custo Est. (Forn.)</th>
+              <th>Custo Fornec.</th>
               <th>Valor Cobrado</th>
               <th>Envio</th>
               <th>Status</th>
@@ -946,7 +969,7 @@
       <div id="lista-perfis-fornecedores"></div>
     </div>
 
-    <!-- ABA 3: PRODUTOS (LAYOUT UNIFICADO E DIRETO) -->
+    <!-- ABA 3: PRODUTOS -->
     <div id="tab-produtos" class="tab-content">
       <div class="form-section">
         <h3 id="form-produto-title">🏷️ Precificação de Produtos</h3>
@@ -1056,18 +1079,18 @@
       </div>
     </div>
 
-    <!-- ABA 4: RELATÓRIO E RATEIO MENSAL DAS SÓCIAS -->
+    <!-- ABA 4: RELATÓRIO MENSAL, RATEIO E HISTÓRICO -->
     <div id="tab-relatorio" class="tab-content">
-      
-      <!-- CONTROLES DO GERADOR DE RELATÓRIO DE RATEIO -->
-      <div class="form-section">
-        <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px; margin-bottom:14px;">
+      <div class="form-section" style="background:#ffffff;">
+        <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px; margin-bottom:16px;">
           <div>
-            <h3 style="margin-bottom:2px;">📊 Central de Fechamento & Rateio Mensal</h3>
-            <p style="font-size:0.85rem; color:var(--text-muted);">Consolidação de lucro, despesas, clientes e pagamentos de fornecedores com comparativo de meses.</p>
+            <h3 style="margin-bottom:4px;">📊 Gerador de Relatório e Rateio Mensal</h3>
+            <p style="font-size:0.85rem; color:var(--text-muted);">
+              Selecione o mês para calcular o fechamento oficial do rateio dos sócios e gerar o documento em PDF.
+            </p>
           </div>
-          <div style="display:flex; gap:10px; align-items:center; flex-wrap:wrap;">
-            <select id="relatorio-select-mes" style="padding:8px; font-weight:700;">
+          <div style="display:flex; gap:8px; align-items:center;">
+            <select id="select-mes-rateio" style="font-weight:700;">
               <option value="0">Janeiro</option>
               <option value="1">Fevereiro</option>
               <option value="2">Março</option>
@@ -1081,104 +1104,105 @@
               <option value="10">Novembro</option>
               <option value="11">Dezembro</option>
             </select>
-            <input type="number" id="relatorio-select-ano" value="2026" style="width:90px; padding:8px; font-weight:700;">
-            <button class="btn-secondary" style="margin:0;" onclick="gerarRelatorioRateio()">🔄 Gerar / Recalcular Rateio</button>
+            <select id="select-ano-rateio" style="font-weight:700;">
+              <option value="2026">2026</option>
+              <option value="2025">2025</option>
+              <option value="2027">2027</option>
+            </select>
+            <button class="btn-submit" style="margin-top:0; width:auto; padding:10px 16px;" onclick="gerarRelatorioRateio()">
+              📊 Gerar / Recalcular Rateio
+            </button>
           </div>
         </div>
 
-        <div style="display:flex; gap:10px; flex-wrap:wrap; margin-bottom:16px;">
-          <button class="btn-submit" style="margin:0; flex:1;" onclick="salvarRateioNoHistorico()">🔒 Salvar / Fechar Rateio no Histórico</button>
-          <button class="btn-secondary" style="margin:0; background:#e3f2fd; color:#1565c0; border-color:#90caf9;" onclick="baixarRelatorioPDF()">📥 Baixar Relatório em PDF</button>
+        <div style="display:flex; gap:10px; justify-content:flex-end; margin-bottom:14px; flex-wrap:wrap;">
+          <button class="btn-secondary" style="margin-top:0; background:var(--herb-green); color:#fff; border:none;" onclick="salvarRateioNoHistorico()">
+            🔒 Salvar / Fechar Mês no Histórico
+          </button>
+          <button class="btn-secondary" style="margin-top:0; background:var(--choc-dark); color:#fff; border:none;" onclick="baixarRelatorioPDF()">
+            📥 Baixar Relatório em PDF
+          </button>
         </div>
 
-        <!-- CONSULTA DE HISTÓRICO DE RATEIOS -->
-        <div style="background:#ffffff; padding:10px 14px; border-radius:10px; border:1px solid var(--border-color); display:flex; align-items:center; gap:10px; flex-wrap:wrap;">
-          <span style="font-size:0.85rem; font-weight:700; color:var(--choc-dark);">📂 Consultar Rateios Anteriores Salvos:</span>
-          <select id="select-historico-rateios" style="flex:1; padding:6px;" onchange="carregarRateioSalvoDoHistorico(this.value)">
-            <option value="">Selecione um mês salvo no histórico...</option>
-          </select>
+        <!-- ÁREA IMPRESSA NO PDF -->
+        <div id="pdf-export-container" style="padding:10px; background:#ffffff; border-radius:10px;">
+          <div id="rateio-header-export" style="text-align:center; border-bottom:2px solid var(--choc-dark); padding-bottom:12px; margin-bottom:16px;">
+            <h2 style="color:var(--choc-dark); font-family:'Georgia', serif; font-size:1.5rem;">A FANTÁSTICA FÁBRICA DE CHOCOLATE</h2>
+            <h4 style="color:var(--choc-milk); font-size:1.1rem; margin-top:4px;" id="title-periodo-rateio">
+              Relatório Geral de Fechamento e Rateio
+            </h4>
+            <span style="font-size:0.8rem; color:var(--text-muted);" id="date-geracao-rateio"></span>
+          </div>
+
+          <!-- COMPARATIVO COM O MÊS ANTERIOR -->
+          <div id="container-comparativo-mes-anterior" class="report-comparison-box"></div>
+
+          <!-- RESUMO FINANCEIRO EM QUADROS -->
+          <div class="report-summary-grid">
+            <div class="report-card">
+              <div class="title">FATURAMENTO CLIENTES</div>
+              <div class="value" id="rep-val-faturamento">R$ 0,00</div>
+              <small id="rep-sub-faturamento" style="font-size:0.75rem; color:var(--text-muted);"></small>
+            </div>
+            <div class="report-card">
+              <div class="title">CUSTO FORNECEDORES</div>
+              <div class="value" id="rep-val-custo-fornec">R$ 0,00</div>
+              <small id="rep-sub-custo-fornec" style="font-size:0.75rem; color:var(--text-muted);"></small>
+            </div>
+            <div class="report-card">
+              <div class="title">GASTO CONSUMO SÓCIOS</div>
+              <div class="value" id="rep-val-gasto-socios">R$ 0,00</div>
+              <small style="font-size:0.75rem; color:var(--text-muted);">Pedidos Próprios</small>
+            </div>
+            <div class="report-card" style="border:2px solid var(--choc-dark); background:#f4eae0;">
+              <div class="title" style="color:var(--choc-dark);">LUCRO LÍQUIDO RATEÁVEL</div>
+              <div class="value" id="rep-val-lucro-liquido" style="color:var(--choc-dark);">R$ 0,00</div>
+              <small id="rep-sub-divisao-socios" style="font-size:0.75rem; font-weight:700; color:var(--choc-milk);"></small>
+            </div>
+          </div>
+
+          <!-- DETALHAMENTO DE CLIENTES & VENDAS -->
+          <h4 style="color:var(--choc-dark); margin-bottom:8px; font-family:'Georgia', serif;">🛒 Pedidos & Clientes do Período</h4>
+          <div class="table-wrapper" style="margin-bottom:20px;">
+            <table>
+              <thead>
+                <tr>
+                  <th>Cliente / Tipo</th>
+                  <th>Produto</th>
+                  <th>Qtd (g/un)</th>
+                  <th>Custo Fornec.</th>
+                  <th>Valor Cobrado</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody id="rep-lista-pedidos-body"></tbody>
+            </table>
+          </div>
+
+          <!-- DETALHAMENTO DE FORNECEDORES & ACERTOS -->
+          <h4 style="color:var(--choc-dark); margin-bottom:8px; font-family:'Georgia', serif;">📦 Fornecedores, Vendas & Acertos Devidos</h4>
+          <div id="rep-lista-fornecedores-container"></div>
         </div>
       </div>
 
-      <!-- ÁREA IMPRESSA DO RELATÓRIO DO MÊS (EXPORTÁVEL EM PDF) -->
-      <div id="area-relatorio-impressao" style="background:#ffffff; padding:20px; border-radius:14px; border:2px solid var(--border-color); margin-bottom:24px;">
-        <div style="text-align:center; border-bottom:2px solid var(--choc-milk); padding-bottom:12px; margin-bottom:16px;">
-          <h2 style="color:var(--choc-dark); font-family:'Georgia', serif; font-size:1.5rem;">A FANTÁSTICA FÁBRICA DE CHOCOLATE</h2>
-          <h3 id="rel-titulo-mes-ano" style="color:var(--choc-milk); font-size:1.1rem; margin-top:4px;">FECHAMENTO & RATEIO - MÊS / ANO</h3>
-          <small style="color:var(--text-muted);" id="rel-data-geracao">Relatório consolidado gerado no sistema</small>
+      <!-- CONSULTA DE RATEIOS PASSADOS SALVOS -->
+      <div class="form-section">
+        <h3>📂 Consultar Rateios Anteriores Salvos</h3>
+        <p style="font-size:0.85rem; color:var(--text-muted); margin-bottom:10px;">
+          Selecione um mês salvo no histórico para visualizar ou reimprimir em PDF.
+        </p>
+        <div style="display:flex; gap:10px; align-items:center;">
+          <select id="select-rateios-salvos" style="flex:1;">
+            <option value="">Nenhum fechamento salvo ainda...</option>
+          </select>
+          <button class="btn-secondary" style="margin-top:0;" onclick="carregarRateioSalvoDoHistorico()">🔍 Visualizar</button>
         </div>
-
-        <!-- 1. QUADROS COMPARATIVOS COM O MÊS ANTERIOR -->
-        <h4 style="color:var(--choc-dark); margin-bottom:8px;">📈 Comparativo com o Mês Anterior</h4>
-        <div class="report-comparative-grid" id="rel-comparativo-container">
-          <div class="comp-card">
-            <div class="comp-title">Faturamento Total</div>
-            <div class="comp-val" id="comp-val-fat">R$ 0,00</div>
-            <div class="comp-diff" id="comp-diff-fat">--</div>
-          </div>
-          <div class="comp-card">
-            <div class="comp-title">Lucro Líquido</div>
-            <div class="comp-val" id="comp-val-lucro">R$ 0,00</div>
-            <div class="comp-diff" id="comp-diff-lucro">--</div>
-          </div>
-          <div class="comp-card">
-            <div class="comp-title">Clientes Atendidos</div>
-            <div class="comp-val" id="comp-val-cli">0</div>
-            <div class="comp-diff" id="comp-diff-cli">--</div>
-          </div>
-          <div class="comp-card">
-            <div class="comp-title">Volume Vendido</div>
-            <div class="comp-val" id="comp-val-vol">0 g/un</div>
-            <div class="comp-diff" id="comp-diff-vol">--</div>
-          </div>
-        </div>
-
-        <!-- 2. RESUMO FINANCEIRO E RATEIO SÓCIOS -->
-        <h4 style="color:var(--choc-dark); margin-top:16px; margin-bottom:8px;">💰 Resumo Financeiro & Divisão do Rateio</h4>
-        <div style="background:var(--card-sub-bg); padding:14px; border-radius:10px; border:1px solid var(--border-color); margin-bottom:18px;">
-          <div style="display:flex; justify-content:space-between; margin-bottom:6px;">
-            <span>(+) Faturamento Total Vendas Clientes:</span>
-            <strong id="rel-val-faturamento-total" style="color:var(--success-text);">R$ 0,00</strong>
-          </div>
-          <div style="display:flex; justify-content:space-between; margin-bottom:6px;">
-            <span>(-) Custos Totais de Fornecedores & Fretes:</span>
-            <strong id="rel-val-custos-fornecedores" style="color:var(--danger-text);">R$ 0,00</strong>
-          </div>
-          <div style="display:flex; justify-content:space-between; margin-bottom:6px;">
-            <span>(-) Custo Consumo Próprio dos Sócios:</span>
-            <strong id="rel-val-custos-socios" style="color:#5b2c6f;">R$ 0,00</strong>
-          </div>
-          <hr style="border:none; border-top:1px solid var(--border-color); margin:8px 0;">
-          <div style="display:flex; justify-content:space-between; font-size:1.1rem; font-weight:800; margin-bottom:10px;">
-            <span>(=) Lucro Líquido a Distribuir:</span>
-            <strong id="rel-val-lucro-liquido" style="color:var(--choc-dark);">R$ 0,00</strong>
-          </div>
-
-          <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; background:#ffffff; padding:10px; border-radius:8px; border:1px solid var(--border-color); text-align:center;">
-            <div>
-              <span style="font-size:0.8rem; color:var(--text-muted);">Parte do Ramom</span>
-              <div id="rel-rateio-ramom" style="font-size:1.1rem; font-weight:800; color:var(--choc-dark);">R$ 0,00</div>
-            </div>
-            <div>
-              <span style="font-size:0.8rem; color:var(--text-muted);">Parte da Monique</span>
-              <div id="rel-rateio-monique" style="font-size:1.1rem; font-weight:800; color:var(--choc-dark);">R$ 0,00</div>
-            </div>
-          </div>
-        </div>
-
-        <!-- 3. RELATÓRIO DE CLIENTES DO MÊS -->
-        <h4 style="color:var(--choc-dark); margin-top:16px; margin-bottom:8px;">👥 Clientes e Pedidos do Mês</h4>
-        <div id="rel-tabela-clientes-container"></div>
-
-        <!-- 4. RELATÓRIO DE FORNECEDORES E COMPRAS DO MÊS -->
-        <h4 style="color:var(--choc-dark); margin-top:20px; margin-bottom:8px;">📦 Fornecedores e Pagamentos do Mês</h4>
-        <div id="rel-tabela-fornecedores-container"></div>
       </div>
 
       <!-- HISTÓRICO DE ALTERAÇÕES DOS SÓCIOS -->
       <div class="form-section" style="background:#ffffff; margin-top:20px;">
-        <h3 style="color:var(--choc-dark); font-size:1rem; margin-bottom:10px;">📝 Log de Alterações dos Sócios</h3>
-        <div id="container-logs-historico" style="max-height:250px; overflow-y:auto; border:1px solid var(--border-color); border-radius:8px;"></div>
+        <h3 style="color:var(--choc-dark); font-size:1rem; margin-bottom:10px;">📝 Histórico de Alterações dos Sócios</h3>
+        <div id="container-logs-historico" style="max-height:220px; overflow-y:auto; border:1px solid var(--border-color); border-radius:8px;"></div>
       </div>
     </div>
 
@@ -1192,7 +1216,7 @@
 
   <script>
     /* ---------------------------------------------------
-       1. CONFIGURAÇÃO DO FIREBASE COM SUAS CHAVES REAIS
+       1. CONFIGURAÇÃO DO FIREBASE COM SUAS CHAVE REAIS
        --------------------------------------------------- */
     const firebaseConfig = {
       apiKey: "AIzaSyDpQE3OCdrAhWNWe4n06F4YkvG-yZFyffE",
@@ -1214,7 +1238,7 @@
         useFirebase = true;
       }
     } catch (e) {
-      console.log("Firebase não conectado. Usando modo LocalStorage.");
+      console.log("Firebase não configurado ainda. Usando modo LocalStorage.");
     }
 
     const STORAGE_KEY = 'fabrica_v18_data';
@@ -1281,7 +1305,9 @@
     }
 
     function limparDados() {
-      const conf = confirm("🧹 LIMPAR DADOS:\n\nDeseja apagar todas as informações cadastradas?");
+      const conf = confirm("🧹 LIMPAR DADOS:
+
+Deseja apagar todas as informações cadastradas?");
       if (!conf) return;
 
       localStorage.removeItem(STORAGE_KEY);
@@ -1304,7 +1330,125 @@
     }
 
     /* ---------------------------------------------------
-       2. LÓGICA DO 5º DIA ÚTIL E TEMPO REGRESSIVO (RATEIO)
+       2. EFEITO DE FUMAÇA / INCENSO (CANVAS ANIMATION)
+       --------------------------------------------------- */
+    let smokeActive = true;
+    let canvas, ctx;
+    let particles = [];
+    let mouse = { x: -100, y: -100, moving: false };
+    let mouseTimer;
+
+    function initSmokeCanvas() {
+      canvas = document.getElementById('smoke-canvas');
+      if (!canvas) return;
+      ctx = canvas.getContext('2d');
+
+      resizeCanvas();
+      window.addEventListener('resize', resizeCanvas);
+
+      window.addEventListener('mousemove', (e) => {
+        mouse.x = e.clientX;
+        mouse.y = e.clientY;
+        mouse.moving = true;
+        clearTimeout(mouseTimer);
+        mouseTimer = setTimeout(() => { mouse.moving = false; }, 300);
+
+        if (smokeActive && Math.random() < 0.6) {
+          createParticle(mouse.x, mouse.y, true);
+        }
+      });
+
+      window.addEventListener('touchmove', (e) => {
+        if (e.touches.length > 0) {
+          mouse.x = e.touches[0].clientX;
+          mouse.y = e.touches[0].clientY;
+          if (smokeActive) createParticle(mouse.x, mouse.y, true);
+        }
+      });
+
+      requestAnimationFrame(renderSmoke);
+    }
+
+    function resizeCanvas() {
+      if (!canvas) return;
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    }
+
+    function toggleEfeitoFumaca() {
+      smokeActive = !smokeActive;
+      const btn = document.getElementById('btn-toggle-smoke');
+      if (btn) {
+        btn.innerText = smokeActive ? '💨 Fumaça: On' : '💨 Fumaça: Off';
+      }
+      canvas.style.opacity = smokeActive ? '0.85' : '0';
+    }
+
+    function createParticle(x, y, isMouse = false) {
+      if (particles.length > 60) return;
+
+      const p = {
+        x: x + (Math.random() - 0.5) * 12,
+        y: y + (Math.random() - 0.5) * 12,
+        vx: (Math.random() - 0.5) * 0.8,
+        vy: isMouse ? (-0.6 - Math.random() * 0.8) : (-0.4 - Math.random() * 0.5),
+        radius: isMouse ? (8 + Math.random() * 12) : (12 + Math.random() * 20),
+        alpha: 0.01,
+        maxAlpha: isMouse ? (0.2 + Math.random() * 0.15) : (0.12 + Math.random() * 0.1),
+        growth: 0.2 + Math.random() * 0.3,
+        life: 0,
+        maxLife: isMouse ? (100 + Math.random() * 60) : (180 + Math.random() * 100)
+      };
+      particles.push(p);
+    }
+
+    function renderSmoke() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      if (smokeActive) {
+        // Incenso sutil periódico no fundo quando parado
+        if (Math.random() < 0.12) {
+          const spawnX = Math.random() * canvas.width;
+          const spawnY = canvas.height + 20;
+          createParticle(spawnX, spawnY, false);
+        }
+
+        for (let i = particles.length - 1; i >= 0; i--) {
+          const p = particles[i];
+          p.life++;
+          p.x += p.vx + Math.sin(p.life * 0.03) * 0.3;
+          p.y += p.vy;
+          p.radius += p.growth;
+
+          const halfLife = p.maxLife / 2;
+          if (p.life < halfLife) {
+            p.alpha = (p.life / halfLife) * p.maxAlpha;
+          } else {
+            p.alpha = (1 - (p.life - halfLife) / halfLife) * p.maxAlpha;
+          }
+
+          if (p.life >= p.maxLife || p.alpha <= 0) {
+            particles.splice(i, 1);
+            continue;
+          }
+
+          const grad = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.radius);
+          grad.addColorStop(0, `rgba(235, 225, 215, ${p.alpha})`);
+          grad.addColorStop(0.5, `rgba(215, 200, 185, ${p.alpha * 0.4})`);
+          grad.addColorStop(1, 'rgba(215, 200, 185, 0)');
+
+          ctx.beginPath();
+          ctx.fillStyle = grad;
+          ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+          ctx.fill();
+        }
+      }
+
+      requestAnimationFrame(renderSmoke);
+    }
+
+    /* ---------------------------------------------------
+       3. LÓGICA DO 5º DIA ÚTIL E TEMPO REGRESSIVO (RATEIO)
        --------------------------------------------------- */
     function obterQuintoDiaUtil(ano, mes) {
       let count = 0;
@@ -1392,7 +1536,7 @@
     setInterval(atualizarInformativoRateio, 1000);
 
     /* ---------------------------------------------------
-       3. NAVEGAÇÃO DE ABAS E PANÉIS INTERATIVOS
+       4. NAVEGAÇÃO DE ABAS E PANÉIS INTERATIVOS
        --------------------------------------------------- */
     function switchTab(tabName) {
       document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
@@ -1404,10 +1548,11 @@
       document.getElementById(`tab-${tabName}`).classList.add('active');
 
       if (tabName === 'relatorio') {
-        const hoje = new Date();
-        document.getElementById('relatorio-select-mes').value = hoje.getMonth();
-        document.getElementById('relatorio-select-ano').value = hoje.getFullYear();
+        const agora = new Date();
+        document.getElementById('select-mes-rateio').value = agora.getMonth();
+        document.getElementById('select-ano-rateio').value = agora.getFullYear();
         gerarRelatorioRateio();
+        renderizarListaRateiosSalvosSelect();
       }
     }
 
@@ -1441,7 +1586,7 @@
     }
 
     /* ---------------------------------------------------
-       4. FORMATADORES E CÁLCULOS DINÂMICOS
+       5. FORMATADORES E CÁLCULOS DINÂMICOS
        --------------------------------------------------- */
     function formatarMoeda(val) {
       return new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(val || 0);
@@ -1510,12 +1655,13 @@
             if (ped.dependentes) ped.dependentes.forEach(d => qtdTotal += (parseFloat(d.qtd) || 0));
 
             const { custoUnit } = obterCustoEfetivoProduto(prod.id);
-            custoProdutos += (qtdTotal * custoUnit);
 
             if (ped.categoriaTipo !== 'Socio') {
               const precoVendaUnit = calcularPrecoVendaCliente(prod, qtdTotal);
               faturamento += (qtdTotal * precoVendaUnit);
             }
+
+            custoProdutos += (qtdTotal * custoUnit);
           }
         });
       }
@@ -1525,7 +1671,7 @@
     }
 
     /* ---------------------------------------------------
-       5. DASHBOARD
+       6. DASHBOARD
        --------------------------------------------------- */
     function atualizarDashboard() {
       let faturamento = 0;
@@ -1597,25 +1743,24 @@
     }
 
     /* ---------------------------------------------------
-       6. GESTÃO DE PEDIDOS & CATEGORIA DOS SÓCIOS
+       7. GESTÃO DE PEDIDOS (COM ÁREA DE SÓCIOS)
        --------------------------------------------------- */
     function alternarTipoCategoriaPedido() {
-      const radios = document.getElementsByName('pedido-categoria-tipo');
-      let tipo = 'Cliente';
-      for (let r of radios) { if (r.checked) tipo = r.value; }
-
+      const tipo = document.getElementById('pedido-categoria-tipo').value;
+      const clienteInput = document.getElementById('pedido-cliente');
       const lblCliente = document.getElementById('lbl-pedido-cliente');
-      const inputCliente = document.getElementById('pedido-cliente');
-      const helpMsg = document.getElementById('help-categoria-pedido');
 
       if (tipo === 'Socio') {
-        lblCliente.innerText = "Sócio Responsável";
-        inputCliente.placeholder = "Ex: Ramom ou Monique";
-        helpMsg.innerText = "⚠️ Pedido para consumo próprio do sócio. Valor de venda zerado (R$ 0,00). Apenas a saída e o custo do fornecedor são contabilizados.";
+        lblCliente.innerText = 'Sócio (Quem está levando?)';
+        const usuarioAtual = document.getElementById('select-usuario-atual').value || 'Ramom';
+        if (!clienteInput.value || clienteInput.value === 'João') {
+          clienteInput.value = `Sócio (${usuarioAtual})`;
+        }
       } else {
-        lblCliente.innerText = "Cliente";
-        inputCliente.placeholder = "Ex: João";
-        helpMsg.innerText = "Venda comercial normal faturada para o cliente.";
+        lblCliente.innerText = 'Cliente';
+        if (clienteInput.value.includes('Sócio (')) {
+          clienteInput.value = '';
+        }
       }
       atualizarCalculoPedido();
     }
@@ -1640,13 +1785,10 @@
     }
 
     function atualizarCalculoPedido() {
+      const catTipo = document.getElementById('pedido-categoria-tipo').value;
       const prodId = document.getElementById('pedido-produto').value;
       const qtdPrincipal = parseFloat(document.getElementById('pedido-qtd-principal').value) || 0;
       const previewEl = document.getElementById('pedido-calc-preview');
-
-      const radios = document.getElementsByName('pedido-categoria-tipo');
-      let tipoCategoria = 'Cliente';
-      for (let r of radios) { if (r.checked) tipoCategoria = r.value; }
 
       let qtdDependentes = 0;
       document.querySelectorAll('.dep-qtd').forEach(input => {
@@ -1664,14 +1806,14 @@
       if (!produto) return;
 
       const { custoUnit } = obterCustoEfetivoProduto(produto.id);
-      const custoTotalForn = qtdTotal * custoUnit;
+      const custoTotalSaida = qtdTotal * custoUnit;
 
-      if (tipoCategoria === 'Socio') {
-        previewEl.innerText = `👑 Consumo Sócio: ${qtdTotal} g/un | Preço Venda: R$ 0,00 | Custo Fornecedor: ${formatarMoeda(custoTotalForn)}`;
+      if (catTipo === 'Socio') {
+        previewEl.innerHTML = `👑 <strong>Consumo Sócio:</strong> R$ 0,00 cobrado. <span style="color:var(--choc-milk);">(Custo do fornecedor registrado: ${formatarMoeda(custoTotalSaida)})</span>`;
       } else {
         const precoVendaUnit = calcularPrecoVendaCliente(produto, qtdTotal);
         const valorTotal = qtdTotal * precoVendaUnit;
-        previewEl.innerText = `Total: ${qtdTotal} g/un (${qtdPrincipal}g Princ. + ${qtdDependentes}g Dep.) x ${formatarMoeda(precoVendaUnit)} = ${formatarMoeda(valorTotal)} (Custo Forn: ${formatarMoeda(custoTotalForn)})`;
+        previewEl.innerText = `Total Cliente: ${qtdTotal} g/un (${qtdPrincipal}g Princ. + ${qtdDependentes}g Dep.) x ${formatarMoeda(precoVendaUnit)} = ${formatarMoeda(valorTotal)} (Custo Fornec: ${formatarMoeda(custoTotalSaida)})`;
       }
     }
 
@@ -1709,24 +1851,25 @@
         }
 
         let statusClass = ped.status === 'Pago' ? 'badge-pago' : 'badge-pendente';
+        let statusLabel = ped.status || 'Pendente';
         let clienteDisplay = `<strong>${ped.cliente || 'Sem Nome'}</strong>`;
 
         if (ped.categoriaTipo === 'Socio') {
-          clienteDisplay += ` <span class="badge badge-socio">👑 Consumo Sócio</span>`;
-        } else if (numDeps > 0) {
-          clienteDisplay += ` <small style="color:var(--choc-milk);">(+${numDeps} dep.)</small>`;
+          statusClass = 'badge-socio';
+          statusLabel = '👑 Consumo Sócio';
+          clienteDisplay += ` <small style="color:var(--choc-milk); font-weight:700;">(Sócio)</small>`;
         }
 
         const tr = document.createElement('tr');
         tr.className = 'order-row-clickable';
         tr.innerHTML = `
-          <td>${clienteDisplay}</td>
+          <td>${clienteDisplay} ${numDeps > 0 ? `<small style="color:var(--choc-milk);">(+${numDeps} dep.)</small>` : ''}</td>
           <td>${prodNome}</td>
           <td><strong>${qtdTotal} g/un</strong></td>
           <td>${formatarMoeda(custoTotalPedido)}</td>
-          <td><strong>${ped.categoriaTipo === 'Socio' ? 'R$ 0,00' : formatarMoeda(valorTotalPedido)}</strong></td>
+          <td><strong>${formatarMoeda(valorTotalPedido)}</strong></td>
           <td>${ped.tipoEnvio || 'Retirada'}</td>
-          <td><span class="badge ${statusClass}">${ped.status || 'Pendente'}</span></td>
+          <td><span class="badge ${statusClass}">${statusLabel}</span></td>
           <td>
             <button class="btn-action btn-edit" onclick="event.stopPropagation(); editarPedido('${ped.id}')">✏️ Editar</button>
             <button class="btn-action btn-delete" onclick="event.stopPropagation(); excluirPedido('${ped.id}')">🗑️ Excluir</button>
@@ -1755,7 +1898,6 @@
           <td colspan="8" style="background:#fdfaf8; padding:12px 20px;">
             <div class="order-details-box">
               <h4 style="color:var(--choc-dark); margin-bottom:6px;">📋 Detalhes do Pedido - ${ped.cliente || 'Cliente'}</h4>
-              <p><strong>Categoria:</strong> ${ped.categoriaTipo === 'Socio' ? '👑 Consumo Próprio dos Sócios' : '🛒 Pedido de Cliente'}</p>
               <p><strong>Pedido Principal:</strong> ${ped.cliente || 'Cliente'} (${ped.qtdPrincipal || 0} g/un)</p>
               <div style="margin:6px 0;"><strong>Rateio / Dependentes:</strong> ${dependentesHtml}</div>
               <div style="margin:6px 0;">${envioHtml}</div>
@@ -1777,7 +1919,8 @@
     function salvarPedido(e) {
       e.preventDefault();
       const id = document.getElementById('pedido-id').value;
-      const cliente = document.getElementById('pedido-cliente').value.trim() || 'Cliente';
+      const categoriaTipo = document.getElementById('pedido-categoria-tipo').value;
+      const cliente = document.getElementById('pedido-cliente').value.trim() || (categoriaTipo === 'Socio' ? 'Sócio' : 'Cliente');
       const produtoId = document.getElementById('pedido-produto').value;
       const qtdPrincipal = parseFloat(document.getElementById('pedido-qtd-principal').value) || 1;
       const status = document.getElementById('pedido-status').value || 'Pendente';
@@ -1787,10 +1930,6 @@
       const horario = document.getElementById('pedido-horario').value.trim();
       const observacoes = document.getElementById('pedido-obs').value.trim();
 
-      const radios = document.getElementsByName('pedido-categoria-tipo');
-      let categoriaTipo = 'Cliente';
-      for (let r of radios) { if (r.checked) categoriaTipo = r.value; }
-
       const dependentes = [];
       document.querySelectorAll('#dependentes-list .faixa-row').forEach(row => {
         const n = row.querySelector('.dep-nome').value.trim();
@@ -1798,31 +1937,33 @@
         if (n || q > 0) dependentes.push({ nome: n || 'Dependente', qtd: q });
       });
 
+      const agora = new Date();
+
       const objPedido = {
         id: id || 'ped_' + Date.now(),
+        categoriaTipo,
         cliente,
         produtoId,
         qtdPrincipal,
-        categoriaTipo,
         dependentes,
-        status,
+        status: categoriaTipo === 'Socio' ? 'Consumo Sócio' : status,
         tipoEnvio,
         endereco: tipoEnvio === 'Entrega por Conta' ? endereco : '',
         dia: tipoEnvio === 'Entrega por Conta' ? dia : '',
         horario: tipoEnvio === 'Entrega por Conta' ? horario : '',
         observacoes,
-        dataCriacao: new Date().toISOString()
+        dataCriacao: agora.toISOString()
       };
 
       let acaoLog = "";
       if (id) {
         const idx = appData.pedidos.findIndex(p => p.id === id);
         if (idx !== -1) appData.pedidos[idx] = objPedido;
-        acaoLog = `Atualizou o pedido de "${cliente}" (${categoriaTipo}).`;
+        acaoLog = `Atualizou o pedido de "${cliente}".`;
       } else {
         if (!appData.pedidos) appData.pedidos = [];
         appData.pedidos.push(objPedido);
-        acaoLog = `Registrou pedido para "${cliente}" (${categoriaTipo}).`;
+        acaoLog = `Registrou novo pedido para "${cliente}" (${categoriaTipo}).`;
       }
 
       cancelarEdicaoPedido();
@@ -1834,17 +1975,14 @@
       if (!ped) return;
 
       document.getElementById('pedido-id').value = ped.id;
+      document.getElementById('pedido-categoria-tipo').value = ped.categoriaTipo || 'Cliente';
+      alternarTipoCategoriaPedido();
+
       document.getElementById('pedido-cliente').value = ped.cliente;
       document.getElementById('pedido-produto').value = ped.produtoId;
       document.getElementById('pedido-qtd-principal').value = ped.qtdPrincipal;
-      document.getElementById('pedido-status').value = ped.status;
+      document.getElementById('pedido-status').value = ped.status || 'Pendente';
       document.getElementById('pedido-envio').value = ped.tipoEnvio;
-
-      const radios = document.getElementsByName('pedido-categoria-tipo');
-      for (let r of radios) {
-        r.checked = (r.value === (ped.categoriaTipo || 'Cliente'));
-      }
-      alternarTipoCategoriaPedido();
 
       alternarCamposEnvio();
 
@@ -1872,14 +2010,11 @@
     function cancelarEdicaoPedido() {
       document.getElementById('form-pedido').reset();
       document.getElementById('pedido-id').value = '';
+      document.getElementById('pedido-categoria-tipo').value = 'Cliente';
+      alternarTipoCategoriaPedido();
       document.getElementById('dependentes-list').innerHTML = '';
       document.getElementById('pedido-calc-preview').innerText = 'Cálculo estimado: R$ 0,00';
       document.getElementById('pedido-envio').value = 'Retirada';
-
-      const radios = document.getElementsByName('pedido-categoria-tipo');
-      if (radios.length > 0) radios[0].checked = true;
-      alternarTipoCategoriaPedido();
-
       alternarCamposEnvio();
 
       document.getElementById('form-pedido-title').innerText = 'Novo Pedido';
@@ -1898,7 +2033,7 @@
     }
 
     /* ---------------------------------------------------
-       7. GESTÃO DE FORNECEDORES & PRODUTOS EMBUTIDOS
+       8. GESTÃO DE FORNECEDORES & PRODUTOS EMBUTIDOS
        --------------------------------------------------- */
     let prodBlockCounter = 0;
 
@@ -2020,7 +2155,7 @@
       if (id) {
         const idx = appData.fornecedores.findIndex(f => f.id === id);
         if (idx !== -1) appData.fornecedores[idx] = objFornecedor;
-        acaoLog = `Atualizou o fornecedor "${nome}".`;
+        acaoLog = `Atualizou dados do fornecedor "${nome}".`;
       } else {
         if (!appData.fornecedores) appData.fornecedores = [];
         appData.fornecedores.push(objFornecedor);
@@ -2180,7 +2315,7 @@
     }
 
     /* ---------------------------------------------------
-       8. GESTÃO DE PRODUTOS & CENTRAL DE PRECIFICAÇÃO
+       9. GESTÃO DE PRODUTOS & CENTRAL DE PRECIFICAÇÃO
        --------------------------------------------------- */
     function aoSelecionarProdutoParaPrecificar() {
       const prodId = document.getElementById('produto-select').value;
@@ -2394,7 +2529,7 @@
       }
 
       cancelarEdicaoProduto();
-      salvarDados(`Ajustou precificação do produto "${pNome}".`);
+      salvarDados(`Ajustou a precificação do produto "${pNome}".`);
     }
 
     function editarProduto(id) {
@@ -2435,351 +2570,315 @@
     }
 
     /* ---------------------------------------------------
-       9. GERADOR DE RELATÓRIOS MENSAL, COMPARATIVO E HISTÓRICO
+       10. RELATÓRIO MENSAL, COMPARATIVO E HISTÓRICO DE RATEIO
        --------------------------------------------------- */
-    const NORMES_MESES = ["Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"];
+    const NOMES_MESES = ["Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"];
+
+    function obterPedidosDoMesAno(mes, ano) {
+      if (!appData.pedidos) return [];
+      return appData.pedidos.filter(p => {
+        if (!p.dataCriacao) return true; // Se não tiver data, inclui no mês atual por compatibilidade
+        const d = new Date(p.dataCriacao);
+        return d.getMonth() === parseInt(mes) && d.getFullYear() === parseInt(ano);
+      });
+    }
 
     function gerarRelatorioRateio() {
-      const mesIdx = parseInt(document.getElementById('relatorio-select-mes').value);
-      const ano = parseInt(document.getElementById('relatorio-select-ano').value);
+      const mesIdx = parseInt(document.getElementById('select-mes-rateio').value);
+      const anoVal = parseInt(document.getElementById('select-ano-rateio').value);
 
-      document.getElementById('rel-titulo-mes-ano').innerText = `FECHAMENTO & RATEIO DE ${NORMES_MESES[mesIdx].toUpperCase()} DE ${ano}`;
-      document.getElementById('rel-data-geracao').innerText = `Consolidado gerado em ${new Date().toLocaleDateString('pt-BR')} às ${new Date().toLocaleTimeString('pt-BR', {hour:'2-digit', minute:'2-digit'})}`;
+      const nomeMes = NOMES_MESES[mesIdx];
+      document.getElementById('title-periodo-rateio').innerText = `Relatório Geral de Fechamento e Rateio — ${nomeMes} / ${anoVal}`;
+      document.getElementById('date-geracao-rateio').innerText = `Gerado em: ${new Date().toLocaleDateString('pt-BR')} às ${new Date().toLocaleTimeString('pt-BR')}`;
+
+      const pedidosDoMes = obterPedidosDoMesAno(mesIdx, anoVal);
 
       let faturamentoTotal = 0;
       let faturamentoPago = 0;
       let faturamentoPendente = 0;
-      let custosFornecedoresTotal = 0;
-      let custosConsumoSociosTotal = 0;
-      let clientesMap = {};
-      let fornecedoresMap = {};
-      let totalVolumeGeral = 0;
+      let custoFornecedoresTotal = 0;
+      let gastoSociosTotal = 0;
+      let totalGramasVendidas = 0;
+      let clientesSet = new Set();
 
-      if (appData.pedidos) {
-        appData.pedidos.forEach(ped => {
-          let dataPed = ped.dataCriacao ? new Date(ped.dataCriacao) : new Date();
-          let pedMes = dataPed.getMonth();
-          let pedAno = dataPed.getFullYear();
+      const tbodyPedidos = document.getElementById('rep-lista-pedidos-body');
+      tbodyPedidos.innerHTML = '';
 
-          if (pedMes === mesIdx && pedAno === ano) {
-            const prod = appData.produtos.find(p => p.id === ped.produtoId);
-            let qtdTotal = (parseFloat(ped.qtdPrincipal) || 0);
-            if (ped.dependentes) ped.dependentes.forEach(d => qtdTotal += (parseFloat(d.qtd) || 0));
-            totalVolumeGeral += qtdTotal;
+      if (pedidosDoMes.length === 0) {
+        tbodyPedidos.innerHTML = '<tr><td colspan="6" class="empty-state">Nenhum pedido registrado para este mês.</td></tr>';
+      } else {
+        pedidosDoMes.forEach(ped => {
+          const prod = appData.produtos.find(p => p.id === ped.produtoId);
+          const prodNome = prod ? prod.nome : 'Produto';
 
-            let custoForn = 0;
-            let precoVenda = 0;
+          let qtdTotal = (parseFloat(ped.qtdPrincipal) || 0);
+          if (ped.dependentes) ped.dependentes.forEach(d => qtdTotal += (parseFloat(d.qtd) || 0));
 
-            if (prod) {
-              const { custoUnit } = obterCustoEfetivoProduto(prod.id);
-              custoForn = qtdTotal * custoUnit;
+          totalGramasVendidas += qtdTotal;
+          clientesSet.add(ped.cliente);
 
-              if (ped.categoriaTipo === 'Socio') {
-                custosConsumoSociosTotal += custoForn;
-              } else {
-                precoVenda = qtdTotal * calcularPrecoVendaCliente(prod, qtdTotal);
-                faturamentoTotal += precoVenda;
-                if (ped.status === 'Pago') faturamentoPago += precoVenda;
-                else faturamentoPendente += precoVenda;
-              }
+          let custoFornecPed = 0;
+          let valorCobradoPed = 0;
 
-              if (!fornecedoresMap[prod.fornecedorId]) {
-                const fObj = appData.fornecedores.find(f => f.id === prod.fornecedorId);
-                fornecedoresMap[prod.fornecedorId] = {
-                  nome: fObj ? fObj.nome : 'Desconhecido',
-                  frete: fObj ? parseFloat(fObj.frete) || 0 : 0,
-                  produtos: {}
-                };
-              }
-              if (!fornecedoresMap[prod.fornecedorId].produtos[prod.id]) {
-                fornecedoresMap[prod.fornecedorId].produtos[prod.id] = {
-                  nome: prod.nome,
-                  qtdTotal: 0,
-                  subtotalCusto: 0
-                };
-              }
-              fornecedoresMap[prod.fornecedorId].produtos[prod.id].qtdTotal += qtdTotal;
-              fornecedoresMap[prod.fornecedorId].produtos[prod.id].subtotalCusto += custoForn;
-              custosFornecedoresTotal += custoForn;
+          if (prod) {
+            const { custoUnit } = obterCustoEfetivoProduto(prod.id);
+            custoFornecPed = qtdTotal * custoUnit;
+            custoFornecedoresTotal += custoFornecPed;
+
+            if (ped.categoriaTipo === 'Socio') {
+              gastoSociosTotal += custoFornecPed;
+            } else {
+              const precoUnit = calcularPrecoVendaCliente(prod, qtdTotal);
+              valorCobradoPed = qtdTotal * precoUnit;
+              faturamentoTotal += valorCobradoPed;
+
+              if (ped.status === 'Pago') faturamentoPago += valorCobradoPed;
+              else faturamentoPendente += valorCobradoPed;
             }
-
-            let keyCli = (ped.cliente || 'Sem Nome') + '_' + (ped.categoriaTipo || 'Cliente');
-            if (!clientesMap[keyCli]) {
-              clientesMap[keyCli] = {
-                nome: ped.cliente || 'Sem Nome',
-                categoria: ped.categoriaTipo || 'Cliente',
-                qtdTotalG: 0,
-                valorCobrado: 0,
-                pedidosCount: 0
-              };
-            }
-            clientesMap[keyCli].qtdTotalG += qtdTotal;
-            clientesMap[keyCli].valorCobrado += (ped.categoriaTipo === 'Socio' ? 0 : precoVenda);
-            clientesMap[keyCli].pedidosCount++;
           }
+
+          let tagStatus = `<span class="badge ${ped.status === 'Pago' ? 'badge-pago' : 'badge-pendente'}">${ped.status || 'Pendente'}</span>`;
+          if (ped.categoriaTipo === 'Socio') {
+            tagStatus = `<span class="badge badge-socio">👑 Consumo Sócio</span>`;
+          }
+
+          tbodyPedidos.innerHTML += `
+            <tr>
+              <td><strong>${ped.cliente}</strong></td>
+              <td>${prodNome}</td>
+              <td><strong>${qtdTotal} g/un</strong></td>
+              <td>${formatarMoeda(custoFornecPed)}</td>
+              <td><strong>${formatarMoeda(valorCobradoPed)}</strong></td>
+              <td>${tagStatus}</td>
+            </tr>
+          `;
         });
       }
 
-      const freteTotalFornecedores = appData.fornecedores ? appData.fornecedores.reduce((acc, f) => acc + (parseFloat(f.frete) || 0), 0) : 0;
-      const despesaTotalRealFornecedores = custosFornecedoresTotal + freteTotalFornecedores;
+      const freteFornecedores = appData.fornecedores ? appData.fornecedores.reduce((acc, f) => acc + (parseFloat(f.frete) || 0), 0) : 0;
+      const totalCustosFábrica = custoFornecedoresTotal + freteFornecedores;
+      const lucroLiquidoRateio = faturamentoTotal - totalCustosFábrica;
 
-      const lucroLiquidoReal = faturamentoTotal - (despesaTotalRealFornecedores + custosConsumoSociosTotal);
+      document.getElementById('rep-val-faturamento').innerText = formatarMoeda(faturamentoTotal);
+      document.getElementById('rep-sub-faturamento').innerText = `Pago: ${formatarMoeda(faturamentoPago)} | Pend: ${formatarMoeda(faturamentoPendente)}`;
 
-      document.getElementById('rel-val-faturamento-total').innerText = formatarMoeda(faturamentoTotal);
-      document.getElementById('rel-val-custos-fornecedores').innerText = formatarMoeda(despesaTotalRealFornecedores);
-      document.getElementById('rel-val-custos-socios').innerText = formatarMoeda(custosConsumoSociosTotal);
-      document.getElementById('rel-val-lucro-liquido').innerText = formatarMoeda(lucroLiquidoReal);
+      document.getElementById('rep-val-custo-fornec').innerText = formatarMoeda(totalCustosFábrica);
+      document.getElementById('rep-sub-custo-fornec').innerText = `Prods: ${formatarMoeda(custoFornecedoresTotal)} + Frete: ${formatarMoeda(freteFornecedores)}`;
 
-      const splitVal = (appData.configLucro && appData.configLucro.splitRamom !== undefined) ? appData.configLucro.splitRamom : 50;
-      const partRamom = lucroLiquidoReal * (splitVal / 100);
-      const partMonique = lucroLiquidoReal * ((100 - splitVal) / 100);
+      document.getElementById('rep-val-gasto-socios').innerText = formatarMoeda(gastoSociosTotal);
 
-      document.getElementById('rel-rateio-ramom').innerText = formatarMoeda(partRamom);
-      document.getElementById('rel-rateio-monique').innerText = formatarMoeda(partMonique);
+      document.getElementById('rep-val-lucro-liquido').innerText = formatarMoeda(lucroLiquidoRateio);
 
-      // COMPARATIVO COM MÊS ANTERIOR
-      let mesAntIdx = mesIdx - 1;
-      let anoAnt = ano;
-      if (mesAntIdx < 0) { mesAntIdx = 11; anoAnt = ano - 1; }
+      const splitRamom = (appData.configLucro && appData.configLucro.splitRamom !== undefined) ? appData.configLucro.splitRamom : 50;
+      const splitMonique = 100 - splitRamom;
+      const parteRamom = lucroLiquidoRateio * (splitRamom / 100);
+      const parteMonique = lucroLiquidoRateio * (splitMonique / 100);
 
-      let keyAnt = `${anoAnt}_${mesAntIdx}`;
-      let dadosAnt = (appData.historicoRateios && appData.historicoRateios[keyAnt]) ? appData.historicoRateios[keyAnt] : null;
+      document.getElementById('rep-sub-divisao-socios').innerText = `Ramom (${splitRamom}%): ${formatarMoeda(parteRamom)} | Monique (${splitMonique}%): ${formatarMoeda(parteMonique)}`;
 
-      document.getElementById('comp-val-fat').innerText = formatarMoeda(faturamentoTotal);
-      document.getElementById('comp-val-lucro').innerText = formatarMoeda(lucroLiquidoReal);
-      const numClientesAtendidos = Object.keys(clientesMap).length;
-      document.getElementById('comp-val-cli').innerText = numClientesAtendidos;
-      document.getElementById('comp-val-vol').innerText = `${totalVolumeGeral} g/un`;
-
-      if (dadosAnt) {
-        atualizarElemDiff('comp-diff-fat', faturamentoTotal, dadosAnt.faturamentoTotal, true);
-        atualizarElemDiff('comp-diff-lucro', lucroLiquidoReal, dadosAnt.lucroLiquidoReal, true);
-        atualizarElemDiff('comp-diff-cli', numClientesAtendidos, dadosAnt.numClientesAtendidos, false);
-        atualizarElemDiff('comp-diff-vol', totalVolumeGeral, dadosAnt.totalVolumeGeral, false);
-      } else {
-        document.getElementById('comp-diff-fat').innerHTML = '<span class="diff-equal">-- Sem dados do mês ant.</span>';
-        document.getElementById('comp-diff-lucro').innerHTML = '<span class="diff-equal">-- Sem dados do mês ant.</span>';
-        document.getElementById('comp-diff-cli').innerHTML = '<span class="diff-equal">-- Sem dados do mês ant.</span>';
-        document.getElementById('comp-diff-vol').innerHTML = '<span class="diff-equal">-- Sem dados do mês ant.</span>';
-      }
-
-      // TABELA DE CLIENTES DO RELATÓRIO
-      const containerCli = document.getElementById('rel-tabela-clientes-container');
-      containerCli.innerHTML = '';
-
-      if (Object.keys(clientesMap).length === 0) {
-        containerCli.innerHTML = '<div class="empty-state">Nenhum pedido de cliente registrado neste mês.</div>';
-      } else {
-        let rowsCli = '';
-        for (let k in clientesMap) {
-          let c = clientesMap[k];
-          let badgeCat = c.categoria === 'Socio' ? '<span class="badge badge-socio">👑 Consumo Sócio</span>' : '<span class="badge badge-pago">🛒 Cliente</span>';
-          rowsCli += `
-            <tr>
-              <td><strong>${c.nome}</strong></td>
-              <td>${badgeCat}</td>
-              <td><strong>${c.qtdTotalG} g/un</strong></td>
-              <td><strong>${formatarMoeda(c.valorCobrado)}</strong></td>
-            </tr>
-          `;
-        }
-        containerCli.innerHTML = `
-          <div class="table-wrapper">
-            <table>
-              <thead>
-                <tr>
-                  <th>Nome do Cliente / Sócio</th>
-                  <th>Categoria</th>
-                  <th>Volume Total Comprado</th>
-                  <th>Valor Total Faturado</th>
-                </tr>
-              </thead>
-              <tbody>
-                ${rowsCli}
-              </tbody>
-            </table>
-          </div>
-        `;
-      }
-
-      // TABELA DE FORNECEDORES DO RELATÓRIO
-      const containerForn = document.getElementById('rel-tabela-fornecedores-container');
-      containerForn.innerHTML = '';
+      // FORNECEDORES
+      const containerFornec = document.getElementById('rep-lista-fornecedores-container');
+      containerFornec.innerHTML = '';
 
       if (!appData.fornecedores || appData.fornecedores.length === 0) {
-        containerForn.innerHTML = '<div class="empty-state">Nenhum fornecedor cadastrado.</div>';
+        containerFornec.innerHTML = '<div class="empty-state">Nenhum fornecedor cadastrado.</div>';
       } else {
-        let htmlFornBlocks = '';
         appData.fornecedores.forEach(f => {
-          let fData = fornecedoresMap[f.id];
-          let subtotalProdsForn = 0;
-          let prodRows = '';
+          const prodsF = appData.produtos.filter(p => p.fornecedorId === f.id);
+          let subtotalProdsF = 0;
 
-          const prodsForn = appData.produtos.filter(p => p.fornecedorId === f.id);
-          prodsForn.forEach(p => {
-            let itemData = (fData && fData.produtos[p.id]) ? fData.produtos[p.id] : { qtdTotal: 0, subtotalCusto: 0 };
-            subtotalProdsForn += itemData.subtotalCusto;
+          let prodsRows = [];
+          prodsF.forEach(prod => {
+            const { custoUnit, volumeTotal } = obterCustoEfetivoProduto(prod.id);
+            const sub = volumeTotal * custoUnit;
+            subtotalProdsF += sub;
 
-            let qtdTexto = itemData.qtdTotal > 0 ? `<strong>${itemData.qtdTotal} g/un</strong>` : '<span style="color:var(--text-muted); font-style:italic;">⏳ Sem vendas</span>';
-            let subtotalTexto = itemData.subtotalCusto > 0 ? `<strong>${formatarMoeda(itemData.subtotalCusto)}</strong>` : '<span style="color:var(--text-muted); font-style:italic;">R$ 0,00 (Aguardando pedidos)</span>';
-
-            prodRows += `
+            prodsRows.push(`
               <tr>
-                <td><strong>${p.nome}</strong></td>
-                <td>${qtdTexto}</td>
-                <td>${subtotalTexto}</td>
+                <td><strong>${prod.nome}</strong></td>
+                <td>${volumeTotal > 0 ? `<strong>${volumeTotal} g/un</strong>` : '<span style="color:var(--text-muted); font-style:italic;">⏳ Sem vendas</span>'}</td>
+                <td>${formatarMoeda(custoUnit)}/g</td>
+                <td><strong>${volumeTotal > 0 ? formatarMoeda(sub) : 'R$ 0,00'}</strong></td>
               </tr>
-            `;
+            `);
           });
 
-          const totalDevidoForn = subtotalProdsForn + (parseFloat(f.frete) || 0);
+          const totalDevidoF = subtotalProdsF + parseFloat(f.frete);
 
-          htmlFornBlocks += `
-            <div style="background:var(--card-sub-bg); border:1px solid var(--border-color); border-radius:10px; padding:12px; margin-bottom:12px;">
-              <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
-                <strong style="color:var(--choc-dark); font-size:1rem;">📦 Fornecedor: ${f.nome}</strong>
-                <span style="font-weight:800; color:var(--choc-dark);">Total Devido: ${formatarMoeda(totalDevidoForn)} (Prods: ${formatarMoeda(subtotalProdsForn)} + Frete: ${formatarMoeda(f.frete)})</span>
+          containerFornec.innerHTML += `
+            <div style="background:var(--card-sub-bg); padding:12px; border-radius:10px; border:1px solid var(--border-color); margin-bottom:12px;">
+              <div style="display:flex; justify-content:space-between; margin-bottom:6px;">
+                <strong>📦 ${f.nome}</strong>
+                <span style="font-weight:800; color:var(--choc-dark);">A Pagar: ${formatarMoeda(totalDevidoF)} (Prods: ${formatarMoeda(subtotalProdsF)} + Frete: ${formatarMoeda(f.frete)})</span>
               </div>
               <div class="table-wrapper">
                 <table>
                   <thead>
                     <tr>
-                      <th>Produto Vendido pelo Fornecedor</th>
-                      <th>Quantidade Saída no Mês</th>
-                      <th>Valor a Pagar ao Fornecedor</th>
+                      <th>Produto</th>
+                      <th>Qtd Vendida</th>
+                      <th>Custo Unit.</th>
+                      <th>Subtotal Devido</th>
                     </tr>
                   </thead>
-                  <tbody>
-                    ${prodRows}
-                  </tbody>
+                  <tbody>${prodsRows.join('')}</tbody>
                 </table>
               </div>
             </div>
           `;
         });
-        containerForn.innerHTML = htmlFornBlocks;
       }
 
-      atualizarSelectHistoricoRateios();
-    }
+      // COMPARATIVO COM O MÊS ANTERIOR
+      let mesAntIdx = mesIdx - 1;
+      let anoAntVal = anoVal;
+      if (mesAntIdx < 0) { mesAntIdx = 11; anoAntVal--; }
 
-    function atualizarElemDiff(elemId, valAtual, valAnt, isMoeda) {
-      const el = document.getElementById(elemId);
-      const diff = valAtual - valAnt;
-      if (diff > 0) {
-        let txtDiff = isMoeda ? `+${formatarMoeda(diff)}` : `+${diff}`;
-        let pct = valAnt > 0 ? ` (+${((diff/valAnt)*100).toFixed(1)}%)` : '';
-        el.innerHTML = `<span class="diff-up">🟢 Superior (${txtDiff}${pct})</span>`;
-      } else if (diff < 0) {
-        let txtDiff = isMoeda ? formatarMoeda(diff) : diff;
-        let pct = valAnt > 0 ? ` (${((diff/valAnt)*100).toFixed(1)}%)` : '';
-        el.innerHTML = `<span class="diff-down">🔴 Inferior (${txtDiff}${pct})</span>`;
+      const keyAnterior = `${anoAntVal}_${mesAntIdx}`;
+      const rateioAnterior = (appData.historicoRateios && appData.historicoRateios[keyAnterior]) ? appData.historicoRateios[keyAnterior] : null;
+
+      const containerComp = document.getElementById('container-comparativo-mes-anterior');
+
+      if (!rateioAnterior) {
+        containerComp.innerHTML = `
+          <div style="text-align:center; color:var(--text-muted); font-size:0.88rem;">
+            💡 <strong>Análise Comparativa:</strong> Não há fechamento salvo no histórico para ${NOMES_MESES[mesAntIdx]}/${anoAntVal}. Salve este fechamento para liberar comparações automáticas!
+          </div>
+        `;
       } else {
-        el.innerHTML = '<span class="diff-equal">🟡 Igual ao mês passado</span>';
+        const diffFat = faturamentoTotal - rateioAnterior.faturamentoTotal;
+        const pctFat = rateioAnterior.faturamentoTotal > 0 ? ((diffFat / rateioAnterior.faturamentoTotal) * 100).toFixed(1) : 0;
+        const tagFat = diffFat >= 0 ? `<span class="tag-superior">🟢 Superior (+${formatarMoeda(diffFat)} / +${pctFat}%)</span>` : `<span class="tag-inferior">🔴 Inferior (${formatarMoeda(diffFat)} / ${pctFat}%)</span>`;
+
+        const diffLucro = lucroLiquidoRateio - rateioAnterior.lucroLiquido;
+        const pctLucro = rateioAnterior.lucroLiquido > 0 ? ((diffLucro / rateioAnterior.lucroLiquido) * 100).toFixed(1) : 0;
+        const tagLucro = diffLucro >= 0 ? `<span class="tag-superior">🟢 Superior (+${formatarMoeda(diffLucro)} / +${pctLucro}%)</span>` : `<span class="tag-inferior">🔴 Inferior (${formatarMoeda(diffLucro)} / ${pctLucro}%)</span>`;
+
+        const diffClientes = clientesSet.size - rateioAnterior.qtdClientes;
+        const tagClientes = diffClientes >= 0 ? `<span class="tag-superior">🟢 +${diffClientes} Clientes</span>` : `<span class="tag-inferior">🔴 ${diffClientes} Clientes</span>`;
+
+        const diffGramas = totalGramasVendidas - rateioAnterior.totalGramas;
+        const tagGramas = diffGramas >= 0 ? `<span class="tag-superior">🟢 +${diffGramas} g/un</span>` : `<span class="tag-inferior">🔴 ${diffGramas} g/un</span>`;
+
+        containerComp.innerHTML = `
+          <h4 style="color:var(--herb-green); margin-bottom:10px; text-align:center;">
+            📈 Análise Comparativa vs. Mês Anterior (${NOMES_MESES[mesAntIdx]}/${anoAntVal})
+          </h4>
+          <div class="comp-item">
+            <span><strong>Faturamento de Clientes:</strong> ${formatarMoeda(faturamentoTotal)} (vs. ${formatarMoeda(rateioAnterior.faturamentoTotal)})</span>
+            ${tagFat}
+          </div>
+          <div class="comp-item">
+            <span><strong>Lucro Líquido Rateável:</strong> ${formatarMoeda(lucroLiquidoRateio)} (vs. ${formatarMoeda(rateioAnterior.lucroLiquido)})</span>
+            ${tagLucro}
+          </div>
+          <div class="comp-item">
+            <span><strong>Clientes Atendidos:</strong> ${clientesSet.size} clientes (vs. ${rateioAnterior.qtdClientes})</span>
+            ${tagClientes}
+          </div>
+          <div class="comp-item">
+            <span><strong>Volume Total Saídas:</strong> ${totalGramasVendidas} g/un (vs. ${rateioAnterior.totalGramas} g/un)</span>
+            ${tagGramas}
+          </div>
+        `;
       }
     }
 
     function salvarRateioNoHistorico() {
-      const mesIdx = parseInt(document.getElementById('relatorio-select-mes').value);
-      const ano = parseInt(document.getElementById('relatorio-select-ano').value);
+      const mesIdx = parseInt(document.getElementById('select-mes-rateio').value);
+      const anoVal = parseInt(document.getElementById('select-ano-rateio').value);
+      const key = `${anoVal}_${mesIdx}`;
 
-      const key = `${ano}_${mesIdx}`;
-      if (!appData.historicoRateios) appData.historicoRateios = {};
+      const pedidosDoMes = obterPedidosDoMesAno(mesIdx, anoVal);
 
       let faturamentoTotal = 0;
-      let custosFornecedoresTotal = 0;
-      let custosConsumoSociosTotal = 0;
+      let custoFornecedoresTotal = 0;
+      let totalGramasVendidas = 0;
       let clientesSet = new Set();
-      let totalVolumeGeral = 0;
 
-      if (appData.pedidos) {
-        appData.pedidos.forEach(ped => {
-          let dataPed = ped.dataCriacao ? new Date(ped.dataCriacao) : new Date();
-          if (dataPed.getMonth() === mesIdx && dataPed.getFullYear() === ano) {
-            const prod = appData.produtos.find(p => p.id === ped.produtoId);
-            let qtdTotal = (parseFloat(ped.qtdPrincipal) || 0);
-            if (ped.dependentes) ped.dependentes.forEach(d => qtdTotal += (parseFloat(d.qtd) || 0));
-            totalVolumeGeral += qtdTotal;
+      pedidosDoMes.forEach(ped => {
+        const prod = appData.produtos.find(p => p.id === ped.produtoId);
+        let qtdTotal = (parseFloat(ped.qtdPrincipal) || 0);
+        if (ped.dependentes) ped.dependentes.forEach(d => qtdTotal += (parseFloat(d.qtd) || 0));
 
-            if (prod) {
-              const { custoUnit } = obterCustoEfetivoProduto(prod.id);
-              let custoForn = qtdTotal * custoUnit;
+        totalGramasVendidas += qtdTotal;
+        clientesSet.add(ped.cliente);
 
-              if (ped.categoriaTipo === 'Socio') {
-                custosConsumoSociosTotal += custoForn;
-              } else {
-                let precoVenda = qtdTotal * calcularPrecoVendaCliente(prod, qtdTotal);
-                faturamentoTotal += precoVenda;
-              }
-              custosFornecedoresTotal += custoForn;
-            }
-            clientesSet.add(ped.cliente || 'Sem Nome');
+        if (prod) {
+          const { custoUnit } = obterCustoEfetivoProduto(prod.id);
+          custoFornecedoresTotal += (qtdTotal * custoUnit);
+
+          if (ped.categoriaTipo !== 'Socio') {
+            const precoUnit = calcularPrecoVendaCliente(prod, qtdTotal);
+            faturamentoTotal += (qtdTotal * precoUnit);
           }
-        });
-      }
+        }
+      });
 
-      const freteTotalFornecedores = appData.fornecedores ? appData.fornecedores.reduce((acc, f) => acc + (parseFloat(f.frete) || 0), 0) : 0;
-      const despesaTotalRealFornecedores = custosFornecedoresTotal + freteTotalFornecedores;
-      const lucroLiquidoReal = faturamentoTotal - (despesaTotalRealFornecedores + custosConsumoSociosTotal);
+      const freteFornecedores = appData.fornecedores ? appData.fornecedores.reduce((acc, f) => acc + (parseFloat(f.frete) || 0), 0) : 0;
+      const lucroLiquido = faturamentoTotal - (custoFornecedoresTotal + freteFornecedores);
+
+      if (!appData.historicoRateios) appData.historicoRateios = {};
 
       appData.historicoRateios[key] = {
         mesIdx,
-        ano,
-        nomeMes: NORMES_MESES[mesIdx],
+        anoVal,
+        nomeMes: NOMES_MESES[mesIdx],
         faturamentoTotal,
-        despesaTotalRealFornecedores,
-        custosConsumoSociosTotal,
-        lucroLiquidoReal,
-        numClientesAtendidos: clientesSet.size,
-        totalVolumeGeral,
+        custoFornecedoresTotal,
+        freteFornecedores,
+        lucroLiquido,
+        qtdClientes: clientesSet.size,
+        totalGramas: totalGramasVendidas,
         dataFechamento: new Date().toISOString()
       };
 
-      salvarDados(`Fechou e salvou no histórico o rateio de ${NORMES_MESES[mesIdx]}/${ano}.`);
-      alert(`✅ Rateio de ${NORMES_MESES[mesIdx]}/${ano} salvo com sucesso no histórico!`);
-      atualizarSelectHistoricoRateios();
+      salvarDados(`Fechou e salvou no histórico o rateio de ${NOMES_MESES[mesIdx]}/${anoVal}.`);
+      alert(`✅ Rateio de ${NOMES_MESES[mesIdx]}/${anoVal} salvo com sucesso no histórico!`);
+      renderizarListaRateiosSalvosSelect();
     }
 
-    function atualizarSelectHistoricoRateios() {
-      const select = document.getElementById('select-historico-rateios');
-      if (!select) return;
-
+    function renderizarListaRateiosSalvosSelect() {
+      const select = document.getElementById('select-rateios-salvos');
       select.innerHTML = '<option value="">Selecione um mês salvo no histórico...</option>';
+
       if (appData.historicoRateios) {
-        for (let k in appData.historicoRateios) {
-          let h = appData.historicoRateios[k];
-          select.innerHTML += `<option value="${k}">${h.nomeMes} / ${h.ano} - Lucro: ${formatarMoeda(h.lucroLiquidoReal)}</option>`;
-        }
+        Object.keys(appData.historicoRateios).forEach(k => {
+          const item = appData.historicoRateios[k];
+          select.innerHTML += `<option value="${k}">${item.nomeMes}/${item.anoVal} — Lucro: ${formatarMoeda(item.lucroLiquido)}</option>`;
+        });
       }
     }
 
-    function carregarRateioSalvoDoHistorico(key) {
-      if (!key || !appData.historicoRateios || !appData.historicoRateios[key]) return;
-      let h = appData.historicoRateios[key];
+    function carregarRateioSalvoDoHistorico() {
+      const key = document.getElementById('select-rateios-salvos').value;
+      if (!key) return;
 
-      document.getElementById('relatorio-select-mes').value = h.mesIdx;
-      document.getElementById('relatorio-select-ano').value = h.ano;
+      const parts = key.split('_');
+      document.getElementById('select-ano-rateio').value = parts[0];
+      document.getElementById('select-mes-rateio').value = parts[1];
       gerarRelatorioRateio();
     }
 
     function baixarRelatorioPDF() {
-      const element = document.getElementById('area-relatorio-impressao');
-      const mesText = document.getElementById('relatorio-select-mes').options[document.getElementById('relatorio-select-mes').selectedIndex].text;
-      const anoText = document.getElementById('relatorio-select-ano').value;
+      const element = document.getElementById('pdf-export-container');
+      const mesIdx = document.getElementById('select-mes-rateio').value;
+      const anoVal = document.getElementById('select-ano-rateio').value;
+      const nomeMes = NOMES_MESES[mesIdx];
 
       const opt = {
-        margin:       [10, 10, 10, 10],
-        filename:     `Relatorio_Rateio_${mesText}_${anoText}.pdf`,
+        margin:       0.3,
+        filename:     `Rateio_${nomeMes}_${anoVal}_Fabrica.pdf`,
         image:        { type: 'jpeg', quality: 0.98 },
-        html2canvas:  { scale: 2, useCORS: true },
-        jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
+        html2canvas:  { scale: 2 },
+        jsPDF:        { unit: 'in', format: 'letter', orientation: 'portrait' }
       };
 
       html2pdf().set(opt).from(element).save();
     }
 
     /* ---------------------------------------------------
-       10. INICIALIZAÇÃO
+       11. INICIALIZAÇÃO
        --------------------------------------------------- */
     function renderizarTudo() {
       renderizarFornecedores();
@@ -2787,26 +2886,10 @@
       renderizarPedidos();
       atualizarDashboard();
       atualizarInformativoRateio();
-
-      const containerLogs = document.getElementById('container-logs-historico');
-      if (containerLogs) {
-        containerLogs.innerHTML = '';
-        if (!appData.logs || appData.logs.length === 0) {
-          containerLogs.innerHTML = '<div style="padding:10px; text-align:center; color:var(--text-muted); font-style:italic;">Nenhuma alteração registrada ainda.</div>';
-        } else {
-          appData.logs.forEach(log => {
-            containerLogs.innerHTML += `
-              <div class="log-item">
-                <span><strong>👤 ${log.usuario}:</strong> ${log.acao}</span>
-                <span style="color:var(--text-muted); font-size:0.78rem;">${log.dataHora}</span>
-              </div>
-            `;
-          });
-        }
-      }
     }
 
     document.addEventListener('DOMContentLoaded', () => {
+      initSmokeCanvas();
       cancelarEdicaoFornecedor();
       renderizarTudo();
     });
