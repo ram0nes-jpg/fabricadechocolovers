@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <!-- Favicon -->
-  <link rel="icon" href="fcicon.ico" type="image/x-icon">
-  <link rel="shortcut icon" href="fcicon.ico" type="image/x-icon">
+  <!-- Favicon / Ícone da Página -->
+  <link rel="icon" href="fcicon.ico?v=2" type="image/x-icon">
+  <link rel="shortcut icon" href="fcicon.ico?v=2">
 
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
@@ -48,7 +48,7 @@
 
     body {
       background-color: var(--bg-cream);
-      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160' viewBox='0 0 160 160'%3E%3Cg fill='%237c594c' fill-opacity='0.07'%3E%3C!-- Cannabis Leaf --%3E%3Cpath d='M40 10c0 10-5 20-15 25 10 0 18 8 20 18 2-10 10-18 20-18-10-5-15-15-15-25 0 10-4 18-10 22-6-4-10-12-10-22z'/%3E%3Cpath d='M40 32c-1 8-2 15-2 23h4c0-8-1-15-2-23z'/%3E%3C!-- Bong --%3E%3Cpath d='M120 20h-8v20l-12 24c-5 10 2 20 14 20s19-10 14-20l-12-24V20z M112 20h8v4h-8z M106 50l-10 8'/%3E%3C!-- Joint --%3E%3Cpath d='M20 120l30-10 4 4-30 10z M50 110l6-2 2 2-6 2z M20 120l-4 2 2 2 4-2z'/%3E%3C!-- Second Leaf --%3E%3Cpath d='M110 100c0 8-4 16-12 20 8 0 14 6 16 14 2-8 8-14 16-14-8-4-12-12-12-20 0 8-3 14-8 18-5-4-8-10-8-18z'/%3E%3Cpath d='M110 118v18h2v-18z'/%3E%3C/g%3E%3C/svg%3E");
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120' viewBox='0 0 120 120'%3E%3Cg fill='%237c594c' fill-opacity='0.06'%3E%3Cpath d='M15 15h30v25H15zM48 15h30v25H48zM15 43h30v25H15zM48 43h30v25H48z'/%3E%3C/g%3E%3Cg fill='%23487e49' fill-opacity='0.05'%3E%3Cpath d='M95 70c-10 0-18 8-18 18 0 2.5.5 5 1.5 7.2L75 99l3.8-1c2.2 1 4.7 1.5 7.2 1.5 10 0 18-8 18-18s-8-12-9-12.5c-1-5-5-9-10-9z'/%3E%3C/g%3E%3C/svg%3E");
       color: var(--text-main);
       display: flex;
       flex-direction: column;
@@ -69,6 +69,31 @@
       position: relative;
       box-sizing: border-box;
       word-wrap: break-word;
+    }
+
+    
+    /* Estilo do Logo do Cabeçalho Responsivo */
+    .header-logo-container {
+      width: 100%;
+      max-width: 680px;
+      margin: 0 auto 15px auto;
+      text-align: center;
+    }
+
+    .header-logo-img {
+      width: 100%;
+      height: auto;
+      max-height: 280px;
+      object-fit: contain;
+      border-radius: 16px;
+      box-shadow: 0 8px 25px rgba(74, 44, 42, 0.25);
+      border: 2px solid var(--border-color);
+      background: #2b1816;
+      transition: transform 0.3s ease;
+    }
+
+    .header-logo-img:hover {
+      transform: scale(1.01);
     }
 
     header {
@@ -463,7 +488,32 @@
       max-width: 100%;
     }
 
-    .perfil-header {
+    .perfil-
+    /* Estilo do Logo do Cabeçalho Responsivo */
+    .header-logo-container {
+      width: 100%;
+      max-width: 680px;
+      margin: 0 auto 15px auto;
+      text-align: center;
+    }
+
+    .header-logo-img {
+      width: 100%;
+      height: auto;
+      max-height: 280px;
+      object-fit: contain;
+      border-radius: 16px;
+      box-shadow: 0 8px 25px rgba(74, 44, 42, 0.25);
+      border: 2px solid var(--border-color);
+      background: #2b1816;
+      transition: transform 0.3s ease;
+    }
+
+    .header-logo-img:hover {
+      transform: scale(1.01);
+    }
+
+    header {
       display: flex;
       justify-content: space-between;
       align-items: center;
@@ -698,7 +748,32 @@
         padding: 14px 12px;
       }
 
-      .perfil-header {
+      .perfil-
+    /* Estilo do Logo do Cabeçalho Responsivo */
+    .header-logo-container {
+      width: 100%;
+      max-width: 680px;
+      margin: 0 auto 15px auto;
+      text-align: center;
+    }
+
+    .header-logo-img {
+      width: 100%;
+      height: auto;
+      max-height: 280px;
+      object-fit: contain;
+      border-radius: 16px;
+      box-shadow: 0 8px 25px rgba(74, 44, 42, 0.25);
+      border: 2px solid var(--border-color);
+      background: #2b1816;
+      transition: transform 0.3s ease;
+    }
+
+    .header-logo-img:hover {
+      transform: scale(1.01);
+    }
+
+    header {
         flex-direction: column;
         align-items: flex-start;
       }
@@ -731,8 +806,10 @@
       </select>
     </div>
 
-    <header style="text-align: center; margin-bottom: 20px;">
-      <img src="Gemini_Generated_Image_dnabx7dnabx7dnab.png" alt="Fábrica de Chocolate" style="max-width: 240px; width: 100%; height: auto; margin: 0 auto; display: block; filter: drop-shadow(0 6px 12px rgba(74, 44, 42, 0.18)); border-radius: 12px;">
+    <header>
+      <div class="header-logo-container">
+        <img src="fabrica_logo.png" alt="A Fantástica Fábrica de Chocolate" class="header-logo-img" onerror="this.onerror=null; this.src='Gemini_Generated_Image_dnabx7dnabx7dnab.png';">
+      </div>
     </header>
 
     <!-- 3 DISPLAYS INTERATIVOS DO DASHBOARD -->
