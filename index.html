@@ -1,0 +1,2276 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>A FANTÁSTICA FÁBRICA DE CHOCOLATE</title>
+  
+  <!-- SDKs do Firebase (Versão Compatível via CDN) -->
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-database-compat.js"></script>
+
+  <style>
+    /* ===================================================
+       PALETA DE CORES E IDENTIDADE VISUAL (Cacau & Flat)
+       =================================================== */
+    :root {
+      --bg-cream: #f5ebe6;         /* Fundo Creme Suave */
+      --card-bg: #ffffff;          /* Fundo dos Containers */
+      --card-sub-bg: #faf4f0;      /* Fundo de Destaques/Forms */
+      --choc-dark: #4a2c2a;        /* Chocolate Amargo (Cor Principal) */
+      --choc-milk: #7c594c;        /* Chocolate ao Leite (Destaques) */
+      --choc-accent: #8c5a4a;      /* Tom de Ação e Botões Secundários */
+      --border-color: #e0d0c7;     /* Bordas Suaves */
+      --text-main: #332221;
+      --text-muted: #66524e;
+      --success-bg: #e8f5e9;
+      --success-text: #2e7d32;
+      --warning-bg: #fff8e1;
+      --warning-text: #b78103;
+      --danger-bg: #ffebee;
+      --danger-text: #c62828;
+      --info-bg: #e3f2fd;
+      --info-text: #1565c0;
+      --muted-btn-bg: #eddcd3;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    }
+
+    body {
+      background-color: var(--bg-cream);
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120' viewBox='0 0 120 120'%3E%3Cg fill='%237c594c' fill-opacity='0.06'%3E%3Cpath d='M15 15h30v25H15zM48 15h30v25H48zM15 43h30v25H15zM48 43h30v25H48z'/%3E%3C/g%3E%3Cg fill='%23487e49' fill-opacity='0.05'%3E%3Cpath d='M95 70c-10 0-18 8-18 18 0 2.5.5 5 1.5 7.2L75 99l3.8-1c2.2 1 4.7 1.5 7.2 1.5 10 0 18-8 18-18s-8-12-9-12.5c-1-5-5-9-10-9z'/%3E%3C/g%3E%3C/svg%3E");
+      color: var(--text-main);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-height: 100vh;
+      padding: 25px 15px;
+    }
+
+    .app-container {
+      width: 100%;
+      max-width: 980px;
+      background: var(--card-bg);
+      border-radius: 18px;
+      box-shadow: 0 12px 35px rgba(74, 44, 42, 0.15);
+      border: 1px solid var(--border-color);
+      padding: 28px;
+      position: relative;
+    }
+
+    header {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .user-select-bar {
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 12px;
+      background: var(--card-sub-bg);
+      padding: 8px 14px;
+      border-radius: 20px;
+      border: 1px solid var(--border-color);
+      width: fit-content;
+      margin-left: auto;
+    }
+
+    .brand-tag {
+      font-style: italic;
+      font-size: 0.95rem;
+      color: var(--choc-milk);
+      letter-spacing: 1px;
+      display: block;
+      margin-bottom: 2px;
+      text-transform: lowercase;
+    }
+
+    header h1 {
+      font-family: 'Georgia', 'Cambria', serif;
+      font-size: 2.2rem;
+      color: var(--choc-dark);
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+    }
+
+    /* 3 DISPLAYS DASHBOARD */
+    .dashboard-3 {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 14px;
+      margin-bottom: 16px;
+    }
+
+    .dash-card {
+      background: var(--card-sub-bg);
+      border: 2px solid var(--border-color);
+      border-radius: 12px;
+      padding: 16px;
+      cursor: pointer;
+      transition: transform 0.15s ease, border-color 0.15s ease;
+      position: relative;
+    }
+
+    .dash-card:hover {
+      transform: translateY(-2px);
+      border-color: var(--choc-milk);
+    }
+
+    .dash-card.hero-card {
+      grid-column: 1 / -1;
+      background: #f4eae4;
+      border-color: var(--choc-milk);
+      text-align: center;
+    }
+
+    .dash-title {
+      font-size: 0.8rem;
+      color: var(--choc-milk);
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      margin-bottom: 6px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .dash-value {
+      font-size: 1.5rem;
+      color: var(--choc-dark);
+      font-weight: 800;
+    }
+
+    .hero-card .dash-value { font-size: 2rem; }
+
+    .click-hint {
+      font-size: 0.72rem;
+      color: var(--choc-accent);
+      font-weight: 600;
+      text-transform: none;
+    }
+
+    .dash-detail-panel {
+      display: none;
+      grid-column: 1 / -1;
+      background: #ffffff;
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 16px;
+      margin-top: -6px;
+      margin-bottom: 12px;
+      box-shadow: inset 0 2px 6px rgba(0,0,0,0.03);
+    }
+
+    /* BANNER INFORMATIVO DE RATEIO DO 5º DIA ÚTIL */
+    .banner-rateio-box {
+      background: #ffffff;
+      border: 2px solid var(--choc-milk);
+      border-radius: 12px;
+      padding: 14px 18px;
+      text-align: center;
+      margin-bottom: 24px;
+      box-shadow: 0 4px 12px rgba(74, 44, 42, 0.06);
+    }
+
+    .rateio-tag {
+      font-size: 0.78rem;
+      font-weight: 800;
+      color: var(--choc-milk);
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      margin-bottom: 4px;
+    }
+
+    .rateio-msg-main {
+      font-size: 1.05rem;
+      font-weight: 800;
+      color: var(--choc-dark);
+    }
+
+    .rateio-counter {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      margin-top: 6px;
+      font-weight: 700;
+    }
+
+    .split-slider-container {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      max-width: 500px;
+      margin: 0 auto;
+      padding: 10px;
+    }
+
+    .split-labels {
+      display: flex;
+      justify-content: space-between;
+      font-weight: 700;
+      color: var(--choc-dark);
+      font-size: 0.95rem;
+    }
+
+    input[type=range] {
+      width: 100%;
+      accent-color: var(--choc-dark);
+      cursor: pointer;
+    }
+
+    /* Navegação de Abas */
+    .tabs-nav {
+      display: flex;
+      border-bottom: 2px solid var(--border-color);
+      gap: 8px;
+      margin-bottom: 24px;
+      flex-wrap: wrap;
+    }
+
+    .tab-btn {
+      background: transparent;
+      border: none;
+      padding: 10px 20px;
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: var(--choc-milk);
+      cursor: pointer;
+      border-radius: 8px 8px 0 0;
+      transition: all 0.2s ease;
+    }
+
+    .tab-btn:hover { background: var(--bg-cream); }
+    .tab-btn.active {
+      background: var(--choc-dark);
+      color: #ffffff;
+    }
+
+    .tab-content { display: none; }
+    .tab-content.active { display: block; }
+
+    /* Forms */
+    .form-section {
+      background: var(--card-sub-bg);
+      padding: 20px;
+      border-radius: 12px;
+      border: 1px solid var(--border-color);
+      margin-bottom: 24px;
+    }
+
+    .form-section h3 {
+      font-size: 1.1rem;
+      color: var(--choc-dark);
+      margin-bottom: 16px;
+      font-family: 'Georgia', serif;
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 14px;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .form-group.full-width { grid-column: 1 / -1; }
+
+    label {
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--choc-dark);
+    }
+
+    .input-prefix-group {
+      display: flex;
+      align-items: center;
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      background: #ffffff;
+      overflow: hidden;
+    }
+
+    .input-prefix-group .prefix {
+      padding: 10px 12px;
+      background: #eee4de;
+      color: var(--choc-dark);
+      font-weight: 700;
+      font-size: 0.88rem;
+      border-right: 1px solid var(--border-color);
+      white-space: nowrap;
+    }
+
+    .input-prefix-group input {
+      border: none !important;
+      border-radius: 0 !important;
+      width: 100%;
+      box-shadow: none !important;
+    }
+
+    input, select, textarea {
+      padding: 10px 12px;
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      font-size: 0.9rem;
+      background: #ffffff;
+      color: var(--text-main);
+      outline: none;
+    }
+
+    input:disabled, select:disabled {
+      background: #f0e6e0;
+      color: #66524e;
+      cursor: not-allowed;
+    }
+
+    input:focus, select:focus, textarea:focus {
+      border-color: var(--choc-milk);
+      box-shadow: 0 0 0 3px rgba(124, 89, 76, 0.15);
+    }
+
+    textarea { resize: vertical; min-height: 60px; }
+
+    .faixa-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: #ffffff;
+      padding: 8px 12px;
+      border-radius: 8px;
+      border: 1px solid var(--border-color);
+    }
+
+    /* CARD DE PRODUTO / CONTEÚDO */
+    .product-pricing-card {
+      background: #ffffff;
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 16px;
+      margin-bottom: 16px;
+    }
+
+    /* BOX DE ANÁLISE DE MARGEM / TERMÔMETRO DE PREÇO */
+    .margin-analysis-box {
+      background: #ffffff;
+      border: 2px dashed var(--choc-milk);
+      border-radius: 12px;
+      padding: 16px;
+      margin-top: 14px;
+    }
+
+    .margin-analysis-title {
+      font-weight: 800;
+      color: var(--choc-dark);
+      font-size: 0.95rem;
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .margin-badge {
+      display: inline-block;
+      padding: 8px 14px;
+      border-radius: 8px;
+      font-weight: 700;
+      font-size: 0.88rem;
+      margin-top: 6px;
+      line-height: 1.4;
+    }
+
+    .badge-danger { background: var(--danger-bg); color: var(--danger-text); border: 1px solid #ef9a9a; }
+    .badge-warning { background: var(--warning-bg); color: var(--warning-text); border: 1px solid #ffe082; }
+    .badge-success { background: var(--success-bg); color: var(--success-text); border: 1px solid #a5d6a7; }
+    .badge-info { background: var(--info-bg); color: var(--info-text); border: 1px solid #90caf9; }
+
+    .btn-secondary {
+      background: var(--muted-btn-bg);
+      color: var(--choc-dark);
+      border: 1px solid var(--border-color);
+      padding: 8px 14px;
+      border-radius: 8px;
+      font-size: 0.85rem;
+      font-weight: 700;
+      cursor: pointer;
+      margin-top: 6px;
+    }
+
+    .btn-secondary:hover { background: #e0cecf; }
+
+    .btn-submit {
+      background: var(--choc-dark);
+      color: #ffffff;
+      border: none;
+      padding: 12px 20px;
+      border-radius: 8px;
+      font-weight: 700;
+      cursor: pointer;
+      margin-top: 14px;
+      width: 100%;
+    }
+
+    .btn-submit:hover { background: var(--choc-milk); }
+
+    .btn-cancel {
+      background: transparent;
+      color: var(--choc-accent);
+      border: 1px solid var(--choc-accent);
+      padding: 10px 20px;
+      border-radius: 8px;
+      font-weight: 600;
+      cursor: pointer;
+      margin-top: 8px;
+      width: 100%;
+    }
+
+    /* CARDS DE PERFIL DE FORNECEDOR */
+    .fornecedor-perfil-card {
+      background: #ffffff;
+      border: 2px solid var(--border-color);
+      border-radius: 14px;
+      padding: 20px;
+      margin-bottom: 18px;
+      box-shadow: 0 4px 12px rgba(74, 44, 42, 0.06);
+    }
+
+    .perfil-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 2px solid var(--border-color);
+      padding-bottom: 12px;
+      margin-bottom: 14px;
+    }
+
+    .perfil-title {
+      font-size: 1.25rem;
+      color: var(--choc-dark);
+      font-weight: 800;
+    }
+
+    .perfil-badge-total {
+      background: var(--choc-dark);
+      color: #ffffff;
+      padding: 6px 14px;
+      border-radius: 20px;
+      font-size: 0.9rem;
+      font-weight: 800;
+    }
+
+    .perfil-section-title {
+      font-size: 0.88rem;
+      font-weight: 700;
+      color: var(--choc-milk);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-top: 10px;
+      margin-bottom: 6px;
+    }
+
+    /* Tabelas */
+    .table-wrapper {
+      overflow-x: auto;
+      border-radius: 10px;
+      border: 1px solid var(--border-color);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+      font-size: 0.88rem;
+    }
+
+    th {
+      background: var(--choc-dark);
+      color: #ffffff;
+      padding: 12px 14px;
+      font-weight: 600;
+    }
+
+    td {
+      padding: 12px 14px;
+      border-bottom: 1px solid var(--border-color);
+      background: #ffffff;
+      vertical-align: middle;
+    }
+
+    tr:hover td { background: var(--card-sub-bg); }
+
+    .order-row-clickable { cursor: pointer; }
+
+    .order-details-box {
+      background: #faf6f3;
+      border-left: 4px solid var(--choc-milk);
+      padding: 12px 16px;
+      margin: 8px 0;
+      border-radius: 6px;
+      font-size: 0.85rem;
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 4px 10px;
+      border-radius: 20px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+    }
+
+    .badge-pago { background: var(--success-bg); color: var(--success-text); }
+    .badge-pendente { background: var(--warning-bg); color: var(--warning-text); }
+
+    .btn-action {
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-size: 0.88rem;
+      padding: 4px 8px;
+      border-radius: 4px;
+      font-weight: 600;
+    }
+
+    .btn-edit { color: var(--choc-milk); }
+    .btn-delete { color: var(--choc-accent); }
+    .btn-action:hover { background: var(--bg-cream); }
+
+    .calc-info {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      margin-top: 8px;
+      font-style: italic;
+    }
+
+    .empty-state {
+      text-align: center;
+      padding: 25px;
+      color: var(--text-muted);
+      font-style: italic;
+    }
+
+    .log-item {
+      padding: 8px 12px;
+      border-bottom: 1px solid var(--border-color);
+      font-size: 0.85rem;
+      display: flex;
+      justify-content: space-between;
+    }
+
+    footer {
+      margin-top: 24px;
+      width: 100%;
+      max-width: 980px;
+      display: flex;
+      justify-content: center;
+      padding-bottom: 20px;
+    }
+
+    .btn-clear-footer {
+      background: #ede4df;
+      color: var(--choc-dark);
+      border: 1px solid var(--border-color);
+      padding: 10px 20px;
+      border-radius: 8px;
+      font-size: 0.85rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .btn-clear-footer:hover {
+      background: var(--choc-milk);
+      color: #ffffff;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="app-container">
+    
+    <!-- SELETOR DE SÓCIO -->
+    <div class="user-select-bar">
+      <label for="select-usuario-atual" style="font-size:0.8rem; color:var(--choc-dark);">👤 Usuário Atual:</label>
+      <select id="select-usuario-atual" style="padding:4px 8px; font-size:0.85rem; font-weight:700;">
+        <option value="Ramom">Ramom</option>
+        <option value="Monique">Monique</option>
+      </select>
+    </div>
+
+    <header>
+      <span class="brand-tag">a fantástica</span>
+      <h1>FÁBRICA DE CHOCOLATE</h1>
+    </header>
+
+    <!-- 3 DISPLAYS INTERATIVOS DO DASHBOARD -->
+    <div class="dashboard-3">
+      <!-- DISPLAY 1 -->
+      <div class="dash-card" onclick="toggleDashPanel('panel-faturar')">
+        <div class="dash-title">
+          <span>FATURAMENTO</span>
+          <span class="click-hint">🔍 Detalhes</span>
+        </div>
+        <div class="dash-value" id="dash-faturamento">R$ 0,00</div>
+      </div>
+
+      <!-- DISPLAY 2 -->
+      <div class="dash-card" onclick="toggleDashPanel('panel-pagar')">
+        <div class="dash-title">
+          <span>CUSTOS FORNECEDORES</span>
+          <span class="click-hint">🔍 Detalhes</span>
+        </div>
+        <div class="dash-value" id="dash-custos">R$ 0,00</div>
+      </div>
+
+      <!-- DISPLAY 3 (HERO - NOSSO LUCRO) -->
+      <div class="dash-card hero-card" onclick="toggleDashPanel('panel-lucro')">
+        <div class="dash-title" style="justify-content: center; gap: 8px;">
+          <span>LUCRO LÍQUIDO DA FÁBRICA</span>
+          <span class="click-hint">⚖️ Divisão Sócios</span>
+        </div>
+        <div class="dash-value" id="dash-lucro">R$ 0,00</div>
+      </div>
+
+      <!-- PAINEL EXPANSÍVEL 1: FATURAMENTO -->
+      <div id="panel-faturar" class="dash-detail-panel">
+        <h4 style="margin-bottom:8px; color:var(--choc-dark);">💰 Faturamento de Pedidos</h4>
+        <div style="display:flex; justify-content:space-around; text-align:center;">
+          <div>
+            <span style="font-size:0.8rem; color:var(--success-text); font-weight:700;">🟢 RECEBIDOS</span>
+            <div id="det-faturar-pago" style="font-size:1.2rem; font-weight:800;">R$ 0,00</div>
+          </div>
+          <div>
+            <span style="font-size:0.8rem; color:var(--warning-text); font-weight:700;">🟡 A RECEBER</span>
+            <div id="det-faturar-pendente" style="font-size:1.2rem; font-weight:800;">R$ 0,00</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- PAINEL EXPANSÍVEL 2: FORNECEDORES -->
+      <div id="panel-pagar" class="dash-detail-panel">
+        <h4 style="margin-bottom:8px; color:var(--choc-dark);">📦 Total a Pagar por Fornecedor (Produtos + Frete)</h4>
+        <div id="det-pagar-fornecedores-list" style="font-size:0.9rem; line-height:1.6;"></div>
+      </div>
+
+      <!-- PAINEL EXPANSÍVEL 3: DIVISÃO DE SÓCIOS -->
+      <div id="panel-lucro" class="dash-detail-panel">
+        <h4 style="text-align:center; margin-bottom:12px; color:var(--choc-dark);">⚖️ Divisão do Lucro entre Sócios</h4>
+        <div class="split-slider-container">
+          <div class="split-labels">
+            <span>Ramom: <span id="lbl-pct-ramom">50%</span></span>
+            <span>Monique: <span id="lbl-pct-monique">50%</span></span>
+          </div>
+          <input type="range" id="slider-split" min="0" max="100" value="50" oninput="atualizarDivisaoSocios(this.value)">
+          <div style="display:flex; justify-content:space-between; margin-top:8px;">
+            <div style="text-align:left;">
+              <span style="font-size:0.8rem; color:var(--text-muted);">Parte do Ramom</span>
+              <div id="val-lucro-ramom" style="font-size:1.2rem; font-weight:800; color:var(--choc-dark);">R$ 0,00</div>
+            </div>
+            <div style="text-align:right;">
+              <span style="font-size:0.8rem; color:var(--text-muted);">Parte da Monique</span>
+              <div id="val-lucro-monique" style="font-size:1.2rem; font-weight:800; color:var(--choc-dark);">R$ 0,00</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- BANNER INFORMATIVO DE RATEIO DO 5º DIA ÚTIL -->
+    <div class="banner-rateio-box">
+      <div class="rateio-tag">📅 Rateio dos Sócios (5º Dia Útil)</div>
+      <div class="rateio-msg-main" id="rateio-status-msg">
+        Calculando próximo rateio...
+      </div>
+      <div class="rateio-counter" id="rateio-countdown"></div>
+    </div>
+
+    <!-- Navegação de Abas -->
+    <div class="tabs-nav">
+      <button class="tab-btn active" onclick="switchTab('pedidos')">🛒 Pedidos</button>
+      <button class="tab-btn" onclick="switchTab('fornecedores')">📦 Fornecedores</button>
+      <button class="tab-btn" onclick="switchTab('produtos')">🍬 Produtos</button>
+      <button class="tab-btn" onclick="switchTab('relatorio')">📊 Relatório</button>
+    </div>
+
+    <!-- ABA 1: PEDIDOS -->
+    <div id="tab-pedidos" class="tab-content active">
+      <div class="form-section">
+        <h3 id="form-pedido-title">Novo Pedido</h3>
+        <form id="form-pedido" onsubmit="salvarPedido(event)">
+          <input type="hidden" id="pedido-id">
+          
+          <div class="form-grid">
+            <div class="form-group">
+              <label for="pedido-cliente">Cliente</label>
+              <input type="text" id="pedido-cliente" placeholder="Ex: João">
+            </div>
+
+            <div class="form-group">
+              <label for="pedido-produto">Produto</label>
+              <select id="pedido-produto" onchange="atualizarCalculoPedido()">
+                <option value="">Selecione um produto...</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="pedido-qtd-principal">Quantidade (g/un)</label>
+              <input type="number" id="pedido-qtd-principal" min="1" value="1" oninput="atualizarCalculoPedido()">
+            </div>
+
+            <!-- Lista Dinâmica de Dependentes -->
+            <div class="form-group full-width">
+              <label>Rateio / Dependentes</label>
+              <div id="dependentes-list" style="display:flex; flex-direction:column; gap:8px; margin-top:4px;"></div>
+              <button type="button" class="btn-secondary" onclick="adicionarLinhaDependente()">+ Adicionar Dependente</button>
+            </div>
+
+            <div class="form-group">
+              <label for="pedido-status">Status</label>
+              <select id="pedido-status">
+                <option value="Pendente">Pendente</option>
+                <option value="Pago">Pago</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="pedido-envio">Forma de Envio</label>
+              <select id="pedido-envio" onchange="alternarCamposEnvio()">
+                <option value="Retirada">Retirada em Mãos</option>
+                <option value="Entrega por Conta">Entrega por Conta</option>
+              </select>
+            </div>
+
+            <!-- Campos Condicionais de Entrega -->
+            <div id="container-detalhes-entrega" class="form-grid full-width" style="display:none; grid-column:1/-1;">
+              <div class="form-group full-width">
+                <label for="pedido-endereco">Endereço de Entrega</label>
+                <input type="text" id="pedido-endereco" placeholder="Rua, número, bairro">
+              </div>
+              <div class="form-group">
+                <label for="pedido-dia">Dia de Entrega</label>
+                <input type="text" id="pedido-dia" placeholder="Ex: Sexta-feira">
+              </div>
+              <div class="form-group">
+                <label for="pedido-horario">Horário</label>
+                <input type="text" id="pedido-horario" placeholder="Ex: 14h às 18h">
+              </div>
+            </div>
+
+            <div class="form-group full-width">
+              <label for="pedido-obs">Observações</label>
+              <textarea id="pedido-obs" placeholder="Preferências ou detalhes do pedido..."></textarea>
+            </div>
+          </div>
+
+          <div class="calc-info" id="pedido-calc-preview">
+            Cálculo estimado: R\$ 0,00
+          </div>
+
+          <button type="submit" class="btn-submit" id="btn-pedido-submit">Salvar Pedido</button>
+          <button type="button" class="btn-cancel" id="btn-pedido-cancel" style="display:none;" onclick="cancelarEdicaoPedido()">Cancelar</button>
+        </form>
+      </div>
+
+      <div class="table-wrapper">
+        <table>
+          <thead>
+            <tr>
+              <th>Cliente</th>
+              <th>Produto</th>
+              <th>Total g/un</th>
+              <th>Custo Est.</th>
+              <th>Valor Total</th>
+              <th>Envio</th>
+              <th>Status</th>
+              <th>Ações</th>
+            </tr>
+          </thead>
+          <tbody id="lista-pedidos"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ABA 2: FORNECEDORES -->
+    <div id="tab-fornecedores" class="tab-content">
+      <div class="form-section">
+        <h3 id="form-fornecedor-title">Novo Fornecedor</h3>
+        <form id="form-fornecedor" onsubmit="salvarFornecedor(event)">
+          <input type="hidden" id="fornecedor-id">
+          
+          <div class="form-grid">
+            <div class="form-group">
+              <label for="fornecedor-nome">Nome do Fornecedor</label>
+              <input type="text" id="fornecedor-nome" placeholder="Ex: Brás, Akam...">
+            </div>
+
+            <div class="form-group">
+              <label for="fornecedor-frete">Frete / Taxa de Entrega</label>
+              <div class="input-prefix-group">
+                <span class="prefix">R$</span>
+                <input type="number" id="fornecedor-frete" step="0.01" min="0" placeholder="0.00">
+              </div>
+            </div>
+
+            <!-- PRODUTOS DO FORNECEDOR -->
+            <div class="form-group full-width">
+              <label style="font-size:0.95rem; font-weight:700; color:var(--choc-dark); margin-top:8px;">Produtos do Fornecedor</label>
+              <div id="fornecedor-produtos-container" style="display:flex; flex-direction:column; gap:12px; margin-top:6px;"></div>
+
+              <button type="button" class="btn-secondary" style="margin-top:10px; width:fit-content;" onclick="adicionarBlocoProdutoFornecedor()">
+                + Adicionar Produto
+              </button>
+            </div>
+          </div>
+
+          <button type="submit" class="btn-submit" id="btn-fornecedor-submit">Salvar Fornecedor</button>
+          <button type="button" class="btn-cancel" id="btn-fornecedor-cancel" style="display:none;" onclick="cancelarEdicaoFornecedor()">Cancelar</button>
+        </form>
+      </div>
+
+      <!-- VISUALIZAÇÃO EM PERFIL DOS FORNECEDORES -->
+      <h3 style="color:var(--choc-dark); font-family:'Georgia', serif; margin-bottom:14px;">👤 Fornecedores Cadastrados</h3>
+      <div id="lista-perfis-fornecedores"></div>
+    </div>
+
+    <!-- ABA 3: PRODUTOS (LAYOUT UNIFICADO E DIRETO) -->
+    <div id="tab-produtos" class="tab-content">
+      <div class="form-section">
+        <h3 id="form-produto-title">🏷️ Precificação de Produtos</h3>
+        <form id="form-produto" onsubmit="salvarProduto(event)">
+          <input type="hidden" id="produto-id">
+          
+          <!-- DADOS DO PRODUTO -->
+          <div class="form-grid" style="margin-bottom:16px;">
+            <div class="form-group">
+              <label for="produto-select">Produto</label>
+              <select id="produto-select" onchange="aoSelecionarProdutoParaPrecificar()">
+                <option value="">Selecione um produto...</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="produto-fornecedor-nome">Fornecedor</label>
+              <input type="text" id="produto-fornecedor-nome" placeholder="Automático" disabled>
+            </div>
+
+            <div class="form-group">
+              <label for="produto-custo-efetivo-display">Custo Unitário (Fornecedor)</label>
+              <div class="input-prefix-group">
+                <span class="prefix">R$</span>
+                <input type="text" id="produto-custo-efetivo-display" placeholder="R$ 0,00" disabled>
+              </div>
+              <small style="font-size:0.75rem; color:var(--text-muted); margin-top:2px;" id="lbl-info-meta-atingida">
+                🔒 Atualizado via pedidos da fábrica.
+              </small>
+            </div>
+          </div>
+
+          <!-- CARD UNIFICADO: VALORES DE VENDA -->
+          <div class="product-pricing-card">
+            <strong style="color:var(--choc-dark); font-size:0.95rem; display:block; margin-bottom:10px;">
+              💰 Valores de Venda (Cliente)
+            </strong>
+
+            <div class="form-grid" style="margin-bottom:12px;">
+              <div class="form-group">
+                <label for="produto-venda">Preço Padrão (Base / g ou un)</label>
+                <div class="input-prefix-group">
+                  <span class="prefix">R$</span>
+                  <input type="number" id="produto-venda" step="0.01" min="0" placeholder="0.00" oninput="atualizarSimuladorPrecificacao()">
+                </div>
+              </div>
+            </div>
+
+            <div class="form-group full-width">
+              <label style="font-size:0.85rem; color:var(--choc-milk); font-weight:700;">
+                Desconto por Quantidade (Opcional)
+              </label>
+              <div id="faixas-preco-list" style="display:flex; flex-direction:column; gap:6px; margin-top:6px;"></div>
+              <button type="button" class="btn-secondary" style="font-size:0.8rem; padding:6px 12px; align-self:flex-start; margin-top:8px;" onclick="adicionarLinhaFaixaVenda()">
+                + Adicionar Faixa de Desconto
+              </button>
+            </div>
+          </div>
+
+          <!-- ANÁLISE DE MARGEM -->
+          <div class="margin-analysis-box">
+            <div class="margin-analysis-title">
+              <span>📊 Análise de Margem & Lucro</span>
+            </div>
+
+            <div style="display:flex; justify-content:space-between; flex-wrap:wrap; gap:10px; margin-bottom:8px;">
+              <div>
+                <span style="font-size:0.8rem; color:var(--text-muted);">Custo Fornecedor:</span>
+                <div id="sim-custo-val" style="font-weight:700; color:var(--choc-dark);">R$ 0,00/g</div>
+              </div>
+              <div>
+                <span style="font-size:0.8rem; color:var(--text-muted);">Preço de Venda:</span>
+                <div id="sim-venda-val" style="font-weight:700; color:var(--choc-dark);">R$ 0,00/g</div>
+              </div>
+              <div>
+                <span style="font-size:0.8rem; color:var(--text-muted);">Lucro Unitário:</span>
+                <div id="sim-lucro-val" style="font-weight:800; font-size:1.1rem; color:var(--choc-dark);">R$ 0,00</div>
+              </div>
+            </div>
+
+            <div id="sim-badge-container">
+              <div class="margin-badge badge-warning">
+                💡 Selecione um produto e informe o preço para analisar a margem.
+              </div>
+            </div>
+          </div>
+
+          <button type="submit" class="btn-submit" id="btn-produto-submit">Salvar Precificação</button>
+          <button type="button" class="btn-cancel" id="btn-produto-cancel" style="display:none;" onclick="cancelarEdicaoProduto()">Cancelar</button>
+        </form>
+      </div>
+
+      <div class="table-wrapper">
+        <table>
+          <thead>
+            <tr>
+              <th>Produto</th>
+              <th>Fornecedor</th>
+              <th>Custo Unitário</th>
+              <th>Preço de Venda</th>
+              <th>Status</th>
+              <th>Ações</th>
+            </tr>
+          </thead>
+          <tbody id="lista-produtos"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ABA 4: RELATÓRIO E HISTÓRICO DE LOGS -->
+    <div id="tab-relatorio" class="tab-content">
+      <div class="form-section">
+        <h3>📊 Relatório por Fornecedor</h3>
+        <p style="font-size:0.88rem; color:var(--text-muted); margin-bottom:12px;">
+          Consolidado com a quantidade total vendida e os valores devidos a cada fornecedor.
+        </p>
+
+        <div id="container-relatorio-geral"></div>
+      </div>
+
+      <!-- HISTÓRICO DE ALTERAÇÕES DOS SÓCIOS -->
+      <div class="form-section" style="background:#ffffff; margin-top:20px;">
+        <h3 style="color:var(--choc-dark); font-size:1rem; margin-bottom:10px;">📝 Histórico de Alterações dos Sócios</h3>
+        <div id="container-logs-historico" style="max-height:250px; overflow-y:auto; border:1px solid var(--border-color); border-radius:8px;"></div>
+      </div>
+    </div>
+
+  </div>
+
+  <footer>
+    <button class="btn-clear-footer" onclick="limparDados()">
+      🧹 Limpar Todos os Dados
+    </button>
+  </footer>
+
+  <script>
+    /* ---------------------------------------------------
+       1. CONFIGURAÇÃO DO FIREBASE (SUBSTITUA AQUI SEU PROJETO)
+       --------------------------------------------------- */
+     const firebaseConfig = {
+    apiKey: "AIzaSyDpQE3OCdrAhWNWe4n06F4YkvG-yZFyffE",
+    authDomain: "fabricadechocolate-7a294.firebaseapp.com",
+    projectId: "fabricadechocolate-7a294",
+    storageBucket: "fabricadechocolate-7a294.firebasestorage.app",
+    messagingSenderId: "136719887706",
+    appId: "1:136719887706:web:d8394a0963bdfb769b1763",
+    measurementId: "G-9L28X6JJR0"
+  };
+
+    let useFirebase = false;
+
+    try {
+      if (typeof firebase !== 'undefined' && firebaseConfig.apiKey !== "SUA_API_KEY_AQUI") {
+        firebase.initializeApp(firebaseConfig);
+        useFirebase = true;
+      }
+    } catch (e) {
+      console.log("Firebase não configurado ainda. Usando modo LocalStorage.");
+    }
+
+    const STORAGE_KEY = 'fabrica_v16_data';
+
+    function carregarDadosIniciais() {
+      const data = localStorage.getItem(STORAGE_KEY);
+      if (data) {
+        try { return JSON.parse(data); } catch(e) {}
+      }
+      return {
+        fornecedores: [
+          { id: 'f_bras', nome: 'Brás', frete: 0 },
+          { id: 'f_akam', nome: 'Akam', frete: 0 }
+        ],
+        produtos: [
+          { id: 'p_capulho_bras', fornecedorId: 'f_bras', nome: 'Capulho (Brás)', custoBase: 0, precoVenda: 0, faixasVenda: [], faixasCusto: [] },
+          { id: 'p_capulho_akam', fornecedorId: 'f_akam', nome: 'Capulho (Akam)', custoBase: 0, precoVenda: 0, faixasVenda: [], faixasCusto: [] }
+        ],
+        pedidos: [],
+        logs: [],
+        configLucro: { splitRamom: 50 }
+      };
+    }
+
+    let appData = carregarDadosIniciais();
+
+    function registrarLog(acao) {
+      const usuario = document.getElementById('select-usuario-atual').value || 'Sócio';
+      if (!appData.logs) appData.logs = [];
+      const agora = new Date();
+      const dataHoraStr = agora.toLocaleDateString('pt-BR') + ' ' + agora.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+
+      appData.logs.unshift({
+        usuario: usuario,
+        acao: acao,
+        dataHora: dataHoraStr
+      });
+
+      if (appData.logs.length > 50) appData.logs = appData.logs.slice(0, 50);
+    }
+
+    function salvarDados(mensagemLog = null) {
+      if (mensagemLog) {
+        registrarLog(mensagemLog);
+      }
+
+      if (useFirebase) {
+        firebase.database().ref('fabrica_data').set(appData);
+      } else {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(appData));
+        renderizarTudo();
+      }
+    }
+
+    if (useFirebase) {
+      firebase.database().ref('fabrica_data').on('value', (snapshot) => {
+        const val = snapshot.val();
+        if (val) {
+          appData = val;
+          renderizarTudo();
+        }
+      });
+    }
+
+    function limparDados() {
+      const conf = confirm("🧹 LIMPAR DADOS:\n\nDeseja apagar todas as informações cadastradas?");
+      if (!conf) return;
+
+      localStorage.removeItem(STORAGE_KEY);
+
+      appData = {
+        fornecedores: [
+          { id: 'f_bras', nome: 'Brás', frete: 0 },
+          { id: 'f_akam', nome: 'Akam', frete: 0 }
+        ],
+        produtos: [
+          { id: 'p_capulho_bras', fornecedorId: 'f_bras', nome: 'Capulho (Brás)', custoBase: 0, precoVenda: 0, faixasVenda: [], faixasCusto: [] },
+          { id: 'p_capulho_akam', fornecedorId: 'f_akam', nome: 'Capulho (Akam)', custoBase: 0, precoVenda: 0, faixasVenda: [], faixasCusto: [] }
+        ],
+        pedidos: [],
+        logs: [],
+        configLucro: { splitRamom: 50 }
+      };
+      salvarDados("Limpou todos os dados do sistema.");
+    }
+
+    /* ---------------------------------------------------
+       2. LÓGICA DO 5º DIA ÚTIL E TEMPO REGRESSIVO (RATEIO)
+       --------------------------------------------------- */
+    function obterQuintoDiaUtil(ano, mes) {
+      let count = 0;
+      let dia = 1;
+      while (count < 5) {
+        let d = new Date(ano, mes, dia);
+        let dayOfWeek = d.getDay();
+        if (dayOfWeek !== 0 && dayOfWeek !== 6) {
+          count++;
+        }
+        if (count === 5) {
+          return d;
+        }
+        dia++;
+      }
+    }
+
+    function atualizarInformativoRateio() {
+      const agora = new Date();
+      const anoAtual = agora.getFullYear();
+      const mesAtual = agora.getMonth();
+
+      const quintoDiaUtilAtual = obterQuintoDiaUtil(anoAtual, mesAtual);
+
+      const statusEl = document.getElementById('rateio-status-msg');
+      const countEl = document.getElementById('rateio-countdown');
+
+      if (!statusEl || !countEl) return;
+
+      const eMesmoDia = (
+        agora.getFullYear() === quintoDiaUtilAtual.getFullYear() &&
+        agora.getMonth() === quintoDiaUtilAtual.getMonth() &&
+        agora.getDate() === quintoDiaUtilAtual.getDate()
+      );
+
+      if (eMesmoDia) {
+        statusEl.innerHTML = '<span style="color:var(--success-text); font-size:1.25rem;">🎉 É HOJE! HORA DO RATEIO</span>';
+        countEl.innerText = 'O rateio está acontecendo hoje!';
+        return;
+      }
+
+      let proximoQuintoDia;
+      const fimQuintoDiaAtual = new Date(anoAtual, mesAtual, quintoDiaUtilAtual.getDate(), 23, 59, 59);
+
+      if (agora > fimQuintoDiaAtual) {
+        let proximoMes = mesAtual + 1;
+        let proximoAno = anoAtual;
+        if (proximoMes > 11) {
+          proximoMes = 0;
+          proximoAno++;
+        }
+        proximoQuintoDia = obterQuintoDiaUtil(proximoAno, proximoMes);
+      } else {
+        proximoQuintoDia = new Date(anoAtual, mesAtual, quintoDiaUtilAtual.getDate(), 0, 0, 0);
+      }
+
+      const diaFormatted = String(proximoQuintoDia.getDate()).padStart(2, '0');
+      const mesFormatted = String(proximoQuintoDia.getMonth() + 1).padStart(2, '0');
+      const anoFormatted = proximoQuintoDia.getFullYear();
+
+      let diaSemana = proximoQuintoDia.toLocaleDateString('pt-BR', { weekday: 'long' });
+      diaSemana = diaSemana.split('-').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join('-');
+
+      statusEl.innerHTML = `Próximo rateio: <strong>${diaFormatted}/${mesFormatted}/${anoFormatted} (${diaSemana})</strong>`;
+
+      const diffMs = proximoQuintoDia - agora;
+      if (diffMs > 0) {
+        let totalSec = Math.floor(diffMs / 1000);
+        let totalMin = Math.floor(totalSec / 60);
+        let totalHoras = Math.floor(totalMin / 60);
+        let totalDias = Math.floor(totalHoras / 24);
+
+        let semanas = Math.floor(totalDias / 7);
+        let dias = totalDias % 7;
+        let horas = totalHoras % 24;
+        let minutos = totalMin % 60;
+        let segundos = totalSec % 60;
+
+        countEl.innerText = `⏳ Falta: ${semanas} sem, ${dias}d, ${horas}h ${minutos}m ${segundos}s`;
+      } else {
+        countEl.innerText = '';
+      }
+    }
+
+    setInterval(atualizarInformativoRateio, 1000);
+
+    /* ---------------------------------------------------
+       3. NAVEGAÇÃO DE ABAS E PANÉIS INTERATIVOS
+       --------------------------------------------------- */
+    function switchTab(tabName) {
+      document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+      document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+
+      const activeBtn = Array.from(document.querySelectorAll('.tab-btn')).find(btn => btn.getAttribute('onclick').includes(tabName));
+      if (activeBtn) activeBtn.classList.add('active');
+
+      document.getElementById(`tab-${tabName}`).classList.add('active');
+
+      if (tabName === 'relatorio') renderizarRelatorio();
+    }
+
+    function toggleDashPanel(panelId) {
+      const targetPanel = document.getElementById(panelId);
+      const isVisible = targetPanel.style.display === 'block';
+
+      document.querySelectorAll('.dash-detail-panel').forEach(p => p.style.display = 'none');
+
+      if (!isVisible) {
+        targetPanel.style.display = 'block';
+      }
+    }
+
+    function atualizarDivisaoSocios(val) {
+      const pctRamom = parseInt(val);
+      const pctMonique = 100 - pctRamom;
+
+      if (!appData.configLucro) appData.configLucro = {};
+      appData.configLucro.splitRamom = pctRamom;
+
+      document.getElementById('lbl-pct-ramom').innerText = pctRamom + '%';
+      document.getElementById('lbl-pct-monique').innerText = pctMonique + '%';
+
+      const lucroTotal = calcularLucroLiquidoGlobal();
+      const valRamom = lucroTotal * (pctRamom / 100);
+      const valMonique = lucroTotal * (pctMonique / 100);
+
+      document.getElementById('val-lucro-ramom').innerText = formatarMoeda(valRamom);
+      document.getElementById('val-lucro-monique').innerText = formatarMoeda(valMonique);
+    }
+
+    /* ---------------------------------------------------
+       4. FORMATADORES E CÁLCULOS DINÂMICOS
+       --------------------------------------------------- */
+    function formatarMoeda(val) {
+      return new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(val || 0);
+    }
+
+    function obterVolumeTotalGeralPorProduto() {
+      const volumes = {};
+      if (appData.pedidos) {
+        appData.pedidos.forEach(ped => {
+          let qtdPedido = (parseFloat(ped.qtdPrincipal) || 0);
+          if (ped.dependentes && Array.isArray(ped.dependentes)) {
+            ped.dependentes.forEach(d => qtdPedido += (parseFloat(d.qtd) || 0));
+          }
+          volumes[ped.produtoId] = (volumes[ped.produtoId] || 0) + qtdPedido;
+        });
+      }
+      return volumes;
+    }
+
+    function obterCustoEfetivoProduto(produtoId) {
+      const produto = appData.produtos.find(p => p.id === produtoId);
+      if (!produto) return { custoUnit: 0, metaAtingida: null, volumeTotal: 0 };
+
+      const volumes = obterVolumeTotalGeralPorProduto();
+      const volumeTotal = volumes[produtoId] || 0;
+
+      let custoUnit = parseFloat(produto.custoBase) || 0;
+      let metaAtingida = null;
+
+      if (produto.faixasCusto && produto.faixasCusto.length > 0) {
+        const faixasOrdenadas = [...produto.faixasCusto].sort((a, b) => b.qtdMin - a.qtdMin);
+        for (const f of faixasOrdenadas) {
+          if (volumeTotal >= f.qtdMin) {
+            custoUnit = parseFloat(f.custoUnit);
+            metaAtingida = f;
+            break;
+          }
+        }
+      }
+
+      return { custoUnit, metaAtingida, volumeTotal };
+    }
+
+    function calcularPrecoVendaCliente(produto, quantidadeTotalPedido) {
+      if (!produto) return 0;
+      if (produto.faixasVenda && produto.faixasVenda.length > 0) {
+        const faixasOrdenadas = [...produto.faixasVenda].sort((a, b) => b.qtdMin - a.qtdMin);
+        for (const f of faixasOrdenadas) {
+          if (quantidadeTotalPedido >= f.qtdMin) {
+            return parseFloat(f.precoUnit);
+          }
+        }
+      }
+      return parseFloat(produto.precoVenda) || 0;
+    }
+
+    function calcularLucroLiquidoGlobal() {
+      let faturamento = 0;
+      let custoProdutos = 0;
+
+      if (appData.pedidos) {
+        appData.pedidos.forEach(ped => {
+          const prod = appData.produtos.find(p => p.id === ped.produtoId);
+          if (prod) {
+            let qtdTotal = (parseFloat(ped.qtdPrincipal) || 0);
+            if (ped.dependentes) ped.dependentes.forEach(d => qtdTotal += (parseFloat(d.qtd) || 0));
+
+            const precoVendaUnit = calcularPrecoVendaCliente(prod, qtdTotal);
+            const { custoUnit } = obterCustoEfetivoProduto(prod.id);
+
+            faturamento += (qtdTotal * precoVendaUnit);
+            custoProdutos += (qtdTotal * custoUnit);
+          }
+        });
+      }
+
+      const freteFornecedores = appData.fornecedores ? appData.fornecedores.reduce((acc, f) => acc + (parseFloat(f.frete) || 0), 0) : 0;
+      return faturamento - (custoProdutos + freteFornecedores);
+    }
+
+    /* ---------------------------------------------------
+       5. DASHBOARD
+       --------------------------------------------------- */
+    function atualizarDashboard() {
+      let faturamento = 0;
+      let faturamentoPago = 0;
+      let faturamentoPendente = 0;
+      let custoProdutos = 0;
+
+      if (appData.pedidos) {
+        appData.pedidos.forEach(ped => {
+          const prod = appData.produtos.find(p => p.id === ped.produtoId);
+          if (prod) {
+            let qtdTotal = (parseFloat(ped.qtdPrincipal) || 0);
+            if (ped.dependentes) ped.dependentes.forEach(d => qtdTotal += (parseFloat(d.qtd) || 0));
+
+            const precoVendaUnit = calcularPrecoVendaCliente(prod, qtdTotal);
+            const { custoUnit } = obterCustoEfetivoProduto(prod.id);
+
+            const valorPedido = qtdTotal * precoVendaUnit;
+            faturamento += valorPedido;
+
+            if (ped.status === 'Pago') faturamentoPago += valorPedido;
+            else faturamentoPendente += valorPedido;
+
+            custoProdutos += (qtdTotal * custoUnit);
+          }
+        });
+      }
+
+      const freteFornecedores = appData.fornecedores ? appData.fornecedores.reduce((acc, f) => acc + (parseFloat(f.frete) || 0), 0) : 0;
+      const totalPagarFornecedores = custoProdutos + freteFornecedores;
+      const lucroLiquido = faturamento - totalPagarFornecedores;
+
+      document.getElementById('dash-faturamento').innerText = formatarMoeda(faturamento);
+      document.getElementById('dash-custos').innerText = formatarMoeda(totalPagarFornecedores);
+      document.getElementById('dash-lucro').innerText = formatarMoeda(lucroLiquido);
+
+      document.getElementById('det-faturar-pago').innerText = formatarMoeda(faturamentoPago);
+      document.getElementById('det-faturar-pendente').innerText = formatarMoeda(faturamentoPendente);
+
+      const detFornecList = document.getElementById('det-pagar-fornecedores-list');
+      detFornecList.innerHTML = '';
+
+      if (!appData.fornecedores || appData.fornecedores.length === 0) {
+        detFornecList.innerHTML = '<span style="color:var(--text-muted);">Nenhum fornecedor cadastrado.</span>';
+      } else {
+        appData.fornecedores.forEach(f => {
+          let custoProdsF = 0;
+          const prodsF = appData.produtos.filter(p => p.fornecedorId === f.id);
+
+          prodsF.forEach(prod => {
+            const { custoUnit, volumeTotal } = obterCustoEfetivoProduto(prod.id);
+            custoProdsF += (volumeTotal * custoUnit);
+          });
+
+          const totalF = custoProdsF + (parseFloat(f.frete) || 0);
+          detFornecList.innerHTML += `
+            <div style="display:flex; justify-content:space-between; border-bottom:1px solid #eee; padding:4px 0;">
+              <span><strong>${f.nome}</strong> (Prods: ${formatarMoeda(custoProdsF)} + Frete: ${formatarMoeda(f.frete)})</span>
+              <strong>${formatarMoeda(totalF)}</strong>
+            </div>
+          `;
+        });
+      }
+
+      const splitVal = (appData.configLucro && appData.configLucro.splitRamom !== undefined) ? appData.configLucro.splitRamom : 50;
+      document.getElementById('slider-split').value = splitVal;
+      atualizarDivisaoSocios(splitVal);
+    }
+
+    /* ---------------------------------------------------
+       6. GESTÃO DE PEDIDOS
+       --------------------------------------------------- */
+    function alternarCamposEnvio() {
+      const tipo = document.getElementById('pedido-envio').value;
+      const container = document.getElementById('container-detalhes-entrega');
+      container.style.display = tipo === 'Entrega por Conta' ? 'grid' : 'none';
+    }
+
+    function adicionarLinhaDependente(nome = '', qtd = '') {
+      const container = document.getElementById('dependentes-list');
+      const div = document.createElement('div');
+      div.className = 'faixa-row';
+      div.innerHTML = `
+        <input type="text" class="dep-nome" placeholder="Nome" value="${nome}" style="flex:2;">
+        <input type="number" class="dep-qtd" min="1" placeholder="Qtd (g/un)" value="${qtd}" style="flex:1;" oninput="atualizarCalculoPedido()">
+        <button type="button" class="btn-action btn-delete" onclick="this.parentElement.remove(); atualizarCalculoPedido();">🗑️</button>
+      `;
+      container.appendChild(div);
+      atualizarCalculoPedido();
+    }
+
+    function atualizarCalculoPedido() {
+      const prodId = document.getElementById('pedido-produto').value;
+      const qtdPrincipal = parseFloat(document.getElementById('pedido-qtd-principal').value) || 0;
+      const previewEl = document.getElementById('pedido-calc-preview');
+
+      let qtdDependentes = 0;
+      document.querySelectorAll('.dep-qtd').forEach(input => {
+        qtdDependentes += (parseFloat(input.value) || 0);
+      });
+
+      const qtdTotal = qtdPrincipal + qtdDependentes;
+
+      if (!prodId || qtdTotal <= 0) {
+        previewEl.innerText = 'Cálculo estimado: R\$ 0,00';
+        return;
+      }
+
+      const produto = appData.produtos.find(p => p.id === prodId);
+      if (!produto) return;
+
+      const precoVendaUnit = calcularPrecoVendaCliente(produto, qtdTotal);
+      const valorTotal = qtdTotal * precoVendaUnit;
+
+      previewEl.innerText = `Total: ${qtdTotal} g/un (${qtdPrincipal}g Princ. + ${qtdDependentes}g Dep.) x ${formatarMoeda(precoVendaUnit)} = ${formatarMoeda(valorTotal)}`;
+    }
+
+    function renderizarPedidos() {
+      const tbody = document.getElementById('lista-pedidos');
+      tbody.innerHTML = '';
+
+      if (!appData.pedidos || appData.pedidos.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="8" class="empty-state">Nenhum pedido registrado.</td></tr>';
+        return;
+      }
+
+      appData.pedidos.forEach(ped => {
+        const prod = appData.produtos.find(p => p.id === ped.produtoId);
+        const prodNome = prod ? prod.nome : 'Não especificado';
+
+        let qtdTotal = (parseFloat(ped.qtdPrincipal) || 0);
+        let numDeps = 0;
+        if (ped.dependentes) {
+          numDeps = ped.dependentes.length;
+          ped.dependentes.forEach(d => qtdTotal += (parseFloat(d.qtd) || 0));
+        }
+
+        let valorTotalPedido = 0;
+        let custoTotalPedido = 0;
+
+        if (prod) {
+          const precoUnit = calcularPrecoVendaCliente(prod, qtdTotal);
+          valorTotalPedido = qtdTotal * precoUnit;
+
+          const { custoUnit } = obterCustoEfetivoProduto(prod.id);
+          custoTotalPedido = qtdTotal * custoUnit;
+        }
+
+        const statusClass = ped.status === 'Pago' ? 'badge-pago' : 'badge-pendente';
+
+        const tr = document.createElement('tr');
+        tr.className = 'order-row-clickable';
+        tr.innerHTML = `
+          <td><strong>${ped.cliente || 'Sem Nome'}</strong> ${numDeps > 0 ? `<small style="color:var(--choc-milk);">(+\${numDeps} dep.)</small>` : ''}</td>
+          <td>${prodNome}</td>
+          <td><strong>${qtdTotal} g/un</strong></td>
+          <td>${formatarMoeda(custoTotalPedido)}</td>
+          <td><strong>${formatarMoeda(valorTotalPedido)}</strong></td>
+          <td>${ped.tipoEnvio || 'Retirada'}</td>
+          <td><span class="badge ${statusClass}">${ped.status || 'Pendente'}</span></td>
+          <td>
+            <button class="btn-action btn-edit" onclick="event.stopPropagation(); editarPedido('${ped.id}')">✏️ Editar</button>
+            <button class="btn-action btn-delete" onclick="event.stopPropagation(); excluirPedido('${ped.id}')">🗑️ Excluir</button>
+          </td>
+        `;
+
+        const trDetails = document.createElement('tr');
+        trDetails.id = `details-ped-${ped.id}`;
+        trDetails.style.display = 'none';
+
+        let dependentesHtml = '<em>Sem dependentes.</em>';
+        if (ped.dependentes && ped.dependentes.length > 0) {
+          dependentesHtml = '<ul>' + ped.dependentes.map(d => `<li><strong>${d.nome || 'Dependente'}:</strong> ${d.qtd || 0} g/un</li>`).join('') + '</ul>';
+        }
+
+        let envioHtml = '<strong>Tipo:</strong> Retirada em Mãos';
+        if (ped.tipoEnvio === 'Entrega por Conta') {
+          envioHtml = `
+            <strong>📍 Endereço:</strong> ${ped.endereco || 'A preencher'}<br>
+            <strong>📅 Dia:</strong> ${ped.dia || 'A definir'}<br>
+            <strong>⏰ Horário:</strong> ${ped.horario || 'A definir'}
+          `;
+        }
+
+        trDetails.innerHTML = `
+          <td colspan="8" style="background:#fdfaf8; padding:12px 20px;">
+            <div class="order-details-box">
+              <h4 style="color:var(--choc-dark); margin-bottom:6px;">📋 Detalhes do Pedido - ${ped.cliente || 'Cliente'}</h4>
+              <p><strong>Pedido Principal:</strong> ${ped.cliente || 'Cliente'} (${ped.qtdPrincipal || 0} g/un)</p>
+              <div style="margin:6px 0;"><strong>Rateio / Dependentes:</strong> ${dependentesHtml}</div>
+              <div style="margin:6px 0;">${envioHtml}</div>
+              ${ped.observacoes ? `<p style="margin-top:4px;"><strong>Obs:</strong> \${ped.observacoes}</p>` : ''}
+            </div>
+          </td>
+        `;
+
+        tr.onclick = () => {
+          const det = document.getElementById(`details-ped-${ped.id}`);
+          det.style.display = det.style.display === 'none' ? 'table-row' : 'none';
+        };
+
+        tbody.appendChild(tr);
+        tbody.appendChild(trDetails);
+      });
+    }
+
+    function salvarPedido(e) {
+      e.preventDefault();
+      const id = document.getElementById('pedido-id').value;
+      const cliente = document.getElementById('pedido-cliente').value.trim() || 'Cliente';
+      const produtoId = document.getElementById('pedido-produto').value;
+      const qtdPrincipal = parseFloat(document.getElementById('pedido-qtd-principal').value) || 1;
+      const status = document.getElementById('pedido-status').value || 'Pendente';
+      const tipoEnvio = document.getElementById('pedido-envio').value || 'Retirada';
+      const endereco = document.getElementById('pedido-endereco').value.trim();
+      const dia = document.getElementById('pedido-dia').value.trim();
+      const horario = document.getElementById('pedido-horario').value.trim();
+      const observacoes = document.getElementById('pedido-obs').value.trim();
+
+      const dependentes = [];
+      document.querySelectorAll('#dependentes-list .faixa-row').forEach(row => {
+        const n = row.querySelector('.dep-nome').value.trim();
+        const q = parseFloat(row.querySelector('.dep-qtd').value) || 0;
+        if (n || q > 0) dependentes.push({ nome: n || 'Dependente', qtd: q });
+      });
+
+      const objPedido = {
+        id: id || 'ped_' + Date.now(),
+        cliente,
+        produtoId,
+        qtdPrincipal,
+        dependentes,
+        status,
+        tipoEnvio,
+        endereco: tipoEnvio === 'Entrega por Conta' ? endereco : '',
+        dia: tipoEnvio === 'Entrega por Conta' ? dia : '',
+        horario: tipoEnvio === 'Entrega por Conta' ? horario : '',
+        observacoes
+      };
+
+      let acaoLog = "";
+      if (id) {
+        const idx = appData.pedidos.findIndex(p => p.id === id);
+        if (idx !== -1) appData.pedidos[idx] = objPedido;
+        acaoLog = `Atualizou o pedido do cliente "${cliente}".`;
+      } else {
+        if (!appData.pedidos) appData.pedidos = [];
+        appData.pedidos.push(objPedido);
+        acaoLog = `Registrou novo pedido para "${cliente}".`;
+      }
+
+      cancelarEdicaoPedido();
+      salvarDados(acaoLog);
+    }
+
+    function editarPedido(id) {
+      const ped = appData.pedidos.find(p => p.id === id);
+      if (!ped) return;
+
+      document.getElementById('pedido-id').value = ped.id;
+      document.getElementById('pedido-cliente').value = ped.cliente;
+      document.getElementById('pedido-produto').value = ped.produtoId;
+      document.getElementById('pedido-qtd-principal').value = ped.qtdPrincipal;
+      document.getElementById('pedido-status').value = ped.status;
+      document.getElementById('pedido-envio').value = ped.tipoEnvio;
+
+      alternarCamposEnvio();
+
+      if (ped.tipoEnvio === 'Entrega por Conta') {
+        document.getElementById('pedido-endereco').value = ped.endereco || '';
+        document.getElementById('pedido-dia').value = ped.dia || '';
+        document.getElementById('pedido-horario').value = ped.horario || '';
+      }
+
+      document.getElementById('pedido-obs').value = ped.observacoes || '';
+
+      const depList = document.getElementById('dependentes-list');
+      depList.innerHTML = '';
+      if (ped.dependentes && ped.dependentes.length > 0) {
+        ped.dependentes.forEach(d => adicionarLinhaDependente(d.nome, d.qtd));
+      }
+
+      atualizarCalculoPedido();
+
+      document.getElementById('form-pedido-title').innerText = 'Editar Pedido';
+      document.getElementById('btn-pedido-submit').innerText = 'Atualizar Pedido';
+      document.getElementById('btn-pedido-cancel').style.display = 'block';
+    }
+
+    function cancelarEdicaoPedido() {
+      document.getElementById('form-pedido').reset();
+      document.getElementById('pedido-id').value = '';
+      document.getElementById('dependentes-list').innerHTML = '';
+      document.getElementById('pedido-calc-preview').innerText = 'Cálculo estimado: R\$ 0,00';
+      document.getElementById('pedido-envio').value = 'Retirada';
+      alternarCamposEnvio();
+
+      document.getElementById('form-pedido-title').innerText = 'Novo Pedido';
+      document.getElementById('btn-pedido-submit').innerText = 'Salvar Pedido';
+      document.getElementById('btn-pedido-cancel').style.display = 'none';
+    }
+
+    function excluirPedido(id) {
+      const ped = appData.pedidos.find(p => p.id === id);
+      if (!ped) return;
+
+      if (!confirm(`Deseja excluir o pedido de "${ped.cliente}"?`)) return;
+
+      appData.pedidos = appData.pedidos.filter(p => p.id !== id);
+      salvarDados(`Excluiu o pedido do cliente "${ped.cliente}".`);
+    }
+
+    /* ---------------------------------------------------
+       7. GESTÃO DE FORNECEDORES & PRODUTOS EMBUTIDOS
+       --------------------------------------------------- */
+    let prodBlockCounter = 0;
+
+    function adicionarBlocoProdutoFornecedor(prodData = null) {
+      const container = document.getElementById('fornecedor-produtos-container');
+      const blockId = 'prod_block_' + (++prodBlockCounter);
+
+      const prodNome = prodData ? prodData.nome : '';
+      const prodCustoBase = prodData ? (prodData.custoBase || '') : '';
+      const prodId = prodData ? prodData.id : '';
+
+      const div = document.createElement('div');
+      div.className = 'product-pricing-card';
+      div.id = blockId;
+      div.dataset.prodId = prodId;
+
+      div.innerHTML = `
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+          <strong style="color:var(--choc-dark); font-size:0.95rem;">🍬 Produto do Fornecedor</strong>
+          <button type="button" class="btn-action btn-delete" onclick="document.getElementById('${blockId}').remove()">🗑️ Remover</button>
+        </div>
+        <div class="form-grid" style="margin-bottom:10px;">
+          <div class="form-group">
+            <label>Nome do Produto</label>
+            <input type="text" class="forn-prod-nome" value="${prodNome}" placeholder="Ex: Capulho, Dry...">
+          </div>
+          <div class="form-group">
+            <label>Preço Base (Custo / g ou un)</label>
+            <div class="input-prefix-group">
+              <span class="prefix">R$</span>
+              <input type="number" class="forn-prod-custo-base" step="0.01" min="0" value="${prodCustoBase}" placeholder="0.00">
+            </div>
+          </div>
+        </div>
+        <div class="form-group full-width">
+          <label style="font-size:0.82rem; color:var(--choc-milk); font-weight:700;">Desconto por Quantidade (Opcional)</label>
+          <div class="forn-prod-metas-container" style="display:flex; flex-direction:column; gap:6px; margin-top:4px;"></div>
+          <button type="button" class="btn-secondary" style="font-size:0.78rem; padding:6px 10px; align-self:flex-start; margin-top:6px;" onclick="adicionarMetaVolumeEmBloco('${blockId}')">
+            + Adicionar Faixa
+          </button>
+        </div>
+      `;
+
+      container.appendChild(div);
+
+      if (prodData && prodData.faixasCusto && prodData.faixasCusto.length > 0) {
+        prodData.faixasCusto.forEach(f => {
+          adicionarMetaVolumeEmBloco(blockId, f.qtdMin, f.custoUnit);
+        });
+      }
+    }
+
+    function adicionarMetaVolumeEmBloco(blockId, qtdMin = '', custoUnit = '') {
+      const block = document.getElementById(blockId);
+      if (!block) return;
+      const metasContainer = block.querySelector('.forn-prod-metas-container');
+
+      const div = document.createElement('div');
+      div.className = 'faixa-row';
+      div.innerHTML = `
+        <span style="font-size:0.82rem; font-weight:600;">A partir de:</span>
+        <input type="number" class="meta-qtd" min="1" placeholder="Ex: 50" value="${qtdMin}" style="width:75px;">
+        <span style="font-size:0.82rem; font-weight:600;">g/un ➔ R$:</span>
+        <div class="input-prefix-group" style="flex:1;">
+          <span class="prefix">R$</span>
+          <input type="number" class="meta-custo" step="0.01" min="0" placeholder="0.00" value="${custoUnit}">
+        </div>
+        <button type="button" class="btn-action btn-delete" onclick="this.parentElement.remove()">🗑️</button>
+      `;
+      metasContainer.appendChild(div);
+    }
+
+    function salvarFornecedor(e) {
+      e.preventDefault();
+      const id = document.getElementById('fornecedor-id').value;
+      const nome = document.getElementById('fornecedor-nome').value.trim() || 'Novo Fornecedor';
+      const frete = parseFloat(document.getElementById('fornecedor-frete').value) || 0;
+
+      const fornId = id || 'f_' + Date.now();
+
+      const prodBlocks = document.querySelectorAll('#fornecedor-produtos-container .product-pricing-card');
+
+      prodBlocks.forEach(block => {
+        const pNome = block.querySelector('.forn-prod-nome').value.trim() || 'Produto Sem Nome';
+        const pCustoBase = parseFloat(block.querySelector('.forn-prod-custo-base').value) || 0;
+        let pId = block.dataset.prodId;
+
+        const faixasCusto = [];
+        block.querySelectorAll('.forn-prod-metas-container .faixa-row').forEach(row => {
+          const q = parseFloat(row.querySelector('.meta-qtd').value) || 0;
+          const c = parseFloat(row.querySelector('.meta-custo').value) || 0;
+          if (q > 0 || c > 0) faixasCusto.push({ qtdMin: q, custoUnit: c });
+        });
+
+        if (!pId) pId = 'p_' + Date.now() + '_' + Math.floor(Math.random()*1000);
+
+        const idxExistente = appData.produtos.findIndex(p => p.id === pId);
+        if (idxExistente !== -1) {
+          appData.produtos[idxExistente].nome = pNome;
+          appData.produtos[idxExistente].custoBase = pCustoBase;
+          appData.produtos[idxExistente].fornecedorId = fornId;
+          appData.produtos[idxExistente].faixasCusto = faixasCusto;
+        } else {
+          appData.produtos.push({
+            id: pId,
+            fornecedorId: fornId,
+            nome: pNome,
+            custoBase: pCustoBase,
+            precoVenda: 0,
+            faixasVenda: [],
+            faixasCusto: faixasCusto
+          });
+        }
+      });
+
+      const objFornecedor = { id: fornId, nome, frete };
+
+      let acaoLog = "";
+      if (id) {
+        const idx = appData.fornecedores.findIndex(f => f.id === id);
+        if (idx !== -1) appData.fornecedores[idx] = objFornecedor;
+        acaoLog = `Atualizou dados do fornecedor "${nome}".`;
+      } else {
+        if (!appData.fornecedores) appData.fornecedores = [];
+        appData.fornecedores.push(objFornecedor);
+        acaoLog = `Cadastrou o fornecedor "${nome}".`;
+      }
+
+      cancelarEdicaoFornecedor();
+      salvarDados(acaoLog);
+    }
+
+    function renderizarFornecedores() {
+      const container = document.getElementById('lista-perfis-fornecedores');
+      container.innerHTML = '';
+
+      if (!appData.fornecedores || appData.fornecedores.length === 0) {
+        container.innerHTML = '<div class="empty-state">Nenhum fornecedor cadastrado.</div>';
+      } else {
+        appData.fornecedores.forEach(f => {
+          const prodsF = appData.produtos.filter(p => p.fornecedorId === f.id);
+
+          let custoProdutosAteAgora = 0;
+          let htmlProdutosList = '';
+          let htmlDetalhamentoPedidos = '';
+
+          if (prodsF.length === 0) {
+            htmlProdutosList = '<em>Nenhum produto cadastrado.</em>';
+            htmlDetalhamentoPedidos = '<p style="color:var(--text-muted); font-style:italic;">Sem produtos ou pedidos lançados.</p>';
+          } else {
+            htmlProdutosList = '<ul style="list-style:none; display:flex; flex-direction:column; gap:6px;">' + prodsF.map(p => {
+              let metasTxt = '';
+              if (p.faixasCusto && p.faixasCusto.length > 0) {
+                metasTxt = ' <small style="color:var(--choc-milk);">(' + p.faixasCusto.sort((a,b)=>a.qtdMin-b.qtdMin).map(m => `≥${m.qtdMin}g: ${formatarMoeda(m.custoUnit)}`).join(' | ') + ')</small>';
+              }
+              return `<li><strong>• ${p.nome}:</strong> Base: ${formatarMoeda(p.custoBase)} ${metasTxt}</li>`;
+            }).join('') + '</ul>';
+
+            let detalheItems = [];
+            prodsF.forEach(p => {
+              const { custoUnit, metaAtingida, volumeTotal } = obterCustoEfetivoProduto(p.id);
+              const subtotalProduto = volumeTotal * custoUnit;
+              custoProdutosAteAgora += subtotalProduto;
+
+              let metaInfo = metaAtingida ? ` <span style="color:var(--success-text); font-weight:700;">(🟢 Desconto ≥${metaAtingida.qtdMin}g)</span>` : '';
+
+              detalheItems.push(`
+                <tr style="font-size:0.85rem;">
+                  <td><strong>${p.nome}</strong></td>
+                  <td><strong>${volumeTotal} g/un</strong></td>
+                  <td>${formatarMoeda(custoUnit)}/g ${metaInfo}</td>
+                  <td><strong>${formatarMoeda(subtotalProduto)}</strong></td>
+                </tr>
+              `);
+            });
+
+            htmlDetalhamentoPedidos = `
+              <div class="table-wrapper" style="margin-top:6px;">
+                <table>
+                  <thead>
+                    <tr>
+                      <th>Produto</th>
+                      <th>Total Vendido (g/un)</th>
+                      <th>Custo Aplicado</th>
+                      <th>Subtotal Devido</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    ${detalheItems.join('')}
+                  </tbody>
+                </table>
+              </div>
+            `;
+          }
+
+          const totalDevidoAteAgora = custoProdutosAteAgora + (parseFloat(f.frete) || 0);
+
+          const card = document.createElement('div');
+          card.className = 'fornecedor-perfil-card';
+          card.innerHTML = `
+            <div class="perfil-header">
+              <div>
+                <div class="perfil-title">👤 ${f.nome}</div>
+                <div style="font-size:0.85rem; color:var(--text-muted); margin-top:2px;">
+                  🚚 Frete / Entrega: <strong>${formatarMoeda(f.frete)}</strong>
+                </div>
+              </div>
+              <div class="perfil-badge-total">
+                💰 Total a Pagar: ${formatarMoeda(totalDevidoAteAgora)}
+              </div>
+            </div>
+
+            <div class="perfil-section-title">🍬 Produtos & Descontos do Fornecedor</div>
+            <div style="background:var(--card-sub-bg); padding:10px 14px; border-radius:8px; font-size:0.88rem; margin-bottom:12px;">
+              ${htmlProdutosList}
+            </div>
+
+            <div class="perfil-section-title">📊 Resumo de Pedidos na Fábrica</div>
+            ${htmlDetalhamentoPedidos}
+
+            <div style="display:flex; justify-content:flex-end; gap:10px; margin-top:14px; border-top:1px solid var(--border-color); padding-top:10px;">
+              <button class="btn-action btn-edit" onclick="editarFornecedor('${f.id}')">✏️ Editar</button>
+              <button class="btn-action btn-delete" onclick="excluirFornecedor('${f.id}')">🗑️ Excluir</button>
+            </div>
+          `;
+
+          container.appendChild(card);
+        });
+      }
+    }
+
+    function editarFornecedor(id) {
+      const f = appData.fornecedores.find(item => item.id === id);
+      if (!f) return;
+
+      document.getElementById('fornecedor-id').value = f.id;
+      document.getElementById('fornecedor-nome').value = f.nome;
+      document.getElementById('fornecedor-frete').value = f.frete;
+
+      const containerProds = document.getElementById('fornecedor-produtos-container');
+      containerProds.innerHTML = '';
+
+      const prodsF = appData.produtos.filter(p => p.fornecedorId === f.id);
+      if (prodsF.length > 0) {
+        prodsF.forEach(p => adicionarBlocoProdutoFornecedor(p));
+      } else {
+        adicionarBlocoProdutoFornecedor();
+      }
+
+      document.getElementById('form-fornecedor-title').innerText = 'Editar Fornecedor';
+      document.getElementById('btn-fornecedor-submit').innerText = 'Atualizar Fornecedor';
+      document.getElementById('btn-fornecedor-cancel').style.display = 'block';
+
+      window.scrollTo({ top: document.getElementById('tab-fornecedores').offsetTop, behavior: 'smooth' });
+    }
+
+    function cancelarEdicaoFornecedor() {
+      document.getElementById('form-fornecedor').reset();
+      document.getElementById('fornecedor-id').value = '';
+      document.getElementById('fornecedor-produtos-container').innerHTML = '';
+      document.getElementById('form-fornecedor-title').innerText = 'Novo Fornecedor';
+      document.getElementById('btn-fornecedor-submit').innerText = 'Salvar Fornecedor';
+      document.getElementById('btn-fornecedor-cancel').style.display = 'none';
+      adicionarBlocoProdutoFornecedor();
+    }
+
+    function excluirFornecedor(id) {
+      const f = appData.fornecedores.find(item => item.id === id);
+      if (!f) return;
+
+      if (!confirm(`⚠️ Excluir o fornecedor "${f.nome}" removerá também todos os seus produtos e pedidos. Continuar?`)) return;
+
+      const prodsRemover = appData.produtos.filter(p => p.fornecedorId === id).map(p => p.id);
+      appData.fornecedores = appData.fornecedores.filter(item => item.id !== id);
+      appData.produtos = appData.produtos.filter(p => p.fornecedorId !== id);
+      appData.pedidos = appData.pedidos.filter(ped => !prodsRemover.includes(ped.produtoId));
+
+      salvarDados(`Excluiu o fornecedor "${f.nome}".`);
+    }
+
+    /* ---------------------------------------------------
+       8. GESTÃO DE PRODUTOS & CENTRAL DE PRECIFICAÇÃO
+       --------------------------------------------------- */
+    function aoSelecionarProdutoParaPrecificar() {
+      const prodId = document.getElementById('produto-select').value;
+      const fornInput = document.getElementById('produto-fornecedor-nome');
+      const custoInput = document.getElementById('produto-custo-efetivo-display');
+      const infoMetaLbl = document.getElementById('lbl-info-meta-atingida');
+
+      if (!prodId) {
+        fornInput.value = '';
+        custoInput.value = 'R\$ 0,00';
+        infoMetaLbl.innerText = '🔒 Escolha um produto acima.';
+        document.getElementById('produto-id').value = '';
+        document.getElementById('produto-venda').value = '';
+        document.getElementById('faixas-preco-list').innerHTML = '';
+        atualizarSimuladorPrecificacao();
+        return;
+      }
+
+      const prod = appData.produtos.find(p => p.id === prodId);
+      if (!prod) return;
+
+      document.getElementById('produto-id').value = prod.id;
+
+      const forn = appData.fornecedores.find(f => f.id === prod.fornecedorId);
+      fornInput.value = forn ? forn.nome : 'Não identificado';
+
+      const { custoUnit, metaAtingida, volumeTotal } = obterCustoEfetivoProduto(prod.id);
+      custoInput.value = formatarMoeda(custoUnit);
+
+      if (metaAtingida) {
+        infoMetaLbl.innerHTML = `<strong style="color:var(--success-text);">🟢 Desconto Atingido: ≥${metaAtingida.qtdMin}g</strong> (${volumeTotal}g na fábrica). Custo reduzido para ${formatarMoeda(custoUnit)}.`;
+      } else {
+        infoMetaLbl.innerText = `🔒 Custo Base Standard (${volumeTotal}g lançados na fábrica).`;
+      }
+
+      document.getElementById('produto-venda').value = prod.precoVenda || '';
+
+      const containerFaixas = document.getElementById('faixas-preco-list');
+      containerFaixas.innerHTML = '';
+      if (prod.faixasVenda && prod.faixasVenda.length > 0) {
+        prod.faixasVenda.forEach(f => adicionarLinhaFaixaVenda(f.qtdMin, f.precoUnit));
+      }
+
+      atualizarSimuladorPrecificacao();
+    }
+
+    function adicionarLinhaFaixaVenda(qtdMin = '', precoUnit = '') {
+      const container = document.getElementById('faixas-preco-list');
+      const div = document.createElement('div');
+      div.className = 'faixa-row';
+      div.innerHTML = `
+        <span style="font-size:0.82rem; font-weight:600;">A partir de:</span>
+        <input type="number" class="venda-qtd" min="1" placeholder="Ex: 10" value="${qtdMin}" style="width:75px;">
+        <span style="font-size:0.82rem; font-weight:600;">g/un ➔ R$:</span>
+        <div class="input-prefix-group" style="flex:1;">
+          <span class="prefix">R$</span>
+          <input type="number" class="venda-preco" step="0.01" min="0" placeholder="0.00" value="${precoUnit}" oninput="atualizarSimuladorPrecificacao()">
+        </div>
+        <button type="button" class="btn-action btn-delete" onclick="this.parentElement.remove(); atualizarSimuladorPrecificacao();">🗑️</button>
+      `;
+      container.appendChild(div);
+      atualizarSimuladorPrecificacao();
+    }
+
+    function atualizarSimuladorPrecificacao() {
+      const prodId = document.getElementById('produto-select').value;
+      const simCustoEl = document.getElementById('sim-custo-val');
+      const simVendaEl = document.getElementById('sim-venda-val');
+      const simLucroEl = document.getElementById('sim-lucro-val');
+      const badgeContainer = document.getElementById('sim-badge-container');
+
+      if (!prodId) {
+        simCustoEl.innerText = 'R\$ 0,00/g';
+        simVendaEl.innerText = 'R\$ 0,00/g';
+        simLucroEl.innerText = 'R\$ 0,00';
+        badgeContainer.innerHTML = '<div class="margin-badge badge-warning">💡 Selecione um produto e informe o preço para analisar a margem.</div>';
+        return;
+      }
+
+      const { custoUnit } = obterCustoEfetivoProduto(prodId);
+      const precoVendaBase = parseFloat(document.getElementById('produto-venda').value) || 0;
+
+      const lucroPorGrama = precoVendaBase - custoUnit;
+      const margemPct = precoVendaBase > 0 ? ((lucroPorGrama / precoVendaBase) * 100) : 0;
+
+      simCustoEl.innerText = `${formatarMoeda(custoUnit)}/g`;
+      simVendaEl.innerText = `${formatarMoeda(precoVendaBase)}/g`;
+      simLucroEl.innerText = `${formatarMoeda(lucroPorGrama)} (${margemPct.toFixed(1)}%)`;
+
+      if (precoVendaBase <= 0) {
+        badgeContainer.innerHTML = '<div class="margin-badge badge-warning">⚠️ Informe o preço padrão cobrado do cliente.</div>';
+      } else if (lucroPorGrama <= 0) {
+        badgeContainer.innerHTML = `
+          <div class="margin-badge badge-danger">
+            🚨 <strong>PREJUÍZO DETECTADO:</strong> Preço cobrado (${formatarMoeda(precoVendaBase)}) é menor ou igual ao custo do fornecedor (${formatarMoeda(custoUnit)}).
+          </div>
+        `;
+      } else if (margemPct < 20) {
+        badgeContainer.innerHTML = `
+          <div class="margin-badge badge-warning">
+            ⚠️ <strong>MARGEM BAIXA (${margemPct.toFixed(1)}%):</strong> Lucro de ${formatarMoeda(lucroPorGrama)}/g. Atenção a taxas e perdas.
+          </div>
+        `;
+      } else if (margemPct <= 55) {
+        badgeContainer.innerHTML = `
+          <div class="margin-badge badge-success">
+            🟢 <strong>MARGEM EXCELENTE (${margemPct.toFixed(1)}%):</strong> Lucro saudável de ${formatarMoeda(lucroPorGrama)}/g.
+          </div>
+        `;
+      } else {
+        badgeContainer.innerHTML = `
+          <div class="margin-badge badge-info">
+            🔵 <strong>MARGEM ALTA (${margemPct.toFixed(1)}%):</strong> Lucro de ${formatarMoeda(lucroPorGrama)}/g. Verifique a competitividade no mercado.
+          </div>
+        `;
+      }
+    }
+
+    function renderizarProdutos() {
+      const selectProd = document.getElementById('produto-select');
+      const valAtual = selectProd.value;
+      selectProd.innerHTML = '<option value="">Selecione um produto...</option>';
+      if (appData.produtos) {
+        appData.produtos.forEach(p => {
+          const forn = appData.fornecedores.find(f => f.id === p.fornecedorId);
+          selectProd.innerHTML += `<option value="${p.id}">${p.nome} (${forn ? forn.nome : 'Sem fornecedor'})</option>`;
+        });
+      }
+      selectProd.value = valAtual;
+
+      const tbody = document.getElementById('lista-produtos');
+      tbody.innerHTML = '';
+
+      if (!appData.produtos || appData.produtos.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="6" class="empty-state">Nenhum produto cadastrado.</td></tr>';
+      } else {
+        appData.produtos.forEach(p => {
+          const forn = appData.fornecedores.find(f => f.id === p.fornecedorId);
+          const fornNome = forn ? forn.nome : 'Sem fornecedor';
+
+          const { custoUnit, metaAtingida, volumeTotal } = obterCustoEfetivoProduto(p.id);
+
+          let custoTexto = formatarMoeda(custoUnit);
+          if (metaAtingida) {
+            custoTexto += `<br><small style="color:var(--success-text); font-weight:700;">✨ Desc: ≥${metaAtingida.qtdMin}g (${volumeTotal}g total)</small>`;
+          }
+
+          let vendaTexto = formatarMoeda(p.precoVenda);
+          if (p.faixasVenda && p.faixasVenda.length > 0) {
+            vendaTexto += '<br><small style="color:var(--choc-milk); font-weight:700;">' +
+              p.faixasVenda.sort((a,b)=>a.qtdMin-b.qtdMin).map(f => `≥${f.qtdMin}g: ${formatarMoeda(f.precoUnit)}`).join(' | ') + '</small>';
+          }
+
+          let statusBadge = '<span class="badge badge-pendente">A precificar</span>';
+          const precoVendaCalc = parseFloat(p.precoVenda) || 0;
+          if (precoVendaCalc > 0) {
+            const lucro = precoVendaCalc - custoUnit;
+            if (lucro <= 0) statusBadge = '<span class="badge" style="background:var(--danger-bg); color:var(--danger-text);">🔴 Prejuízo</span>';
+            else if (lucro < (custoUnit * 0.25)) statusBadge = '<span class="badge" style="background:var(--warning-bg); color:var(--warning-text);">🟡 M. Baixa</span>';
+            else statusBadge = '<span class="badge" style="background:var(--success-bg); color:var(--success-text);">🟢 Lucrativo</span>';
+          }
+
+          const tr = document.createElement('tr');
+          tr.innerHTML = `
+            <td><strong>${p.nome}</strong></td>
+            <td><strong>${fornNome}</strong></td>
+            <td style="font-size:0.85rem; line-height:1.3;">${custoTexto}</td>
+            <td style="font-size:0.85rem; line-height:1.3;">${vendaTexto}</td>
+            <td>${statusBadge}</td>
+            <td>
+              <button class="btn-action btn-edit" onclick="editarProduto('${p.id}')">✏️ Precificar</button>
+              <button class="btn-action btn-delete" onclick="excluirProduto('${p.id}')">🗑️ Excluir</button>
+            </td>
+          `;
+          tbody.appendChild(tr);
+        });
+      }
+
+      const selectPedProd = document.getElementById('pedido-produto');
+      selectPedProd.innerHTML = '<option value="">Selecione um produto...</option>';
+      if (appData.produtos) {
+        appData.produtos.forEach(p => {
+          selectPedProd.innerHTML += `<option value="${p.id}">${p.nome}</option>`;
+        });
+      }
+    }
+
+    function salvarProduto(e) {
+      e.preventDefault();
+      const id = document.getElementById('produto-id').value;
+      if (!id) {
+        alert("Escolha um produto na lista antes de salvar!");
+        return;
+      }
+
+      const precoVenda = parseFloat(document.getElementById('produto-venda').value) || 0;
+
+      const faixasVenda = [];
+      document.querySelectorAll('#faixas-preco-list .faixa-row').forEach(row => {
+        const q = parseFloat(row.querySelector('.venda-qtd').value) || 0;
+        const pr = parseFloat(row.querySelector('.venda-preco').value) || 0;
+        if (q > 0 || pr > 0) faixasVenda.push({ qtdMin: q, precoUnit: pr });
+      });
+
+      const idxExistente = appData.produtos.findIndex(p => p.id === id);
+      let pNome = "Produto";
+      if (idxExistente !== -1) {
+        appData.produtos[idxExistente].precoVenda = precoVenda;
+        appData.produtos[idxExistente].faixasVenda = faixasVenda;
+        pNome = appData.produtos[idxExistente].nome;
+      }
+
+      cancelarEdicaoProduto();
+      salvarDados(`Ajustou a precificação do produto "${pNome}".`);
+    }
+
+    function editarProduto(id) {
+      document.getElementById('produto-select').value = id;
+      aoSelecionarProdutoParaPrecificar();
+
+      document.getElementById('form-produto-title').innerText = 'Ajustar Precificação';
+      document.getElementById('btn-produto-submit').innerText = 'Atualizar Precificação';
+      document.getElementById('btn-produto-cancel').style.display = 'block';
+
+      window.scrollTo({ top: document.getElementById('tab-produtos').offsetTop, behavior: 'smooth' });
+    }
+
+    function cancelarEdicaoProduto() {
+      document.getElementById('form-produto').reset();
+      document.getElementById('produto-id').value = '';
+      document.getElementById('produto-select').value = '';
+      document.getElementById('produto-fornecedor-nome').value = '';
+      document.getElementById('produto-custo-efetivo-display').value = 'R\$ 0,00';
+      document.getElementById('faixas-preco-list').innerHTML = '';
+
+      document.getElementById('form-produto-title').innerText = '🏷️ Precificação de Produtos';
+      document.getElementById('btn-produto-submit').innerText = 'Salvar Precificação';
+      document.getElementById('btn-produto-cancel').style.display = 'none';
+      atualizarSimuladorPrecificacao();
+    }
+
+    function excluirProduto(id) {
+      const p = appData.produtos.find(item => item.id === id);
+      if (!p) return;
+
+      if (!confirm(`Excluir o produto "${p.nome}" removerá seus pedidos associados. Continuar?`)) return;
+
+      appData.produtos = appData.produtos.filter(item => item.id !== id);
+      appData.pedidos = appData.pedidos.filter(ped => ped.produtoId !== id);
+
+      salvarDados(`Excluiu o produto "${p.nome}".`);
+    }
+
+    /* ---------------------------------------------------
+       9. ABA RELATÓRIO E HISTÓRICO DE LOGS
+       --------------------------------------------------- */
+    function renderizarRelatorio() {
+      const container = document.getElementById('container-relatorio-geral');
+      container.innerHTML = '';
+
+      if (!appData.fornecedores || appData.fornecedores.length === 0) {
+        container.innerHTML = '<div class="empty-state">Nenhum fornecedor cadastrado.</div>';
+      } else {
+        appData.fornecedores.forEach(f => {
+          const prodsFornec = appData.produtos.filter(p => p.fornecedorId === f.id);
+
+          let htmlProds = '';
+          let totalGramaFornecedor = 0;
+          let custoTotalProdsFornecedor = 0;
+
+          if (prodsFornec.length === 0) {
+            htmlProds = '<p style="color:var(--text-muted); font-style:italic;">Nenhum produto cadastrado para este fornecedor.</p>';
+          } else {
+            htmlProds = `
+              <div class="table-wrapper" style="margin-top:8px;">
+                <table>
+                  <thead>
+                    <tr>
+                      <th>Produto</th>
+                      <th>Qtd Totais Saídas</th>
+                      <th>Custo Unitário</th>
+                      <th>Desconto Atingido</th>
+                      <th>Subtotal Devido</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    ${prodsFornec.map(p => {
+                      const { custoUnit, metaAtingida, volumeTotal } = obterCustoEfetivoProduto(p.id);
+                      const subtotal = volumeTotal * custoUnit;
+
+                      totalGramaFornecedor += volumeTotal;
+                      custoTotalProdsFornecedor += subtotal;
+
+                      let statusMeta = '— Base Standard';
+                      if (metaAtingida) {
+                        statusMeta = `<span style="color:var(--success-text); font-weight:700;">🟢 Desconto ≥\${metaAtingida.qtdMin}g</span>`;
+                      }
+
+                      return `
+                        <tr>
+                          <td><strong>\${p.nome}</strong></td>
+                          <td><strong>\${volumeTotal} g/un</strong></td>
+                          <td>\${formatarMoeda(custoUnit)}/g</td>
+                          <td>\${statusMeta}</td>
+                          <td><strong>\${formatarMoeda(subtotal)}</strong></td>
+                        </tr>
+                      `;
+                    }).join('')}
+                  </tbody>
+                </table>
+              </div>
+            `;
+          }
+
+          const totalFinalFornecedor = custoTotalProdsFornecedor + parseFloat(f.frete);
+
+          const card = document.createElement('div');
+          card.className = 'form-section';
+          card.style.background = '#ffffff';
+          card.innerHTML = `
+            <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:2px solid var(--border-color); padding-bottom:8px;">
+              <h4 style="color:var(--choc-dark); font-size:1.1rem;">📦 Fornecedor: ${f.nome}</h4>
+              <span style="background:var(--choc-dark); color:#fff; padding:4px 12px; border-radius:20px; font-weight:700;">
+                Total a Pagar: ${formatarMoeda(totalFinalFornecedor)}
+              </span>
+            </div>
+            <div style="margin-top:10px;">
+              ${htmlProds}
+              <div style="display:flex; justify-content:space-between; margin-top:10px; font-weight:600; font-size:0.9rem; background:var(--card-sub-bg); padding:10px; border-radius:8px;">
+                <span>Saída do Fornecedor: <strong>${totalGramaFornecedor} g/un</strong></span>
+                <span>Produtos: ${formatarMoeda(custoTotalProdsFornecedor)} + Frete: ${formatarMoeda(f.frete)}</span>
+              </div>
+            </div>
+          `;
+
+          container.appendChild(card);
+        });
+      }
+
+      // RENDERIZAR HISTÓRICO DE LOGS
+      const containerLogs = document.getElementById('container-logs-historico');
+      containerLogs.innerHTML = '';
+
+      if (!appData.logs || appData.logs.length === 0) {
+        containerLogs.innerHTML = '<div style="padding:10px; text-align:center; color:var(--text-muted); font-style:italic;">Nenhuma alteração registrada ainda.</div>';
+      } else {
+        appData.logs.forEach(log => {
+          containerLogs.innerHTML += `
+            <div class="log-item">
+              <span><strong>👤 ${log.usuario}:</strong> ${log.acao}</span>
+              <span style="color:var(--text-muted); font-size:0.78rem;">${log.dataHora}</span>
+            </div>
+          `;
+        });
+      }
+    }
+
+    /* ---------------------------------------------------
+       10. INICIALIZAÇÃO
+       --------------------------------------------------- */
+    function renderizarTudo() {
+      renderizarFornecedores();
+      renderizarProdutos();
+      renderizarPedidos();
+      atualizarDashboard();
+      atualizarInformativoRateio();
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      cancelarEdicaoFornecedor();
+      renderizarTudo();
+    });
+  </script>
+</body>
+</html>
