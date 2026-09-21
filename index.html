@@ -587,12 +587,12 @@
     <!-- PAINÉIS EXPAN SÍVEIS DO DASHBOARD -->
     <div id="panel-faturar" class="dash-detail-panel">
       <h4 style="color:var(--choc-dark); margin-bottom:8px;">📊 Detalhamento de Faturamento</h4>
-      <div id="panel-faturar-conteudo" style="font-size:0.88rem; color:var(--text-muted);">Carregando dados...</div>
+      <div id="panel-faturar-conteudo" style="font-size:0.88rem; color:var(--text-muted);">Preparando dados...</div>
     </div>
 
     <div id="panel-fornecedores" class="dash-detail-panel">
       <h4 style="color:var(--choc-dark); margin-bottom:8px;">📦 Resumo por Fornecedor</h4>
-      <div id="panel-fornecedores-conteudo" style="font-size:0.88rem; color:var(--text-muted);">Carregando dados...</div>
+      <div id="panel-fornecedores-conteudo" style="font-size:0.88rem; color:var(--text-muted);">Preparando dados...</div>
     </div>
 
     <div id="panel-lucro" class="dash-detail-panel">
@@ -976,6 +976,7 @@
             appData = Object.assign(appData, val);
             renderizarTudo();
           } else {
+            renderizarTudo();
             salvarDados();
           }
         });
@@ -1019,9 +1020,28 @@
 
     function toggleDashPanel(panelId) {
       const panel = document.getElementById(panelId);
+      if (!panel) return;
+
       const isVisible = panel.style.display === 'block';
       document.querySelectorAll('.dash-detail-panel').forEach(p => p.style.display = 'none');
+
       if (!isVisible) {
+        // Garante que o painel nunca fique preso em “Carregando dados...”.
+        // Atualizamos os números e os detalhes imediatamente antes de abrir.
+        try {
+          atualizarDashboard();
+        } catch (err) {
+          console.error('Erro ao atualizar o Dashboard:', err);
+          const targets = {
+            'panel-faturar': 'panel-faturar-conteudo',
+            'panel-fornecedores': 'panel-fornecedores-conteudo',
+            'panel-lucro': 'panel-lucro-conteudo'
+          };
+          const target = document.getElementById(targets[panelId]);
+          if (target) {
+            target.innerHTML = '<p style="color:var(--danger-text);">Não foi possível carregar os dados deste painel. Verifique o console para detalhes.</p>';
+          }
+        }
         panel.style.display = 'block';
       }
     }
@@ -1130,6 +1150,10 @@
     }
 
     function atualizarDashboard() {
+      // Normaliza coleções para que dados antigos/incompletos não interrompam o Dashboard.
+      appData.pedidos = Array.isArray(appData.pedidos) ? appData.pedidos : [];
+      appData.fornecedores = Array.isArray(appData.fornecedores) ? appData.fornecedores : [];
+      appData.produtos = Array.isArray(appData.produtos) ? appData.produtos : [];
       const r=calcularResumoFinanceiro();
       const lucro=r.faturamentoTotal-r.custoTotal;
       const pctRamom=appData.splitRamomPct ?? 50, pctMonique=100-pctRamom;
