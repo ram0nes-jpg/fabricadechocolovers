@@ -34,6 +34,7 @@
       --success-bg: #eaf0e6;
       --success-text: #2d5a27;
       --herb-green: #4d683a;       /* Verde Erva Pastel */
+      --herb-green-bg: #eef4e9;
       --warning-bg: #fff8e1;
       --warning-text: #b78103;
       --danger-bg: #ffebee;
@@ -130,8 +131,39 @@
       display: grid;
       grid-template-columns: repeat(3, 1fr);
       gap: 16px;
-      margin-bottom: 24px;
+      margin-bottom: 18px;
     }
+
+    .dash-summary-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+      margin-bottom: 22px;
+    }
+
+    .dash-mini {
+      background: #fff;
+      border: 1px solid var(--border-color);
+      border-radius: 11px;
+      padding: 10px 12px;
+    }
+
+    .dash-mini-label { font-size:.72rem; color:var(--text-muted); font-weight:700; }
+    .dash-mini-value { font-size:1rem; color:var(--choc-dark); font-weight:800; margin-top:3px; }
+
+    .dash-chart {
+      margin-top: 12px;
+      display: grid;
+      gap: 8px;
+    }
+
+    .chart-row { display:grid; grid-template-columns:110px 1fr auto; gap:8px; align-items:center; font-size:.78rem; }
+    .chart-track { height:9px; background:#eadfd4; border-radius:99px; overflow:hidden; }
+    .chart-fill { height:100%; background:var(--choc-accent); border-radius:99px; min-width:2px; }
+
+    .detail-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:12px; }
+    .detail-box { background:#fff; border:1px solid var(--border-color); border-radius:10px; padding:12px; }
+    .detail-box h5 { color:var(--choc-dark); margin-bottom:7px; }
 
     .dash-card {
       background: var(--card-sub-bg);
@@ -191,7 +223,9 @@
       border-bottom: 2px solid var(--border-color);
       gap: 8px;
       margin-bottom: 24px;
-      flex-wrap: wrap;
+      flex-wrap: nowrap;
+      overflow-x: auto;
+      scrollbar-width: thin;
     }
 
     .tab-btn {
@@ -213,6 +247,12 @@
     .tab-btn.active {
       background: var(--choc-dark);
       color: #ffffff;
+      box-shadow: 0 4px 10px rgba(74,44,29,.12);
+    }
+
+    .tab-btn:focus-visible, .btn-submit:focus-visible, .btn-secondary:focus-visible, .btn-action:focus-visible {
+      outline: 3px solid rgba(140,98,57,.25);
+      outline-offset: 2px;
     }
 
     .tab-content {
@@ -462,24 +502,35 @@
       color: var(--text-muted);
     }
 
+    .status-summary { display:flex; gap:8px; flex-wrap:wrap; margin-bottom:12px; }
+    .status-pill { background:var(--card-sub-bg); border:1px solid var(--border-color); border-radius:999px; padding:6px 10px; font-size:.78rem; font-weight:700; }
+    .status-pill strong { color:var(--choc-dark); }
+    .section-kicker { font-size:.78rem; color:var(--text-muted); margin:-8px 0 14px; }
+    .warning-inline { background:var(--warning-bg); color:var(--warning-text); border:1px solid #f0d98b; padding:7px 10px; border-radius:8px; font-size:.78rem; font-weight:700; margin-top:8px; }
+    .positive-inline { background:var(--herb-green-bg); color:var(--herb-green); border:1px solid #cbd9c3; padding:7px 10px; border-radius:8px; font-size:.78rem; font-weight:700; margin-top:8px; }
+
     /* RESPONSIVIDADE NO CELULAR */
     @media (max-width: 650px) {
       .dashboard-3 {
         grid-template-columns: 1fr;
       }
+      .dash-summary-grid { grid-template-columns:repeat(2,1fr); }
       .tabs-nav {
-        display: grid;
-        grid-template-columns: repeat(2, 1fr);
-        gap: 6px;
+        display:flex;
+        gap:6px;
+        overflow-x:auto;
+        padding-bottom:5px;
       }
       .tab-btn {
-        padding: 10px 6px;
-        font-size: 0.85rem;
-        border-radius: 8px;
-        text-align: center;
+        flex:0 0 auto;
+        padding:10px 12px;
+        font-size:0.85rem;
+        border-radius:8px;
+        text-align:center;
         background: var(--card-sub-bg);
         border: 1px solid var(--border-color);
       }
+      .chart-row { grid-template-columns:85px 1fr auto; }
       .tab-btn.active {
         background: var(--choc-dark);
         color: #ffffff;
@@ -505,25 +556,32 @@
       <img src="final_fabrica.png" alt="A Fantástica Fábrica de Chocolate" class="header-logo-img">
     </header>
 
-    <!-- DASHBOARD DE 3 PAINÉIS CLÁSSICOS -->
+    <!-- DASHBOARD FINANCEIRO -->
     <div class="dashboard-3">
       <div class="dash-card" onclick="toggleDashPanel('panel-faturar')">
-        <div class="dash-title">💰 Faturar Clientes</div>
+        <div class="dash-title">💰 Quanto a fábrica faturou?</div>
         <div class="dash-value" id="dash-faturamento-total">R$ 0,00</div>
-        <div class="dash-subtext" id="dash-faturamento-sub">0 pedidos registrados</div>
+        <div class="dash-subtext" id="dash-faturamento-sub">0 pedidos de clientes</div>
       </div>
 
       <div class="dash-card" onclick="toggleDashPanel('panel-fornecedores')">
-        <div class="dash-title">📦 Custos de Produção</div>
+        <div class="dash-title">📦 Pra quem a gente vai pagar?</div>
         <div class="dash-value" id="dash-custo-fornecedores">R$ 0,00</div>
-        <div class="dash-subtext">Insumos de fornecedores</div>
+        <div class="dash-subtext" id="dash-custo-sub">Produtos + fretes</div>
       </div>
 
       <div class="dash-card card-accent" onclick="toggleDashPanel('panel-lucro')">
-        <div class="dash-title">🍫 Lucro Líquido da Fábrica</div>
+        <div class="dash-title">🍫 O nosso pedaço do chocolate</div>
         <div class="dash-value" id="dash-lucro-liquido" style="font-size:1.8rem; color:var(--herb-green);">R$ 0,00</div>
-        <div class="dash-subtext" id="dash-lucro-divisao">Divisão dos Sócios: Ramom R$ 0,00 | Monique R$ 0,00</div>
+        <div class="dash-subtext" id="dash-lucro-divisao">Ramom R$ 0,00 | Monique R$ 0,00</div>
       </div>
+    </div>
+
+    <div class="dash-summary-grid">
+      <div class="dash-mini"><div class="dash-mini-label">🟢 RECEBIDO</div><div class="dash-mini-value" id="dash-recebido">R$ 0,00</div></div>
+      <div class="dash-mini"><div class="dash-mini-label">⏳ PENDENTE</div><div class="dash-mini-value" id="dash-pendente">R$ 0,00</div></div>
+      <div class="dash-mini"><div class="dash-mini-label">🛒 PEDIDOS</div><div class="dash-mini-value" id="dash-pedidos-count">0</div></div>
+      <div class="dash-mini"><div class="dash-mini-label">👑 CONSUMO SÓCIOS</div><div class="dash-mini-value" id="dash-socios-count">0</div></div>
     </div>
 
     <!-- PAINÉIS EXPAN SÍVEIS DO DASHBOARD -->
@@ -555,15 +613,15 @@
     <div class="tabs-nav">
       <button class="tab-btn active" data-tab="pedidos" onclick="toggleTab('pedidos')">🛒 Pedidos</button>
       <button class="tab-btn" data-tab="fornecedores" onclick="toggleTab('fornecedores')">📦 Fornecedores</button>
-      <button class="tab-btn" data-tab="produtos" onclick="toggleTab('produtos')">🍬 Produtos</button>
-      <button class="tab-btn" data-tab="relatorio" onclick="toggleTab('relatorio')">📊 Relatório & Rateio</button>
+      <button class="tab-btn" data-tab="produtos" onclick="toggleTab('produtos')">🍫 Produtos</button>
+      <button class="tab-btn" data-tab="relatorio" onclick="toggleTab('relatorio')">📊 Relatórios</button>
     </div>
 
     <!-- ABA 1: PEDIDOS -->
     <div id="tab-pedidos" class="tab-content active">
       <div class="form-section">
         <h3 id="form-pedido-title">
-          <span>Novo Pedido</span>
+          <span>🛒 Novo pedido</span>
           <button type="button" class="btn-secondary" onclick="abrirModalImportarWhatsApp()" style="background:var(--herb-green); color:#ffffff; border:none; padding:7px 14px; font-weight:700; border-radius:8px; cursor:pointer;">
             📱 Importar do WhatsApp
           </button>
@@ -574,10 +632,10 @@
           <label>🏷️ Categoria do Pedido:</label>
           <div class="categoria-selector-box">
             <button type="button" id="cat-btn-cliente" class="cat-btn active-cliente" onclick="selecionarCategoriaPedido('Cliente')">
-              🛒 Cliente (Venda Normal)
+              🛒 Venda para cliente
             </button>
             <button type="button" id="cat-btn-socio" class="cat-btn" onclick="selecionarCategoriaPedido('Socio')">
-              👑 Consumo Próprio (Sócios)
+              👑 Consumo dos sócios
             </button>
           </div>
           <input type="hidden" id="pedido-categoria" value="Cliente">
@@ -588,7 +646,7 @@
 
           <div class="form-grid">
             <div class="form-group">
-              <label for="pedido-cliente">Nome do Cliente / Sócio</label>
+              <label for="pedido-cliente">Cliente / responsável</label>
               <input type="text" id="pedido-cliente" placeholder="Ex: João ou Ramom" required>
             </div>
 
@@ -606,15 +664,15 @@
 
             <!-- Lista Dinâmica de Dependentes/Rateio -->
             <div class="form-group full-width">
-              <label>Rateio / Dependentes do Pedido</label>
+              <label>👥 Pessoas do pedido</label>
               <div id="dependentes-list" style="display:flex; flex-direction:column; gap:8px; margin-top:4px;"></div>
-              <button type="button" class="btn-secondary" style="margin-top:6px;" onclick="adicionarLinhaDependente()">+ Adicionar Dependente/Adicional</button>
+              <button type="button" class="btn-secondary" style="margin-top:6px;" onclick="adicionarLinhaDependente()">＋ Adicionar pessoas</button>
             </div>
 
             <!-- CAMPOS EXCLUSIVOS DE CLIENTE (OCULTOS QUANDO SÓCIO) -->
             <div id="container-campos-cliente" class="form-grid full-width" style="grid-column:1/-1;">
               <div class="form-group">
-                <label for="pedido-status">Status do Pagamento</label>
+                <label for="pedido-status">💳 Pagamento</label>
                 <select id="pedido-status">
                   <option value="Pendente">⏳ Pendente</option>
                   <option value="Pago">🟢 Pago</option>
@@ -622,7 +680,7 @@
               </div>
 
               <div class="form-group">
-                <label for="pedido-envio">Forma de Envio</label>
+                <label for="pedido-envio">🚚 Entrega</label>
                 <select id="pedido-envio" onchange="alternarCamposEnvio()">
                   <option value="Retirada">Retirada em Mãos</option>
                   <option value="Entrega por Conta">Entrega por Conta</option>
@@ -645,7 +703,7 @@
               </div>
 
               <div class="form-group full-width">
-                <label for="pedido-obs">Observações</label>
+                <label for="pedido-obs">📝 Observações do pedido</label>
                 <textarea id="pedido-obs" rows="2" placeholder="Preferências ou detalhes adicionais..."></textarea>
               </div>
             </div>
@@ -664,7 +722,11 @@
 
       <!-- TABELA DE PEDIDOS -->
       <div class="form-section" style="background:#ffffff;">
-        <h3>📋 Pedidos Cadastrados</h3>
+        <h3>📋 Pedidos cadastrados</h3>
+        <div class="status-summary" id="pedidos-status-summary"></div>
+        <div style="display:flex; gap:8px; margin-bottom:12px;">
+          <input id="busca-pedidos" type="search" placeholder="🔎 Buscar cliente ou produto..." oninput="renderizarPedidos()" style="flex:1; padding:9px 11px; border:1px solid var(--border-color); border-radius:8px;">
+        </div>
         <p style="font-size:0.82rem; color:var(--text-muted); margin-bottom:12px;">
           💡 Clique em qualquer linha do pedido para abrir a ficha completa do cliente e ver as quantidades individuais e adicionais!
         </p>
@@ -672,7 +734,7 @@
           <table>
             <thead>
               <tr>
-                <th>Cliente / Sócio</th>
+                <th>Cliente</th>
                 <th>Produto</th>
                 <th>Qtd Total</th>
                 <th>Custo Prod.</th>
@@ -693,25 +755,26 @@
     <!-- ABA 2: FORNECEDORES -->
     <div id="tab-fornecedores" class="tab-content">
       <div class="form-section">
-        <h3 id="form-fornecedor-title">Cadastrar Fornecedor</h3>
+        <h3 id="form-fornecedor-title">🏢 Cadastrar fornecedor</h3>
+        <p class="section-kicker">Cadastre seus fornecedores, custos, fretes e condições de volume.</p>
         <form id="form-fornecedor" onsubmit="salvarFornecedor(event)">
           <input type="hidden" id="fornecedor-id">
 
           <div class="form-grid">
             <div class="form-group">
-              <label for="fornecedor-nome">Nome do Fornecedor</label>
+              <label for="fornecedor-nome">Nome do fornecedor</label>
               <input type="text" id="fornecedor-nome" placeholder="Ex: Cacau Brasil" required>
             </div>
 
             <div class="form-group">
-              <label for="fornecedor-frete">Custo do Frete Fixado (R$)</label>
+              <label for="fornecedor-frete">🚚 Frete (R$)</label>
               <input type="number" id="fornecedor-frete" step="0.01" min="0" value="0.00">
             </div>
 
             <div class="form-group full-width">
-              <label>Produtos Fornecidos & Descontos por Meta de Volume</label>
+              <label>🍫 Produtos e custos</label>
               <div id="container-produtos-fornecedor" style="display:flex; flex-direction:column; gap:12px; margin-top:8px;"></div>
-              <button type="button" class="btn-secondary" style="margin-top:8px;" onclick="adicionarBlocoProdutoFornecedor()">+ Adicionar Produto do Fornecedor</button>
+              <button type="button" class="btn-secondary" style="margin-top:8px;" onclick="adicionarBlocoProdutoFornecedor()">＋ Adicionar produto</button>
             </div>
           </div>
 
@@ -723,14 +786,15 @@
       </div>
 
       <div class="form-section" style="background:#ffffff;">
-        <h3>📦 Lista de Fornecedores</h3>
+        <h3>📦 Fornecedores cadastrados</h3>
+        <div class="status-summary" id="fornecedores-resumo"></div>
         <div class="table-wrapper">
           <table>
             <thead>
               <tr>
                 <th>Fornecedor</th>
+                <th>Produtos</th>
                 <th>Frete</th>
-                <th>Produtos & Metas</th>
                 <th>Ações</th>
               </tr>
             </thead>
@@ -745,7 +809,8 @@
     <!-- ABA 3: PRODUTOS & PRECIFICAÇÃO -->
     <div id="tab-produtos" class="tab-content">
       <div class="form-section">
-        <h3 id="form-produto-title">Cadastrar Produto & Tabela de Precificação</h3>
+        <h3 id="form-produto-title">🍫 Cadastrar produto</h3>
+        <p class="section-kicker">Defina o produto e os preços de venda. O custo vem do fornecedor.</p>
         <form id="form-produto" onsubmit="salvarProduto(event)">
           <input type="hidden" id="produto-id">
 
@@ -756,16 +821,16 @@
             </div>
 
             <div class="form-group">
-              <label for="produto-fornecedor">Fornecedor Responsável</label>
+              <label for="produto-fornecedor">🏢 Fornecedor</label>
               <select id="produto-fornecedor" onchange="aoSelecionarProdutoParaPrecificar()" required>
                 <option value="">Selecione o fornecedor...</option>
               </select>
             </div>
 
             <div class="form-group full-width">
-              <label>Tabela de Preço ao Cliente (Faixas por Quantidade)</label>
+              <label>💰 Preços de venda por volume</label>
               <div id="container-faixas-venda" style="display:flex; flex-direction:column; gap:8px; margin-top:6px;"></div>
-              <button type="button" class="btn-secondary" style="margin-top:6px;" onclick="adicionarLinhaFaixaVenda()">+ Adicionar Faixa de Preço</button>
+              <button type="button" class="btn-secondary" style="margin-top:6px;" onclick="adicionarLinhaFaixaVenda()">＋ Adicionar faixa</button>
             </div>
           </div>
 
@@ -777,15 +842,16 @@
       </div>
 
       <div class="form-section" style="background:#ffffff;">
-        <h3>🍬 Catálogo de Produtos</h3>
+        <h3>🍫 Produtos cadastrados</h3>
+        <div class="status-summary" id="produtos-resumo"></div>
         <div class="table-wrapper">
           <table>
             <thead>
               <tr>
                 <th>Produto</th>
                 <th>Fornecedor</th>
-                <th>Custo Atual</th>
-                <th>Tabela de Venda</th>
+                <th>Custo atual</th>
+                <th>Venda / margem</th>
                 <th>Ações</th>
               </tr>
             </thead>
@@ -797,49 +863,20 @@
       </div>
     </div>
 
-    <!-- ABA 4: RELATÓRIO MENSAL & RATEIO -->
+    <!-- ABA 4: RELATÓRIOS -->
     <div id="tab-relatorio" class="tab-content">
       <div class="form-section">
-        <h3>📊 Fechamento Mensal de Rateio</h3>
-        <p style="font-size:0.85rem; color:var(--text-muted); margin-bottom:14px;">
-          Gere o relatório completo de faturamento, custos de fornecedores e lucro líquido do mês desejado para exportação em PDF.
-        </p>
-
+        <h3>📊 Relatórios</h3>
+        <p class="section-kicker">Veja faturamento, recebimentos, custos, margens, produtos e rateio no período escolhido.</p>
         <div style="display:flex; gap:10px; align-items:center; flex-wrap:wrap; margin-bottom:16px;">
-          <div>
-            <label style="font-size:0.82rem; font-weight:700;">Mês:</label>
-            <select id="relatorio-mes" style="padding:8px; border-radius:6px; border:1px solid var(--border-color);">
-              <option value="0">Janeiro</option>
-              <option value="1">Fevereiro</option>
-              <option value="2">Março</option>
-              <option value="3">Abril</option>
-              <option value="4">Maio</option>
-              <option value="5">Junho</option>
-              <option value="6">Julho</option>
-              <option value="7">Agosto</option>
-              <option value="8">Setembro</option>
-              <option value="9">Outubro</option>
-              <option value="10">Novembro</option>
-              <option value="11">Dezembro</option>
-            </select>
-          </div>
-
-          <div>
-            <label style="font-size:0.82rem; font-weight:700;">Ano:</label>
-            <input type="number" id="relatorio-ano" value="2026" style="padding:8px; width:90px; border-radius:6px; border:1px solid var(--border-color);">
-          </div>
-
-          <button type="button" class="btn-submit" style="margin-top:16px;" onclick="gerarRelatorioRateio()">🔄 Gerar / Recalcular Mês</button>
-          <button type="button" class="btn-secondary" style="margin-top:16px; background:var(--herb-green); color:#fff; border:none;" onclick="baixarRelatorioPDF()">📥 Baixar Relatório em PDF</button>
+          <div><label style="font-size:.82rem;font-weight:700;">Mês:</label><select id="relatorio-mes" style="padding:8px;border-radius:6px;border:1px solid var(--border-color);">
+            <option value="0">Janeiro</option><option value="1">Fevereiro</option><option value="2">Março</option><option value="3">Abril</option><option value="4">Maio</option><option value="5">Junho</option><option value="6">Julho</option><option value="7">Agosto</option><option value="8">Setembro</option><option value="9">Outubro</option><option value="10">Novembro</option><option value="11">Dezembro</option>
+          </select></div>
+          <div><label style="font-size:.82rem;font-weight:700;">Ano:</label><input type="number" id="relatorio-ano" value="2026" style="padding:8px;width:90px;border-radius:6px;border:1px solid var(--border-color);"></div>
+          <button type="button" class="btn-submit" style="margin-top:16px;" onclick="gerarRelatorioRateio()">🔄 Gerar relatório</button>
+          <button type="button" class="btn-secondary" style="margin-top:16px;background:var(--herb-green);color:#fff;border:none;" onclick="baixarRelatorioPDF()">📥 Baixar PDF</button>
         </div>
-
-        <div id="area-relatorio-impressao">
-          <div id="container-relatorio-geral">
-            <div style="text-align:center; padding:20px; color:var(--text-muted);">
-              Clique em "Gerar / Recalcular Mês" para visualizar o balanço do período.
-            </div>
-          </div>
-        </div>
+        <div id="area-relatorio-impressao"><div id="container-relatorio-geral"><div style="text-align:center;padding:20px;color:var(--text-muted);">Clique em “Gerar relatório” para visualizar o período.</div></div></div>
       </div>
     </div>
 
@@ -972,23 +1009,12 @@
     function toggleTab(tabName) {
       const targetContent = document.getElementById(`tab-${tabName}`);
       const targetBtn = document.querySelector(`.tab-btn[data-tab="${tabName}"]`);
-
-      const isAlreadyActive = targetContent.classList.contains('active');
-
-      if (isAlreadyActive) {
-        // Recolhe/Esconde mantendo o estado dos dados
-        targetContent.classList.remove('active');
-        if (targetBtn) targetBtn.classList.remove('active');
-      } else {
-        // Expande/Abre a aba selecionada
-        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-        document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
-
-        targetContent.classList.add('active');
-        if (targetBtn) targetBtn.classList.add('active');
-
-        if (tabName === 'relatorio') gerarRelatorioRateio();
-      }
+      if (!targetContent) return;
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+      targetContent.classList.add('active');
+      if (targetBtn) targetBtn.classList.add('active');
+      if (tabName === 'relatorio') gerarRelatorioRateio();
     }
 
     function toggleDashPanel(panelId) {
@@ -1078,76 +1104,49 @@
     /* ---------------------------------------------------
        5. ATUALIZAÇÃO DO DASHBOARD
        --------------------------------------------------- */
+    function calcularResumoFinanceiro() {
+      let faturamentoTotal=0, pendente=0, recebido=0, custoProdutos=0, pedidosClientes=0, socios=0;
+      const custosFornecedor={};
+      (appData.pedidos||[]).forEach(p=>{
+        const prod=(appData.produtos||[]).find(x=>x.id===p.produtoId);
+        let qtd=(parseFloat(p.qtdPrincipal)||0)+(p.dependentes||[]).reduce((a,d)=>a+(parseFloat(d.qtd)||0),0);
+        if(p.categoria==='Socio') socios++;
+        if(prod){
+          const c=obterCustoEfetivoProduto(prod.id).custoUnit;
+          const custo=qtd*c; custoProdutos+=custo;
+          const f=(appData.fornecedores||[]).find(x=>x.id===prod.fornecedorId);
+          if(f){ if(!custosFornecedor[f.id]) custosFornecedor[f.id]={nome:f.nome,produtos:{},frete:parseFloat(f.frete)||0}; custosFornecedor[f.id].produtos[prod.id]=(custosFornecedor[f.id].produtos[prod.id]||0)+custo; }
+          if(p.categoria!=='Socio'){
+            pedidosClientes++; const venda=qtd*calcularPrecoVendaCliente(prod,qtd); faturamentoTotal+=venda;
+            if(p.status==='Pago') recebido+=venda; else pendente+=venda;
+          }
+        }
+      });
+      let fretes=0; Object.values(custosFornecedor).forEach(f=>fretes+=f.frete);
+      // Inclui também fornecedores cadastrados sem pedidos, para o painel de contas atuais.
+      (appData.fornecedores||[]).forEach(f=>{ if(!custosFornecedor[f.id]) custosFornecedor[f.id]={nome:f.nome,produtos:{},frete:parseFloat(f.frete)||0}; });
+      fretes=Object.values(custosFornecedor).reduce((a,f)=>a+f.frete,0);
+      return {faturamentoTotal,pendente,recebido,custoProdutos,fretes,custoTotal:custoProdutos+fretes,pedidosClientes,socios,custosFornecedor};
+    }
+
     function atualizarDashboard() {
-      let faturamentoTotal = 0;
-      let faturamentoPendente = 0;
-      let qtdPedidosClientes = 0;
-
-      let custoProducaoTotal = 0;
-
-      if (appData.pedidos) {
-        appData.pedidos.forEach(p => {
-          const prod = appData.produtos.find(prd => prd.id === p.produtoId);
-
-          let qtdTotal = (parseFloat(p.qtdPrincipal) || 0);
-          if (p.dependentes) {
-            p.dependentes.forEach(d => qtdTotal += (parseFloat(d.qtd) || 0));
-          }
-
-          if (prod) {
-            const { custoUnit } = obterCustoEfetivoProduto(prod.id);
-            custoProducaoTotal += (qtdTotal * custoUnit);
-
-            if (p.categoria !== 'Socio') {
-              qtdPedidosClientes++;
-              const precoUnit = calcularPrecoVendaCliente(prod, qtdTotal);
-              const totalVenda = qtdTotal * precoUnit;
-              faturamentoTotal += totalVenda;
-              if (p.status !== 'Pago') {
-                faturamentoPendente += totalVenda;
-              }
-            }
-          }
-        });
-      }
-
-      // Adiciona Fretes dos fornecedores ao custo
-      if (appData.fornecedores) {
-        appData.fornecedores.forEach(f => {
-          custoProducaoTotal += (parseFloat(f.frete) || 0);
-        });
-      }
-
-      const lucroLiquido = faturamentoTotal - custoProducaoTotal;
-
-      const pctRamom = appData.splitRamomPct || 50;
-      const pctMonique = 100 - pctRamom;
-      const lucroRamom = (lucroLiquido * pctRamom) / 100;
-      const lucroMonique = (lucroLiquido * pctMonique) / 100;
-
-      document.getElementById('dash-faturamento-total').innerText = formatarMoeda(faturamentoTotal);
-      document.getElementById('dash-faturamento-sub').innerText = `${qtdPedidosClientes} pedidos de clientes (${formatarMoeda(faturamentoPendente)} pendente)`;
-
-      document.getElementById('dash-custo-fornecedores').innerText = formatarMoeda(custoProducaoTotal);
-
-      const elLucro = document.getElementById('dash-lucro-liquido');
-      elLucro.innerText = formatarMoeda(lucroLiquido);
-      elLucro.style.color = lucroLiquido >= 0 ? 'var(--herb-green)' : 'var(--danger-text)';
-
-      document.getElementById('dash-lucro-divisao').innerText = `Divisão dos Sócios: Ramom ${formatarMoeda(lucroRamom)} (${pctRamom}%) | Monique ${formatarMoeda(lucroMonique)} (${pctMonique}%)`;
-
-      // Preenche detalhamento nos painéis expansíveis
-      document.getElementById('panel-faturar-conteudo').innerHTML = `
-        <p><strong>Faturamento Bruto Real:</strong> ${formatarMoeda(faturamentoTotal)}</p>
-        <p><strong>Total Recebido (Pago):</strong> ${formatarMoeda(faturamentoTotal - faturamentoPendente)}</p>
-        <p><strong>Total Pendente:</strong> ${formatarMoeda(faturamentoPendente)}</p>
-      `;
-
-      document.getElementById('panel-lucro-conteudo').innerHTML = `
-        <p><strong>Lucro Total da Fábrica:</strong> ${formatarMoeda(lucroLiquido)}</p>
-        <p><strong>Parte do Ramom (${pctRamom}%):</strong> ${formatarMoeda(lucroRamom)}</p>
-        <p><strong>Parte da Monique (${pctMonique}%):</strong> ${formatarMoeda(lucroMonique)}</p>
-      `;
+      const r=calcularResumoFinanceiro();
+      const lucro=r.faturamentoTotal-r.custoTotal;
+      const pctRamom=appData.splitRamomPct ?? 50, pctMonique=100-pctRamom;
+      const lucroRamom=lucro*pctRamom/100, lucroMonique=lucro*pctMonique/100;
+      document.getElementById('dash-faturamento-total').innerText=formatarMoeda(r.faturamentoTotal);
+      document.getElementById('dash-faturamento-sub').innerText=`${r.pedidosClientes} pedidos de clientes`;
+      document.getElementById('dash-custo-fornecedores').innerText=formatarMoeda(r.custoTotal);
+      document.getElementById('dash-custo-sub').innerText=`Produtos ${formatarMoeda(r.custoProdutos)} + fretes ${formatarMoeda(r.fretes)}`;
+      const el=document.getElementById('dash-lucro-liquido'); el.innerText=formatarMoeda(lucro); el.style.color=lucro>=0?'var(--herb-green)':'var(--danger-text)';
+      document.getElementById('dash-lucro-divisao').innerText=`Ramom ${formatarMoeda(lucroRamom)} (${pctRamom}%) | Monique ${formatarMoeda(lucroMonique)} (${pctMonique}%)`;
+      document.getElementById('dash-recebido').innerText=formatarMoeda(r.recebido);
+      document.getElementById('dash-pendente').innerText=formatarMoeda(r.pendente);
+      document.getElementById('dash-pedidos-count').innerText=r.pedidosClientes;
+      document.getElementById('dash-socios-count').innerText=r.socios;
+      document.getElementById('panel-faturar-conteudo').innerHTML=`<div class="detail-grid"><div class="detail-box"><h5>💰 Faturamento</h5><p>${formatarMoeda(r.faturamentoTotal)}</p></div><div class="detail-box"><h5>🟢 Recebido</h5><p>${formatarMoeda(r.recebido)}</p></div><div class="detail-box"><h5>⏳ Pendente</h5><p>${formatarMoeda(r.pendente)}</p></div></div><div class="dash-chart"><div class="chart-row"><span>Recebido</span><div class="chart-track"><div class="chart-fill" style="width:${r.faturamentoTotal?Math.min(100,r.recebido/r.faturamentoTotal*100):0}%"></div></div><strong>${r.faturamentoTotal?Math.round(r.recebido/r.faturamentoTotal*100):0}%</strong></div><div class="chart-row"><span>Pendente</span><div class="chart-track"><div class="chart-fill" style="width:${r.faturamentoTotal?Math.min(100,r.pendente/r.faturamentoTotal*100):0}%"></div></div><strong>${r.faturamentoTotal?Math.round(r.pendente/r.faturamentoTotal*100):0}%</strong></div></div>`;
+      document.getElementById('panel-fornecedores-conteudo').innerHTML=Object.values(r.custosFornecedor).map(f=>{ const itens=Object.entries(f.produtos).map(([pid,v])=>{const p=appData.produtos.find(x=>x.id===pid);return `<div>${p?p.nome:'Produto'}: <strong>${formatarMoeda(v)}</strong></div>`}).join(''); return `<div class="detail-box" style="margin-bottom:8px"><h5>🏢 ${f.nome}</h5>${itens||'<div>Sem produtos consumidos no período.</div>'}<div style="margin-top:6px">🚚 Frete: <strong>${formatarMoeda(f.frete)}</strong></div><div style="margin-top:4px;border-top:1px solid var(--border-color);padding-top:5px"><strong>Total: ${formatarMoeda(Object.values(f.produtos).reduce((a,v)=>a+v,0)+f.frete)}</strong></div></div>`}).join('') || '<p>Nenhum fornecedor cadastrado.</p>';
+      document.getElementById('panel-lucro-conteudo').innerHTML=`<p><strong>Lucro total:</strong> ${formatarMoeda(lucro)}</p><p><strong>Margem líquida:</strong> ${r.faturamentoTotal?((lucro/r.faturamentoTotal)*100).toFixed(2):'0,00'}%</p><p><strong>Ramom (${pctRamom}%):</strong> ${formatarMoeda(lucroRamom)}</p><p><strong>Monique (${pctMonique}%):</strong> ${formatarMoeda(lucroMonique)}</p>`;
     }
 
     /* ---------------------------------------------------
@@ -1276,7 +1275,7 @@
       document.getElementById('pedido-id').value = '';
       document.getElementById('form-pedido').reset();
       document.getElementById('dependentes-list').innerHTML = '';
-      document.getElementById('form-pedido-title').innerText = 'Novo Pedido';
+      document.getElementById('form-pedido-title').innerText = '🛒 Novo pedido';
       document.getElementById('btn-pedido-submit').innerText = 'Salvar Pedido';
       document.getElementById('btn-pedido-cancel').style.display = 'none';
       selecionarCategoriaPedido('Cliente');
@@ -1326,89 +1325,27 @@
     }
 
     function renderizarPedidos() {
-      const tbody = document.getElementById('lista-pedidos');
-      tbody.innerHTML = '';
-
-      if (!appData.pedidos || appData.pedidos.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="8" style="text-align:center; padding:20px; color:var(--text-muted);">Nenhum pedido cadastrado.</td></tr>';
-        return;
-      }
-
-      appData.pedidos.forEach(ped => {
-        const prod = appData.produtos.find(p => p.id === ped.produtoId);
-        const prodNome = prod ? prod.nome : 'Não especificado';
-
-        let qtdTotal = (parseFloat(ped.qtdPrincipal) || 0);
-        let numDeps = 0;
-        if (ped.dependentes) {
-          numDeps = ped.dependentes.length;
-          ped.dependentes.forEach(d => qtdTotal += (parseFloat(d.qtd) || 0));
-        }
-
-        let valorTotalPedido = 0;
-        let custoTotalPedido = 0;
-
-        if (prod) {
-          const { custoUnit } = obterCustoEfetivoProduto(prod.id);
-          custoTotalPedido = qtdTotal * custoUnit;
-
-          if (ped.categoria === 'Socio') {
-            valorTotalPedido = 0;
-          } else {
-            const precoUnit = calcularPrecoVendaCliente(prod, qtdTotal);
-            valorTotalPedido = qtdTotal * precoUnit;
-          }
-        }
-
-        let statusBadge = `<span class="badge ${ped.status === 'Pago' ? 'badge-pago' : 'badge-pendente'}">${ped.status || 'Pendente'}</span>`;
-        if (ped.categoria === 'Socio') {
-          statusBadge = `<span class="badge badge-socio">👑 Sócio (R$ 0)</span>`;
-        }
-
-        const tr = document.createElement('tr');
-        tr.className = 'order-row-clickable';
-        tr.innerHTML = `
-          <td><strong>${ped.cliente || 'Sem Nome'}</strong> ${numDeps > 0 ? `<small style="color:var(--choc-milk);">(+${numDeps} adic.)</small>` : ''}</td>
-          <td>${prodNome}</td>
-          <td><strong>${qtdTotal} g/un</strong></td>
-          <td>${formatarMoeda(custoTotalPedido)}</td>
-          <td><strong>${formatarMoeda(valorTotalPedido)}</strong></td>
-          <td>${ped.categoria === 'Socio' ? 'Consumo Próprio' : (ped.tipoEnvio || 'Retirada')}</td>
-          <td>${statusBadge}</td>
-          <td>
-            <button class="btn-action btn-edit" onclick="event.stopPropagation(); editarPedido('${ped.id}')">✏️ Editar</button>
-            <button class="btn-action btn-delete" onclick="event.stopPropagation(); excluirPedido('${ped.id}')">🗑️ Excluir</button>
-          </td>
-        `;
-
-        const trDetails = document.createElement('tr');
-        trDetails.id = `details-ped-${ped.id}`;
-        trDetails.style.display = 'none';
-
-        let dependentesHtml = '<em>Nenhum adicional/rateio registrado.</em>';
-        if (ped.dependentes && ped.dependentes.length > 0) {
-          dependentesHtml = '<ul>' + ped.dependentes.map(d => `<li><strong>${d.nome || 'Adicional'}:</strong> ${d.qtd || 0} g/un</li>`).join('') + '</ul>';
-        }
-
-        trDetails.innerHTML = `
-          <td colspan="8" style="background:#fdfaf8; padding:14px 20px;">
-            <div style="border-left:3px solid var(--choc-dark); padding-left:14px;">
-              <h4 style="color:var(--choc-dark); margin-bottom:6px;">📋 Ficha do Pedido / Cliente - ${ped.cliente || 'Cliente'}</h4>
-              <p><strong>Pedido Principal:</strong> ${ped.cliente || 'Cliente'} (${ped.qtdPrincipal || 0} g/un)</p>
-              <div style="margin:6px 0;"><strong>Rateio / Adicionais Separados:</strong> ${dependentesHtml}</div>
-              <p style="margin-top:4px; font-weight:700; color:var(--choc-dark);">Total Acumulado do Pedido: ${qtdTotal} g/un</p>
-              ${ped.categoria !== 'Socio' && ped.observacoes ? `<p style="margin-top:6px; color:var(--text-muted);"><strong>Obs:</strong> ${ped.observacoes}</p>` : ''}
-            </div>
-          </td>
-        `;
-
-        tr.onclick = () => {
-          const det = document.getElementById(`details-ped-${ped.id}`);
-          det.style.display = det.style.display === 'none' ? 'table-row' : 'none';
-        };
-
-        tbody.appendChild(tr);
-        tbody.appendChild(trDetails);
+      const tbody=document.getElementById('lista-pedidos'); tbody.innerHTML='';
+      const busca=(document.getElementById('busca-pedidos')?.value||'').toLowerCase().trim();
+      const pedidos=(appData.pedidos||[]).filter(p=>{ const prod=appData.produtos.find(x=>x.id===p.produtoId); return !busca || (p.cliente||'').toLowerCase().includes(busca) || (prod?.nome||'').toLowerCase().includes(busca); });
+      const all=appData.pedidos||[], pagos=all.filter(p=>p.categoria!=='Socio'&&p.status==='Pago'), pend=all.filter(p=>p.categoria!=='Socio'&&p.status!=='Pago'), socios=all.filter(p=>p.categoria==='Socio');
+      const valPedido=p=>{const prod=appData.produtos.find(x=>x.id===p.produtoId);const q=(parseFloat(p.qtdPrincipal)||0)+(p.dependentes||[]).reduce((a,d)=>a+(parseFloat(d.qtd)||0),0);return prod&&p.categoria!=='Socio'?q*calcularPrecoVendaCliente(prod,q):0};
+      const soma=a=>a.reduce((t,p)=>t+valPedido(p),0);
+      document.getElementById('pedidos-status-summary').innerHTML=`<span class="status-pill">🛒 <strong>${all.length}</strong> pedidos</span><span class="status-pill">🟢 <strong>${pagos.length}</strong> pagos · ${formatarMoeda(soma(pagos))}</span><span class="status-pill">⏳ <strong>${pend.length}</strong> pendentes · ${formatarMoeda(soma(pend))}</span><span class="status-pill">👑 <strong>${socios.length}</strong> sócios</span>`;
+      if(!pedidos.length){ tbody.innerHTML='<tr><td colspan="8" style="text-align:center;padding:20px;color:var(--text-muted);">Nenhum pedido encontrado.</td></tr>'; return; }
+      pedidos.forEach(ped=>{
+        const prod=appData.produtos.find(p=>p.id===ped.produtoId), prodNome=prod?prod.nome:'Não especificado';
+        const qtdTotal=(parseFloat(ped.qtdPrincipal)||0)+(ped.dependentes||[]).reduce((a,d)=>a+(parseFloat(d.qtd)||0),0);
+        const custo=prod?qtdTotal*obterCustoEfetivoProduto(prod.id).custoUnit:0;
+        const venda=prod&&ped.categoria!=='Socio'?qtdTotal*calcularPrecoVendaCliente(prod,qtdTotal):0;
+        const numDeps=(ped.dependentes||[]).length;
+        const status=ped.categoria==='Socio'?'<span class="badge badge-socio">👑 Sócio</span>':`<span class="badge ${ped.status==='Pago'?'badge-pago':'badge-pendente'}">${ped.status||'Pendente'}</span>`;
+        const tr=document.createElement('tr'); tr.className='order-row-clickable';
+        tr.innerHTML=`<td><strong>${ped.cliente||'Sem nome'}</strong> ${numDeps?`<small class="dep-hover" title="${ped.dependentes.map(d=>(d.nome||'Pessoa')+' · '+(d.qtd||0)+'g').join(' | ')}">👥 +${numDeps}</small>`:''}</td><td>${prodNome}</td><td><strong>${qtdTotal} g/un</strong></td><td>${formatarMoeda(custo)}</td><td><strong>${formatarMoeda(venda)}</strong></td><td>${ped.categoria==='Socio'?'Consumo próprio':(ped.tipoEnvio||'Retirada')}</td><td>${status}</td><td><button class="btn-action btn-edit" onclick="event.stopPropagation();editarPedido('${ped.id}')">✏️</button><button class="btn-action btn-delete" onclick="event.stopPropagation();excluirPedido('${ped.id}')">🗑️</button></td>`;
+        const det=document.createElement('tr'); det.id=`details-ped-${ped.id}`; det.style.display='none';
+        const deps=ped.dependentes?.length?'<ul>'+ped.dependentes.map(d=>`<li><strong>${d.nome||'Pessoa'}:</strong> ${d.qtd||0} g/un</li>`).join('')+'</ul>':'<em>Nenhuma pessoa adicional.</em>';
+        det.innerHTML=`<td colspan="8" style="background:#fdfaf8;padding:14px 20px;"><div style="border-left:3px solid var(--choc-dark);padding-left:14px;"><h4 style="color:var(--choc-dark);margin-bottom:6px;">📋 Ficha do pedido — ${ped.cliente||'Cliente'}</h4><p><strong>Principal:</strong> ${ped.qtdPrincipal||0} g/un</p><div style="margin:6px 0"><strong>👥 Pessoas do pedido:</strong> ${deps}</div><p style="font-weight:700;color:var(--choc-dark);">Total: ${qtdTotal} g/un</p>${ped.endereco?`<p><strong>Endereço:</strong> ${ped.endereco}</p>`:''}${ped.dia||ped.horario?`<p><strong>Entrega:</strong> ${ped.dia||''} ${ped.horario||''}</p>`:''}${ped.observacoes?`<p style="margin-top:6px;color:var(--text-muted);"><strong>Obs:</strong> ${ped.observacoes}</p>`:''}</div></td>`;
+        tr.onclick=()=>{det.style.display=det.style.display==='none'?'table-row':'none'}; tbody.appendChild(tr); tbody.appendChild(det);
       });
     }
 
@@ -1432,149 +1369,45 @@
       document.getElementById('modal-import-whatsapp').style.display = 'none';
     }
 
+    function normalizarTexto(txt){ return (txt||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/[^a-z0-9]+/g,' ').trim(); }
+    function encontrarProdutoPorNome(nome){
+      const n=normalizarTexto(nome); if(!n)return null;
+      let exato=(appData.produtos||[]).find(p=>normalizarTexto(p.nome)===n); if(exato)return exato;
+      let parcial=(appData.produtos||[]).find(p=>{const pn=normalizarTexto(p.nome);return pn.includes(n)||n.includes(pn)}); return parcial||null;
+    }
+    function parseQuantidadeWhatsApp(str){
+      const parts=(str||'').toLowerCase().replace(/,/g,'.').split('+').map(x=>{let n=parseFloat(x.replace(/[^0-9.]/g,''))||0; if(/kg/.test(x))n*=1000; return n;}).filter(Boolean);
+      return parts;
+    }
     function processarTextoWhatsApp() {
-      const rawText = document.getElementById('whatsapp-import-text').value;
-      const lines = rawText.split('\n').map(l => l.trim()).filter(l => l.length > 0);
-
-      pedidosWhatsAppParsed = [];
-
-      if (lines.length === 0) {
-        document.getElementById('whatsapp-preview-area').style.display = 'none';
-        const btn = document.getElementById('btn-confirmar-importacao');
-        btn.disabled = true;
-        btn.style.opacity = '0.5';
-        btn.innerText = '⚠️ Cole uma lista válida para importar';
-        return;
-      }
-
-      // 1. Identifica Nome do Produto no Cabeçalho
-      let rawProductName = 'Capulho';
-      for (let line of lines) {
-        if (!line.startsWith('-') && !line.toLowerCase().includes('valores') && !line.toLowerCase().includes('fechamento')) {
-          // Remove emojis e caracteres especiais
-          rawProductName = line.replace(/[^a-zA-Z0-9áàâãéèêíïóôõöúçñÁÀÂÃÉÈÊÍÏÓÔÕÖÚÇÑ ]/g, '').trim();
-          break;
-        }
-      }
-
-      // Trata a regra: Se for "Capulho Gold" ou similar, importa como "Capulho"
-      let nomeProdutoNormalizado = rawProductName;
-      if (rawProductName.toLowerCase().includes('capulho')) {
-        nomeProdutoNormalizado = 'Capulho';
-      }
-
-      // Tenta associar com os produtos cadastrados
-      let prodObj = appData.produtos.find(p => p.nome.toLowerCase() === nomeProdutoNormalizado.toLowerCase() || p.nome.toLowerCase().includes(nomeProdutoNormalizado.toLowerCase()));
-      let targetProdutoId = prodObj ? prodObj.id : (appData.produtos[0] ? appData.produtos[0].id : '');
-
-      // 2. Processa as linhas de clientes (ex: - Shazam - 60g ✅)
-      lines.forEach(line => {
-        if (line.startsWith('-') || line.includes('-')) {
-          const isPago = line.includes('✅');
-          const cleanLine = line.replace('✅', '').replace(/^-/, '').trim();
-          const parts = cleanLine.split('-').map(p => p.trim()).filter(p => p.length > 0);
-
-          if (parts.length >= 2) {
-            const clienteNome = parts[0];
-            const qtdStr = parts[1];
-
-            // Analisa quantias compostas (ex: 15g+10g ou 80g)
-            let qtdPrincipal = 0;
-            let dependentes = [];
-
-            if (qtdStr.includes('+')) {
-              const subQtds = qtdStr.split('+').map(s => parseFloat(s.replace(/[^0-9.]/g, '')) || 0);
-              qtdPrincipal = subQtds[0] || 0;
-
-              for (let i = 1; i < subQtds.length; i++) {
-                if (subQtds[i] > 0) {
-                  dependentes.push({
-                    nome: `Adicional Rateio ${i}`,
-                    qtd: subQtds[i]
-                  });
-                }
-              }
-            } else {
-              qtdPrincipal = parseFloat(qtdStr.replace(/[^0-9.]/g, '')) || 0;
-            }
-
-            if (clienteNome && qtdPrincipal > 0) {
-              pedidosWhatsAppParsed.push({
-                cliente: clienteNome,
-                produtoId: targetProdutoId,
-                produtoNomeDisplay: prodObj ? prodObj.nome : nomeProdutoNormalizado,
-                qtdPrincipal,
-                dependentes,
-                status: isPago ? 'Pago' : 'Pendente',
-                categoria: 'Cliente',
-                tipoEnvio: 'Retirada'
-              });
-            }
-          }
-        }
+      const raw=document.getElementById('whatsapp-import-text').value, lines=raw.split('\n').map(x=>x.trim()).filter(Boolean); pedidosWhatsAppParsed=[];
+      const btn=document.getElementById('btn-confirmar-importacao'), preview=document.getElementById('whatsapp-preview-area'), tbody=document.getElementById('whatsapp-preview-tbody');
+      if(!lines.length){preview.style.display='none';btn.disabled=true;btn.style.opacity='.5';btn.innerText='⚠️ Cole uma lista válida para importar';return;}
+      let header=lines.find(x=>!x.startsWith('-')&&!/valores|fechamento|rateio|preco|preço/i.test(x))||'';
+      header=header.replace(/[^a-zA-Z0-9áàâãéèêíïóôõöúçñÁÀÂÃÉÈÊÍÏÓÔÕÖÚÇÑ ]/g,' ').trim();
+      const prodObj=encontrarProdutoPorNome(header)||((appData.produtos||[]).length===1?appData.produtos[0]:null);
+      const targetProdutoId=prodObj?.id||'';
+      lines.forEach(line=>{
+        if(!line.startsWith('-')&&!line.includes(' - '))return;
+        const pago=/✅|\b(pago|pix)\b/i.test(line); const clean=line.replace(/✅/g,'').trim().replace(/^[-•]\s*/,'');
+        const parts=clean.split(/\s+-\s+/); if(parts.length<2)return;
+        const cliente=parts[0].trim(); const qtds=parseQuantidadeWhatsApp(parts.slice(1).join('-')); if(!cliente||!qtds.length)return;
+        const principal=qtds[0], deps=qtds.slice(1).map((q,i)=>({nome:`Pessoa ${i+2}`,qtd:q}));
+        const dup=(appData.pedidos||[]).some(p=>p.categoria!=='Socio'&&normalizarTexto(p.cliente)===normalizarTexto(cliente)&&p.produtoId===targetProdutoId&&Math.abs((parseFloat(p.qtdPrincipal)||0)-principal)<0.001&&(p.dependentes||[]).length===deps.length);
+        pedidosWhatsAppParsed.push({cliente,produtoId:targetProdutoId,produtoNomeDisplay:prodObj?prodObj.nome:(header||'Produto não identificado'),qtdPrincipal:principal,dependentes:deps,status:pago?'Pago':'Pendente',duplicado:dup});
       });
-
-      // Atualiza a prévia visual
-      const previewArea = document.getElementById('whatsapp-preview-area');
-      const tbody = document.getElementById('whatsapp-preview-tbody');
-      tbody.innerHTML = '';
-
-      if (pedidosWhatsAppParsed.length > 0) {
-        previewArea.style.display = 'block';
-        pedidosWhatsAppParsed.forEach(p => {
-          let totalQtd = p.qtdPrincipal;
-          let depText = '';
-          if (p.dependentes && p.dependentes.length > 0) {
-            p.dependentes.forEach(d => totalQtd += d.qtd);
-            depText = ` (${p.qtdPrincipal}g + ${p.dependentes.map(d=>d.qtd+'g').join('+')})`;
-          }
-
-          const tr = document.createElement('tr');
-          tr.innerHTML = `
-            <td><strong>${p.cliente}</strong></td>
-            <td>${p.produtoNomeDisplay}</td>
-            <td><strong>${totalQtd} g/un</strong> <small style="color:var(--text-muted);">${depText}</small></td>
-            <td><span class="badge ${p.status === 'Pago' ? 'badge-pago' : 'badge-pendente'}">${p.status}</span></td>
-          `;
-          tbody.appendChild(tr);
-        });
-
-        const btn = document.getElementById('btn-confirmar-importacao');
-        btn.disabled = false;
-        btn.style.opacity = '1';
-        btn.innerText = `✅ Confirmar e Importar ${pedidosWhatsAppParsed.length} Pedidos`;
-      } else {
-        previewArea.style.display = 'none';
-        const btn = document.getElementById('btn-confirmar-importacao');
-        btn.disabled = true;
-        btn.style.opacity = '0.5';
-        btn.innerText = '⚠️ Nenhum pedido válido reconhecido';
-      }
+      tbody.innerHTML='';
+      if(!pedidosWhatsAppParsed.length){preview.style.display='none';btn.disabled=true;btn.style.opacity='.5';btn.innerText='⚠️ Nenhum pedido válido reconhecido';return;}
+      preview.style.display='block';
+      pedidosWhatsAppParsed.forEach(p=>{const total=p.qtdPrincipal+p.dependentes.reduce((a,d)=>a+d.qtd,0);const tr=document.createElement('tr');tr.innerHTML=`<td><strong>${p.cliente}</strong></td><td>${p.produtoNomeDisplay}${!p.produtoId?'<br><small style="color:var(--danger-text)">⚠️ Produto não identificado</small>':''}</td><td><strong>${total} g/un</strong></td><td><span class="badge ${p.status==='Pago'?'badge-pago':'badge-pendente'}">${p.status}</span></td><td>${p.duplicado?'<span class="badge badge-pendente">⚠️ Possível duplicado</span>':'—'}</td>`;tbody.appendChild(tr);});
+      const validos=pedidosWhatsAppParsed.filter(p=>p.produtoId&&!p.duplicado); btn.disabled=!validos.length;btn.style.opacity=validos.length?'1':'.5';btn.innerText=validos.length?`✅ Confirmar ${validos.length} pedido(s)`:'⚠️ Revise os pedidos antes de importar';
     }
 
     function confirmarImportacaoWhatsApp() {
-      if (pedidosWhatsAppParsed.length === 0) return;
-
-      if (!appData.pedidos) appData.pedidos = [];
-
-      pedidosWhatsAppParsed.forEach(p => {
-        appData.pedidos.push({
-          id: 'ped_' + Date.now() + '_' + Math.random().toString(36).substr(2,4),
-          categoria: 'Cliente',
-          cliente: p.cliente,
-          produtoId: p.produtoId,
-          qtdPrincipal: p.qtdPrincipal,
-          dependentes: p.dependentes,
-          status: p.status,
-          tipoEnvio: 'Retirada',
-          dataCriacao: new Date().toISOString()
-        });
-      });
-
-      salvarDados();
-      fecharModalImportarWhatsApp();
-      renderizarTudo();
-      alert(`🎉 Sucesso! ${pedidosWhatsAppParsed.length} pedidos importados do WhatsApp!`);
+      const validos=pedidosWhatsAppParsed.filter(p=>p.produtoId&&!p.duplicado); if(!validos.length)return;
+      if(!appData.pedidos)appData.pedidos=[];
+      validos.forEach(p=>appData.pedidos.push({id:'ped_'+Date.now()+'_'+Math.random().toString(36).substr(2,4),categoria:'Cliente',cliente:p.cliente,produtoId:p.produtoId,qtdPrincipal:p.qtdPrincipal,dependentes:p.dependentes,status:p.status,tipoEnvio:'Retirada',endereco:'',dia:'',horario:'',observacoes:'Importado do WhatsApp',dataCriacao:new Date().toISOString()}));
+      salvarDados(); fecharModalImportarWhatsApp(); renderizarTudo(); alert(`🎉 ${validos.length} pedido(s) importado(s) do WhatsApp.`);
     }
 
     /* ---------------------------------------------------
@@ -1597,7 +1430,7 @@
       div.style.cssText = 'border:1px solid var(--border-color); border-radius:10px; padding:12px; margin-bottom:8px;';
       div.innerHTML = `
         <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
-          <strong style="color:var(--choc-dark); font-size:0.88rem;">Item Fornecido</strong>
+          <strong style="color:var(--choc-dark); font-size:0.88rem;">🍫 Produto fornecido</strong>
           <button type="button" class="btn-action btn-delete" onclick="document.getElementById('${blockId}').remove();">✕ Remover Item</button>
         </div>
         <div class="form-grid">
@@ -1606,14 +1439,14 @@
             <select class="fornec-prod-id">${optionsProd}</select>
           </div>
           <div class="form-group">
-            <label>Custo Base Standard (R$/g)</label>
+            <label>Custo base (R$/g)</label>
             <input type="number" step="0.01" min="0" class="fornec-prod-custo" value="${custoBase}" placeholder="Ex: 3.50">
           </div>
         </div>
         <div style="margin-top:8px;">
-          <label style="font-size:0.8rem; font-weight:700;">Metas de Volume & Desconto Progressivo:</label>
+          <label style="font-size:0.8rem; font-weight:700;">📉 Preços por volume</label>
           <div class="metas-container" style="display:flex; flex-direction:column; gap:6px; margin-top:4px;"></div>
-          <button type="button" class="btn-secondary" style="margin-top:6px; font-size:0.78rem;" onclick="adicionarMetaVolumeEmBloco('${blockId}')">+ Adicionar Meta de Desconto</button>
+          <button type="button" class="btn-secondary" style="margin-top:6px; font-size:0.78rem;" onclick="adicionarMetaVolumeEmBloco('${blockId}')">＋ Adicionar faixa</button>
         </div>
       `;
 
@@ -1632,8 +1465,8 @@
       const div = document.createElement('div');
       div.style.cssText = 'display:flex; gap:8px; align-items:center;';
       div.innerHTML = `
-        <input type="number" class="meta-qtd" placeholder="Qtd Mínima (g)" min="1" value="${qtdMin}" style="flex:1;">
-        <input type="number" step="0.01" class="meta-custo" placeholder="Novo Custo (R$/g)" min="0" value="${custo}" style="flex:1;">
+        <input type="number" class="meta-qtd" placeholder="A partir de (g)" min="1" value="${qtdMin}" style="flex:1;">
+        <input type="number" step="0.01" class="meta-custo" placeholder="Custo (R$/g)" min="0" value="${custo}" style="flex:1;">
         <button type="button" class="btn-action btn-delete" onclick="this.parentElement.remove();">✕</button>
       `;
       metasContainer.appendChild(div);
@@ -1684,7 +1517,7 @@
       document.getElementById('fornecedor-id').value = '';
       document.getElementById('form-fornecedor').reset();
       document.getElementById('container-produtos-fornecedor').innerHTML = '';
-      document.getElementById('form-fornecedor-title').innerText = 'Cadastrar Fornecedor';
+      document.getElementById('form-fornecedor-title').innerText = '🏢 Cadastrar fornecedor';
       document.getElementById('btn-fornecedor-submit').innerText = 'Salvar Fornecedor';
       document.getElementById('btn-fornecedor-cancel').style.display = 'none';
     }
@@ -1710,7 +1543,10 @@
     }
 
     function excluirFornecedor(id) {
-      if (confirm('Deseja excluir este fornecedor?')) {
+      const f=appData.fornecedores.find(x=>x.id===id);
+      const vinculados=(f?.produtos||[]).length;
+      const msg=vinculados?`Este fornecedor possui ${vinculados} produto(s) vinculado(s). Excluir pode deixar esses produtos sem custo associado. Continuar?`:'Deseja excluir este fornecedor?';
+      if (confirm(msg)) {
         appData.fornecedores = appData.fornecedores.filter(f => f.id !== id);
         salvarDados();
         renderizarTudo();
@@ -1718,34 +1554,17 @@
     }
 
     function renderizarFornecedores() {
-      const tbody = document.getElementById('lista-fornecedores');
-      tbody.innerHTML = '';
-
-      if (!appData.fornecedores || appData.fornecedores.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="4" style="text-align:center; padding:20px; color:var(--text-muted);">Nenhum fornecedor cadastrado.</td></tr>';
-        return;
-      }
-
-      appData.fornecedores.forEach(f => {
-        let prodsText = 'Nenhum produto atrelado.';
-        if (f.produtos && f.produtos.length > 0) {
-          prodsText = f.produtos.map(p => {
-            const prd = appData.produtos.find(item => item.id === p.produtoId);
-            return `<strong>${prd ? prd.nome : 'Produto'}:</strong> R$ ${p.custoBase}/g (${p.metas ? p.metas.length : 0} metas)`;
-          }).join('<br>');
-        }
-
-        const tr = document.createElement('tr');
-        tr.innerHTML = `
-          <td><strong>${f.nome}</strong></td>
-          <td>${formatarMoeda(f.frete || 0)}</td>
-          <td>${prodsText}</td>
-          <td>
-            <button class="btn-action btn-edit" onclick="editarFornecedor('${f.id}')">✏️ Editar</button>
-            <button class="btn-action btn-delete" onclick="excluirFornecedor('${f.id}')">🗑️ Excluir</button>
-          </td>
-        `;
-        tbody.appendChild(tr);
+      const tbody=document.getElementById('lista-fornecedores'); tbody.innerHTML='';
+      const fs=appData.fornecedores||[];
+      const prodCount=fs.reduce((n,f)=>n+(f.produtos||[]).length,0), freteTotal=fs.reduce((n,f)=>n+(parseFloat(f.frete)||0),0);
+      document.getElementById('fornecedores-resumo').innerHTML=`<span class="status-pill">🏢 <strong>${fs.length}</strong> fornecedores</span><span class="status-pill">🍫 <strong>${prodCount}</strong> produtos vinculados</span><span class="status-pill">🚚 <strong>${formatarMoeda(freteTotal)}</strong> em fretes</span>`;
+      if(!fs.length){tbody.innerHTML='<tr><td colspan="4" style="text-align:center;padding:20px;color:var(--text-muted);">Nenhum fornecedor cadastrado.</td></tr>';return;}
+      fs.forEach(f=>{
+        const prods=f.produtos||[];
+        const nomes=prods.map(x=>{const p=appData.produtos.find(y=>y.id===x.produtoId);return p?p.nome:'Produto';});
+        const detalhes=prods.map(x=>{const p=appData.produtos.find(y=>y.id===x.produtoId);return `<div><strong>${p?p.nome:'Produto'}</strong> · ${formatarMoeda(x.custoBase)}/g · ${x.metas?.length||0} faixa(s)</div>`}).join('')||'<em>Nenhum produto vinculado.</em>';
+        const tr=document.createElement('tr'); tr.innerHTML=`<td><strong>${f.nome}</strong></td><td><span title="${nomes.join(', ')}">🍫 ${prods.length} produto(s)</span><div style="font-size:.76rem;color:var(--text-muted);margin-top:3px;">${nomes.join(', ')||'Nenhum produto'}</div></td><td>${formatarMoeda(f.frete||0)}</td><td><button class="btn-action btn-edit" onclick="editarFornecedor('${f.id}')">✏️ Editar</button><button class="btn-action btn-delete" onclick="excluirFornecedor('${f.id}')">🗑️ Excluir</button></td>`;
+        const det=document.createElement('tr');det.style.display='none';det.innerHTML=`<td colspan="4" style="background:#fdfaf8;padding:12px 18px;"><strong>📉 Custos cadastrados</strong><div style="margin-top:7px;display:grid;gap:4px;">${detalhes}</div><div style="margin-top:7px;font-weight:700;">🚚 Frete: ${formatarMoeda(f.frete||0)}</div></td>`; tr.onclick=(e)=>{if(e.target.tagName==='BUTTON')return;det.style.display=det.style.display==='none'?'table-row':'none'};tbody.appendChild(tr);tbody.appendChild(det);
       });
     }
 
@@ -1805,7 +1624,7 @@
       document.getElementById('produto-id').value = '';
       document.getElementById('form-produto').reset();
       document.getElementById('container-faixas-venda').innerHTML = '';
-      document.getElementById('form-produto-title').innerText = 'Cadastrar Produto & Tabela de Precificação';
+      document.getElementById('form-produto-title').innerText = '🍫 Cadastrar produto';
       document.getElementById('btn-produto-submit').innerText = 'Salvar Produto';
       document.getElementById('btn-produto-cancel').style.display = 'none';
     }
@@ -1838,50 +1657,31 @@
       }
     }
 
+    function calcularMargemProduto(prod, qtd=1){
+      if(!prod) return {custo:0,venda:0,margem:0,pct:0};
+      const custo=obterCustoEfetivoProduto(prod.id).custoUnit; const venda=calcularPrecoVendaCliente(prod,qtd); const margem=venda-custo; return {custo,venda,margem,pct:venda?margem/venda*100:0};
+    }
+
     function renderizarProdutos() {
-      const tbody = document.getElementById('lista-produtos');
-      tbody.innerHTML = '';
-
-      const selFornec = document.getElementById('produto-fornecedor');
-      const selPedidoProd = document.getElementById('pedido-produto');
-
-      selFornec.innerHTML = '<option value="">Selecione o fornecedor...</option>';
-      selPedidoProd.innerHTML = '<option value="">Selecione um produto...</option>';
-
-      if (appData.fornecedores) {
-        appData.fornecedores.forEach(f => {
-          selFornec.innerHTML += `<option value="${f.id}">${f.nome}</option>`;
-        });
-      }
-
-      if (!appData.produtos || appData.produtos.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="5" style="text-align:center; padding:20px; color:var(--text-muted);">Nenhum produto cadastrado.</td></tr>';
-        return;
-      }
-
-      appData.produtos.forEach(p => {
-        selPedidoProd.innerHTML += `<option value="${p.id}">${p.nome}</option>`;
-
-        const fornec = appData.fornecedores.find(f => f.id === p.fornecedorId);
-        const { custoUnit } = obterCustoEfetivoProduto(p.id);
-
-        let faixasText = 'Sem tabela de venda';
-        if (p.faixasVenda && p.faixasVenda.length > 0) {
-          faixasText = p.faixasVenda.map(f => `≥ ${f.qtdMin}g: <strong>${formatarMoeda(f.precoUnit)}/g</strong>`).join('<br>');
-        }
-
-        const tr = document.createElement('tr');
-        tr.innerHTML = `
-          <td><strong>${p.nome}</strong></td>
-          <td>${fornec ? fornec.nome : 'Sem fornecedor'}</td>
-          <td>${formatarMoeda(custoUnit)}/g</td>
-          <td>${faixasText}</td>
-          <td>
-            <button class="btn-action btn-edit" onclick="editarProduto('${p.id}')">✏️ Editar</button>
-            <button class="btn-action btn-delete" onclick="excluirProduto('${p.id}')">🗑️ Excluir</button>
-          </td>
-        `;
-        tbody.appendChild(tr);
+      const tbody=document.getElementById('lista-produtos'); tbody.innerHTML='';
+      const selFornec=document.getElementById('produto-fornecedor'), selPedido=document.getElementById('pedido-produto');
+      const oldF=selFornec.value, oldP=selPedido.value;
+      selFornec.innerHTML='<option value="">Selecione o fornecedor...</option>'; selPedido.innerHTML='<option value="">Selecione um produto...</option>';
+      (appData.fornecedores||[]).forEach(f=>selFornec.innerHTML+=`<option value="${f.id}">${f.nome}</option>`);
+      const ps=appData.produtos||[];
+      ps.forEach(p=>selPedido.innerHTML+=`<option value="${p.id}">${p.nome}</option>`);
+      if(oldF) selFornec.value=oldF; if(oldP) selPedido.value=oldP;
+      const fornCount=new Set(ps.map(p=>p.fornecedorId).filter(Boolean)).size;
+      document.getElementById('produtos-resumo').innerHTML=`<span class="status-pill">🍫 <strong>${ps.length}</strong> produtos</span><span class="status-pill">🏢 <strong>${fornCount}</strong> fornecedores usados</span><span class="status-pill">💰 <strong>${ps.reduce((n,p)=>n+(p.faixasVenda?.length||0),0)}</strong> faixas de venda</span>`;
+      if(!ps.length){tbody.innerHTML='<tr><td colspan="5" style="text-align:center;padding:20px;color:var(--text-muted);">Nenhum produto cadastrado.</td></tr>';return;}
+      ps.forEach(p=>{
+        const f=(appData.fornecedores||[]).find(x=>x.id===p.fornecedorId); const m=calcularMargemProduto(p,1);
+        const faixas=(p.faixasVenda||[]).sort((a,b)=>a.qtdMin-b.qtdMin);
+        const vendas=faixas.length?faixas.map(x=>`≥ ${x.qtdMin}g: <strong>${formatarMoeda(x.precoUnit)}/g</strong>`).join('<br>'):'Sem tabela';
+        const faixaDetalhes=faixas.map(x=>{const mm=calcularMargemProduto(p,x.qtdMin);return `<div><strong>A partir de ${x.qtdMin}g:</strong> venda ${formatarMoeda(mm.venda)}/g · custo ${formatarMoeda(mm.custo)}/g · margem ${formatarMoeda(mm.margem)}/g (${mm.pct.toFixed(1)}%)</div>`}).join('');
+        const alerta=m.margem<0?`<div class="warning-inline">⚠️ O preço inicial está abaixo do custo atual.</div>`:`<div class="positive-inline">📈 Margem inicial: ${m.pct.toFixed(1)}%</div>`;
+        const tr=document.createElement('tr'); tr.innerHTML=`<td><strong>${p.nome}</strong></td><td>${f?f.nome:'Sem fornecedor'}</td><td>${formatarMoeda(m.custo)}/g</td><td>${vendas}<div style="margin-top:5px;font-weight:700;color:${m.margem>=0?'var(--herb-green)':'var(--danger-text)'};">Margem inicial: ${formatarMoeda(m.margem)}/g · ${m.pct.toFixed(1)}%</div></td><td><button class="btn-action btn-edit" onclick="editarProduto('${p.id}')">✏️</button><button class="btn-action btn-delete" onclick="excluirProduto('${p.id}')">🗑️</button></td>`;
+        const det=document.createElement('tr');det.style.display='none';det.innerHTML=`<td colspan="5" style="background:#fdfaf8;padding:12px 18px;"><strong>📊 Margem por faixa</strong><div style="display:grid;gap:5px;margin-top:7px;">${faixaDetalhes||'<em>Nenhuma faixa cadastrada.</em>'}</div>${alerta}</td>`;tr.onclick=(e)=>{if(e.target.tagName==='BUTTON')return;det.style.display=det.style.display==='none'?'table-row':'none'};tbody.appendChild(tr);tbody.appendChild(det);
       });
     }
 
@@ -1889,90 +1689,27 @@
        10. RELATÓRIO DE RATEIO MENSAL E EXPORTAÇÃO PDF
        --------------------------------------------------- */
     function gerarRelatorioRateio() {
-      const mes = parseInt(document.getElementById('relatorio-mes').value);
-      const ano = parseInt(document.getElementById('relatorio-ano').value);
-
-      const container = document.getElementById('container-relatorio-geral');
-
-      let faturamentoMes = 0;
-      let faturamentoPendenteMes = 0;
-      let custoProducaoMes = 0;
-
-      let clientesCount = 0;
-      let volumeTotalMes = 0;
-
-      if (appData.pedidos) {
-        appData.pedidos.forEach(p => {
-          const dt = new Date(p.dataCriacao || Date.now());
-          if (dt.getMonth() === mes && dt.getFullYear() === ano) {
-            const prod = appData.produtos.find(prd => prd.id === p.produtoId);
-
-            let qtdTotal = (parseFloat(p.qtdPrincipal) || 0);
-            if (p.dependentes) {
-              p.dependentes.forEach(d => qtdTotal += (parseFloat(d.qtd) || 0));
-            }
-
-            volumeTotalMes += qtdTotal;
-
-            if (prod) {
-              const { custoUnit } = obterCustoEfetivoProduto(prod.id);
-              custoProducaoMes += (qtdTotal * custoUnit);
-
-              if (p.categoria !== 'Socio') {
-                clientesCount++;
-                const precoUnit = calcularPrecoVendaCliente(prod, qtdTotal);
-                const totalVenda = qtdTotal * precoUnit;
-                faturamentoMes += totalVenda;
-                if (p.status !== 'Pago') faturamentoPendenteMes += totalVenda;
-              }
-            }
-          }
-        });
-      }
-
-      const lucroLiquidoMes = faturamentoMes - custoProducaoMes;
-      const pctRamom = appData.splitRamomPct || 50;
-      const pctMonique = 100 - pctRamom;
-
-      const lucroRamom = (lucroLiquidoMes * pctRamom) / 100;
-      const lucroMonique = (lucroLiquidoMes * pctMonique) / 100;
-
-      const nomesMeses = ["Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"];
-
-      container.innerHTML = `
-        <div style="background:#ffffff; border:1px solid var(--border-color); border-radius:12px; padding:20px; margin-top:10px;">
-          <h3 style="color:var(--choc-dark); border-bottom:2px solid var(--border-color); padding-bottom:8px; margin-bottom:14px; text-align:center;">
-            🍫 Balanço Financeiro & Rateio dos Sócios — ${nomesMeses[mes]} / ${ano}
-          </h3>
-
-          <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(200px, 1fr)); gap:12px; margin-bottom:20px;">
-            <div style="background:var(--card-sub-bg); padding:12px; border-radius:8px; text-align:center;">
-              <span style="font-size:0.8rem; color:var(--text-muted); font-weight:700;">FATURAMENTO BRUTO</span>
-              <div style="font-size:1.3rem; font-weight:800; color:var(--choc-dark);">${formatarMoeda(faturamentoMes)}</div>
-            </div>
-
-            <div style="background:var(--card-sub-bg); padding:12px; border-radius:8px; text-align:center;">
-              <span style="font-size:0.8rem; color:var(--text-muted); font-weight:700;">CUSTOS DE INSUMOS</span>
-              <div style="font-size:1.3rem; font-weight:800; color:var(--danger-text);">${formatarMoeda(custoProducaoMes)}</div>
-            </div>
-
-            <div style="background:var(--herb-green-bg); padding:12px; border-radius:8px; text-align:center;">
-              <span style="font-size:0.8rem; color:var(--herb-green); font-weight:700;">LUCRO LÍQUIDO REAL</span>
-              <div style="font-size:1.3rem; font-weight:800; color:var(--herb-green);">${formatarMoeda(lucroLiquidoMes)}</div>
-            </div>
-          </div>
-
-          <div style="background:var(--card-sub-bg); border:1px solid var(--border-color); border-radius:10px; padding:16px; margin-bottom:16px;">
-            <h4 style="color:var(--choc-dark); margin-bottom:8px;">🤝 Divisão Exata do Rateio entre os Sócios:</h4>
-            <p style="font-size:0.95rem;"><strong>Parte do Ramom (${pctRamom}%):</strong> ${formatarMoeda(lucroRamom)}</p>
-            <p style="font-size:0.95rem; margin-top:4px;"><strong>Parte da Monique (${pctMonique}%):</strong> ${formatarMoeda(lucroMonique)}</p>
-          </div>
-
-          <div style="font-size:0.85rem; color:var(--text-muted); text-align:right;">
-            Relatório gerado em ${new Date().toLocaleDateString('pt-BR')} por ${appData.usuarioAtual || 'Sócio'}
-          </div>
-        </div>
-      `;
+      const mes=parseInt(document.getElementById('relatorio-mes').value), ano=parseInt(document.getElementById('relatorio-ano').value);
+      const container=document.getElementById('container-relatorio-geral');
+      let faturamento=0, recebido=0, pendente=0, custoProdutos=0, clientes=0, socios=0, volume=0;
+      const porProduto={}, porFornecedor={};
+      (appData.pedidos||[]).forEach(p=>{
+        const dt=new Date(p.dataCriacao||0); if(dt.getMonth()!==mes||dt.getFullYear()!==ano)return;
+        const prod=appData.produtos.find(x=>x.id===p.produtoId); if(!prod)return;
+        const qtd=(parseFloat(p.qtdPrincipal)||0)+(p.dependentes||[]).reduce((a,d)=>a+(parseFloat(d.qtd)||0),0); volume+=qtd;
+        const custoUnit=obterCustoEfetivoProduto(prod.id).custoUnit, custo=qtd*custoUnit; custoProdutos+=custo;
+        const venda=p.categoria==='Socio'?0:qtd*calcularPrecoVendaCliente(prod,qtd);
+        if(p.categoria==='Socio') socios++; else {clientes++;faturamento+=venda;if(p.status==='Pago')recebido+=venda;else pendente+=venda;}
+        if(!porProduto[prod.id])porProduto[prod.id]={nome:prod.nome,qtd:0,venda:0,custo:0}; porProduto[prod.id].qtd+=qtd;porProduto[prod.id].venda+=venda;porProduto[prod.id].custo+=custo;
+        const f=(appData.fornecedores||[]).find(x=>x.id===prod.fornecedorId); if(f){if(!porFornecedor[f.id])porFornecedor[f.id]={nome:f.nome,produtos:0,custo:0};porFornecedor[f.id].custo+=custo;porFornecedor[f.id].produtos++;}
+      });
+      const fretes=(appData.fornecedores||[]).reduce((a,f)=>a+(parseFloat(f.frete)||0),0);
+      const custoTotal=custoProdutos+fretes, lucro=faturamento-custoTotal, margem=faturamento?lucro/faturamento*100:0;
+      const pctR=appData.splitRamomPct??50,pctM=100-pctR;
+      const nomes=['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'];
+      const produtoRows=Object.values(porProduto).sort((a,b)=>b.venda-a.venda).map(x=>`<tr><td><strong>${x.nome}</strong></td><td>${x.qtd} g/un</td><td>${formatarMoeda(x.venda)}</td><td>${formatarMoeda(x.custo)}</td><td style="color:${x.venda-x.custo>=0?'var(--herb-green)':'var(--danger-text)'}"><strong>${formatarMoeda(x.venda-x.custo)}</strong></td></tr>`).join('')||'<tr><td colspan="5">Nenhum produto movimentado.</td></tr>';
+      const fornecedorRows=Object.values(porFornecedor).map(x=>`<tr><td><strong>${x.nome}</strong></td><td>${x.produtos}</td><td>${formatarMoeda(x.custo)}</td></tr>`).join('')||'<tr><td colspan="3">Nenhum custo de fornecedor no período.</td></tr>';
+      container.innerHTML=`<div style="background:#fff;border:1px solid var(--border-color);border-radius:12px;padding:20px;margin-top:10px;"><h3 style="color:var(--choc-dark);border-bottom:2px solid var(--border-color);padding-bottom:8px;margin-bottom:14px;text-align:center;">🍫 ${nomes[mes]} / ${ano}</h3><div class="detail-grid"><div class="detail-box"><h5>💰 Faturamento</h5><strong>${formatarMoeda(faturamento)}</strong></div><div class="detail-box"><h5>🟢 Recebido</h5><strong>${formatarMoeda(recebido)}</strong></div><div class="detail-box"><h5>⏳ Pendente</h5><strong>${formatarMoeda(pendente)}</strong></div><div class="detail-box"><h5>📦 Custos</h5><strong>${formatarMoeda(custoTotal)}</strong><div style="font-size:.76rem;color:var(--text-muted);">Produtos ${formatarMoeda(custoProdutos)} + fretes ${formatarMoeda(fretes)}</div></div><div class="detail-box"><h5>🍫 Lucro líquido</h5><strong style="color:${lucro>=0?'var(--herb-green)':'var(--danger-text)'}">${formatarMoeda(lucro)}</strong><div style="font-size:.76rem;color:var(--text-muted);">Margem ${margem.toFixed(2)}%</div></div><div class="detail-box"><h5>🛒 Operação</h5><strong>${clientes} vendas</strong><div style="font-size:.76rem;color:var(--text-muted);">${socios} consumos de sócios · ${volume} g/un</div></div></div><h4 style="margin:20px 0 8px;color:var(--choc-dark);">🍫 Vendas por produto</h4><div class="table-wrapper"><table><thead><tr><th>Produto</th><th>Quantidade</th><th>Faturamento</th><th>Custo</th><th>Resultado</th></tr></thead><tbody>${produtoRows}</tbody></table></div><h4 style="margin:20px 0 8px;color:var(--choc-dark);">🏢 Custos por fornecedor</h4><div class="table-wrapper"><table><thead><tr><th>Fornecedor</th><th>Itens usados</th><th>Custo de produtos</th></tr></thead><tbody>${fornecedorRows}</tbody></table></div><div style="background:var(--card-sub-bg);border:1px solid var(--border-color);border-radius:10px;padding:16px;margin-top:18px;"><h4 style="color:var(--choc-dark);margin-bottom:8px;">🤝 Rateio do lucro</h4><p><strong>Ramom (${pctR}%):</strong> ${formatarMoeda(lucro*pctR/100)}</p><p style="margin-top:4px"><strong>Monique (${pctM}%):</strong> ${formatarMoeda(lucro*pctM/100)}</p></div><div style="font-size:.78rem;color:var(--text-muted);text-align:right;margin-top:14px;">Fretes são os valores atualmente cadastrados nos fornecedores; compras históricas ainda não são registradas separadamente.</div></div>`;
     }
 
     function baixarRelatorioPDF() {
