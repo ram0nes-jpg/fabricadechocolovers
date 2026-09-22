@@ -242,6 +242,10 @@
     @keyframes dashPanelIn{from{opacity:0;transform:translate(-50%,8px)}to{opacity:1;transform:translate(-50%,0)}}
     .dash-card[aria-expanded="true"]{border-color:rgba(77,104,58,.48);box-shadow:0 8px 24px rgba(74,44,29,.11)}
     .dash-card[aria-expanded="true"] .profit-caption::after{content:' · fechar detalhes'}
+
+    .dash-detail-panel{overscroll-behavior:contain;scrollbar-width:thin}
+    .dash-detail-panel::-webkit-scrollbar{width:7px}.dash-detail-panel::-webkit-scrollbar-thumb{background:rgba(122,83,56,.18);border-radius:99px}
+    @media(min-width:761px){.dashboard-stack .dashboard-card-block:nth-child(3) .dash-detail-panel{right:0;left:auto;transform:translateY(8px)}.dashboard-stack .dashboard-card-block:nth-child(3) .dash-detail-panel.is-open{transform:translateY(0)}.dashboard-stack .dashboard-card-block:nth-child(3) .dash-detail-panel::before{left:auto;right:34px;transform:rotate(45deg)}}
     @media(max-width:760px){
       .dash-detail-panel{position:fixed;left:16px;right:16px;bottom:16px;top:auto;width:auto;max-height:min(72vh,620px);transform:none;border-radius:18px}
       .dash-detail-panel::before{display:none}
@@ -249,6 +253,13 @@
       @keyframes dashPanelMobileIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
     }
     @media(prefers-reduced-motion:reduce){.dash-detail-panel.is-open{animation:none!important}}
+
+
+    .session-login-card{max-width:430px;padding:26px 24px;text-align:center}
+    .session-login-card h2{font-size:1.35rem;letter-spacing:-.02em;margin-bottom:7px}
+    .session-login-card>p{font-size:.84rem;line-height:1.55;color:var(--text-muted);margin:0 auto 18px;max-width:350px}
+    .session-user-btn{min-height:62px!important;padding:12px 16px!important}
+    .session-user-btn span{font-size:.72rem!important;margin-top:2px}
 
     /* ABAS DE NAVEGAÇÃO RETRÁTEIS */
     .finance-action-strip{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:13px 15px;margin:0 0 16px;background:linear-gradient(90deg,var(--green-soft),#fbf8f3);border:1px solid #d6e0cf;border-radius:12px}
@@ -795,7 +806,7 @@
     <!-- PERFIL DA SESSÃO ATUAL -->
     <div class="user-select-bar">
       <span class="active-session-pill">● <span id="session-user-label">Entrando…</span></span>
-      <button type="button" class="toolbar-btn" onclick="abrirLoginSocio()" title="Trocar o sócio desta sessão">Trocar sócio</button>
+      <button type="button" class="toolbar-btn" onclick="abrirLoginSocio()" title="Trocar o perfil desta sessão">Perfil</button>
       <button type="button" class="toolbar-btn" onclick="abrirAuditoria()" title="Ver histórico de atividades">🧾 Atividade</button>
     </div>
 
@@ -1187,23 +1198,23 @@
   <div id="toast-stack" class="toast-stack" aria-live="polite" aria-atomic="true"></div>
 
 
-  <!-- MODAL: GESTÃO DE COMPRAS E REPASSES -->
+  <!-- IDENTIFICAÇÃO DA SESSÃO -->
   <div id="modal-login-socio" class="modal-backdrop session-login-backdrop">
     <div class="modal-card session-login-card" role="dialog" aria-modal="true" aria-labelledby="login-socio-title">
       <div class="session-login-brand">🍫</div>
-      <h2 id="login-socio-title">Quem está mexendo agora?</h2>
-      <p>Escolha o sócio desta sessão. As alterações ficam sincronizadas para os dois e o histórico registra quem fez cada ação, quando e o que foi alterado.</p>
+      <h2 id="login-socio-title">Quem está usando?</h2>
+      <p>Escolha seu perfil para registrar as ações desta sessão. Os dados continuam compartilhados entre os dois sócios.</p>
       <div class="session-login-options">
-        <button type="button" class="session-user-btn" onclick="entrarComoSocio('Ramom')">👤 Ramom<span>Sócio · entrar nesta sessão</span></button>
-        <button type="button" class="session-user-btn" onclick="entrarComoSocio('Monique')">👤 Monique<span>Sócia · entrar nesta sessão</span></button>
+        <button type="button" class="session-user-btn" onclick="entrarComoSocio('Ramom')">👤 Ramom<span>Entrar como sócio</span></button>
+        <button type="button" class="session-user-btn" onclick="entrarComoSocio('Monique')">👤 Monique<span>Entrar como sócia</span></button>
       </div>
     </div>
   </div>
 
   <div id="modal-auditoria" class="modal-backdrop">
     <div class="modal-card audit-modal-card" role="dialog" aria-modal="true" aria-labelledby="auditoria-title">
-      <div class="modal-header"><h3 id="auditoria-title">🧾 Histórico de atividade</h3><button type="button" class="btn-secondary" onclick="fecharAuditoria()">Fechar</button></div>
-      <p style="margin:-4px 0 14px;color:var(--text-muted);font-size:.82rem;">Registro compartilhado dos dois sócios: entradas, alterações, inclusões, remoções, importações e outras ações importantes.</p>
+      <div class="modal-header"><h3 id="auditoria-title">🧾 Atividades</h3><button type="button" class="btn-secondary" onclick="fecharAuditoria()">Fechar</button></div>
+      <p style="margin:-4px 0 14px;color:var(--text-muted);font-size:.82rem;">Registro compartilhado das ações feitas pelos dois sócios, com data, horário e detalhes do que aconteceu.</p>
       <div id="audit-lista" class="audit-list"></div>
     </div>
   </div>
@@ -1440,7 +1451,7 @@
     function atualizarSessaoUI(){const el=document.getElementById('session-user-label');if(el)el.textContent=sessionUser||'Nenhum sócio';}
     function abrirLoginSocio(){const m=document.getElementById('modal-login-socio');if(m){m.style.display='flex';m.classList.add('session-login-backdrop');}}
     function fecharLoginSocio(){const m=document.getElementById('modal-login-socio');if(m)m.style.display='none';}
-    function entrarComoSocio(nome){if(!['Ramom','Monique'].includes(nome))return;const anterior=sessionUser;sessionUser=nome;try{sessionStorage.setItem('fabricaUsuarioSessao',nome);}catch(e){}atualizarSessaoUI();fecharLoginSocio();registrarAuditoria('login',`Entrou na sessão como ${nome}${anterior&&anterior!==nome?` (trocou de ${anterior})`:''}`);showToast(`Sessão ativa: ${nome}.`);}
+    function entrarComoSocio(nome){if(!['Ramom','Monique'].includes(nome))return;const anterior=sessionUser;sessionUser=nome;try{sessionStorage.setItem('fabricaUsuarioSessao',nome);}catch(e){}atualizarSessaoUI();fecharLoginSocio();registrarAuditoria('login',`Entrou como ${nome}${anterior&&anterior!==nome?` e trocou de ${anterior}`:''}`);showToast(`Sessão ativa: ${nome}.`);}
     function exigirSessao(){if(sessionUser)return true;abrirLoginSocio();return false;}
     function registrarAuditoria(acao,detalhe,extra={}){
       if(!sessionUser)return;
@@ -1454,8 +1465,9 @@
       if(useFirebase){firebase.database().ref('fabricaAuditoria').limitToLast(AUDIT_LIMIT).on('value',snap=>{const obj=snap.val()||{};auditLog=Object.values(obj).sort((a,b)=>String(b.data||'').localeCompare(String(a.data||''))).slice(0,AUDIT_LIMIT);renderizarAuditoria();});}
       else{try{auditLog=JSON.parse(localStorage.getItem('fabricaAuditoria')||'[]')||[];}catch(e){auditLog=[];}renderizarAuditoria();}
     }
-    function renderizarAuditoria(){const el=document.getElementById('audit-lista');if(!el)return;if(!auditLog.length){el.innerHTML='<div class="audit-empty">Ainda não há atividades registradas.</div>';return;}el.innerHTML=auditLog.map(x=>{const d=new Date(x.data||0);const data=Number.isNaN(d.getTime())?'--/--/---- --:--':d.toLocaleString('pt-BR',{dateStyle:'short',timeStyle:'short'});return `<div class="audit-item"><div class="audit-time">${escapeHtml(data)}</div><div class="audit-action"><strong>${escapeHtml(x.usuario||'Sócio')}</strong> · ${escapeHtml(x.acao||'ação')}<br>${escaparTextoAuditoria(x.detalhe||'')}</div></div>`;}).join('');}
-    function abrirAuditoria(){if(!exigirSessao())return;const m=document.getElementById('modal-auditoria');if(m)m.style.display='flex';renderizarAuditoria();registrarAuditoria('consulta','Abriu o histórico de atividade');}
+    function rotuloAuditoria(acao){const mapa={login:'Entrou',navegação:'Navegou',consulta:'Consultou',criação:'Adicionou',edição:'Alterou',remoção:'Removeu',importação:'Importou',exclusão:'Excluiu',restauração:'Restaurou',configuração:'Configurou'};return mapa[acao]||String(acao||'Ação');}
+    function renderizarAuditoria(){const el=document.getElementById('audit-lista');if(!el)return;if(!auditLog.length){el.innerHTML='<div class="audit-empty">Ainda não há atividades registradas.</div>';return;}el.innerHTML=auditLog.map(x=>{const d=new Date(x.data||0);const data=Number.isNaN(d.getTime())?'--/--/---- --:--':d.toLocaleString('pt-BR',{dateStyle:'short',timeStyle:'short'});return `<div class="audit-item"><div class="audit-time">${escapeHtml(data)}</div><div class="audit-action"><strong>${escapeHtml(x.usuario||'Sócio')}</strong> · ${escapeHtml(rotuloAuditoria(x.acao))}<br>${escaparTextoAuditoria(x.detalhe||'')}</div></div>`;}).join('');}
+    function abrirAuditoria(){if(!exigirSessao())return;const m=document.getElementById('modal-auditoria');if(m)m.style.display='flex';renderizarAuditoria();registrarAuditoria('consulta','Abriu as atividades');}
     function fecharAuditoria(){const m=document.getElementById('modal-auditoria');if(m)m.style.display='none';}
     function inicializarSessao(){atualizarSessaoUI();abrirLoginSocio();}
 
@@ -1560,7 +1572,7 @@
         panel.style.display='block';
         const trigger=document.querySelector(`.dash-card[data-panel="${panelId}"]`);
         if(trigger)trigger.setAttribute('aria-expanded','true');
-        registrarAuditoria('consulta',`Abriu o painel ${panelId}`);
+        registrarAuditoria('consulta',`Abriu os detalhes de ${({ 'panel-faturar':'faturamento', 'panel-fornecedores':'repasses', 'panel-compras':'compras', 'panel-lucro':'resultado' }[panelId]||'um painel')}`);
       }
       atualizarDashboard();
     }
