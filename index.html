@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -656,30 +657,35 @@
     }
 
 
-    /* Rádio ambiente */
-    .radio-player{position:fixed;right:18px;bottom:18px;z-index:1200;width:min(360px,calc(100vw - 28px));background:rgba(255,250,245,.96);border:1px solid rgba(122,83,56,.22);border-radius:18px;box-shadow:0 14px 34px rgba(74,44,29,.16);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);padding:11px 12px;color:var(--choc-dark);transition:transform .22s ease,opacity .22s ease,box-shadow .22s ease}
-    .radio-player:hover{box-shadow:0 18px 40px rgba(74,44,29,.2);transform:translateY(-1px)}
+    /* Rádio ambiente — painel integrado, ocultável e sem vídeo visível */
+    .radio-shell{display:flex;justify-content:center;margin:10px 0 2px}
+    .radio-player{width:min(620px,100%);background:linear-gradient(135deg,#fffaf5,#f5efe7);border:1px solid rgba(122,83,56,.18);border-radius:18px;box-shadow:0 8px 24px rgba(74,44,29,.08);padding:10px 12px;color:var(--choc-dark);transition:opacity .2s ease,transform .2s ease}
+    .radio-player.is-hidden{display:none}
     .radio-top{display:flex;align-items:center;gap:10px}
     .radio-art{width:38px;height:38px;border-radius:13px;display:grid;place-items:center;background:linear-gradient(145deg,#efe3d6,#e8efe3);font-size:19px;flex:0 0 auto;border:1px solid rgba(122,83,56,.14)}
     .radio-copy{min-width:0;flex:1}
-    .radio-kicker{font-size:.66rem;text-transform:uppercase;letter-spacing:.11em;color:var(--text-muted);font-weight:800}
+    .radio-kicker{font-size:.64rem;text-transform:uppercase;letter-spacing:.11em;color:var(--text-muted);font-weight:800}
     .radio-name{font-size:.88rem;font-weight:800;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:1px}
-    .radio-status{font-size:.72rem;color:var(--text-muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:2px}
+    .radio-status{font-size:.71rem;color:var(--text-muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:2px}
     .radio-controls{display:flex;align-items:center;gap:6px}
     .radio-btn{border:1px solid rgba(122,83,56,.18);background:#fff;color:var(--choc-dark);width:34px;height:34px;border-radius:11px;display:grid;place-items:center;cursor:pointer;font:inherit;font-weight:800;transition:transform .16s ease,background .16s ease,border-color .16s ease}
     .radio-btn:hover{transform:translateY(-1px);background:#fffaf5;border-color:#cdb8a5}
     .radio-btn:focus-visible{outline:3px solid rgba(77,104,58,.22);outline-offset:2px}
     .radio-btn.primary{background:var(--choc-dark);color:#fff;border-color:var(--choc-dark);font-size:15px}
     .radio-btn.primary:hover{background:#5b3928}
-    .radio-select{margin-top:9px;width:100%;border:1px solid rgba(122,83,56,.18);background:#fffaf5;color:var(--choc-dark);border-radius:11px;padding:8px 10px;font:inherit;font-size:.78rem;font-weight:700;cursor:pointer}
+    .radio-select{margin-top:9px;width:100%;border:1px solid rgba(122,83,56,.18);background:#fff;color:var(--choc-dark);border-radius:11px;padding:8px 10px;font:inherit;font-size:.78rem;font-weight:700;cursor:pointer}
     .radio-bottom{display:flex;align-items:center;gap:9px;margin-top:8px}
     .radio-volume{flex:1;accent-color:var(--choc-dark);cursor:pointer}
     .radio-volume-label{font-size:.68rem;color:var(--text-muted);font-weight:700;min-width:31px;text-align:right}
+    .radio-hide{font-size:.7rem;font-weight:800;color:var(--text-muted);background:transparent;border:0;cursor:pointer;padding:5px 3px}
+    .radio-hide:hover{color:var(--choc-dark);text-decoration:underline}
     .radio-player.is-playing .radio-art{animation:radioPulse 2.6s ease-in-out infinite}
     .radio-player.is-error .radio-status{color:#8b5b47}
+    .radio-youtube-host{position:relative;width:200px;height:200px;margin:12px auto 0;border-radius:16px;overflow:hidden;background:#2f2119;display:none}.radio-player.is-youtube-visible .radio-youtube-host{display:block}
     @keyframes radioPulse{0%,100%{transform:scale(1)}50%{transform:scale(1.035)}}
-    @media(max-width:650px){.radio-player{right:12px;bottom:12px;width:min(330px,calc(100vw - 24px));padding:9px 10px}.radio-art{width:34px;height:34px;border-radius:11px}.radio-name{font-size:.82rem}}
+    @media(max-width:650px){.radio-player{padding:9px 10px}.radio-art{width:34px;height:34px;border-radius:11px}.radio-name{font-size:.82rem}.radio-hide{font-size:.66rem}}
     @media(prefers-reduced-motion:reduce){.radio-player,.radio-btn{transition:none}.radio-player.is-playing .radio-art{animation:none}}
+
 
   </style>
 </head>
@@ -705,6 +711,7 @@
       <div class="toolbar-status"><span id="sync-dot" class="sync-dot"></span><span><strong id="sync-label">Dados prontos</strong> · <span id="sync-detail">salvamento automático ativo</span></span></div>
       <div class="toolbar-actions">
         <button type="button" class="sound-toggle" id="sound-toggle" onclick="alternarSons()" aria-pressed="true" title="Ativar ou desativar sons da interface"><span id="sound-icon">🔊</span><span class="sound-label" id="sound-label">Sons</span></button>
+        <button type="button" class="toolbar-btn" id="radio-open-btn" onclick="mostrarRadio()" aria-expanded="true" title="Mostrar rádio">🎵 Rádio</button>
         <button type="button" class="toolbar-btn" onclick="exportarBackup()">💾 Backup</button>
         <button type="button" class="toolbar-btn" onclick="document.getElementById('backup-file-input').click()">📂 Restaurar</button>
       </div>
@@ -1136,68 +1143,78 @@
   <script>
     // Sistema sonoro da interface: pequenos tons sintéticos, sem arquivos externos.
 
-    // Rádio ambiente: streams oficiais do SomaFM. O navegador pode bloquear autoplay
-    // com áudio; nesse caso a rádio começa no primeiro clique do usuário.
+    // Rádio da fábrica via YouTube IFrame API. O vídeo não é exibido na interface:
+    // o player técnico fica isolado e a página controla apenas a experiência da rádio.
+    // Autoplay com áudio continua sujeito à política do navegador.
     const RADIO_KEY='fabrica_radio_config';
     const RADIO_STATIONS={
-      lofi:{name:'Lo-fi & Chill',icon:'☕',url:'https://ice.somafm.com/groovesalad'},
-      jazz:{name:'Lo-fi Jazz / Jazz moderno',icon:'🎷',url:'https://ice.somafm.com/sonicuniverse'},
-      reggae:{name:'Reggae',icon:'🌿',url:'https://ice.somafm.com/reggae'}
+      lofi:{name:'Lo-fi & Chill',icon:'☕',type:'video',videoId:'X4VbdwhkE10'},
+      jazz:{name:'Jazz 60s / Standards',icon:'🎷',type:'playlist',playlistId:'PL8s5ZR1IezLH0qU8pzh2V5J'},
+      reggae:{name:'Reggae Roots',icon:'🌿',type:'video',videoId:'kHzPG1hja8c'}
     };
-    const radioState={station:'lofi',volume:.22,muted:false,autoplay:true,started:false};
+    const radioState={station:'lofi',volume:.22,muted:false,autoplay:true,started:false,hidden:false};
+    let radioYT=null,radioYTReady=false,radioYTLoading=false;
     function carregarRadioConfig(){
-      try{const raw=localStorage.getItem(RADIO_KEY);if(raw){const x=JSON.parse(raw);if(x.station&&RADIO_STATIONS[x.station])radioState.station=x.station;if(Number.isFinite(x.volume))radioState.volume=Math.max(0,Math.min(1,x.volume));radioState.muted=x.muted===true;radioState.autoplay=x.autoplay!==false;}}catch(e){}
+      try{const raw=localStorage.getItem(RADIO_KEY);if(raw){const x=JSON.parse(raw);if(x.station&&RADIO_STATIONS[x.station])radioState.station=x.station;if(Number.isFinite(x.volume))radioState.volume=Math.max(0,Math.min(1,x.volume));radioState.muted=x.muted===true;radioState.autoplay=x.autoplay!==false;radioState.hidden=x.hidden===true;}}catch(e){}
     }
-    function salvarRadioConfig(){try{localStorage.setItem(RADIO_KEY,JSON.stringify({station:radioState.station,volume:radioState.volume,muted:radioState.muted,autoplay:radioState.autoplay}));}catch(e){}}
+    function salvarRadioConfig(){try{localStorage.setItem(RADIO_KEY,JSON.stringify({station:radioState.station,volume:radioState.volume,muted:radioState.muted,autoplay:radioState.autoplay,hidden:radioState.hidden}));}catch(e){}}
     function atualizarRadioUI(){
-      const box=document.getElementById('radio-player'),a=document.getElementById('radio-audio'),play=document.getElementById('radio-play'),mute=document.getElementById('radio-mute'),sel=document.getElementById('radio-station'),name=document.getElementById('radio-name'),status=document.getElementById('radio-status'),vol=document.getElementById('radio-volume'),vl=document.getElementById('radio-volume-label');
-      if(!box||!a)return;
+      const box=document.getElementById('radio-player'),play=document.getElementById('radio-play'),mute=document.getElementById('radio-mute'),sel=document.getElementById('radio-station'),name=document.getElementById('radio-name'),status=document.getElementById('radio-status'),vol=document.getElementById('radio-volume'),vl=document.getElementById('radio-volume-label'),toggle=document.getElementById('radio-open-btn');
+      if(!box)return;
       const st=RADIO_STATIONS[radioState.station];
       if(sel)sel.value=radioState.station;
       if(name)name.textContent=st.name;
       if(vol)vol.value=radioState.volume;
       if(vl)vl.textContent=Math.round(radioState.volume*100)+'%';
-      a.volume=radioState.volume;a.muted=radioState.muted;
-      if(play){play.textContent=a.paused?'▶':'❚❚';play.title=a.paused?'Tocar rádio':'Pausar rádio';play.setAttribute('aria-label',a.paused?'Tocar rádio':'Pausar rádio');}
+      if(play){play.textContent=radioState.started?'❚❚':'▶';play.title=radioState.started?'Pausar rádio':'Tocar rádio';play.setAttribute('aria-label',radioState.started?'Pausar rádio':'Tocar rádio');}
       if(mute){mute.textContent=radioState.muted?'🔇':'🔊';mute.title=radioState.muted?'Ativar som da rádio':'Silenciar rádio';mute.setAttribute('aria-label',radioState.muted?'Ativar som da rádio':'Silenciar rádio');}
-      box.classList.toggle('is-playing',!a.paused&&!a.ended);box.classList.toggle('is-error',status?.dataset.error==='1');
+      box.classList.toggle('is-hidden',radioState.hidden);
+      const host=document.getElementById('radio-youtube-host'); if(host)host.style.display=radioState.hidden?'none':'block';
+      if(toggle)toggle.setAttribute('aria-expanded',String(!radioState.hidden));
+      if(status)status.dataset.error=status.dataset.error||'0';
+      box.classList.toggle('is-playing',radioState.started);
     }
     function definirStatusRadio(t,erro=false){const el=document.getElementById('radio-status');if(el){el.textContent=t;el.dataset.error=erro?'1':'0';}atualizarRadioUI();}
-    function carregarEstacaoRadio(iniciar=false){
-      const a=document.getElementById('radio-audio');if(!a)return;
+    function garantirYouTubeAPI(){
+      if(radioYTReady||radioYTLoading)return;
+      radioYTLoading=true;
+      if(window.YT&&window.YT.Player){radioYTReady=true;criarPlayerRadio();return;}
+      const s=document.createElement('script');s.src='https://www.youtube.com/iframe_api';s.async=true;document.head.appendChild(s);
+    }
+    window.onYouTubeIframeAPIReady=function(){radioYTReady=true;criarPlayerRadio();};
+    function criarPlayerRadio(){
+      if(radioYT||!radioYTReady)return;
+      const host=document.getElementById('radio-youtube-host');if(!host)return;
+      radioYT=new YT.Player('radio-youtube-host',{width:'200',height:'200',playerVars:{autoplay:0,controls:0,disablekb:1,fs:0,iv_load_policy:3,playsinline:1,rel:0},events:{onReady:()=>{definirStatusRadio('Pronta para tocar');aplicarFonteRadio();if(radioState.autoplay)iniciarRadioAposInteracao();},onStateChange:e=>{if(e.data===YT.PlayerState.PLAYING){radioState.started=true;definirStatusRadio('Tocando · '+RADIO_STATIONS[radioState.station].name);salvarRadioConfig();}else if(e.data===YT.PlayerState.PAUSED){radioState.started=false;definirStatusRadio('Pausada');}else if(e.data===YT.PlayerState.ENDED){radioState.started=false;definirStatusRadio('Fim da seleção');}} ,onError:()=>definirStatusRadio('Esta estação não pôde ser carregada',true)}});
+    }
+    function aplicarFonteRadio(){
+      if(!radioYT||!radioYTReady)return;
       const st=RADIO_STATIONS[radioState.station];
-      a.pause();a.src=st.url;a.load();radioState.started=false;
-      definirStatusRadio('Conectando…');
-      if(iniciar) tocarRadio(); else definirStatusRadio('Pronta para tocar');
+      try{if(st.type==='playlist')radioYT.loadPlaylist({list:st.playlistId,listType:'playlist',index:0,startSeconds:0});else radioYT.loadVideoById(st.videoId);radioYT.setVolume(Math.round(radioState.volume*100));if(radioState.muted)radioYT.mute();else radioYT.unMute();radioState.started=false;definirStatusRadio('Pronta · '+st.name);}catch(e){definirStatusRadio('Não foi possível carregar a estação',true);}
     }
-    async function tocarRadio(){
-      const a=document.getElementById('radio-audio');if(!a)return;
-      if(!a.src)carregarEstacaoRadio(false);
-      a.volume=radioState.volume;a.muted=radioState.muted;
-      try{await a.play();radioState.started=true;definirStatusRadio('Ao vivo · '+RADIO_STATIONS[radioState.station].name);salvarRadioConfig();}
-      catch(e){definirStatusRadio('Clique em ▶ para começar',true);}
-      atualizarRadioUI();
+    function tocarRadio(){
+      garantirYouTubeAPI();
+      if(!radioYTReady||!radioYT)return;
+      try{radioYT.setVolume(Math.round(radioState.volume*100));if(radioState.muted)radioYT.mute();else radioYT.unMute();radioYT.playVideo();radioState.started=true;salvarRadioConfig();definirStatusRadio('Tocando · '+RADIO_STATIONS[radioState.station].name);}catch(e){definirStatusRadio('Clique novamente para começar',true);}
     }
-    function pausarRadio(){const a=document.getElementById('radio-audio');if(!a)return;a.pause();definirStatusRadio('Pausada');atualizarRadioUI();}
-    function alternarRadio(){const a=document.getElementById('radio-audio');if(!a)return;if(a.paused)tocarRadio();else pausarRadio();}
-    function alternarMuteRadio(){radioState.muted=!radioState.muted;const a=document.getElementById('radio-audio');if(a)a.muted=radioState.muted;salvarRadioConfig();atualizarRadioUI();}
-    function ajustarVolumeRadio(v){radioState.volume=Math.max(0,Math.min(1,Number(v)||0));radioState.muted=false;const a=document.getElementById('radio-audio');if(a){a.volume=radioState.volume;a.muted=false;}salvarRadioConfig();atualizarRadioUI();}
-    function trocarRadio(id){if(!RADIO_STATIONS[id])return;const estavaTocando=!document.getElementById('radio-audio')?.paused;radioState.station=id;salvarRadioConfig();carregarEstacaoRadio(estavaTocando);}
+    function pausarRadio(){if(!radioYT)return;try{radioYT.pauseVideo();}catch(e){}radioState.started=false;definirStatusRadio('Pausada');salvarRadioConfig();}
+    function alternarRadio(){if(radioState.started)pausarRadio();else tocarRadio();}
+    function alternarMuteRadio(){radioState.muted=!radioState.muted;if(radioYT){try{radioState.muted?radioYT.mute():radioYT.unMute();}catch(e){}}salvarRadioConfig();atualizarRadioUI();}
+    function ajustarVolumeRadio(v){radioState.volume=Math.max(0,Math.min(1,Number(v)||0));radioState.muted=false;if(radioYT){try{radioYT.setVolume(Math.round(radioState.volume*100));radioYT.unMute();}catch(e){}}salvarRadioConfig();atualizarRadioUI();}
+    function trocarRadio(id){if(!RADIO_STATIONS[id])return;const tocando=radioState.started;radioState.station=id;salvarRadioConfig();garantirYouTubeAPI();if(radioYTReady){aplicarFonteRadio();if(tocando)setTimeout(tocarRadio,120);}else definirStatusRadio('Carregando estação…');}
+    function ocultarRadio(){radioState.hidden=true;salvarRadioConfig();atualizarRadioUI();}
+    function mostrarRadio(){radioState.hidden=false;salvarRadioConfig();atualizarRadioUI();garantirYouTubeAPI();}
+    function iniciarRadioAposInteracao(){
+      if(!radioState.autoplay||radioState.started)return;
+      const iniciar=()=>{if(!radioState.started)tocarRadio();document.removeEventListener('pointerdown',iniciar);document.removeEventListener('keydown',iniciar);};
+      document.addEventListener('pointerdown',iniciar,{once:true,passive:true});document.addEventListener('keydown',iniciar,{once:true});
+    }
     function inicializarRadio(){
-      carregarRadioConfig();const a=document.getElementById('radio-audio');if(!a)return;
-      a.addEventListener('playing',()=>{definirStatusRadio('Ao vivo · '+RADIO_STATIONS[radioState.station].name);atualizarRadioUI();});
-      a.addEventListener('waiting',()=>definirStatusRadio('Carregando transmissão…'));
-      a.addEventListener('stalled',()=>definirStatusRadio('Tentando reconectar…',true));
-      a.addEventListener('error',()=>definirStatusRadio('Não foi possível conectar agora',true));
-      carregarEstacaoRadio(false);atualizarRadioUI();
-      // Tenta autoplay, mas respeita a política do navegador. Se bloquear, o primeiro
-      // clique do usuário pode iniciar a rádio sem precisar de uma segunda configuração.
-      if(radioState.autoplay){
-        const iniciar=()=>{if(document.hidden)return;if(!radioState.started&&a.paused)tocarRadio();document.removeEventListener('pointerdown',iniciar,{once:true});document.removeEventListener('keydown',iniciar,{once:true});};
-        tocarRadio().catch(()=>{});
-        document.addEventListener('pointerdown',iniciar,{once:true,passive:true});
-        document.addEventListener('keydown',iniciar,{once:true});
-      }
+      carregarRadioConfig();
+      const abrir=document.getElementById('radio-open-btn');
+      if(abrir)abrir.addEventListener('click',mostrarRadio);
+      atualizarRadioUI();garantirYouTubeAPI();
+      if(radioState.autoplay)iniciarRadioAposInteracao();
     }
 
     const UI_SOUND_KEY = 'fabrica_ui_sons';
@@ -1530,31 +1547,34 @@
     if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',inicializarRadio);else inicializarRadio();
   </script>
 
-    <aside class="radio-player" id="radio-player" aria-label="Rádio ambiente">
-      <div class="radio-top">
-        <div class="radio-art" aria-hidden="true">☕</div>
-        <div class="radio-copy">
-          <div class="radio-kicker">Rádio da fábrica</div>
-          <div class="radio-name" id="radio-name">Lo-fi &amp; Chill</div>
-          <div class="radio-status" id="radio-status">Pronta para tocar</div>
+    <div class="radio-shell">
+      <aside class="radio-player" id="radio-player" aria-label="Rádio ambiente">
+        <div class="radio-top">
+          <div class="radio-art" aria-hidden="true">☕</div>
+          <div class="radio-copy">
+            <div class="radio-kicker">Rádio da fábrica</div>
+            <div class="radio-name" id="radio-name">Lo-fi &amp; Chill</div>
+            <div class="radio-status" id="radio-status">Pronta para tocar</div>
+          </div>
+          <div class="radio-controls">
+            <button type="button" class="radio-btn primary" id="radio-play" onclick="alternarRadio()" aria-label="Tocar rádio" title="Tocar rádio">▶</button>
+            <button type="button" class="radio-btn" id="radio-mute" onclick="alternarMuteRadio()" aria-label="Silenciar rádio" title="Silenciar rádio">🔊</button>
+          </div>
         </div>
-        <div class="radio-controls">
-          <button type="button" class="radio-btn primary" id="radio-play" onclick="alternarRadio()" aria-label="Tocar rádio" title="Tocar rádio">▶</button>
-          <button type="button" class="radio-btn" id="radio-mute" onclick="alternarMuteRadio()" aria-label="Silenciar rádio" title="Silenciar rádio">🔊</button>
+        <select class="radio-select" id="radio-station" onchange="trocarRadio(this.value)" aria-label="Escolher estação">
+          <option value="lofi">☕ Lo-fi &amp; Chill</option>
+          <option value="jazz">🎷 Jazz 60s / Standards</option>
+          <option value="reggae">🌿 Reggae Roots</option>
+        </select>
+        <div class="radio-bottom">
+          <span aria-hidden="true">🔉</span>
+          <input class="radio-volume" id="radio-volume" type="range" min="0" max="1" step="0.01" value="0.22" aria-label="Volume da rádio" oninput="ajustarVolumeRadio(this.value)">
+          <span class="radio-volume-label" id="radio-volume-label">22%</span>
+          <button type="button" class="radio-hide" onclick="ocultarRadio()" title="Ocultar rádio sem pausar">Ocultar</button>
         </div>
-      </div>
-      <select class="radio-select" id="radio-station" onchange="trocarRadio(this.value)" aria-label="Escolher estação">
-        <option value="lofi">☕ Lo-fi &amp; Chill</option>
-        <option value="jazz">🎷 Lo-fi Jazz / Jazz moderno</option>
-        <option value="reggae">🌿 Reggae</option>
-      </select>
-      <div class="radio-bottom">
-        <span aria-hidden="true">🔉</span>
-        <input class="radio-volume" id="radio-volume" type="range" min="0" max="1" step="0.01" value="0.22" aria-label="Volume da rádio" oninput="ajustarVolumeRadio(this.value)">
-        <span class="radio-volume-label" id="radio-volume-label">22%</span>
-      </div>
-      <audio id="radio-audio" preload="none" crossorigin="anonymous"></audio>
-    </aside>
+      </aside>
+    </div>
+    <div id="radio-youtube-host" class="radio-youtube-host" aria-hidden="true"></div>
 
 </body>
 </html>
