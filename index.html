@@ -207,15 +207,48 @@
       margin-top: 4px;
     }
 
+    /* DETALHES FLUTUANTES DOS CARDS DO DASHBOARD */
+    .dashboard-card-block{position:relative;min-width:0}
     .dash-detail-panel {
-      background: var(--card-sub-bg);
-      border: 1px dashed var(--border-color);
-      border-radius: 12px;
-      padding: 16px;
-      margin-top: -10px;
-      margin-bottom: 20px;
-      display: none;
+      position:absolute;
+      z-index:120;
+      top:calc(100% + 10px);
+      left:50%;
+      width:min(460px,calc(100vw - 32px));
+      max-height:min(62vh,520px);
+      overflow:auto;
+      transform:translate(-50%,8px);
+      background:rgba(255,253,249,.96);
+      border:1px solid rgba(122,83,56,.18);
+      border-radius:16px;
+      padding:18px;
+      box-shadow:0 18px 48px rgba(74,44,29,.16),0 3px 12px rgba(74,44,29,.08);
+      backdrop-filter:blur(14px);
+      -webkit-backdrop-filter:blur(14px);
+      display:none;
+      opacity:0;
+      pointer-events:none;
     }
+    .dash-detail-panel::before{
+      content:'';position:absolute;top:-6px;left:50%;width:11px;height:11px;
+      background:rgba(255,253,249,.96);border-left:1px solid rgba(122,83,56,.18);
+      border-top:1px solid rgba(122,83,56,.18);transform:translateX(-50%) rotate(45deg);
+    }
+    .dash-detail-panel.is-open{
+      display:block;
+      animation:dashPanelIn .22s cubic-bezier(.22,1,.36,1) both;
+      pointer-events:auto;
+    }
+    @keyframes dashPanelIn{from{opacity:0;transform:translate(-50%,8px)}to{opacity:1;transform:translate(-50%,0)}}
+    .dash-card[aria-expanded="true"]{border-color:rgba(77,104,58,.48);box-shadow:0 8px 24px rgba(74,44,29,.11)}
+    .dash-card[aria-expanded="true"] .profit-caption::after{content:' · fechar detalhes'}
+    @media(max-width:760px){
+      .dash-detail-panel{position:fixed;left:16px;right:16px;bottom:16px;top:auto;width:auto;max-height:min(72vh,620px);transform:none;border-radius:18px}
+      .dash-detail-panel::before{display:none}
+      .dash-detail-panel.is-open{animation:dashPanelMobileIn .22s cubic-bezier(.22,1,.36,1) both}
+      @keyframes dashPanelMobileIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+    }
+    @media(prefers-reduced-motion:reduce){.dash-detail-panel.is-open{animation:none!important}}
 
     /* ABAS DE NAVEGAÇÃO RETRÁTEIS */
     .finance-action-strip{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:13px 15px;margin:0 0 16px;background:linear-gradient(90deg,var(--green-soft),#fbf8f3);border:1px solid #d6e0cf;border-radius:12px}
@@ -539,6 +572,9 @@
     :root { --herb-green-bg:#eef4e9; }
     .dashboard-main-cards{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;margin:4px 0 22px}
     .dashboard-main-cards .dash-card{min-height:150px;display:flex;flex-direction:column;justify-content:center;transition:transform .18s ease,box-shadow .18s ease}
+    .dashboard-stack{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;align-items:start}.dashboard-card-block{min-width:0}.dashboard-card-block .dash-detail-panel{width:100%;box-sizing:border-box}.dashboard-featured-profit .dashboard-card-block{max-width:none}.dashboard-stack .dash-card{min-height:150px;display:flex;flex-direction:column;justify-content:center}.dashboard-stack .dash-detail-panel{margin-top:10px;margin-bottom:0}.dashboard-featured-profit .dash-detail-panel{margin-top:10px;margin-bottom:0}.dashboard-stack .dash-card,.dashboard-featured-profit .dash-card{cursor:pointer}.dashboard-stack .dash-card:focus-visible,.dashboard-featured-profit .dash-card:focus-visible{outline:3px solid rgba(77,104,58,.2);outline-offset:3px}
+    @media(max-width:900px){.dashboard-stack{grid-template-columns:1fr}.dashboard-stack .dash-card{min-height:132px}}
+
     .dashboard-main-cards .dash-card:hover{transform:translateY(-2px);box-shadow:0 12px 26px rgba(74,44,29,.11)}
     .dash-card .dash-value{font-size:1.62rem; margin-top:3px}
     .dash-card .dash-subtext{min-height:18px}
@@ -756,13 +792,11 @@
 
   <div class="app-container">
 
-    <!-- SELEÇÃO DE PERFIL DO SÓCIO -->
+    <!-- PERFIL DA SESSÃO ATUAL -->
     <div class="user-select-bar">
-      <label for="select-usuario-atual">👥 Perfil do Sócio:</label>
-      <select id="select-usuario-atual" onchange="salvarUsuarioAtual(this.value)">
-        <option value="Ramom">Ramom (Sócio)</option>
-        <option value="Monique">Monique (Sócio)</option>
-      </select>
+      <span class="active-session-pill">● <span id="session-user-label">Entrando…</span></span>
+      <button type="button" class="toolbar-btn" onclick="abrirLoginSocio()" title="Trocar o sócio desta sessão">Trocar sócio</button>
+      <button type="button" class="toolbar-btn" onclick="abrirAuditoria()" title="Ver histórico de atividades">🧾 Atividade</button>
     </div>
 
     <!-- LOGO OFICIAL -->
@@ -782,58 +816,63 @@
     <input id="backup-file-input" class="data-file-input" type="file" accept="application/json" onchange="importarBackup(event)">
 
     <!-- DASHBOARD FINANCEIRO -->
-    <section class="dashboard-main-cards" aria-label="Resumo financeiro da fábrica">
-      <div class="dash-card" data-panel="panel-faturar" tabindex="0" role="button" onclick="toggleDashPanel('panel-faturar')" onkeydown="if(event.key==='Enter'||event.key===' ')toggleDashPanel('panel-faturar')">
-        <div class="dash-title">💰 Quanto a fábrica faturou?</div>
-        <div class="dash-value" id="dash-faturamento-total">R$ 0,00</div>
-        <div class="dash-subtext" id="dash-faturamento-sub">R$ 0,00 recebido · R$ 0,00 pendente</div>
+    <section class="dashboard-stack" aria-label="Resumo financeiro da fábrica">
+      <div class="dashboard-card-block">
+        <div class="dash-card" data-panel="panel-faturar" tabindex="0" role="button" aria-expanded="false" aria-controls="panel-faturar" onclick="toggleDashPanel('panel-faturar')" onkeydown="if(event.key==='Enter'||event.key===' ')toggleDashPanel('panel-faturar')">
+          <div class="dash-title">💰 Quanto a fábrica faturou?</div>
+          <div class="dash-value" id="dash-faturamento-total">R$ 0,00</div>
+          <div class="dash-subtext" id="dash-faturamento-sub">R$ 0,00 recebido · R$ 0,00 pendente</div>
+        </div>
+        <div id="panel-faturar" class="dash-detail-panel">
+          <div class="section-kicker">Vendas</div>
+          <h4 style="color:var(--choc-dark);margin-bottom:10px;">💰 Como estão as vendas?</h4>
+          <div id="panel-faturar-conteudo"></div>
+        </div>
       </div>
-      <div class="dash-card" data-panel="panel-fornecedores" tabindex="0" role="button" onclick="toggleDashPanel('panel-fornecedores')" onkeydown="if(event.key==='Enter'||event.key===' ')toggleDashPanel('panel-fornecedores')">
-        <div class="dash-title">📦 Pra quem a gente vai pagar?</div>
-        <div class="dash-value" id="dash-repasses-pendentes">R$ 0,00</div>
-        <div class="dash-subtext" id="dash-repasses-sub">0 repasses pendentes</div>
+      <div class="dashboard-card-block">
+        <div class="dash-card" data-panel="panel-fornecedores" tabindex="0" role="button" aria-expanded="false" aria-controls="panel-fornecedores" onclick="toggleDashPanel('panel-fornecedores')" onkeydown="if(event.key==='Enter'||event.key===' ')toggleDashPanel('panel-fornecedores')">
+          <div class="dash-title">📦 Pra quem a gente vai pagar?</div>
+          <div class="dash-value" id="dash-repasses-pendentes">R$ 0,00</div>
+          <div class="dash-subtext" id="dash-repasses-sub">0 repasses pendentes</div>
+        </div>
+        <div id="panel-fornecedores" class="dash-detail-panel">
+          <div class="section-kicker">Repasses</div>
+          <h4 style="color:var(--choc-dark);margin-bottom:10px;">📦 Pra quem a gente vai pagar?</h4>
+          <div id="panel-fornecedores-conteudo"></div>
+        </div>
       </div>
-      <div class="dash-card" data-panel="panel-compras" tabindex="0" role="button" onclick="toggleDashPanel('panel-compras')" onkeydown="if(event.key==='Enter'||event.key===' ')toggleDashPanel('panel-compras')">
-        <div class="dash-title">🛍️ O que a fábrica comprou?</div>
-        <div class="dash-value" id="dash-compras-total">R$ 0,00</div>
-        <div class="dash-subtext" id="dash-compras-sub">0 compras registradas</div>
+      <div class="dashboard-card-block">
+        <div class="dash-card" data-panel="panel-compras" tabindex="0" role="button" aria-expanded="false" aria-controls="panel-compras" onclick="toggleDashPanel('panel-compras')" onkeydown="if(event.key==='Enter'||event.key===' ')toggleDashPanel('panel-compras')">
+          <div class="dash-title">🛍️ O que a fábrica comprou?</div>
+          <div class="dash-value" id="dash-compras-total">R$ 0,00</div>
+          <div class="dash-subtext" id="dash-compras-sub">0 compras registradas</div>
+        </div>
+        <div id="panel-compras" class="dash-detail-panel">
+          <div class="section-kicker">Compras da fábrica</div>
+          <h4 style="color:var(--choc-dark);margin-bottom:10px;">🛍️ O que a fábrica comprou?</h4>
+          <div id="panel-compras-conteudo"></div>
+        </div>
       </div>
     </section>
 
     <section class="dashboard-featured-profit" aria-label="Nossa parte do chocolate">
-      <div class="dash-card" data-panel="panel-lucro" onclick="toggleDashPanel('panel-lucro')">
-        <div class="dash-title">🍫 Nossa parte do chocolate</div>
-        <div class="dash-value" id="dash-lucro-liquido">R$ 0,00</div>
-        <div class="dash-subtext" id="dash-lucro-divisao">Margem 0% · Ramom 50% · Monique 50%</div>
-        <div class="profit-caption">Resultado da fábrica · toque para ver a divisão</div>
+      <div class="dashboard-card-block">
+        <div class="dash-card" data-panel="panel-lucro" tabindex="0" role="button" aria-expanded="false" aria-controls="panel-lucro" onclick="toggleDashPanel('panel-lucro')" onkeydown="if(event.key==='Enter'||event.key===' ')toggleDashPanel('panel-lucro')">
+          <div class="dash-title">🍫 Nossa parte do chocolate</div>
+          <div class="dash-value" id="dash-lucro-liquido">R$ 0,00</div>
+          <div class="dash-subtext" id="dash-lucro-divisao">Margem 0% · Ramom 50% · Monique 50%</div>
+          <div class="profit-caption">Resultado da fábrica · toque para ver a divisão</div>
+        </div>
+        <div id="panel-lucro" class="dash-detail-panel">
+          <div class="section-kicker">Resultado</div>
+          <h4 style="color:var(--choc-dark);margin-bottom:10px;">🍫 Nossa parte do chocolate</h4>
+          <div style="display:flex;flex-direction:column;gap:12px;font-size:.88rem;">
+            <div><label style="font-weight:700;">Divisão entre os sócios</label><div style="display:flex;align-items:center;gap:10px;margin-top:5px;"><input type="range" id="slider-split-socios" min="0" max="100" value="50" oninput="atualizarDivisaoSocios(this.value)" style="flex:1;"><span id="label-split-val" style="font-weight:800;color:var(--choc-dark);">50% Ramom / 50% Monique</span></div></div>
+            <div id="panel-lucro-conteudo"></div>
+          </div>
+        </div>
       </div>
     </section>
-
-    <div id="panel-faturar" class="dash-detail-panel">
-      <div class="section-kicker">Vendas</div>
-      <h4 style="color:var(--choc-dark);margin-bottom:10px;">💰 Como estão as vendas?</h4>
-      <div id="panel-faturar-conteudo"></div>
-    </div>
-    <div id="panel-fornecedores" class="dash-detail-panel">
-      <div class="section-kicker">Repasses</div>
-      <h4 style="color:var(--choc-dark);margin-bottom:10px;">📦 Pra quem a gente vai pagar?</h4>
-      <div id="panel-fornecedores-conteudo"></div>
-    </div>
-    <div id="panel-compras" class="dash-detail-panel">
-      <div class="section-kicker">Compras da fábrica</div>
-      <div style="margin-bottom:10px;">
-        <h4 style="color:var(--choc-dark);margin:0;">🛍️ O que a fábrica comprou?</h4>
-      </div>
-      <div id="panel-compras-conteudo"></div>
-    </div>
-    <div id="panel-lucro" class="dash-detail-panel">
-      <div class="section-kicker">Resultado</div>
-      <h4 style="color:var(--choc-dark);margin-bottom:10px;">🍫 Nossa parte do chocolate</h4>
-      <div style="display:flex;flex-direction:column;gap:12px;font-size:.88rem;">
-        <div><label style="font-weight:700;">Divisão entre os sócios</label><div style="display:flex;align-items:center;gap:10px;margin-top:5px;"><input type="range" id="slider-split-socios" min="0" max="100" value="50" oninput="atualizarDivisaoSocios(this.value)" style="flex:1;"><span id="label-split-val" style="font-weight:800;color:var(--choc-dark);">50% Ramom / 50% Monique</span></div></div>
-        <div id="panel-lucro-conteudo"></div>
-      </div>
-    </div>
 
     <!-- NAVEGAÇÃO PRINCIPAL -->
     <div class="tabs-nav" role="tablist" aria-label="Módulos da fábrica">
@@ -1149,6 +1188,26 @@
 
 
   <!-- MODAL: GESTÃO DE COMPRAS E REPASSES -->
+  <div id="modal-login-socio" class="modal-backdrop session-login-backdrop">
+    <div class="modal-card session-login-card" role="dialog" aria-modal="true" aria-labelledby="login-socio-title">
+      <div class="session-login-brand">🍫</div>
+      <h2 id="login-socio-title">Quem está mexendo agora?</h2>
+      <p>Escolha o sócio desta sessão. As alterações ficam sincronizadas para os dois e o histórico registra quem fez cada ação, quando e o que foi alterado.</p>
+      <div class="session-login-options">
+        <button type="button" class="session-user-btn" onclick="entrarComoSocio('Ramom')">👤 Ramom<span>Sócio · entrar nesta sessão</span></button>
+        <button type="button" class="session-user-btn" onclick="entrarComoSocio('Monique')">👤 Monique<span>Sócia · entrar nesta sessão</span></button>
+      </div>
+    </div>
+  </div>
+
+  <div id="modal-auditoria" class="modal-backdrop">
+    <div class="modal-card audit-modal-card" role="dialog" aria-modal="true" aria-labelledby="auditoria-title">
+      <div class="modal-header"><h3 id="auditoria-title">🧾 Histórico de atividade</h3><button type="button" class="btn-secondary" onclick="fecharAuditoria()">Fechar</button></div>
+      <p style="margin:-4px 0 14px;color:var(--text-muted);font-size:.82rem;">Registro compartilhado dos dois sócios: entradas, alterações, inclusões, remoções, importações e outras ações importantes.</p>
+      <div id="audit-lista" class="audit-list"></div>
+    </div>
+  </div>
+
   <div id="modal-financeiro" class="modal-backdrop">
     <div class="modal-card finance-modal-card">
       <div class="modal-header"><h3>💼 Compras e repasses</h3><button type="button" class="btn-close-modal" onclick="fecharModalFinanceiro()">✕</button></div>
@@ -1266,7 +1325,7 @@
     }
     function pausarRadio(){if(!spotifyController)return;try{spotifyController.pause();}catch(e){}radioState.started=false;definirStatusRadio('Pausada');salvarRadioConfig();}
     function alternarRadio(){if(radioState.started)pausarRadio();else tocarRadio();}
-    function trocarRadio(id){if(!RADIO_STATIONS[id])return;const tocando=radioState.started;radioState.station=id;salvarRadioConfig();atualizarRadioUI();if(spotifyController){carregarEstacaoSpotify();if(tocando)setTimeout(tocarRadio,180);}else{garantirSpotifyAPI();}}
+    function trocarRadio(id){if(!RADIO_STATIONS[id])return; if(typeof registrarAuditoria==='function'&&sessionUser)registrarAuditoria('preferência',`Trocou a rádio para ${RADIO_STATIONS[id].name}`);const tocando=radioState.started;radioState.station=id;salvarRadioConfig();atualizarRadioUI();if(spotifyController){carregarEstacaoSpotify();if(tocando)setTimeout(tocarRadio,180);}else{garantirSpotifyAPI();}}
     function minimizarRadio(){radioState.minimized=!radioState.minimized;salvarRadioConfig();atualizarRadioUI();}
     function ocultarRadio(){radioState.hidden=true;salvarRadioConfig();atualizarRadioUI();}
     function mostrarRadio(){radioState.hidden=false;salvarRadioConfig();atualizarRadioUI();garantirSpotifyAPI();}
@@ -1371,6 +1430,35 @@
       comprasFabrica: [], repasses: [], whatsappImportHistory: []
     };
 
+    let sessionUser = null;
+    let auditLog = [];
+    let auditListenerAttached = false;
+    const AUDIT_LIMIT = 120;
+
+    function escaparTextoAuditoria(v){return escapeHtml(v).replace(/\n/g,' ');}
+    function obterSessaoSalva(){try{return sessionStorage.getItem('fabricaUsuarioSessao')||'';}catch(e){return '';}}
+    function atualizarSessaoUI(){const el=document.getElementById('session-user-label');if(el)el.textContent=sessionUser||'Nenhum sócio';}
+    function abrirLoginSocio(){const m=document.getElementById('modal-login-socio');if(m){m.style.display='flex';m.classList.add('session-login-backdrop');}}
+    function fecharLoginSocio(){const m=document.getElementById('modal-login-socio');if(m)m.style.display='none';}
+    function entrarComoSocio(nome){if(!['Ramom','Monique'].includes(nome))return;const anterior=sessionUser;sessionUser=nome;try{sessionStorage.setItem('fabricaUsuarioSessao',nome);}catch(e){}atualizarSessaoUI();fecharLoginSocio();registrarAuditoria('login',`Entrou na sessão como ${nome}${anterior&&anterior!==nome?` (trocou de ${anterior})`:''}`);showToast(`Sessão ativa: ${nome}.`);}
+    function exigirSessao(){if(sessionUser)return true;abrirLoginSocio();return false;}
+    function registrarAuditoria(acao,detalhe,extra={}){
+      if(!sessionUser)return;
+      const entry={id:uid('log'),usuario:sessionUser,acao:String(acao||'ação'),detalhe:String(detalhe||''),data:new Date().toISOString(),...extra};
+      auditLog=[entry,...auditLog].slice(0,AUDIT_LIMIT);renderizarAuditoria();
+      if(useFirebase){firebase.database().ref('fabricaAuditoria').push(entry).catch(e=>console.warn('Falha ao registrar auditoria',e));}
+      else{try{localStorage.setItem('fabricaAuditoria',JSON.stringify(auditLog));}catch(e){}}
+    }
+    function carregarAuditoria(){
+      if(auditListenerAttached)return; auditListenerAttached=true;
+      if(useFirebase){firebase.database().ref('fabricaAuditoria').limitToLast(AUDIT_LIMIT).on('value',snap=>{const obj=snap.val()||{};auditLog=Object.values(obj).sort((a,b)=>String(b.data||'').localeCompare(String(a.data||''))).slice(0,AUDIT_LIMIT);renderizarAuditoria();});}
+      else{try{auditLog=JSON.parse(localStorage.getItem('fabricaAuditoria')||'[]')||[];}catch(e){auditLog=[];}renderizarAuditoria();}
+    }
+    function renderizarAuditoria(){const el=document.getElementById('audit-lista');if(!el)return;if(!auditLog.length){el.innerHTML='<div class="audit-empty">Ainda não há atividades registradas.</div>';return;}el.innerHTML=auditLog.map(x=>{const d=new Date(x.data||0);const data=Number.isNaN(d.getTime())?'--/--/---- --:--':d.toLocaleString('pt-BR',{dateStyle:'short',timeStyle:'short'});return `<div class="audit-item"><div class="audit-time">${escapeHtml(data)}</div><div class="audit-action"><strong>${escapeHtml(x.usuario||'Sócio')}</strong> · ${escapeHtml(x.acao||'ação')}<br>${escaparTextoAuditoria(x.detalhe||'')}</div></div>`;}).join('');}
+    function abrirAuditoria(){if(!exigirSessao())return;const m=document.getElementById('modal-auditoria');if(m)m.style.display='flex';renderizarAuditoria();registrarAuditoria('consulta','Abriu o histórico de atividade');}
+    function fecharAuditoria(){const m=document.getElementById('modal-auditoria');if(m)m.style.display='none';}
+    function inicializarSessao(){atualizarSessaoUI();abrirLoginSocio();}
+
     let pedidosWhatsAppParsed = [];
     let ultimoSalvamento=null;
     let filtroPedidosTimer=null;
@@ -1420,47 +1508,80 @@
     }
 
     function carregarDadosIniciais(){
-      const aplicar=(val)=>{ const r=migrarDados(val||{}); appData=r.data; if(r.changed) salvarDados(); renderizarTudo(); };
+      const aplicar=(val)=>{ const r=migrarDados(val||{}); appData=r.data; if(r.changed) salvarDados(null,'migração','Dados migrados/normalizados pelo sistema'); renderizarTudo(); };
       if(useFirebase){
         firebase.database().ref('fabricaData').on('value',snap=>aplicar(snap.val()||{}));
       }else{
         let local=null; try{local=JSON.parse(localStorage.getItem('fabricaData')||'null')}catch(e){console.warn('Dados locais inválidos; iniciando vazio.',e)} aplicar(local||{});
       }
+      carregarAuditoria();
     }
-    function salvarDados(){
+    function salvarDados(acao=null,detalhe='',opcoes={}){
       ultimoSalvamento=new Date();
       const dot=document.getElementById('sync-dot'),label=document.getElementById('sync-label'),detail=document.getElementById('sync-detail');
       if(dot)dot.className='sync-dot'; if(label)label.textContent='Salvando…'; if(detail)detail.textContent=useFirebase?'sincronizando com a nuvem':'salvando neste navegador';
+      // usuarioAtual deixou de ser parte da sessão compartilhada; o perfil ativo é local à aba.
+      const payload={...appData}; delete payload.usuarioAtual;
       if(useFirebase){
-        firebase.database().ref('fabricaData').set(appData).then(()=>{if(label)label.textContent='Tudo salvo';if(detail)detail.textContent='sincronizado agora';}).catch(e=>{console.error('Falha ao salvar Firebase',e);if(dot)dot.className='sync-dot error';if(label)label.textContent='Falha ao salvar';if(detail)detail.textContent='verifique sua conexão';showToast('Não consegui sincronizar os dados agora.','error');});
+        firebase.database().ref('fabricaData').set(payload).then(()=>{if(label)label.textContent='Tudo salvo';if(detail)detail.textContent='sincronizado agora';}).catch(e=>{console.error('Falha ao salvar Firebase',e);if(dot)dot.className='sync-dot error';if(label)label.textContent='Falha ao salvar';if(detail)detail.textContent='verifique sua conexão';showToast('Não consegui sincronizar os dados agora.','error');});
       }else{
-        try{localStorage.setItem('fabricaData',JSON.stringify(appData));if(label)label.textContent='Tudo salvo';if(detail)detail.textContent='salvo neste navegador';}
+        try{localStorage.setItem('fabricaData',JSON.stringify(payload));if(label)label.textContent='Tudo salvo';if(detail)detail.textContent='salvo neste navegador';}
         catch(e){if(dot)dot.className='sync-dot error';if(label)label.textContent='Armazenamento cheio';if(detail)detail.textContent='faça um backup';showToast('O navegador não conseguiu salvar. Faça um backup JSON.','error');}
       }
+      if(acao && sessionUser && !opcoes.skipAudit) registrarAuditoria(acao,detalhe);
     }
     function showToast(msg,tipo='success'){const stack=document.getElementById('toast-stack');if(!stack)return;const el=document.createElement('div');el.className='toast'+(tipo==='warning'?' warning':tipo==='error'?' error':'');el.textContent=msg;stack.appendChild(el);setTimeout(()=>{el.style.opacity='0';el.style.transform='translateY(6px)';setTimeout(()=>el.remove(),180)},3200);}
     function exportarBackup(){const payload={...appData,backupMeta:{exportadoEm:new Date().toISOString(),versaoSistema:appData.schemaVersion||3}};const blob=new Blob([JSON.stringify(payload,null,2)],{type:'application/json'}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download=`fabrica-backup-${new Date().toISOString().slice(0,10)}.json`;a.click();URL.revokeObjectURL(url);showToast('Backup JSON criado com sucesso.');}
-    function importarBackup(e){const file=e.target.files?.[0];if(!file)return;const reader=new FileReader();reader.onload=()=>{try{const parsed=JSON.parse(reader.result);if(!parsed||typeof parsed!=='object'||!Array.isArray(parsed.pedidos)||!Array.isArray(parsed.produtos)||!Array.isArray(parsed.fornecedores))throw new Error('Formato inválido');if(!confirm('Isso substituirá os dados atuais desta fábrica pelos dados do backup. Continue?'))return;const r=migrarDados(parsed);appData=r.data;salvarDados();renderizarTudo();showToast('Backup restaurado. Confira os dados antes de continuar.','warning');}catch(err){console.error(err);showToast('Arquivo de backup inválido ou corrompido.','error');}finally{e.target.value='';}};reader.readAsText(file);}
+    function importarBackup(e){const file=e.target.files?.[0];if(!file)return;const reader=new FileReader();reader.onload=()=>{try{const parsed=JSON.parse(reader.result);if(!parsed||typeof parsed!=='object'||!Array.isArray(parsed.pedidos)||!Array.isArray(parsed.produtos)||!Array.isArray(parsed.fornecedores))throw new Error('Formato inválido');if(!confirm('Isso substituirá os dados atuais desta fábrica pelos dados do backup. Continue?'))return;const r=migrarDados(parsed);appData=r.data;salvarDados('restauração',`Restaurou um backup JSON com ${appData.pedidos.length} pedidos`);renderizarTudo();showToast('Backup restaurado. Confira os dados antes de continuar.','warning');}catch(err){console.error(err);showToast('Arquivo de backup inválido ou corrompido.','error');}finally{e.target.value='';}};reader.readAsText(file);}
 
-    function salvarUsuarioAtual(nome){appData.usuarioAtual=nome;salvarDados();}
+    function salvarUsuarioAtual(nome){entrarComoSocio(nome);}
 
     function abrirModalFinanceiro(){const m=document.getElementById('modal-financeiro');if(!m)return;m.style.display='flex';document.body.style.overflow='hidden';renderizarRepasses();renderizarProdutos();const d=document.getElementById('compra-data');if(d&&!d.value)d.value=new Date().toISOString().slice(0,10);const od=document.getElementById('outra-compra-data');if(od&&!od.value)od.value=new Date().toISOString().slice(0,10);if(!document.querySelector('#compra-itens .purchase-row'))adicionarItemCompra();}
     function fecharModalFinanceiro(){const m=document.getElementById('modal-financeiro');if(m)m.style.display='none';document.body.style.overflow='';}
     document.addEventListener('keydown',e=>{if(e.key==='Escape'){fecharModalFinanceiro();}});
 
     function toggleTab(tabName){
+      if(!exigirSessao())return;
       const target=document.getElementById('tab-'+tabName); if(!target)return;
       document.querySelectorAll('.tab-btn').forEach(b=>b.classList.toggle('active',b.dataset.tab===tabName));
       document.querySelectorAll('.tab-content').forEach(c=>c.classList.toggle('active',c.id==='tab-'+tabName));
       if(tabName==='relatorio') gerarRelatorioRateio();
       if(tabName==='fornecedores') renderizarRepasses();
+      registrarAuditoria('navegação',`Abriu a aba ${tabName}`);
     }
     function toggleDashPanel(panelId){
-      const panel=document.getElementById(panelId); if(!panel)return; const visible=panel.style.display==='block';
-      document.querySelectorAll('.dash-detail-panel').forEach(p=>p.style.display='none'); if(!visible){panel.style.display='block';}
+      if(!exigirSessao())return;
+      const panel=document.getElementById(panelId); if(!panel)return;
+      const visible=panel.classList.contains('is-open');
+      document.querySelectorAll('.dash-detail-panel').forEach(p=>{p.classList.remove('is-open');p.style.display='none';});
+      document.querySelectorAll('.dash-card[data-panel]').forEach(c=>{c.setAttribute('aria-expanded','false');});
+      if(!visible){
+        panel.classList.add('is-open');
+        panel.style.display='block';
+        const trigger=document.querySelector(`.dash-card[data-panel="${panelId}"]`);
+        if(trigger)trigger.setAttribute('aria-expanded','true');
+        registrarAuditoria('consulta',`Abriu o painel ${panelId}`);
+      }
       atualizarDashboard();
     }
-    function atualizarDivisaoSocios(val){appData.splitRamomPct=num(val);const l=document.getElementById('label-split-val');if(l)l.innerText=`${appData.splitRamomPct}% Ramom / ${100-appData.splitRamomPct}% Monique`;const r=document.getElementById('slider-split-socios');if(r)r.style.background=`linear-gradient(90deg,var(--herb-green) 0%,var(--herb-green) ${appData.splitRamomPct}%,#d8c6b5 ${appData.splitRamomPct}%,#d8c6b5 100%)`;salvarDados();atualizarDashboard();}
+    document.addEventListener('click',e=>{
+      const open=document.querySelector('.dash-detail-panel.is-open');
+      if(!open)return;
+      const trigger=document.querySelector(`.dash-card[data-panel="${open.id}"]`);
+      if(!open.contains(e.target)&&!trigger?.contains(e.target)){
+        open.classList.remove('is-open');open.style.display='none';
+        if(trigger)trigger.setAttribute('aria-expanded','false');
+      }
+    });
+    document.addEventListener('keydown',e=>{
+      if(e.key!=='Escape')return;
+      const open=document.querySelector('.dash-detail-panel.is-open');
+      if(!open)return;
+      const trigger=document.querySelector(`.dash-card[data-panel="${open.id}"]`);
+      open.classList.remove('is-open');open.style.display='none';
+      if(trigger){trigger.setAttribute('aria-expanded','false');trigger.focus();}
+    });
+    function atualizarDivisaoSocios(val){if(!exigirSessao())return;appData.splitRamomPct=num(val);const l=document.getElementById('label-split-val');if(l)l.innerText=`${appData.splitRamomPct}% Ramom / ${100-appData.splitRamomPct}% Monique`;const r=document.getElementById('slider-split-socios');if(r)r.style.background=`linear-gradient(90deg,var(--herb-green) 0%,var(--herb-green) ${appData.splitRamomPct}%,#d8c6b5 ${appData.splitRamomPct}%,#d8c6b5 100%)`;salvarDados('alteração',`Alterou a divisão dos sócios para ${appData.splitRamomPct}% Ramom / ${100-appData.splitRamomPct}% Monique`);atualizarDashboard();}
 
     function resumoFinanceiro(){
       let faturamento=0,pendente=0,custo=0,pedidos=0,recebido=0,volume=0;
@@ -1489,10 +1610,10 @@
     function alternarCamposEnvio(){const e=document.getElementById('pedido-envio'),c=document.getElementById('container-detalhes-entrega');if(c)c.style.display=e.value==='Entrega por Conta'?'grid':'none';}
     function adicionarLinhaDependente(nome='',qtd=''){const list=document.getElementById('dependentes-list'),div=document.createElement('div');div.className='faixa-row';div.style.cssText='display:flex;gap:8px;align-items:center';div.innerHTML=`<input type="text" class="dep-nome" placeholder="Nome" value="${escapeHtml(nome)}" style="flex:1"><input type="number" class="dep-qtd" placeholder="Qtd" min="1" value="${num(qtd)||''}" oninput="atualizarCalculoPedido()"><button type="button" class="btn-action btn-delete" onclick="this.parentElement.remove();atualizarCalculoPedido()">✕</button>`;list.appendChild(div);atualizarCalculoPedido();}
     function atualizarCalculoPedido(){const cat=document.getElementById('pedido-categoria').value,prod=getProduct(document.getElementById('pedido-produto').value),q=num(document.getElementById('pedido-qtd-principal').value)+[...document.querySelectorAll('#dependentes-list .dep-qtd')].reduce((s,e)=>s+num(e.value),0),box=document.getElementById('pedido-calc-preview');if(cat==='Socio'){box.innerHTML=`<strong>👑 Consumo dos sócios:</strong> ${q} g/un registrados no estoque`;return;}if(!prod){box.innerText='Cálculo estimado: R$ 0,00';return;}const pu=calcularPrecoVendaCliente(prod,q);box.innerHTML=`Cálculo estimado: <strong>${formatarMoeda(q*pu)}</strong> · ${q} g/un × ${formatarMoeda(pu)}/g`;}
-    function salvarPedido(e){e.preventDefault();const id=document.getElementById('pedido-id').value,cat=document.getElementById('pedido-categoria').value,prodId=document.getElementById('pedido-produto').value,prod=getProduct(prodId),q=num(document.getElementById('pedido-qtd-principal').value);if(!prodId||!prod){alert('Selecione um produto válido.');return;}const deps=[...document.querySelectorAll('#dependentes-list .faixa-row')].map(r=>({nome:r.querySelector('.dep-nome').value.trim()||'Pessoa',qtd:num(r.querySelector('.dep-qtd').value)})).filter(x=>x.qtd>0);const total=q+deps.reduce((s,x)=>s+x.qtd,0);const old=id&&(appData.pedidos||[]).find(p=>p.id===id);const obj={id:id||uid('ped'),categoria:cat,cliente:document.getElementById('pedido-cliente').value.trim()||'Cliente',produtoId:prodId,qtdPrincipal:q,dependentes:deps,status:cat==='Socio'?'Pago':document.getElementById('pedido-status').value,tipoEnvio:cat==='Socio'?'Retirada':document.getElementById('pedido-envio').value,endereco:cat==='Socio'?'':document.getElementById('pedido-endereco').value.trim(),dia:cat==='Socio'?'':document.getElementById('pedido-dia').value.trim(),horario:cat==='Socio'?'':document.getElementById('pedido-horario').value.trim(),observacoes:cat==='Socio'?'':document.getElementById('pedido-obs').value.trim(),dataCriacao:old?.dataCriacao||new Date().toISOString(),custoUnitSnapshot:num(old?.custoUnitSnapshot)||obterCustoEfetivoProduto(prodId,total).custoUnit};if(id){const i=appData.pedidos.findIndex(p=>p.id===id);if(i>=0)appData.pedidos[i]=obj;}else appData.pedidos.push(obj);salvarDados();cancelarEdicaoPedido();renderizarTudo();}
+    function salvarPedido(e){if(!exigirSessao())return;e.preventDefault();const id=document.getElementById('pedido-id').value,cat=document.getElementById('pedido-categoria').value,prodId=document.getElementById('pedido-produto').value,prod=getProduct(prodId),q=num(document.getElementById('pedido-qtd-principal').value);if(!prodId||!prod){alert('Selecione um produto válido.');return;}const deps=[...document.querySelectorAll('#dependentes-list .faixa-row')].map(r=>({nome:r.querySelector('.dep-nome').value.trim()||'Pessoa',qtd:num(r.querySelector('.dep-qtd').value)})).filter(x=>x.qtd>0);const total=q+deps.reduce((s,x)=>s+x.qtd,0);const old=id&&(appData.pedidos||[]).find(p=>p.id===id);const obj={id:id||uid('ped'),categoria:cat,cliente:document.getElementById('pedido-cliente').value.trim()||'Cliente',produtoId:prodId,qtdPrincipal:q,dependentes:deps,status:cat==='Socio'?'Pago':document.getElementById('pedido-status').value,tipoEnvio:cat==='Socio'?'Retirada':document.getElementById('pedido-envio').value,endereco:cat==='Socio'?'':document.getElementById('pedido-endereco').value.trim(),dia:cat==='Socio'?'':document.getElementById('pedido-dia').value.trim(),horario:cat==='Socio'?'':document.getElementById('pedido-horario').value.trim(),observacoes:cat==='Socio'?'':document.getElementById('pedido-obs').value.trim(),dataCriacao:old?.dataCriacao||new Date().toISOString(),custoUnitSnapshot:num(old?.custoUnitSnapshot)||obterCustoEfetivoProduto(prodId,total).custoUnit};if(id){const i=appData.pedidos.findIndex(p=>p.id===id);if(i>=0)appData.pedidos[i]=obj;}else appData.pedidos.push(obj);salvarDados(id?'alteração':'adição',`${id?'Atualizou':'Adicionou'} pedido de ${obj.cliente} · ${total} g`);cancelarEdicaoPedido();renderizarTudo();}
     function cancelarEdicaoPedido(){document.getElementById('pedido-id').value='';document.getElementById('form-pedido').reset();document.getElementById('dependentes-list').innerHTML='';document.getElementById('form-pedido-title').innerHTML='<span>🛒 Pedidos</span><button type="button" class="btn-secondary" onclick="abrirModalImportarWhatsApp()" style="background:var(--herb-green);color:#fff;border:none;padding:7px 14px;font-weight:700;border-radius:8px;cursor:pointer">📱 Importar do WhatsApp</button>';document.getElementById('btn-pedido-submit').innerText='Salvar Pedido';document.getElementById('btn-pedido-cancel').style.display='none';selecionarCategoriaPedido('Cliente');}
     function editarPedido(id){const p=(appData.pedidos||[]).find(x=>x.id===id);if(!p)return;document.getElementById('pedido-id').value=p.id;selecionarCategoriaPedido(p.categoria||'Cliente');document.getElementById('pedido-cliente').value=p.cliente||'';document.getElementById('pedido-produto').value=p.produtoId||'';document.getElementById('pedido-qtd-principal').value=p.qtdPrincipal||1;if(p.categoria!=='Socio'){document.getElementById('pedido-status').value=p.status||'Pendente';document.getElementById('pedido-envio').value=p.tipoEnvio||'Retirada';document.getElementById('pedido-endereco').value=p.endereco||'';document.getElementById('pedido-dia').value=p.dia||'';document.getElementById('pedido-horario').value=p.horario||'';document.getElementById('pedido-obs').value=p.observacoes||'';alternarCamposEnvio();}const c=document.getElementById('dependentes-list');c.innerHTML='';(p.dependentes||[]).forEach(d=>adicionarLinhaDependente(d.nome,d.qtd));document.getElementById('form-pedido-title').innerText='Editar Pedido';document.getElementById('btn-pedido-submit').innerText='Atualizar Pedido';document.getElementById('btn-pedido-cancel').style.display='inline-block';document.getElementById('form-pedido').scrollIntoView({behavior:'smooth'});}
-    function excluirPedido(id){if(confirm('Deseja realmente excluir este pedido?')){appData.pedidos=appData.pedidos.filter(p=>p.id!==id);salvarDados();renderizarTudo();}}
+    function excluirPedido(id){if(confirm('Deseja realmente excluir este pedido?')){appData.pedidos=appData.pedidos.filter(p=>p.id!==id);salvarDados('remoção',`Removeu pedido ${id}`);renderizarTudo();}}
     function pedidoPassaFiltro(p){
       const busca=(document.getElementById('pedidos-busca')?.value||'').trim().toLowerCase();
       const status=document.getElementById('pedidos-filtro-status')?.value||'Todos';
@@ -1535,34 +1656,34 @@
       if(warnings.length){status.innerHTML=`<div class="whatsapp-warning"><strong>⚠️ Importação bloqueada:</strong><br>${warnings.map(escapeHtml).join('<br>')}<br><small>Revise as linhas ambíguas antes de salvar.</small></div>`;}else if(parsed.length){status.innerHTML=`<div class="whatsapp-ok">✅ ${parsed.length} pedido(s) reconhecido(s). Nenhum palpite ambíguo foi encontrado.</div>`;btn.disabled=false;btn.style.opacity=1;btn.innerText=`✅ Confirmar ${parsed.length} pedido(s)`;}else{status.innerHTML='<div class="whatsapp-warning">Não encontrei pedidos reconhecíveis. Confira o formato e os produtos cadastrados.</div>';}}
     function abrirModalImportarWhatsApp(){document.getElementById('modal-import-whatsapp').style.display='flex';document.getElementById('whatsapp-import-text').focus();}
     function fecharModalImportarWhatsApp(){document.getElementById('modal-import-whatsapp').style.display='none';}
-    function confirmarImportacaoWhatsApp(){if(!pedidosWhatsAppParsed.length)return;const ids=new Set((appData.pedidos||[]).map(p=>`${normalizarTexto(p.cliente)}|${p.produtoId}|${totalQtdPedido(p)}|${p.dataCriacao?.slice(0,10)||''}`));let added=0,dups=0;(pedidosWhatsAppParsed||[]).forEach(p=>{const key=`${normalizarTexto(p.cliente)}|${p.produtoId}|${totalQtdPedido(p)}|${new Date().toISOString().slice(0,10)}`;if(ids.has(key)){dups++;return;}appData.pedidos.push({id:uid('ped'),categoria:'Cliente',cliente:p.cliente,produtoId:p.produtoId,qtdPrincipal:p.qtdPrincipal,dependentes:p.dependentes,status:p.status,tipoEnvio:'Retirada',endereco:'',dia:'',horario:'',observacoes:p.observacoes,dataCriacao:new Date().toISOString(),custoUnitSnapshot:obterCustoEfetivoProduto(p.produtoId,totalQtdPedido(p)).custoUnit});ids.add(key);added++;});appData.whatsappImportHistory.push({id:uid('wpp'),data:new Date().toISOString(),quantidade:added,duplicados:dups});salvarDados();fecharModalImportarWhatsApp();renderizarTudo();showToast(`Importação concluída: ${added} pedido(s).${dups?` ${dups} duplicado(s) ignorado(s).`:''}`);}
+    function confirmarImportacaoWhatsApp(){if(!exigirSessao())return;if(!pedidosWhatsAppParsed.length)return;const ids=new Set((appData.pedidos||[]).map(p=>`${normalizarTexto(p.cliente)}|${p.produtoId}|${totalQtdPedido(p)}|${p.dataCriacao?.slice(0,10)||''}`));let added=0,dups=0;(pedidosWhatsAppParsed||[]).forEach(p=>{const key=`${normalizarTexto(p.cliente)}|${p.produtoId}|${totalQtdPedido(p)}|${new Date().toISOString().slice(0,10)}`;if(ids.has(key)){dups++;return;}appData.pedidos.push({id:uid('ped'),categoria:'Cliente',cliente:p.cliente,produtoId:p.produtoId,qtdPrincipal:p.qtdPrincipal,dependentes:p.dependentes,status:p.status,tipoEnvio:'Retirada',endereco:'',dia:'',horario:'',observacoes:p.observacoes,dataCriacao:new Date().toISOString(),custoUnitSnapshot:obterCustoEfetivoProduto(p.produtoId,totalQtdPedido(p)).custoUnit});ids.add(key);added++;});appData.whatsappImportHistory.push({id:uid('wpp'),data:new Date().toISOString(),quantidade:added,duplicados:dups});salvarDados('importação',`Importou pedidos do WhatsApp · ${added} adicionados · ${dups} duplicados ignorados`);fecharModalImportarWhatsApp();renderizarTudo();showToast(`Importação concluída: ${added} pedido(s).${dups?` ${dups} duplicado(s) ignorado(s).`:''}`);}
 
     // Fornecedores
     function adicionarBlocoProdutoFornecedor(prodId='',custoBase='',metas=[]){const c=document.getElementById('container-produtos-fornecedor'),id=uid('fitem'),div=document.createElement('div');div.id=id;div.style.cssText='border:1px solid var(--border-color);border-radius:10px;padding:12px;margin-bottom:8px;background:var(--card-sub-bg)';const opts=(appData.produtos||[]).map(p=>`<option value="${p.id}" ${p.id===prodId?'selected':''}>${escapeHtml(p.nome)}</option>`).join('');div.innerHTML=`<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px"><strong>Item fornecido</strong><button type="button" class="btn-action btn-delete" onclick="document.getElementById('${id}').remove()">✕</button></div><div class="form-grid"><div class="form-group"><label>Produto</label><select class="fornec-prod-id"><option value="">Selecione...</option>${opts}</select></div><div class="form-group"><label>Custo base (R$/g)</label><input type="number" step="0.01" min="0" class="fornec-prod-custo" value="${custoBase}"></div></div><div style="margin-top:8px"><label style="font-size:.8rem;font-weight:700">📉 Preços por volume</label><div class="metas-container" style="display:flex;flex-direction:column;gap:6px;margin-top:4px"></div><button type="button" class="btn-secondary" style="margin-top:6px;font-size:.78rem" onclick="adicionarMetaVolumeEmBloco('${id}')">＋ Adicionar faixa</button></div>`;c.appendChild(div);metas.forEach(m=>adicionarMetaVolumeEmBloco(id,m.qtdMin,m.custoComDesconto));}
     function adicionarMetaVolumeEmBloco(id,qtd='',custo=''){const b=document.getElementById(id);if(!b)return;const d=document.createElement('div');d.style.cssText='display:flex;gap:8px;align-items:center';d.innerHTML=`<input type="number" class="meta-qtd" placeholder="A partir de (g)" min="1" value="${qtd}" style="flex:1"><input type="number" step="0.01" class="meta-custo" placeholder="Custo (R$/g)" min="0" value="${custo}" style="flex:1"><button type="button" class="btn-action btn-delete" onclick="this.parentElement.remove()">✕</button>`;b.querySelector('.metas-container').appendChild(d);}
-    function salvarFornecedor(e){e.preventDefault();const id=document.getElementById('fornecedor-id').value,nome=document.getElementById('fornecedor-nome').value.trim();if(!nome)return;const produtos=[...document.querySelectorAll('#container-produtos-fornecedor>div')].map(b=>{const pid=b.querySelector('.fornec-prod-id').value;if(!pid)return null;const metas=[...b.querySelectorAll('.metas-container>div')].map(r=>({qtdMin:num(r.querySelector('.meta-qtd').value),custoComDesconto:num(r.querySelector('.meta-custo').value)})).filter(x=>x.qtdMin>0);return {produtoId:pid,custoBase:num(b.querySelector('.fornec-prod-custo').value),metas};}).filter(Boolean);const obj={id:id||uid('fornec'),nome,frete:num(document.getElementById('fornecedor-frete').value),produtos};if(id){const i=appData.fornecedores.findIndex(f=>f.id===id);if(i>=0)appData.fornecedores[i]=obj;}else appData.fornecedores.push(obj);salvarDados();cancelarEdicaoFornecedor();renderizarTudo();}
+    function salvarFornecedor(e){if(!exigirSessao())return;e.preventDefault();const id=document.getElementById('fornecedor-id').value,nome=document.getElementById('fornecedor-nome').value.trim();if(!nome)return;const produtos=[...document.querySelectorAll('#container-produtos-fornecedor>div')].map(b=>{const pid=b.querySelector('.fornec-prod-id').value;if(!pid)return null;const metas=[...b.querySelectorAll('.metas-container>div')].map(r=>({qtdMin:num(r.querySelector('.meta-qtd').value),custoComDesconto:num(r.querySelector('.meta-custo').value)})).filter(x=>x.qtdMin>0);return {produtoId:pid,custoBase:num(b.querySelector('.fornec-prod-custo').value),metas};}).filter(Boolean);const obj={id:id||uid('fornec'),nome,frete:num(document.getElementById('fornecedor-frete').value),produtos};if(id){const i=appData.fornecedores.findIndex(f=>f.id===id);if(i>=0)appData.fornecedores[i]=obj;}else appData.fornecedores.push(obj);salvarDados(id?'alteração':'adição',`${id?'Atualizou':'Adicionou'} fornecedor ${nome}`);cancelarEdicaoFornecedor();renderizarTudo();}
     function cancelarEdicaoFornecedor(){document.getElementById('fornecedor-id').value='';document.getElementById('form-fornecedor').reset();document.getElementById('container-produtos-fornecedor').innerHTML='';document.getElementById('form-fornecedor-title').innerText='📦 Fornecedores';document.getElementById('btn-fornecedor-submit').innerText='Salvar Fornecedor';document.getElementById('btn-fornecedor-cancel').style.display='none';}
     function editarFornecedor(id){const f=getSupplier(id);if(!f)return;document.getElementById('fornecedor-id').value=f.id;document.getElementById('fornecedor-nome').value=f.nome||'';document.getElementById('fornecedor-frete').value=f.frete||0;const c=document.getElementById('container-produtos-fornecedor');c.innerHTML='';(f.produtos||[]).forEach(p=>adicionarBlocoProdutoFornecedor(p.produtoId,p.custoBase,p.metas||[]));document.getElementById('form-fornecedor-title').innerText='Editar fornecedor';document.getElementById('btn-fornecedor-submit').innerText='Atualizar fornecedor';document.getElementById('btn-fornecedor-cancel').style.display='inline-block';document.getElementById('form-fornecedor').scrollIntoView({behavior:'smooth'});}
-    function excluirFornecedor(id){const linked=(appData.produtos||[]).filter(p=>p.fornecedorId===id).length,pending=(appData.repasses||[]).some(r=>r.fornecedorId===id&&r.status!=='Repassado');const msg=linked||pending?`Este fornecedor possui ${linked} produto(s) ligado(s) e ${pending?'repasses pendentes. ':''}Excluir pode quebrar referências históricas. Deseja continuar?`:'Deseja excluir este fornecedor?';if(confirm(msg)){appData.fornecedores=appData.fornecedores.filter(f=>f.id!==id);salvarDados();renderizarTudo();}}
+    function excluirFornecedor(id){const linked=(appData.produtos||[]).filter(p=>p.fornecedorId===id).length,pending=(appData.repasses||[]).some(r=>r.fornecedorId===id&&r.status!=='Repassado');const msg=linked||pending?`Este fornecedor possui ${linked} produto(s) ligado(s) e ${pending?'repasses pendentes. ':''}Excluir pode quebrar referências históricas. Deseja continuar?`:'Deseja excluir este fornecedor?';if(confirm(msg)){appData.fornecedores=appData.fornecedores.filter(f=>f.id!==id);salvarDados('remoção',`Removeu fornecedor ${id}`);renderizarTudo();}}
     function renderizarFornecedores(){const tb=document.getElementById('lista-fornecedores');tb.innerHTML='';const sum=document.getElementById('fornecedor-summary');if(sum){const produtos=new Set((appData.fornecedores||[]).flatMap(f=>(f.produtos||[]).map(x=>x.produtoId)));const freteRef=(appData.fornecedores||[]).reduce((s,f)=>s+num(f.frete),0);sum.innerHTML=`<div class="summary-box"><strong>🏢 ${appData.fornecedores.length}</strong><span>fornecedores cadastrados</span></div><div class="summary-box"><strong>🍫 ${produtos.size}</strong><span>produtos vinculados</span></div><div class="summary-box"><strong>🚚 ${formatarMoeda(freteRef)}</strong><span>fretes de referência</span></div>`;}if(!appData.fornecedores.length){tb.innerHTML='<tr><td colspan="4" style="text-align:center;padding:20px;color:var(--text-muted)">Nenhum fornecedor cadastrado.</td></tr>';return;}appData.fornecedores.forEach(f=>{const tr=document.createElement('tr');tr.innerHTML=`<td><strong>${escapeHtml(f.nome)}</strong></td><td>${(f.produtos||[]).map(x=>{const p=getProduct(x.produtoId);return `<strong>${escapeHtml(p?.nome||'Produto')}</strong>: ${formatarMoeda(x.custoBase)}/g · ${(x.metas||[]).length} faixa(s)`}).join('<br>')||'Nenhum produto'}</td><td>Ref.: ${formatarMoeda(f.frete||0)}</td><td><button class="btn-action btn-edit" onclick="editarFornecedor('${f.id}')">✏️ Editar</button><button class="btn-action btn-delete" onclick="excluirFornecedor('${f.id}')">🗑️</button></td>`;tb.appendChild(tr);});}
 
     // Produtos
     function aoSelecionarProdutoParaPrecificar(){}
     function adicionarLinhaFaixaVenda(qtd='',preco=''){const c=document.getElementById('container-faixas-venda'),d=document.createElement('div');d.style.cssText='display:flex;gap:8px;align-items:center';d.innerHTML=`<input type="number" class="faixa-qtd" placeholder="A partir de (g)" min="1" value="${qtd}" style="flex:1" required><input type="number" step="0.01" class="faixa-preco" placeholder="Preço (R$/g)" min="0" value="${preco}" style="flex:1" required><button type="button" class="btn-action btn-delete" onclick="this.parentElement.remove()">✕</button>`;c.appendChild(d);}
-    function salvarProduto(e){e.preventDefault();const id=document.getElementById('produto-id').value,nome=document.getElementById('produto-nome').value.trim(),fornecedorId=document.getElementById('produto-fornecedor').value;if(!nome||!fornecedorId){alert('Preencha nome e fornecedor.');return;}const faixasVenda=[...document.querySelectorAll('#container-faixas-venda>div')].map(r=>({qtdMin:num(r.querySelector('.faixa-qtd').value),precoUnit:num(r.querySelector('.faixa-preco').value)})).filter(x=>x.qtdMin>0).sort((a,b)=>a.qtdMin-b.qtdMin);const obj={id:id||uid('prod'),nome,fornecedorId,faixasVenda};if(id){const i=appData.produtos.findIndex(p=>p.id===id);if(i>=0)appData.produtos[i]=obj;}else appData.produtos.push(obj);salvarDados();cancelarEdicaoProduto();renderizarTudo();}
+    function salvarProduto(e){if(!exigirSessao())return;e.preventDefault();const id=document.getElementById('produto-id').value,nome=document.getElementById('produto-nome').value.trim(),fornecedorId=document.getElementById('produto-fornecedor').value;if(!nome||!fornecedorId){alert('Preencha nome e fornecedor.');return;}const faixasVenda=[...document.querySelectorAll('#container-faixas-venda>div')].map(r=>({qtdMin:num(r.querySelector('.faixa-qtd').value),precoUnit:num(r.querySelector('.faixa-preco').value)})).filter(x=>x.qtdMin>0).sort((a,b)=>a.qtdMin-b.qtdMin);const obj={id:id||uid('prod'),nome,fornecedorId,faixasVenda};if(id){const i=appData.produtos.findIndex(p=>p.id===id);if(i>=0)appData.produtos[i]=obj;}else appData.produtos.push(obj);salvarDados(id?'alteração':'adição',`${id?'Atualizou':'Adicionou'} produto ${nome}`);cancelarEdicaoProduto();renderizarTudo();}
     function cancelarEdicaoProduto(){document.getElementById('produto-id').value='';document.getElementById('form-produto').reset();document.getElementById('container-faixas-venda').innerHTML='';document.getElementById('form-produto-title').innerText='🍫 Produtos';document.getElementById('btn-produto-submit').innerText='Salvar Produto';document.getElementById('btn-produto-cancel').style.display='none';}
     function editarProduto(id){const p=getProduct(id);if(!p)return;document.getElementById('produto-id').value=p.id;document.getElementById('produto-nome').value=p.nome||'';document.getElementById('produto-fornecedor').value=p.fornecedorId||'';const c=document.getElementById('container-faixas-venda');c.innerHTML='';(p.faixasVenda||[]).forEach(f=>adicionarLinhaFaixaVenda(f.qtdMin,f.precoUnit));document.getElementById('form-produto-title').innerText='Editar produto';document.getElementById('btn-produto-submit').innerText='Atualizar produto';document.getElementById('btn-produto-cancel').style.display='inline-block';document.getElementById('form-produto').scrollIntoView({behavior:'smooth'});}
-    function excluirProduto(id){const linked=(appData.pedidos||[]).some(p=>p.produtoId===id),rep=(appData.repasses||[]).some(r=>(r.produtosComprados||[]).some(x=>x.produtoId===id));if((linked||rep)&&!confirm('Este produto aparece em histórico de pedidos/compras. Excluir manterá o histórico, mas o nome poderá aparecer como removido. Continuar?'))return;if(confirm('Deseja excluir este produto?')){appData.produtos=appData.produtos.filter(p=>p.id!==id);salvarDados();renderizarTudo();}}
+    function excluirProduto(id){const linked=(appData.pedidos||[]).some(p=>p.produtoId===id),rep=(appData.repasses||[]).some(r=>(r.produtosComprados||[]).some(x=>x.produtoId===id));if((linked||rep)&&!confirm('Este produto aparece em histórico de pedidos/compras. Excluir manterá o histórico, mas o nome poderá aparecer como removido. Continuar?'))return;if(confirm('Deseja excluir este produto?')){appData.produtos=appData.produtos.filter(p=>p.id!==id);salvarDados('remoção',`Removeu produto ${id}`);renderizarTudo();}}
     function renderizarProdutos(){const tb=document.getElementById('lista-produtos'),sf=document.getElementById('produto-fornecedor'),sp=document.getElementById('pedido-produto'),sc=document.getElementById('compra-fornecedor');tb.innerHTML='';const sum=document.getElementById('produto-summary');if(sum){let faixas=0,mar={total:0,n:0};(appData.produtos||[]).forEach(p=>{faixas+=(p.faixasVenda||[]).length;const custo=obterCustoEfetivoProduto(p.id).custoUnit;const venda=calcularPrecoVendaCliente(p,Math.max(1,((p.faixasVenda||[])[0]?.qtdMin||1)));if(custo>0&&venda>0){mar.total+=(venda-custo)/venda*100;mar.n++;}});sum.innerHTML=`<div class="summary-box"><strong>🍫 ${appData.produtos.length}</strong><span>produtos cadastrados</span></div><div class="summary-box"><strong>🏢 ${new Set((appData.produtos||[]).map(p=>p.fornecedorId).filter(Boolean)).size}</strong><span>fornecedores ligados</span></div><div class="summary-box"><strong>📊 ${faixas}</strong><span>faixas de venda</span></div><div class="summary-box"><strong>${mar.n?mar.total/mar.n:0}%</strong><span>margem média estimada</span></div>`;}sf.innerHTML='<option value="">Selecione o fornecedor...</option>';sp.innerHTML='<option value="">Selecione um produto...</option>';if(sc)sc.innerHTML='<option value="">Selecione...</option>';appData.fornecedores.forEach(f=>{sf.innerHTML+=`<option value="${f.id}">${escapeHtml(f.nome)}</option>`;if(sc)sc.innerHTML+=`<option value="${f.id}">${escapeHtml(f.nome)}</option>`;});appData.produtos.forEach(p=>{sp.innerHTML+=`<option value="${p.id}">${escapeHtml(p.nome)}</option>`;const f=getSupplier(p.fornecedorId),c=obterCustoEfetivoProduto(p.id).custoUnit,faixas=(p.faixasVenda||[]).map(x=>`≥ ${x.qtdMin}g: <strong>${formatarMoeda(x.precoUnit)}/g</strong>`).join('<br>')||'Sem tabela';const tr=document.createElement('tr');tr.innerHTML=`<td><strong>${escapeHtml(p.nome)}</strong></td><td>${escapeHtml(f?.nome||'Sem fornecedor')}</td><td>${formatarMoeda(c)}/g</td><td>${faixas}</td><td><button class="btn-action btn-edit" onclick="editarProduto('${p.id}')">✏️</button><button class="btn-action btn-delete" onclick="excluirProduto('${p.id}')">🗑️</button></td>`;tb.appendChild(tr);});if(!appData.produtos.length)tb.innerHTML='<tr><td colspan="5" style="text-align:center;padding:20px;color:var(--text-muted)">Nenhum produto cadastrado.</td></tr>';}
 
     // Compras / Repasse
     function adicionarItemCompra(produtoId='',qtd='',custo=''){const c=document.getElementById('compra-itens'),d=document.createElement('div');d.className='purchase-row';const id=uid('citem');d.dataset.id=id;const opts=appData.produtos.map(p=>`<option value="${p.id}" ${p.id===produtoId?'selected':''}>${escapeHtml(p.nome)}</option>`).join('');d.innerHTML=`<div class="form-group"><label>Produto</label><select class="compra-produto"><option value="">Selecione...</option>${opts}</select></div><div class="form-group"><label>Quantidade</label><input type="number" class="compra-qtd" min="0.01" step="0.01" value="${qtd}" oninput="atualizarTotalCompra()"></div><div class="form-group"><label>Custo (R$/g)</label><input type="number" class="compra-custo" min="0" step="0.01" value="${custo}" oninput="atualizarTotalCompra()"></div><button type="button" class="btn-action btn-delete purchase-remove" onclick="this.parentElement.remove();atualizarTotalCompra()">✕ Remover</button>`;c.appendChild(d);atualizarTotalCompra();}
     function atualizarTotalCompra(){let total=num(document.getElementById('compra-frete')?.value);document.querySelectorAll('#compra-itens .purchase-row').forEach(r=>total+=num(r.querySelector('.compra-qtd').value)*num(r.querySelector('.compra-custo').value));const box=document.getElementById('compra-total-preview');if(box)box.innerHTML=`Total da compra: <strong>${formatarMoeda(total)}</strong>`;}
-    function salvarCompra(e){e.preventDefault();const fornecedorId=document.getElementById('compra-fornecedor').value;if(!fornecedorId){alert('Selecione um fornecedor.');return;}const itens=[...document.querySelectorAll('#compra-itens .purchase-row')].map(r=>({produtoId:r.querySelector('.compra-produto').value,quantidade:num(r.querySelector('.compra-qtd').value),custoUnit:num(r.querySelector('.compra-custo').value)})).filter(x=>x.produtoId&&x.quantidade>0);if(!itens.length){alert('Adicione ao menos um produto comprado.');return;}const frete=num(document.getElementById('compra-frete').value),total=frete+itens.reduce((s,x)=>s+x.quantidade*x.custoUnit,0),data=document.getElementById('compra-data').value||new Date().toISOString().slice(0,10),status=document.getElementById('compra-status').value;const compra={id:uid('rep'),fornecedorId,data,produtosComprados:itens,frete,total,status,criadoEm:new Date().toISOString()};appData.repasses.push(compra);appData.comprasFabrica.push({id:compra.id,fornecedorId,data,categoria:'Insumos',descricao:`Compra de ${itens.map(x=>getProduct(x.produtoId)?.nome||'produto').join(', ')}`,valor:total,tipo:'Insumo já incorporado',impactoResultado:false,repasseId:compra.id});salvarDados();cancelarCompra();renderizarTudo();}
+    function salvarCompra(e){if(!exigirSessao())return;e.preventDefault();const fornecedorId=document.getElementById('compra-fornecedor').value;if(!fornecedorId){alert('Selecione um fornecedor.');return;}const itens=[...document.querySelectorAll('#compra-itens .purchase-row')].map(r=>({produtoId:r.querySelector('.compra-produto').value,quantidade:num(r.querySelector('.compra-qtd').value),custoUnit:num(r.querySelector('.compra-custo').value)})).filter(x=>x.produtoId&&x.quantidade>0);if(!itens.length){alert('Adicione ao menos um produto comprado.');return;}const frete=num(document.getElementById('compra-frete').value),total=frete+itens.reduce((s,x)=>s+x.quantidade*x.custoUnit,0),data=document.getElementById('compra-data').value||new Date().toISOString().slice(0,10),status=document.getElementById('compra-status').value;const compra={id:uid('rep'),fornecedorId,data,produtosComprados:itens,frete,total,status,criadoEm:new Date().toISOString()};appData.repasses.push(compra);appData.comprasFabrica.push({id:compra.id,fornecedorId,data,categoria:'Insumos',descricao:`Compra de ${itens.map(x=>getProduct(x.produtoId)?.nome||'produto').join(', ')}`,valor:total,tipo:'Insumo já incorporado',impactoResultado:false,repasseId:compra.id});salvarDados('adição',`Registrou compra/repasse de ${formatarMoeda(total)}`);cancelarCompra();renderizarTudo();}
     function cancelarCompra(){const f=document.getElementById('form-compra');if(f)f.reset();document.getElementById('compra-itens').innerHTML='';const d=document.getElementById('compra-data');if(d)d.value=new Date().toISOString().slice(0,10);atualizarTotalCompra();}
-    function salvarOutraCompra(e){e.preventDefault();const data=document.getElementById('outra-compra-data').value||new Date().toISOString().slice(0,10),categoria=document.getElementById('outra-compra-categoria').value,descricao=document.getElementById('outra-compra-descricao').value.trim(),valor=num(document.getElementById('outra-compra-valor').value);if(!descricao||valor<0)return;appData.comprasFabrica.push({id:uid('cmp'),data,categoria,descricao,valor,tipo:'Operacional',impactoResultado:true});salvarDados();document.getElementById('form-outra-compra').reset();document.getElementById('outra-compra-data').value=new Date().toISOString().slice(0,10);renderizarTudo();}
+    function salvarOutraCompra(e){if(!exigirSessao())return;e.preventDefault();const data=document.getElementById('outra-compra-data').value||new Date().toISOString().slice(0,10),categoria=document.getElementById('outra-compra-categoria').value,descricao=document.getElementById('outra-compra-descricao').value.trim(),valor=num(document.getElementById('outra-compra-valor').value);if(!descricao||valor<0)return;appData.comprasFabrica.push({id:uid('cmp'),data,categoria,descricao,valor,tipo:'Operacional',impactoResultado:true});salvarDados('adição',`Registrou compra operacional: ${descricao} · ${formatarMoeda(valor)}`);document.getElementById('form-outra-compra').reset();document.getElementById('outra-compra-data').value=new Date().toISOString().slice(0,10);renderizarTudo();}
     function renderizarRepasses(){const c=document.getElementById('lista-repasses');if(!c)return;c.innerHTML='';const arr=[...(appData.repasses||[])].sort((a,b)=>String(b.data).localeCompare(String(a.data)));if(!arr.length){c.innerHTML='<div style="color:var(--text-muted);padding:12px">Nenhum repasse registrado.</div>';return;}arr.forEach(r=>{const f=getSupplier(r.fornecedorId);const div=document.createElement('div');div.className='purchase-card';div.innerHTML=`<div class="purchase-card-head"><div><strong>${escapeHtml(f?.nome||'Fornecedor removido')}</strong><div class="purchase-meta">${escapeHtml(r.data||'')} · ${(r.produtosComprados||[]).map(x=>`${escapeHtml(getProduct(x.produtoId)?.nome||'Produto removido')} ${num(x.quantidade)}g × ${formatarMoeda(x.custoUnit)}/g`).join(' · ')} · frete ${formatarMoeda(r.frete)}</div></div><div style="text-align:right"><span class="status-pill ${r.status==='Repassado'?'done':'pending'}">${r.status==='Repassado'?'🟢 Repassado':'🟡 A pagar'}</span><div class="purchase-total">${formatarMoeda(r.total)}</div></div></div><div style="margin-top:8px"><button class="btn-action" onclick="alternarStatusRepasse('${r.id}')">${r.status==='Repassado'?'↩️ Voltar a pagar':'💸 Marcar como repassado'}</button></div>`;c.appendChild(div);});}
-    function alternarStatusRepasse(id){const r=appData.repasses.find(x=>x.id===id);if(!r)return;r.status=r.status==='Repassado'?'Pendente':'Repassado';salvarDados();renderizarTudo();}
+    function alternarStatusRepasse(id){if(!exigirSessao())return;const r=appData.repasses.find(x=>x.id===id);if(!r)return;r.status=r.status==='Repassado'?'Pendente':'Repassado';salvarDados('alteração',`Alterou status do repasse ${id} para ${r.status}`);renderizarTudo();}
 
     // Relatórios: período mensal + ticket médio, vendas por produto, custos por fornecedor e rateio.
     function gerarRelatorioRateio(){
@@ -1603,12 +1724,12 @@
     }
     function baixarRelatorioPDF(){const el=document.getElementById('area-relatorio-impressao');if(!el)return;if(typeof html2pdf==='undefined'){alert('A biblioteca de PDF ainda está carregando.');return;}html2pdf().set({margin:10,filename:`relatorio_${document.getElementById('relatorio-mes').value}_${document.getElementById('relatorio-ano').value}.pdf`,image:{type:'jpeg',quality:.98},html2canvas:{scale:2},jsPDF:{unit:'mm',format:'a4',orientation:'portrait'}}).from(el).save();}
 
-    function renderizarTudo(){const u=document.getElementById('select-usuario-atual');if(u)u.value=appData.usuarioAtual||'Ramom';const s=document.getElementById('slider-split-socios');if(s){s.value=appData.splitRamomPct??50;document.getElementById('label-split-val').innerText=`${appData.splitRamomPct??50}% Ramom / ${100-(appData.splitRamomPct??50)}% Monique`;s.style.background=`linear-gradient(90deg,var(--herb-green) 0%,var(--herb-green) ${appData.splitRamomPct??50}%,#d8c6b5 ${appData.splitRamomPct??50}%,#d8c6b5 100%)`;}renderizarProdutos();renderizarFornecedores();renderizarPedidos();renderizarRepasses();atualizarDashboard();}
+    function renderizarTudo(){atualizarSessaoUI();const s=document.getElementById('slider-split-socios');if(s){s.value=appData.splitRamomPct??50;document.getElementById('label-split-val').innerText=`${appData.splitRamomPct??50}% Ramom / ${100-(appData.splitRamomPct??50)}% Monique`;s.style.background=`linear-gradient(90deg,var(--herb-green) 0%,var(--herb-green) ${appData.splitRamomPct??50}%,#d8c6b5 ${appData.splitRamomPct??50}%,#d8c6b5 100%)`;}renderizarProdutos();renderizarFornecedores();renderizarPedidos();renderizarRepasses();atualizarDashboard();}
 
     window.addEventListener('online',()=>{const dot=document.getElementById('sync-dot');if(dot)dot.className='sync-dot';showToast('Conexão restaurada.');});
     window.addEventListener('offline',()=>{const dot=document.getElementById('sync-dot'),label=document.getElementById('sync-label'),detail=document.getElementById('sync-detail');if(dot)dot.className='sync-dot offline';if(label)label.textContent='Modo offline';if(detail)detail.textContent='as alterações podem sincronizar depois';showToast('Você está offline. Evite fechar a página antes de confirmar a sincronização.','warning');});
-    document.addEventListener('keydown',e=>{if(e.key==='Escape'){document.querySelectorAll('.modal-backdrop').forEach(m=>m.style.display='none');}});
-    window.addEventListener('load',()=>{const d=document.getElementById('compra-data');if(d)d.value=new Date().toISOString().slice(0,10);const od=document.getElementById('outra-compra-data');if(od)od.value=new Date().toISOString().slice(0,10);carregarDadosIniciais();const now=new Date(),m=document.getElementById('relatorio-mes'),a=document.getElementById('relatorio-ano');if(m)m.value=now.getMonth();if(a)a.value=now.getFullYear();});
+    document.addEventListener('keydown',e=>{if(e.key==='Escape'){fecharAuditoria();fecharModalFinanceiro();}});
+    window.addEventListener('load',()=>{inicializarSessao();const d=document.getElementById('compra-data');if(d)d.value=new Date().toISOString().slice(0,10);const od=document.getElementById('outra-compra-data');if(od)od.value=new Date().toISOString().slice(0,10);carregarDadosIniciais();const now=new Date(),m=document.getElementById('relatorio-mes'),a=document.getElementById('relatorio-ano');if(m)m.value=now.getMonth();if(a)a.value=now.getFullYear();});
     if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',inicializarRadio);else inicializarRadio();
   </script>
 
