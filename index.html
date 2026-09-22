@@ -38,8 +38,12 @@
       --warning-text: #b78103;
       --danger-bg: #ffebee;
       --danger-text: #c62828;
-      --info-bg: #e3f2fd;
-      --info-text: #1565c0;
+      --info-bg: #f1ebe3;
+      --info-text: #6b4b35;
+      --green-soft: #e8efe3;
+      --green-mid: #607a4a;
+      --cocoa-soft: #efe3d6;
+      --cocoa-line: #d7c1ab;
       --muted-btn-bg: #eddcd3;
     }
 
@@ -163,6 +167,21 @@
     .dashboard-featured-profit .dash-subtext{font-size:.82rem;margin-top:7px}
     .dashboard-featured-profit .profit-caption{font-size:.72rem;color:var(--text-muted);margin-top:10px}
 
+    /* Divisão dos sócios: verde/cacau, sem o azul padrão do navegador */
+    #slider-split-socios{
+      appearance:none;-webkit-appearance:none;height:6px;border-radius:999px;
+      background:linear-gradient(90deg,var(--herb-green) 0%,var(--herb-green) 50%,#d8c6b5 50%,#d8c6b5 100%);
+      accent-color:var(--herb-green);cursor:pointer;
+    }
+    #slider-split-socios::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;width:18px;height:18px;border-radius:50%;background:var(--herb-green);border:3px solid #fff;box-shadow:0 1px 5px rgba(74,44,29,.28)}
+    #slider-split-socios::-moz-range-thumb{width:18px;height:18px;border-radius:50%;background:var(--herb-green);border:3px solid #fff;box-shadow:0 1px 5px rgba(74,44,29,.28)}
+    #slider-split-socios:focus-visible{outline:3px solid rgba(77,104,58,.2);outline-offset:4px}
+
+    /* Azul não faz parte da identidade: ações neutras usam cacau/verde */
+    .btn-edit{background:var(--green-soft);color:var(--herb-green)}
+    .btn-delete{background:#f7e8e3;color:#a33f2f}
+    .badge-socio{background:var(--cocoa-soft);color:var(--choc-dark)}
+
     .dash-title {
       font-size: 0.82rem;
       text-transform: uppercase;
@@ -195,8 +214,22 @@
     }
 
     /* ABAS DE NAVEGAÇÃO RETRÁTEIS */
+    .finance-action-strip{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:13px 15px;margin:0 0 16px;background:linear-gradient(90deg,var(--green-soft),#fbf8f3);border:1px solid #d6e0cf;border-radius:12px}
+    .finance-action-strip>div{display:flex;flex-direction:column;gap:2px}.finance-action-strip strong{color:var(--choc-dark);font-size:.9rem}.finance-action-strip span{font-size:.78rem;color:var(--text-muted)}
+    .finance-action-btn{white-space:nowrap;border-color:var(--herb-green);color:var(--herb-green);background:#fff}
+    .finance-action-btn:hover{background:var(--green-soft)}
+    @media(max-width:650px){.finance-action-strip{align-items:stretch;flex-direction:column}.finance-action-btn{width:100%}}
+
+    /* MICROINTERAÇÕES SONORAS — leves, opcionais e sem arquivos externos */
+    .sound-toggle{display:inline-flex;align-items:center;gap:7px;border:1px solid var(--border-color);background:#fffaf5;color:var(--choc-dark);padding:7px 10px;border-radius:10px;font:inherit;font-size:.8rem;font-weight:700;cursor:pointer;transition:transform .18s ease,box-shadow .18s ease,border-color .18s ease,background .18s ease}
+    .sound-toggle:hover{transform:translateY(-1px);border-color:#cdb8a5;box-shadow:0 5px 14px rgba(74,44,29,.09);background:#fff}
+    .sound-toggle:focus-visible{outline:3px solid rgba(77,104,58,.22);outline-offset:2px}
+    .sound-toggle.is-off{color:var(--text-muted);background:#f7f3ee}
+    @media(max-width:650px){.sound-toggle .sound-label{display:none}.sound-toggle{padding:8px 9px}}
+
     .tabs-nav {
       display: flex;
+      justify-content: center;
       border-bottom: 2px solid var(--border-color);
       gap: 8px;
       margin-bottom: 24px;
@@ -365,7 +398,7 @@
       margin-right: 4px;
     }
 
-    .btn-edit { background: #e0f2fe; color: #0369a1; }
+    .btn-edit { background: var(--green-soft); color: var(--herb-green); }
     .btn-delete { background: #fee2e2; color: #b91c1c; }
 
     /* TABELAS */
@@ -434,6 +467,10 @@
       padding: 16px;
     }
 
+    .finance-modal-card{max-width:820px}
+    .finance-modal-section{padding:14px 0;border-bottom:1px solid var(--border-color)}
+    .finance-modal-section:last-child{border-bottom:none}.finance-modal-section h4{color:var(--choc-dark);margin:3px 0 12px}.finance-history-section{padding-bottom:0}
+
     .modal-card {
       background: #ffffff;
       border-radius: 16px;
@@ -496,23 +533,22 @@
     }
 
     :root { --herb-green-bg:#eef4e9; }
-    .dashboard-carousel { position:relative; margin-bottom:22px; }
-    .dashboard-track { display:flex; gap:14px; overflow-x:auto; scroll-snap-type:x mandatory; scroll-behavior:smooth; padding:4px 3px 10px; cursor:grab; scrollbar-width:none; overscroll-behavior-x:contain; }
-    .dashboard-track::-webkit-scrollbar{display:none}
-    .dashboard-track.is-dragging{cursor:grabbing;scroll-behavior:auto;scroll-snap-type:none}
-    .dashboard-track .dash-card{flex:0 0 min(78%, 330px); min-height:138px; display:flex; flex-direction:column; justify-content:center; scroll-snap-align:start; user-select:none}
+    .dashboard-main-cards{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;margin:4px 0 22px}
+    .dashboard-main-cards .dash-card{min-height:150px;display:flex;flex-direction:column;justify-content:center;transition:transform .18s ease,box-shadow .18s ease}
+    .dashboard-main-cards .dash-card:hover{transform:translateY(-2px);box-shadow:0 12px 26px rgba(74,44,29,.11)}
     .dash-card .dash-value{font-size:1.62rem; margin-top:3px}
     .dash-card .dash-subtext{min-height:18px}
-    .carousel-arrow{position:absolute;top:50%;transform:translateY(-50%);width:36px;height:36px;border-radius:50%;border:1px solid var(--border-color);background:#fff;color:var(--choc-dark);font-size:1.2rem;font-weight:800;box-shadow:0 4px 12px rgba(74,44,29,.12);z-index:2;cursor:pointer}
-    .carousel-arrow:hover{background:var(--card-sub-bg)} .carousel-arrow.prev{left:-12px}.carousel-arrow.next{right:-12px}
-    .carousel-dots{display:flex;justify-content:center;gap:6px;margin-top:3px}.carousel-dot{width:7px;height:7px;border-radius:50%;background:var(--border-color);border:0;padding:0}.carousel-dot.active{background:var(--choc-dark);transform:scale(1.25)}
+    .dashboard-main-cards .dash-card:nth-child(2){border-color:#d8c6b5}
+    .dashboard-main-cards .dash-card:nth-child(3){border-color:#d8c6b5;background:linear-gradient(145deg,#fffaf4,#f5eee5)}
+    .dashboard-main-cards .dash-card:nth-child(3) .dash-title{color:var(--choc-dark)}
+    .dashboard-main-cards .dash-card:nth-child(3) .dash-value{color:var(--choc-dark)}
     .dash-detail-panel{margin-top:0;position:relative}.detail-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px}.detail-stat{background:#fff;border:1px solid var(--border-color);border-radius:10px;padding:11px}.detail-stat span{display:block;font-size:.74rem;color:var(--text-muted);font-weight:700}.detail-stat strong{display:block;margin-top:3px;color:var(--choc-dark);font-size:1.05rem}
     .section-kicker{font-size:.76rem;text-transform:uppercase;letter-spacing:.06em;color:var(--text-muted);font-weight:800;margin-bottom:4px}
     .summary-strip{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-bottom:14px}.summary-box{background:var(--card-sub-bg);border:1px solid var(--border-color);border-radius:10px;padding:12px}.summary-box strong{display:block;font-size:1.12rem;color:var(--choc-dark)}.summary-box span{font-size:.75rem;color:var(--text-muted)}
     .status-pill{display:inline-flex;align-items:center;gap:4px;padding:4px 8px;border-radius:999px;font-size:.74rem;font-weight:800}.status-pill.pending{background:var(--warning-bg);color:var(--warning-text)}.status-pill.done{background:var(--success-bg);color:var(--success-text)}.status-pill.info{background:var(--info-bg);color:var(--info-text)}
     .purchase-items{display:flex;flex-direction:column;gap:8px}.purchase-row{display:grid;grid-template-columns:1.5fr .7fr .8fr auto;gap:8px;align-items:end;padding:10px;border:1px solid var(--border-color);border-radius:10px;background:#fff}.purchase-list{display:flex;flex-direction:column;gap:8px}.purchase-card{background:#fff;border:1px solid var(--border-color);border-radius:12px;padding:12px}.purchase-card-head{display:flex;justify-content:space-between;gap:8px;align-items:flex-start}.purchase-meta{font-size:.78rem;color:var(--text-muted);margin-top:4px}.purchase-total{font-size:1.05rem;font-weight:800;color:var(--choc-dark)}
     .whatsapp-warning{background:var(--warning-bg);color:#765800;border:1px solid #f0d98a;border-radius:9px;padding:9px;font-size:.78rem;margin-top:8px}.whatsapp-ok{background:var(--success-bg);color:var(--success-text);border:1px solid #cfe1c7;border-radius:9px;padding:9px;font-size:.78rem;margin-top:8px}
-    @media (max-width:650px){.dashboard-track .dash-card{flex-basis:86%}.carousel-arrow{display:none}.dashboard-featured-profit .dash-card{min-height:158px;padding:20px 18px}.dashboard-featured-profit .dash-value{font-size:1.9rem}.purchase-row{grid-template-columns:1fr 1fr}.purchase-row .purchase-remove{grid-column:1/-1}.tabs-nav{display:flex;overflow-x:auto;flex-wrap:nowrap;scrollbar-width:none}.tabs-nav::-webkit-scrollbar{display:none}.tab-btn{white-space:nowrap;flex:0 0 auto}}
+    @media (max-width:650px){.dashboard-main-cards{grid-template-columns:1fr;gap:10px}.dashboard-main-cards .dash-card{min-height:132px}.dashboard-featured-profit .dash-card{min-height:158px;padding:20px 18px}.dashboard-featured-profit .dash-value{font-size:1.9rem}.purchase-row{grid-template-columns:1fr 1fr}.purchase-row .purchase-remove{grid-column:1/-1}.tabs-nav{display:flex;justify-content:flex-start;overflow-x:auto;flex-wrap:nowrap;scrollbar-width:none}.tabs-nav::-webkit-scrollbar{display:none}.tab-btn{white-space:nowrap;flex:0 0 auto}}
 
     /* ===================================================
        CAMADA DE POLIMENTO 2026 — interface, acessibilidade
@@ -532,16 +568,119 @@
     .toolbar-status{display:flex;align-items:center;gap:8px;font-size:.78rem;color:var(--text-muted);font-weight:700;min-width:0}.toolbar-status strong{color:var(--choc-dark)}
     .sync-dot{width:9px;height:9px;border-radius:50%;background:var(--herb-green);box-shadow:0 0 0 4px rgba(77,104,58,.12);flex:0 0 auto}.sync-dot.offline{background:#b78103;box-shadow:0 0 0 4px rgba(183,129,3,.12)}.sync-dot.error{background:#c62828;box-shadow:0 0 0 4px rgba(198,40,40,.12)}
     .toolbar-actions{display:flex;gap:7px;flex-wrap:wrap;justify-content:flex-end}.toolbar-btn{border:1px solid var(--border-color);background:#fff;color:var(--choc-dark);border-radius:8px;padding:7px 10px;font-size:.76rem;font-weight:800;cursor:pointer}.toolbar-btn:hover{background:var(--card-sub-bg);transform:translateY(-1px)}
-    .dashboard-insights{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:0 0 18px}.insight-card{background:linear-gradient(135deg,#fff,#fbf7f0);border:1px solid var(--border-color);border-radius:12px;padding:11px 13px;box-shadow:0 4px 12px rgba(74,44,29,.045)}.insight-label{font-size:.7rem;text-transform:uppercase;letter-spacing:.05em;color:var(--text-muted);font-weight:800}.insight-value{font-size:1.02rem;font-weight:900;color:var(--choc-dark);margin-top:2px}.insight-note{font-size:.72rem;color:var(--text-muted);margin-top:2px}
     .trend-card{background:#fff;border:1px solid var(--border-color);border-radius:14px;padding:14px 16px;margin-bottom:20px;box-shadow:var(--shadow-soft)}.trend-head{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:8px}.trend-head h3{font-size:1rem;color:var(--choc-dark)}.trend-head p{font-size:.74rem;color:var(--text-muted);margin-top:2px}.trend-value{text-align:right;font-size:1.05rem;font-weight:900;color:var(--herb-green)}.trend-chart{width:100%;height:170px;display:block}.trend-grid{stroke:#eadfd1;stroke-width:1}.trend-line{fill:none;stroke:var(--herb-green);stroke-width:3;stroke-linecap:round;stroke-linejoin:round}.trend-area{fill:rgba(77,104,58,.10)}.trend-point{fill:#fff;stroke:var(--herb-green);stroke-width:2}.trend-label{font-size:10px;fill:var(--text-muted)}
     .orders-toolbar{display:grid;grid-template-columns:minmax(220px,1.5fr) repeat(3,minmax(130px,.55fr)) auto;gap:8px;align-items:center;margin-bottom:12px}.orders-search{position:relative}.orders-search input{width:100%;padding:10px 12px 10px 36px;border:1px solid var(--border-color);border-radius:9px;background:#fff}.orders-search span{position:absolute;left:12px;top:9px;color:var(--text-muted)}.filter-select{width:100%;padding:10px 11px;border:1px solid var(--border-color);border-radius:9px;background:#fff;color:var(--text-main);font-size:.82rem}.results-count{font-size:.75rem;color:var(--text-muted);font-weight:700;text-align:right;white-space:nowrap}.order-mobile-list{display:none}.order-mobile-card{background:#fff;border:1px solid var(--border-color);border-radius:12px;padding:13px;box-shadow:0 4px 14px rgba(74,44,29,.05)}.order-mobile-top{display:flex;justify-content:space-between;gap:10px;align-items:flex-start}.order-mobile-name{font-weight:900;color:var(--choc-dark)}.order-mobile-meta{font-size:.76rem;color:var(--text-muted);margin-top:3px}.order-mobile-money{display:flex;justify-content:space-between;gap:10px;margin-top:10px;padding-top:10px;border-top:1px solid #f0e8df}.order-mobile-actions{display:flex;gap:6px;margin-top:10px}.order-mobile-detail{display:none;margin-top:9px;padding:9px;border-radius:9px;background:var(--card-sub-bg);font-size:.78rem}.order-mobile-card.open .order-mobile-detail{display:block}
     .empty-state{padding:24px;text-align:center;color:var(--text-muted)}.empty-state strong{display:block;color:var(--choc-dark);font-size:.95rem;margin-bottom:3px}.empty-state span{font-size:.78rem}
     .toast-stack{position:fixed;right:18px;bottom:18px;z-index:10050;display:flex;flex-direction:column;gap:8px;max-width:min(360px,calc(100vw - 36px))}.toast{background:#fff;border:1px solid var(--border-color);border-left:4px solid var(--herb-green);border-radius:10px;padding:11px 13px;box-shadow:0 14px 30px rgba(45,28,20,.18);font-size:.8rem;font-weight:700;color:var(--choc-dark);animation:toastIn .2s ease}.toast.warning{border-left-color:#b78103}.toast.error{border-left-color:#c62828}@keyframes toastIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
     .backup-note{font-size:.72rem;color:var(--text-muted);margin-top:5px}.data-file-input{display:none}
     .report-toolbar{display:flex;gap:8px;align-items:end;flex-wrap:wrap}.report-toolbar .report-field{display:flex;flex-direction:column;gap:5px}.report-toolbar label{font-size:.76rem;font-weight:800;color:var(--text-muted)}
-    @media(max-width:850px){.orders-toolbar{grid-template-columns:1fr 1fr}.results-count{grid-column:1/-1;text-align:left}.dashboard-insights{grid-template-columns:repeat(2,1fr)}}
-    @media(max-width:650px){.app-toolbar{align-items:flex-start;flex-direction:column}.toolbar-actions{width:100%;justify-content:stretch}.toolbar-btn{flex:1}.dashboard-insights{grid-template-columns:1fr 1fr}.trend-card{padding:12px}.trend-chart{height:150px}.orders-toolbar{grid-template-columns:1fr}.results-count{grid-column:auto}.table-wrapper.orders-table-wrap{display:none}.order-mobile-list{display:flex;flex-direction:column;gap:9px}.orders-search input,.filter-select{padding-top:11px;padding-bottom:11px}.dashboard-insights .insight-card{padding:10px}.insight-value{font-size:.94rem}}
     @media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;animation-duration:.001ms!important;transition-duration:.001ms!important}}
+
+    /* POLIMENTO ESTÉTICO — dashboard contemporâneo, sem alterar a lógica */
+    .dashboard-main-cards{gap:16px;margin:6px 0 24px;align-items:stretch}
+    .dashboard-main-cards .dash-card{
+      position:relative;isolation:isolate;overflow:hidden;min-height:164px;padding:22px 20px 20px;
+      text-align:left;justify-content:flex-start;align-items:flex-start;
+      background:linear-gradient(145deg,#fffdf9 0%,#fbf7f1 100%);
+      border:1px solid rgba(122,83,56,.16);border-radius:20px;
+      box-shadow:0 8px 24px rgba(74,44,29,.065);
+      transition:transform .22s cubic-bezier(.2,.7,.2,1),box-shadow .22s ease,border-color .22s ease,background .22s ease;
+    }
+    .dashboard-main-cards .dash-card::before{
+      content:"";position:absolute;left:0;right:0;top:0;height:3px;
+      background:linear-gradient(90deg,var(--choc-dark),var(--choc-milk));opacity:.9;
+    }
+    .dashboard-main-cards .dash-card::after{
+      content:"";position:absolute;width:110px;height:110px;right:-42px;bottom:-52px;border-radius:50%;
+      background:rgba(122,83,56,.045);z-index:-1;transition:transform .3s ease,background .3s ease;
+    }
+    .dashboard-main-cards .dash-card:hover{
+      transform:translateY(-4px);box-shadow:0 16px 34px rgba(74,44,29,.11);
+      border-color:rgba(122,83,56,.28);background:linear-gradient(145deg,#fffefa 0%,#f8f1e8 100%);
+    }
+    .dashboard-main-cards .dash-card:hover::after{transform:scale(1.25);background:rgba(77,104,58,.055)}
+    .dashboard-main-cards .dash-card:active{transform:translateY(-1px)}
+    .dashboard-main-cards .dash-title{
+      position:relative;padding-right:18px;font-size:.82rem;font-weight:800;line-height:1.3;
+      letter-spacing:.15px;color:var(--choc-milk);margin-bottom:13px;
+    }
+    .dashboard-main-cards .dash-title::after{
+      content:"";position:absolute;right:0;top:.28em;width:6px;height:6px;border-radius:50%;
+      background:var(--choc-milk);opacity:.55;
+    }
+    .dashboard-main-cards .dash-value{
+      font-size:clamp(1.65rem,2.3vw,2.15rem);font-weight:900;line-height:1.05;
+      letter-spacing:-.045em;color:var(--choc-dark);margin:0;
+    }
+    .dashboard-main-cards .dash-subtext{
+      margin-top:auto;padding-top:13px;font-size:.76rem;line-height:1.4;color:var(--text-muted);font-weight:650;
+    }
+    /* O verde fica reservado ao resultado/lucro e a estados semanticamente positivos. */
+    .dashboard-main-cards .dash-card:nth-child(1)::before,.dashboard-main-cards .dash-card:nth-child(2)::before,.dashboard-main-cards .dash-card:nth-child(3)::before{background:linear-gradient(90deg,var(--choc-dark),var(--choc-milk))}
+    .dashboard-main-cards .dash-card:nth-child(1) .dash-title,.dashboard-main-cards .dash-card:nth-child(2) .dash-title,.dashboard-main-cards .dash-card:nth-child(3) .dash-title{color:var(--choc-milk)}
+    .dashboard-main-cards .dash-card:nth-child(1) .dash-value,.dashboard-main-cards .dash-card:nth-child(2) .dash-value,.dashboard-main-cards .dash-card:nth-child(3) .dash-value{color:var(--choc-dark)}
+
+    .dashboard-featured-profit{margin:2px 0 26px;position:relative}
+    .dashboard-featured-profit .dash-card{
+      min-height:188px;padding:27px 28px 24px;display:flex;flex-direction:column;align-items:flex-start;
+      background:linear-gradient(135deg,#fffdf8 0%,#f8f3eb 58%,#eef4e9 100%);
+      border:1px solid rgba(77,104,58,.28);border-radius:24px;
+      box-shadow:0 12px 30px rgba(74,44,29,.075);position:relative;overflow:hidden;cursor:pointer;
+      transition:transform .24s cubic-bezier(.2,.7,.2,1),box-shadow .24s ease,border-color .24s ease;
+    }
+    .dashboard-featured-profit .dash-card::before{
+      content:"";position:absolute;left:0;top:0;bottom:0;width:4px;background:var(--herb-green);
+    }
+    .dashboard-featured-profit .dash-card::after{
+      content:"";position:absolute;width:220px;height:220px;right:-90px;top:-120px;border-radius:50%;
+      border:1px solid rgba(77,104,58,.12);box-shadow:0 0 0 18px rgba(77,104,58,.025),0 0 0 38px rgba(77,104,58,.018);
+      pointer-events:none;
+    }
+    .dashboard-featured-profit .dash-card:hover{transform:translateY(-4px);box-shadow:0 18px 38px rgba(74,44,29,.12);border-color:rgba(77,104,58,.42)}
+    .dashboard-featured-profit .dash-title{font-size:.84rem;color:var(--herb-green);font-weight:850;letter-spacing:.2px;margin-bottom:12px}
+    .dashboard-featured-profit .dash-value{font-size:clamp(2rem,3.2vw,2.65rem);font-weight:950;line-height:1.02;letter-spacing:-.055em;color:var(--herb-green)!important;margin:0}
+    .dashboard-featured-profit .dash-subtext{font-size:.8rem;margin-top:12px;color:var(--text-muted);font-weight:650}
+    .dashboard-featured-profit .profit-caption{font-size:.72rem;color:var(--text-muted);margin-top:auto;padding-top:14px}
+
+    .dash-detail-panel{border-radius:18px;box-shadow:0 10px 28px rgba(74,44,29,.07);border-color:rgba(122,83,56,.16)}
+    .dashboard-main-cards + .dashboard-featured-profit{margin-top:0}
+    @media(max-width:650px){
+      .dashboard-main-cards{gap:11px;margin-bottom:16px}
+      .dashboard-main-cards .dash-card{min-height:145px;padding:19px 17px 17px;border-radius:17px}
+      .dashboard-main-cards .dash-value{font-size:1.7rem}
+      .dashboard-featured-profit .dash-card{min-height:170px;padding:23px 20px 21px;border-radius:20px}
+      .dashboard-featured-profit .dash-value{font-size:2rem}
+    }
+    @media(prefers-reduced-motion:reduce){
+      .dashboard-main-cards .dash-card,.dashboard-featured-profit .dash-card{transition:none}
+    }
+
+
+    /* Rádio ambiente */
+    .radio-player{position:fixed;right:18px;bottom:18px;z-index:1200;width:min(360px,calc(100vw - 28px));background:rgba(255,250,245,.96);border:1px solid rgba(122,83,56,.22);border-radius:18px;box-shadow:0 14px 34px rgba(74,44,29,.16);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);padding:11px 12px;color:var(--choc-dark);transition:transform .22s ease,opacity .22s ease,box-shadow .22s ease}
+    .radio-player:hover{box-shadow:0 18px 40px rgba(74,44,29,.2);transform:translateY(-1px)}
+    .radio-top{display:flex;align-items:center;gap:10px}
+    .radio-art{width:38px;height:38px;border-radius:13px;display:grid;place-items:center;background:linear-gradient(145deg,#efe3d6,#e8efe3);font-size:19px;flex:0 0 auto;border:1px solid rgba(122,83,56,.14)}
+    .radio-copy{min-width:0;flex:1}
+    .radio-kicker{font-size:.66rem;text-transform:uppercase;letter-spacing:.11em;color:var(--text-muted);font-weight:800}
+    .radio-name{font-size:.88rem;font-weight:800;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:1px}
+    .radio-status{font-size:.72rem;color:var(--text-muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:2px}
+    .radio-controls{display:flex;align-items:center;gap:6px}
+    .radio-btn{border:1px solid rgba(122,83,56,.18);background:#fff;color:var(--choc-dark);width:34px;height:34px;border-radius:11px;display:grid;place-items:center;cursor:pointer;font:inherit;font-weight:800;transition:transform .16s ease,background .16s ease,border-color .16s ease}
+    .radio-btn:hover{transform:translateY(-1px);background:#fffaf5;border-color:#cdb8a5}
+    .radio-btn:focus-visible{outline:3px solid rgba(77,104,58,.22);outline-offset:2px}
+    .radio-btn.primary{background:var(--choc-dark);color:#fff;border-color:var(--choc-dark);font-size:15px}
+    .radio-btn.primary:hover{background:#5b3928}
+    .radio-select{margin-top:9px;width:100%;border:1px solid rgba(122,83,56,.18);background:#fffaf5;color:var(--choc-dark);border-radius:11px;padding:8px 10px;font:inherit;font-size:.78rem;font-weight:700;cursor:pointer}
+    .radio-bottom{display:flex;align-items:center;gap:9px;margin-top:8px}
+    .radio-volume{flex:1;accent-color:var(--choc-dark);cursor:pointer}
+    .radio-volume-label{font-size:.68rem;color:var(--text-muted);font-weight:700;min-width:31px;text-align:right}
+    .radio-player.is-playing .radio-art{animation:radioPulse 2.6s ease-in-out infinite}
+    .radio-player.is-error .radio-status{color:#8b5b47}
+    @keyframes radioPulse{0%,100%{transform:scale(1)}50%{transform:scale(1.035)}}
+    @media(max-width:650px){.radio-player{right:12px;bottom:12px;width:min(330px,calc(100vw - 24px));padding:9px 10px}.radio-art{width:34px;height:34px;border-radius:11px}.radio-name{font-size:.82rem}}
+    @media(prefers-reduced-motion:reduce){.radio-player,.radio-btn{transition:none}.radio-player.is-playing .radio-art{animation:none}}
+
   </style>
 </head>
 <body>
@@ -565,35 +704,30 @@
     <div class="app-toolbar" aria-label="Ferramentas rápidas">
       <div class="toolbar-status"><span id="sync-dot" class="sync-dot"></span><span><strong id="sync-label">Dados prontos</strong> · <span id="sync-detail">salvamento automático ativo</span></span></div>
       <div class="toolbar-actions">
+        <button type="button" class="sound-toggle" id="sound-toggle" onclick="alternarSons()" aria-pressed="true" title="Ativar ou desativar sons da interface"><span id="sound-icon">🔊</span><span class="sound-label" id="sound-label">Sons</span></button>
         <button type="button" class="toolbar-btn" onclick="exportarBackup()">💾 Backup</button>
         <button type="button" class="toolbar-btn" onclick="document.getElementById('backup-file-input').click()">📂 Restaurar</button>
-        <button type="button" class="toolbar-btn" onclick="toggleTab('relatorio')">📊 Visão financeira</button>
       </div>
     </div>
     <input id="backup-file-input" class="data-file-input" type="file" accept="application/json" onchange="importarBackup(event)">
 
     <!-- DASHBOARD FINANCEIRO -->
-    <section class="dashboard-carousel" aria-label="Resumo financeiro da fábrica">
-      <button class="carousel-arrow prev" type="button" aria-label="Card anterior" onclick="moverDashboard(-1)">‹</button>
-      <div id="dashboard-track" class="dashboard-track" tabindex="0">
-        <div class="dash-card" data-panel="panel-faturar" onclick="toggleDashPanel('panel-faturar')">
-          <div class="dash-title">💰 Quanto a fábrica faturou?</div>
-          <div class="dash-value" id="dash-faturamento-total">R$ 0,00</div>
-          <div class="dash-subtext" id="dash-faturamento-sub">R$ 0,00 recebido · R$ 0,00 pendente</div>
-        </div>
-        <div class="dash-card" data-panel="panel-fornecedores" onclick="toggleDashPanel('panel-fornecedores')">
-          <div class="dash-title">📦 Pra quem a gente vai pagar?</div>
-          <div class="dash-value" id="dash-repasses-pendentes">R$ 0,00</div>
-          <div class="dash-subtext" id="dash-repasses-sub">0 repasses pendentes</div>
-        </div>
-        <div class="dash-card" data-panel="panel-compras" onclick="toggleDashPanel('panel-compras')">
-          <div class="dash-title">🛍️ O que a fábrica comprou?</div>
-          <div class="dash-value" id="dash-compras-total">R$ 0,00</div>
-          <div class="dash-subtext" id="dash-compras-sub">0 compras registradas</div>
-        </div>
+    <section class="dashboard-main-cards" aria-label="Resumo financeiro da fábrica">
+      <div class="dash-card" data-panel="panel-faturar" tabindex="0" role="button" onclick="toggleDashPanel('panel-faturar')" onkeydown="if(event.key==='Enter'||event.key===' ')toggleDashPanel('panel-faturar')">
+        <div class="dash-title">💰 Quanto a fábrica faturou?</div>
+        <div class="dash-value" id="dash-faturamento-total">R$ 0,00</div>
+        <div class="dash-subtext" id="dash-faturamento-sub">R$ 0,00 recebido · R$ 0,00 pendente</div>
       </div>
-      <button class="carousel-arrow next" type="button" aria-label="Próximo card" onclick="moverDashboard(1)">›</button>
-      <div id="carousel-dots" class="carousel-dots" aria-hidden="true"></div>
+      <div class="dash-card" data-panel="panel-fornecedores" tabindex="0" role="button" onclick="toggleDashPanel('panel-fornecedores')" onkeydown="if(event.key==='Enter'||event.key===' ')toggleDashPanel('panel-fornecedores')">
+        <div class="dash-title">📦 Pra quem a gente vai pagar?</div>
+        <div class="dash-value" id="dash-repasses-pendentes">R$ 0,00</div>
+        <div class="dash-subtext" id="dash-repasses-sub">0 repasses pendentes</div>
+      </div>
+      <div class="dash-card" data-panel="panel-compras" tabindex="0" role="button" onclick="toggleDashPanel('panel-compras')" onkeydown="if(event.key==='Enter'||event.key===' ')toggleDashPanel('panel-compras')">
+        <div class="dash-title">🛍️ O que a fábrica comprou?</div>
+        <div class="dash-value" id="dash-compras-total">R$ 0,00</div>
+        <div class="dash-subtext" id="dash-compras-sub">0 compras registradas</div>
+      </div>
     </section>
 
     <section class="dashboard-featured-profit" aria-label="Nossa parte do chocolate">
@@ -617,7 +751,9 @@
     </div>
     <div id="panel-compras" class="dash-detail-panel">
       <div class="section-kicker">Compras da fábrica</div>
-      <h4 style="color:var(--choc-dark);margin-bottom:10px;">🛍️ O que a fábrica comprou?</h4>
+      <div style="margin-bottom:10px;">
+        <h4 style="color:var(--choc-dark);margin:0;">🛍️ O que a fábrica comprou?</h4>
+      </div>
       <div id="panel-compras-conteudo"></div>
     </div>
     <div id="panel-lucro" class="dash-detail-panel">
@@ -628,18 +764,6 @@
         <div id="panel-lucro-conteudo"></div>
       </div>
     </div>
-
-    <section class="dashboard-insights" aria-label="Indicadores rápidos">
-      <div class="insight-card"><div class="insight-label">Pedidos</div><div id="insight-pedidos" class="insight-value">0</div><div id="insight-pedidos-note" class="insight-note">neste período</div></div>
-      <div class="insight-card"><div class="insight-label">Ticket médio</div><div id="insight-ticket" class="insight-value">R$ 0,00</div><div class="insight-note">por venda</div></div>
-      <div class="insight-card"><div class="insight-label">Margem</div><div id="insight-margem" class="insight-value">0%</div><div class="insight-note">sobre o faturamento</div></div>
-      <div class="insight-card"><div class="insight-label">A receber</div><div id="insight-pendente" class="insight-value">R$ 0,00</div><div class="insight-note">pedidos pendentes</div></div>
-    </section>
-
-    <section class="trend-card" aria-label="Evolução recente das vendas">
-      <div class="trend-head"><div><h3>📈 Movimento recente</h3><p>Faturamento dos últimos 7 dias com pedidos registrados.</p></div><div id="trend-total" class="trend-value">R$ 0,00</div></div>
-      <div id="dashboard-trend-chart"></div>
-    </section>
 
     <!-- NAVEGAÇÃO PRINCIPAL -->
     <div class="tabs-nav" role="tablist" aria-label="Módulos da fábrica">
@@ -843,40 +967,6 @@
     </div>
 
 
-      <div class="form-section" style="background:#ffffff;">
-        <div class="section-kicker">Movimentação financeira</div>
-        <h3>📦 Repasses e compras de insumos</h3>
-        <p style="font-size:.82rem;color:var(--text-muted);margin-bottom:12px;">O frete cadastrado no fornecedor é apenas referência. O valor abaixo registra o frete e os custos reais de cada compra, evitando duplicidade no lucro.</p>
-        <form id="form-compra" onsubmit="salvarCompra(event)">
-          <div class="form-grid">
-            <div class="form-group"><label for="compra-fornecedor">Fornecedor</label><select id="compra-fornecedor" required><option value="">Selecione...</option></select></div>
-            <div class="form-group"><label for="compra-data">Data da compra</label><input type="date" id="compra-data" required></div>
-            <div class="form-group"><label for="compra-frete">Frete real (R$)</label><input type="number" id="compra-frete" step="0.01" min="0" value="0"></div>
-            <div class="form-group"><label for="compra-status">Repasse</label><select id="compra-status"><option value="Pendente">🟡 A pagar</option><option value="Repassado">🟢 Repassado</option></select></div>
-            <div class="form-group full-width"><label>🍫 Produtos comprados</label><div id="compra-itens" class="purchase-items"></div><button type="button" class="btn-secondary" onclick="adicionarItemCompra()">＋ Adicionar produto</button></div>
-          </div>
-          <div id="compra-total-preview" class="summary-box" style="margin-top:12px;">Total da compra: <strong>R$ 0,00</strong></div>
-          <div style="display:flex;gap:10px;margin-top:12px;"><button type="submit" class="btn-submit">Registrar compra</button><button type="button" class="btn-secondary" onclick="cancelarCompra()">Limpar</button></div>
-        </form>
-      </div>
-      <div class="form-section" style="background:#ffffff;">
-        <div class="section-kicker">Compras da fábrica</div>
-        <h3>🛍️ O que a fábrica comprou?</h3>
-        <p style="font-size:.82rem;color:var(--text-muted);margin-bottom:12px;">Use para registrar compras que não são repasses de insumos: embalagens, sacolas, etiquetas, equipamentos, manutenção e outros.</p>
-        <form id="form-outra-compra" onsubmit="salvarOutraCompra(event)">
-          <div class="form-grid">
-            <div class="form-group"><label for="outra-compra-data">Data</label><input type="date" id="outra-compra-data" required></div>
-            <div class="form-group"><label for="outra-compra-categoria">Categoria</label><select id="outra-compra-categoria"><option>Embalagens</option><option>Sacolas</option><option>Etiquetas</option><option>Equipamentos</option><option>Manutenção</option><option>Outros</option></select></div>
-            <div class="form-group full-width"><label for="outra-compra-descricao">O que foi comprado?</label><input type="text" id="outra-compra-descricao" placeholder="Ex.: 500 sacolas kraft" required></div>
-            <div class="form-group"><label for="outra-compra-valor">Valor (R$)</label><input type="number" id="outra-compra-valor" step="0.01" min="0" required></div>
-          </div>
-          <button type="submit" class="btn-submit">Registrar compra</button>
-        </form>
-      </div>
-      <div class="form-section" style="background:#ffffff;">
-        <h3>📋 Histórico de repasses</h3>
-        <div id="lista-repasses" class="purchase-list"></div>
-      </div>
     <!-- ABA 3: PRODUTOS & PRECIFICAÇÃO -->
     <div id="tab-produtos" class="tab-content">
       <div id="produto-summary" class="summary-strip" aria-label="Resumo dos produtos"></div>
@@ -940,6 +1030,10 @@
         <p style="font-size:0.85rem; color:var(--text-muted); margin-bottom:14px;">
           Veja vendas, recebimentos, pendências, custos, ticket médio, resultado e rateio do período.
         </p>
+        <div class="finance-action-strip" aria-label="Ações financeiras">
+          <div><strong>💼 Gestão de compras e repasses</strong><span>Registre pagamentos e compras sem ocupar a tela principal.</span></div>
+          <button type="button" class="btn-secondary finance-action-btn" onclick="abrirModalFinanceiro()">＋ Registrar compra / repasse</button>
+        </div>
 
         <div class="report-toolbar" style="margin-bottom:16px;">
           <div>
@@ -983,6 +1077,49 @@
 
   <div id="toast-stack" class="toast-stack" aria-live="polite" aria-atomic="true"></div>
 
+
+  <!-- MODAL: GESTÃO DE COMPRAS E REPASSES -->
+  <div id="modal-financeiro" class="modal-backdrop">
+    <div class="modal-card finance-modal-card">
+      <div class="modal-header"><h3>💼 Compras e repasses</h3><button type="button" class="btn-close-modal" onclick="fecharModalFinanceiro()">✕</button></div>
+      <p style="font-size:.84rem;color:var(--text-muted);margin-bottom:14px;">Esses registros ficam fora das abas principais para não poluir a operação diária. O que você lançar aqui alimenta os relatórios e os valores de repasse.</p>
+      <div class="finance-modal-section">
+        <div class="section-kicker">Repasse de insumo</div>
+        <h4>📦 Registrar compra do fornecedor</h4>
+        <form id="form-compra" onsubmit="salvarCompra(event)">
+          <div class="form-grid">
+            <div class="form-group"><label for="compra-fornecedor">Fornecedor</label><select id="compra-fornecedor" required><option value="">Selecione...</option></select></div>
+            <div class="form-group"><label for="compra-data">Data da compra</label><input type="date" id="compra-data" required></div>
+            <div class="form-group"><label for="compra-frete">Frete real (R$)</label><input type="number" id="compra-frete" step="0.01" min="0" value="0"></div>
+            <div class="form-group"><label for="compra-status">Repasse</label><select id="compra-status"><option value="Pendente">🟡 A pagar</option><option value="Repassado">🟢 Repassado</option></select></div>
+            <div class="form-group full-width"><label>🍫 Produtos comprados</label><div id="compra-itens" class="purchase-items"></div><button type="button" class="btn-secondary" onclick="adicionarItemCompra()">＋ Adicionar produto</button></div>
+          </div>
+          <div id="compra-total-preview" class="summary-box" style="margin-top:12px;">Total da compra: <strong>R$ 0,00</strong></div>
+          <div style="display:flex;gap:10px;margin-top:12px;"><button type="submit" class="btn-submit">Registrar compra</button><button type="button" class="btn-secondary" onclick="cancelarCompra()">Limpar</button></div>
+        </form>
+      </div>
+      <div class="finance-modal-section">
+        <div class="section-kicker">Compra operacional</div>
+        <h4>🛍️ O que a fábrica comprou?</h4>
+        <p style="font-size:.8rem;color:var(--text-muted);margin-bottom:10px;">Embalagens, sacolas, etiquetas, equipamentos, manutenção e outras compras que não são insumos do fornecedor.</p>
+        <form id="form-outra-compra" onsubmit="salvarOutraCompra(event)">
+          <div class="form-grid">
+            <div class="form-group"><label for="outra-compra-data">Data</label><input type="date" id="outra-compra-data" required></div>
+            <div class="form-group"><label for="outra-compra-categoria">Categoria</label><select id="outra-compra-categoria"><option>Embalagens</option><option>Sacolas</option><option>Etiquetas</option><option>Equipamentos</option><option>Manutenção</option><option>Outros</option></select></div>
+            <div class="form-group full-width"><label for="outra-compra-descricao">O que foi comprado?</label><input type="text" id="outra-compra-descricao" placeholder="Ex.: 500 sacolas kraft" required></div>
+            <div class="form-group"><label for="outra-compra-valor">Valor (R$)</label><input type="number" id="outra-compra-valor" step="0.01" min="0" required></div>
+          </div>
+          <button type="submit" class="btn-submit">Registrar compra</button>
+        </form>
+      </div>
+      <div class="finance-modal-section finance-history-section">
+        <div class="section-kicker">Histórico</div>
+        <h4>📋 Repasses registrados</h4>
+        <div id="lista-repasses" class="purchase-list"></div>
+      </div>
+    </div>
+  </div>
+
   <!-- JANELA MODAL: IMPORTAR DO WHATSAPP -->
   <div id="modal-import-whatsapp" class="modal-backdrop">
     <div class="modal-card">
@@ -997,6 +1134,126 @@
 
   <!-- JAVASCRIPT PRINCIPAL DO SISTEMA -->
   <script>
+    // Sistema sonoro da interface: pequenos tons sintéticos, sem arquivos externos.
+
+    // Rádio ambiente: streams oficiais do SomaFM. O navegador pode bloquear autoplay
+    // com áudio; nesse caso a rádio começa no primeiro clique do usuário.
+    const RADIO_KEY='fabrica_radio_config';
+    const RADIO_STATIONS={
+      lofi:{name:'Lo-fi & Chill',icon:'☕',url:'https://ice.somafm.com/groovesalad'},
+      jazz:{name:'Lo-fi Jazz / Jazz moderno',icon:'🎷',url:'https://ice.somafm.com/sonicuniverse'},
+      reggae:{name:'Reggae',icon:'🌿',url:'https://ice.somafm.com/reggae'}
+    };
+    const radioState={station:'lofi',volume:.22,muted:false,autoplay:true,started:false};
+    function carregarRadioConfig(){
+      try{const raw=localStorage.getItem(RADIO_KEY);if(raw){const x=JSON.parse(raw);if(x.station&&RADIO_STATIONS[x.station])radioState.station=x.station;if(Number.isFinite(x.volume))radioState.volume=Math.max(0,Math.min(1,x.volume));radioState.muted=x.muted===true;radioState.autoplay=x.autoplay!==false;}}catch(e){}
+    }
+    function salvarRadioConfig(){try{localStorage.setItem(RADIO_KEY,JSON.stringify({station:radioState.station,volume:radioState.volume,muted:radioState.muted,autoplay:radioState.autoplay}));}catch(e){}}
+    function atualizarRadioUI(){
+      const box=document.getElementById('radio-player'),a=document.getElementById('radio-audio'),play=document.getElementById('radio-play'),mute=document.getElementById('radio-mute'),sel=document.getElementById('radio-station'),name=document.getElementById('radio-name'),status=document.getElementById('radio-status'),vol=document.getElementById('radio-volume'),vl=document.getElementById('radio-volume-label');
+      if(!box||!a)return;
+      const st=RADIO_STATIONS[radioState.station];
+      if(sel)sel.value=radioState.station;
+      if(name)name.textContent=st.name;
+      if(vol)vol.value=radioState.volume;
+      if(vl)vl.textContent=Math.round(radioState.volume*100)+'%';
+      a.volume=radioState.volume;a.muted=radioState.muted;
+      if(play){play.textContent=a.paused?'▶':'❚❚';play.title=a.paused?'Tocar rádio':'Pausar rádio';play.setAttribute('aria-label',a.paused?'Tocar rádio':'Pausar rádio');}
+      if(mute){mute.textContent=radioState.muted?'🔇':'🔊';mute.title=radioState.muted?'Ativar som da rádio':'Silenciar rádio';mute.setAttribute('aria-label',radioState.muted?'Ativar som da rádio':'Silenciar rádio');}
+      box.classList.toggle('is-playing',!a.paused&&!a.ended);box.classList.toggle('is-error',status?.dataset.error==='1');
+    }
+    function definirStatusRadio(t,erro=false){const el=document.getElementById('radio-status');if(el){el.textContent=t;el.dataset.error=erro?'1':'0';}atualizarRadioUI();}
+    function carregarEstacaoRadio(iniciar=false){
+      const a=document.getElementById('radio-audio');if(!a)return;
+      const st=RADIO_STATIONS[radioState.station];
+      a.pause();a.src=st.url;a.load();radioState.started=false;
+      definirStatusRadio('Conectando…');
+      if(iniciar) tocarRadio(); else definirStatusRadio('Pronta para tocar');
+    }
+    async function tocarRadio(){
+      const a=document.getElementById('radio-audio');if(!a)return;
+      if(!a.src)carregarEstacaoRadio(false);
+      a.volume=radioState.volume;a.muted=radioState.muted;
+      try{await a.play();radioState.started=true;definirStatusRadio('Ao vivo · '+RADIO_STATIONS[radioState.station].name);salvarRadioConfig();}
+      catch(e){definirStatusRadio('Clique em ▶ para começar',true);}
+      atualizarRadioUI();
+    }
+    function pausarRadio(){const a=document.getElementById('radio-audio');if(!a)return;a.pause();definirStatusRadio('Pausada');atualizarRadioUI();}
+    function alternarRadio(){const a=document.getElementById('radio-audio');if(!a)return;if(a.paused)tocarRadio();else pausarRadio();}
+    function alternarMuteRadio(){radioState.muted=!radioState.muted;const a=document.getElementById('radio-audio');if(a)a.muted=radioState.muted;salvarRadioConfig();atualizarRadioUI();}
+    function ajustarVolumeRadio(v){radioState.volume=Math.max(0,Math.min(1,Number(v)||0));radioState.muted=false;const a=document.getElementById('radio-audio');if(a){a.volume=radioState.volume;a.muted=false;}salvarRadioConfig();atualizarRadioUI();}
+    function trocarRadio(id){if(!RADIO_STATIONS[id])return;const estavaTocando=!document.getElementById('radio-audio')?.paused;radioState.station=id;salvarRadioConfig();carregarEstacaoRadio(estavaTocando);}
+    function inicializarRadio(){
+      carregarRadioConfig();const a=document.getElementById('radio-audio');if(!a)return;
+      a.addEventListener('playing',()=>{definirStatusRadio('Ao vivo · '+RADIO_STATIONS[radioState.station].name);atualizarRadioUI();});
+      a.addEventListener('waiting',()=>definirStatusRadio('Carregando transmissão…'));
+      a.addEventListener('stalled',()=>definirStatusRadio('Tentando reconectar…',true));
+      a.addEventListener('error',()=>definirStatusRadio('Não foi possível conectar agora',true));
+      carregarEstacaoRadio(false);atualizarRadioUI();
+      // Tenta autoplay, mas respeita a política do navegador. Se bloquear, o primeiro
+      // clique do usuário pode iniciar a rádio sem precisar de uma segunda configuração.
+      if(radioState.autoplay){
+        const iniciar=()=>{if(document.hidden)return;if(!radioState.started&&a.paused)tocarRadio();document.removeEventListener('pointerdown',iniciar,{once:true});document.removeEventListener('keydown',iniciar,{once:true});};
+        tocarRadio().catch(()=>{});
+        document.addEventListener('pointerdown',iniciar,{once:true,passive:true});
+        document.addEventListener('keydown',iniciar,{once:true});
+      }
+    }
+
+    const UI_SOUND_KEY = 'fabrica_ui_sons';
+    const uiSound = { enabled: true, ctx: null, master: null };
+    try { uiSound.enabled = localStorage.getItem(UI_SOUND_KEY) !== 'off'; } catch(e) {}
+    function prepararSom(){
+      if(!uiSound.enabled) return false;
+      try{
+        const C=window.AudioContext||window.webkitAudioContext; if(!C) return false;
+        if(!uiSound.ctx){ uiSound.ctx=new C(); uiSound.master=uiSound.ctx.createGain(); uiSound.master.gain.value=.055; uiSound.master.connect(uiSound.ctx.destination); }
+        if(uiSound.ctx.state==='suspended') uiSound.ctx.resume();
+        return true;
+      }catch(e){ return false; }
+    }
+    function tocarSom(tipo='tap'){
+      if(!prepararSom()) return;
+      const ctx=uiSound.ctx, agora=ctx.currentTime, osc=ctx.createOscillator(), gain=ctx.createGain();
+      const presets={
+        tap:{f1:420,f2:500,d:.055,w:'sine',v:.65},
+        tab:{f1:300,f2:410,d:.075,w:'sine',v:.72},
+        open:{f1:390,f2:560,d:.11,w:'sine',v:.62},
+        list:{f1:520,f2:610,d:.045,w:'triangle',v:.42},
+        success:{f1:520,f2:740,d:.16,w:'sine',v:.58},
+        warning:{f1:260,f2:210,d:.13,w:'sine',v:.48}
+      };
+      const q=presets[tipo]||presets.tap; osc.type=q.w; osc.frequency.setValueAtTime(q.f1,agora); osc.frequency.exponentialRampToValueAtTime(q.f2,agora+q.d);
+      gain.gain.setValueAtTime(0.0001,agora); gain.gain.exponentialRampToValueAtTime(q.v,agora+.008); gain.gain.exponentialRampToValueAtTime(.0001,agora+q.d);
+      osc.connect(gain); gain.connect(uiSound.master); osc.start(agora); osc.stop(agora+q.d+.02);
+    }
+    function alternarSons(){
+      uiSound.enabled=!uiSound.enabled;
+      try{localStorage.setItem(UI_SOUND_KEY,uiSound.enabled?'on':'off');}catch(e){}
+      atualizarBotaoSom();
+      if(uiSound.enabled) tocarSom('success');
+    }
+    function atualizarBotaoSom(){
+      const b=document.getElementById('sound-toggle'),i=document.getElementById('sound-icon'),l=document.getElementById('sound-label'); if(!b)return;
+      b.classList.toggle('is-off',!uiSound.enabled); b.setAttribute('aria-pressed',String(uiSound.enabled)); b.title=uiSound.enabled?'Desativar sons da interface':'Ativar sons da interface';
+      if(i)i.textContent=uiSound.enabled?'🔊':'🔇'; if(l)l.textContent=uiSound.enabled?'Sons':'Mudo';
+    }
+    function inicializarSons(){
+      atualizarBotaoSom();
+      document.addEventListener('click',e=>{
+        const alvo=e.target.closest('.dash-card,.tab-btn,.btn-submit,.btn-secondary,.toolbar-btn,.btn-action,.cat-btn,.purchase-card,.order-row-clickable');
+        if(!alvo || alvo.id==='sound-toggle') return;
+        if(alvo.classList.contains('tab-btn')) tocarSom('tab');
+        else if(alvo.classList.contains('dash-card')) tocarSom('open');
+        else if(alvo.classList.contains('order-row-clickable') || alvo.classList.contains('purchase-card')) tocarSom('list');
+        else tocarSom('tap');
+      },true);
+      document.addEventListener('keydown',e=>{
+        if(e.repeat) return;
+        if((e.key==='Enter'||e.key===' ') && e.target.closest('.dash-card,.tab-btn')) tocarSom(e.target.closest('.tab-btn')?'tab':'open');
+      },true);
+    }
+    inicializarSons();
     /* ---------------------------------------------------
        1. CONFIGURAÇÃO DO FIREBASE COM SUAS CHAVE REAIS
        --------------------------------------------------- */
@@ -1081,7 +1338,7 @@
     }
 
     function carregarDadosIniciais(){
-      const aplicar=(val)=>{ const r=migrarDados(val||{}); appData=r.data; if(r.changed) salvarDados(); renderizarTudo(); inicializarDashboardCarousel(); };
+      const aplicar=(val)=>{ const r=migrarDados(val||{}); appData=r.data; if(r.changed) salvarDados(); renderizarTudo(); };
       if(useFirebase){
         firebase.database().ref('fabricaData').on('value',snap=>aplicar(snap.val()||{}));
       }else{
@@ -1105,6 +1362,10 @@
 
     function salvarUsuarioAtual(nome){appData.usuarioAtual=nome;salvarDados();}
 
+    function abrirModalFinanceiro(){const m=document.getElementById('modal-financeiro');if(!m)return;m.style.display='flex';document.body.style.overflow='hidden';renderizarRepasses();renderizarProdutos();const d=document.getElementById('compra-data');if(d&&!d.value)d.value=new Date().toISOString().slice(0,10);const od=document.getElementById('outra-compra-data');if(od&&!od.value)od.value=new Date().toISOString().slice(0,10);if(!document.querySelector('#compra-itens .purchase-row'))adicionarItemCompra();}
+    function fecharModalFinanceiro(){const m=document.getElementById('modal-financeiro');if(m)m.style.display='none';document.body.style.overflow='';}
+    document.addEventListener('keydown',e=>{if(e.key==='Escape'){fecharModalFinanceiro();}});
+
     function toggleTab(tabName){
       const target=document.getElementById('tab-'+tabName); if(!target)return;
       document.querySelectorAll('.tab-btn').forEach(b=>b.classList.toggle('active',b.dataset.tab===tabName));
@@ -1117,22 +1378,7 @@
       document.querySelectorAll('.dash-detail-panel').forEach(p=>p.style.display='none'); if(!visible){panel.style.display='block';}
       atualizarDashboard();
     }
-    function atualizarDivisaoSocios(val){appData.splitRamomPct=num(val);const l=document.getElementById('label-split-val');if(l)l.innerText=`${appData.splitRamomPct}% Ramom / ${100-appData.splitRamomPct}% Monique`;salvarDados();atualizarDashboard();}
-
-    // Carrossel: autoplay, mouse/touch drag, wheel horizontal, snap e proteção contra clique após arraste.
-    function atualizarDotsDashboard(){const track=document.getElementById('dashboard-track'),dots=document.getElementById('carousel-dots');if(!track||!dots)return;const cards=[...track.querySelectorAll('.dash-card')];dots.innerHTML=cards.map((_,i)=>`<button class="carousel-dot ${i===0?'active':''}" type="button" aria-label="Ir para card ${i+1}" onclick="irParaDashboard(${i})"></button>`).join('');track.addEventListener('scroll',()=>{const i=Math.round(track.scrollLeft/(cards[0]?.offsetWidth+14||1));dots.querySelectorAll('.carousel-dot').forEach((d,j)=>d.classList.toggle('active',j===Math.min(i,cards.length-1)));},{passive:true});}
-    function irParaDashboard(i){const t=document.getElementById('dashboard-track'),c=t?.querySelectorAll('.dash-card')[i];if(t&&c)t.scrollTo({left:c.offsetLeft-3,behavior:'smooth'});}
-    function moverDashboard(dir){const t=document.getElementById('dashboard-track');if(!t)return;const c=t.querySelector('.dash-card');t.scrollBy({left:dir*((c?.getBoundingClientRect().width||300)+14),behavior:'smooth'});}
-    function inicializarDashboardCarousel(){const t=document.getElementById('dashboard-track');if(!t||t.dataset.ready)return;t.dataset.ready='1';atualizarDotsDashboard();
-      const start=e=>{dashboardDrag.active=true;dashboardDrag.moved=false;dashboardDrag.startX=(e.touches?e.touches[0].pageX:e.pageX);dashboardDrag.scrollLeft=t.scrollLeft;t.classList.add('is-dragging');};
-      const move=e=>{if(!dashboardDrag.active)return;const x=e.touches?e.touches[0].pageX:e.pageX,dx=x-dashboardDrag.startX;if(Math.abs(dx)>6)dashboardDrag.moved=true;t.scrollLeft=dashboardDrag.scrollLeft-dx;};
-      const end=()=>{if(!dashboardDrag.active)return;dashboardDrag.active=false;t.classList.remove('is-dragging');if(dashboardDrag.moved){const cards=[...t.querySelectorAll('.dash-card')];const i=Math.round(t.scrollLeft/(cards[0]?.offsetWidth+14||1));irParaDashboard(i);setTimeout(()=>dashboardDrag.moved=false,80);}};
-      t.addEventListener('mousedown',start);window.addEventListener('mousemove',move);window.addEventListener('mouseup',end);t.addEventListener('touchstart',start,{passive:true});window.addEventListener('touchmove',move,{passive:true});window.addEventListener('touchend',end,{passive:true});
-      t.addEventListener('wheel',e=>{if(Math.abs(e.deltaX)<Math.abs(e.deltaY)){t.scrollLeft+=e.deltaY;e.preventDefault();}},{passive:false});
-      t.addEventListener('click',e=>{if(dashboardDrag.moved){e.stopPropagation();e.preventDefault();}},true);
-      let timer=setInterval(()=>{if(document.hidden||dashboardDrag.active||t.matches(':hover'))return;const cards=[...t.querySelectorAll('.dash-card')];const current=Math.round(t.scrollLeft/(cards[0]?.offsetWidth+14||1));irParaDashboard((current+1)%cards.length);},4800);
-      t.addEventListener('mouseenter',()=>{}); window.addEventListener('beforeunload',()=>clearInterval(timer));
-    }
+    function atualizarDivisaoSocios(val){appData.splitRamomPct=num(val);const l=document.getElementById('label-split-val');if(l)l.innerText=`${appData.splitRamomPct}% Ramom / ${100-appData.splitRamomPct}% Monique`;const r=document.getElementById('slider-split-socios');if(r)r.style.background=`linear-gradient(90deg,var(--herb-green) 0%,var(--herb-green) ${appData.splitRamomPct}%,#d8c6b5 ${appData.splitRamomPct}%,#d8c6b5 100%)`;salvarDados();atualizarDashboard();}
 
     function resumoFinanceiro(){
       let faturamento=0,pendente=0,custo=0,pedidos=0,recebido=0,volume=0;
@@ -1153,14 +1399,10 @@
       const lr=r.lucro*pct/100,lm=r.lucro*(100-pct)/100;
       const f=document.getElementById('panel-faturar-conteudo');if(f)f.innerHTML=`<div class="detail-grid"><div class="detail-stat"><span>Recebido</span><strong>${formatarMoeda(r.recebido)}</strong></div><div class="detail-stat"><span>Pendente</span><strong>${formatarMoeda(r.pendente)}</strong></div><div class="detail-stat"><span>Pedidos</span><strong>${r.pedidos}</strong></div><div class="detail-stat"><span>Volume</span><strong>${r.volume.toLocaleString('pt-BR')} g/un</strong></div></div>`;
       const fp=document.getElementById('panel-fornecedores-conteudo');if(fp){const groups={};(appData.repasses||[]).filter(x=>x.status!=='Repassado').forEach(x=>{const g=groups[x.fornecedorId]??={total:0,produtos:0,frete:0,itens:[]};g.total+=num(x.total);g.frete+=num(x.frete);g.produtos+=num(x.total)-num(x.frete);g.itens.push(x);});const rows=Object.entries(groups);fp.innerHTML=rows.length?`<div class="purchase-list">${rows.map(([fid,g])=>`<div class="purchase-card"><div class="purchase-card-head"><strong>${escapeHtml(getSupplier(fid)?.nome||'Fornecedor')}</strong><span class="purchase-total">${formatarMoeda(g.total)}</span></div><div class="detail-grid" style="margin-top:8px"><div class="detail-stat"><span>Produtos</span><strong>${formatarMoeda(g.produtos)}</strong></div><div class="detail-stat"><span>Frete</span><strong>${formatarMoeda(g.frete)}</strong></div><div class="detail-stat"><span>Compras pendentes</span><strong>${g.itens.length}</strong></div></div><div class="purchase-meta" style="margin-top:8px">${g.itens.map(x=>`${escapeHtml(x.data||'')} · produtos ${formatarMoeda(num(x.total)-num(x.frete))} · frete ${formatarMoeda(x.frete)}`).join('<br>')}</div></div>`).join('')}</div>`:'<div class="whatsapp-ok">Nenhum repasse pendente.</div>';}
-      const fc=document.getElementById('panel-compras-conteudo');if(fc){const compras=(appData.comprasFabrica||[]).slice().sort((a,b)=>String(b.data).localeCompare(String(a.data))).slice(0,8);fc.innerHTML=compras.length?`<div class="purchase-list">${compras.map(c=>`<div class="purchase-card"><div class="purchase-card-head"><strong>${escapeHtml(c.descricao||c.categoria||'Compra')}</strong><span class="purchase-total">${formatarMoeda(c.valor||c.total)}</span></div><div class="purchase-meta">${escapeHtml(c.data||'')} · ${escapeHtml(c.categoria||'Outros')}</div></div>`).join('')}</div>`:'<div class="whatsapp-warning">Nenhuma compra registrada ainda.</div>';}
-      const fl=document.getElementById('panel-lucro-conteudo');if(fl)fl.innerHTML=`<div class="detail-grid"><div class="detail-stat"><span>Resultado</span><strong>${formatarMoeda(r.lucro)}</strong></div><div class="detail-stat"><span>Margem</span><strong>${margem.toFixed(1)}%</strong></div><div class="detail-stat"><span>Ramom</span><strong>${formatarMoeda(lr)}</strong></div><div class="detail-stat"><span>Monique</span><strong>${formatarMoeda(lm)}</strong></div></div>`;
-      atualizarInsightsDashboard(r);
-      renderizarTendenciaDashboard();
-    }
-    function atualizarInsightsDashboard(r){const el=(id,v)=>{const e=document.getElementById(id);if(e)e.textContent=v;};const vendas=(appData.pedidos||[]).filter(p=>p.categoria!=='Socio'&&getProduct(p.produtoId));const ticket=vendas.length?r.faturamento/vendas.length:0;el('insight-pedidos',r.pedidos);el('insight-pedidos-note',`${r.volume.toLocaleString('pt-BR')} g/un vendidos`);el('insight-ticket',formatarMoeda(ticket));el('insight-margem',`${r.faturamento?((r.lucro/r.faturamento)*100).toFixed(1):'0.0'}%`);el('insight-pendente',formatarMoeda(r.pendente));}
-    function renderizarTendenciaDashboard(){const box=document.getElementById('dashboard-trend-chart'),totalEl=document.getElementById('trend-total');if(!box)return;const hoje=new Date();hoje.setHours(23,59,59,999);const dias=[];for(let i=6;i>=0;i--){const d=new Date(hoje);d.setDate(hoje.getDate()-i);dias.push(d);}const vals=dias.map(d=>{const y=d.getFullYear(),m=d.getMonth(),day=d.getDate();return (appData.pedidos||[]).filter(p=>p.categoria!=='Socio'&&getProduct(p.produtoId)).filter(p=>{const x=new Date(p.dataCriacao||0);return x.getFullYear()===y&&x.getMonth()===m&&x.getDate()===day;}).reduce((s,p)=>s+totalQtdPedido(p)*calcularPrecoVendaCliente(getProduct(p.produtoId),totalQtdPedido(p)),0);});const total=vals.reduce((a,b)=>a+b,0);if(totalEl)totalEl.textContent=formatarMoeda(total);const w=760,h=170,pad={l:10,r:10,t:12,b:28},max=Math.max(1,...vals),step=(w-pad.l-pad.r)/(vals.length-1||1),pts=vals.map((v,i)=>[pad.l+i*step,pad.t+(h-pad.t-pad.b)*(1-v/max)]),line=pts.map(p=>p.join(',')).join(' '),area=`${pad.l},${h-pad.b} ${line} ${w-pad.r},${h-pad.b}`;const labels=dias.map((d,i)=>`<text x="${pts[i][0]}" y="${h-8}" text-anchor="middle" class="trend-label">${String(d.getDate()).padStart(2,'0')}/${String(d.getMonth()+1).padStart(2,'0')}</text>`).join('');const points=pts.map((p,i)=>`<circle cx="${p[0]}" cy="${p[1]}" r="4" class="trend-point"><title>${dias[i].toLocaleDateString('pt-BR')}: ${formatarMoeda(vals[i])}</title></circle>`).join('');box.innerHTML=`<svg class="trend-chart" viewBox="0 0 ${w} ${h}" preserveAspectRatio="none" role="img" aria-label="Faturamento dos últimos sete dias"><line x1="${pad.l}" y1="${pad.t}" x2="${w-pad.r}" y2="${pad.t}" class="trend-grid"/><line x1="${pad.l}" y1="${h-pad.b}" x2="${w-pad.r}" y2="${h-pad.b}" class="trend-grid"/><polygon points="${area}" class="trend-area"/><polyline points="${line}" class="trend-line"/>${points}${labels}</svg>`;}
 
+      const pc=document.getElementById('panel-compras-conteudo');if(pc){const comprasOp=(appData.comprasFabrica||[]).filter(x=>x.tipo!=='Insumo já incorporado');pc.innerHTML=comprasOp.length?`<div class="purchase-list">${comprasOp.slice().sort((a,b)=>String(b.data||'').localeCompare(String(a.data||''))).map(x=>`<div class="purchase-card"><div class="purchase-card-head"><strong>${escapeHtml(x.descricao||'Compra')}</strong><span class="purchase-total">${formatarMoeda(x.valor)}</span></div><div class="purchase-meta">${escapeHtml(x.data||'')} · ${escapeHtml(x.categoria||'Outros')}</div></div>`).join('')}</div>`:'<div class="empty-state"><strong>Nenhuma compra registrada</strong><span>Quando a fábrica comprar algo, registre aqui para manter o histórico organizado.</span></div>';}
+      const fl=document.getElementById('panel-lucro-conteudo');if(fl)fl.innerHTML=`<div class="detail-grid"><div class="detail-stat"><span>Resultado</span><strong>${formatarMoeda(r.lucro)}</strong></div><div class="detail-stat"><span>Margem</span><strong>${margem.toFixed(1)}%</strong></div><div class="detail-stat"><span>Ramom</span><strong>${formatarMoeda(lr)}</strong></div><div class="detail-stat"><span>Monique</span><strong>${formatarMoeda(lm)}</strong></div></div>`;
+    }
     function selecionarCategoriaPedido(categoria){document.getElementById('pedido-categoria').value=categoria;document.getElementById('cat-btn-cliente').className='cat-btn'+(categoria==='Cliente'?' active-cliente':'');document.getElementById('cat-btn-socio').className='cat-btn'+(categoria==='Socio'?' active-socio':'');document.getElementById('container-campos-cliente').style.display=categoria==='Socio'?'none':'grid';atualizarCalculoPedido();}
     function alternarCamposEnvio(){const e=document.getElementById('pedido-envio'),c=document.getElementById('container-detalhes-entrega');if(c)c.style.display=e.value==='Entrega por Conta'?'grid':'none';}
     function adicionarLinhaDependente(nome='',qtd=''){const list=document.getElementById('dependentes-list'),div=document.createElement('div');div.className='faixa-row';div.style.cssText='display:flex;gap:8px;align-items:center';div.innerHTML=`<input type="text" class="dep-nome" placeholder="Nome" value="${escapeHtml(nome)}" style="flex:1"><input type="number" class="dep-qtd" placeholder="Qtd" min="1" value="${num(qtd)||''}" oninput="atualizarCalculoPedido()"><button type="button" class="btn-action btn-delete" onclick="this.parentElement.remove();atualizarCalculoPedido()">✕</button>`;list.appendChild(div);atualizarCalculoPedido();}
@@ -1279,12 +1521,40 @@
     }
     function baixarRelatorioPDF(){const el=document.getElementById('area-relatorio-impressao');if(!el)return;if(typeof html2pdf==='undefined'){alert('A biblioteca de PDF ainda está carregando.');return;}html2pdf().set({margin:10,filename:`relatorio_${document.getElementById('relatorio-mes').value}_${document.getElementById('relatorio-ano').value}.pdf`,image:{type:'jpeg',quality:.98},html2canvas:{scale:2},jsPDF:{unit:'mm',format:'a4',orientation:'portrait'}}).from(el).save();}
 
-    function renderizarTudo(){const u=document.getElementById('select-usuario-atual');if(u)u.value=appData.usuarioAtual||'Ramom';const s=document.getElementById('slider-split-socios');if(s){s.value=appData.splitRamomPct??50;document.getElementById('label-split-val').innerText=`${appData.splitRamomPct??50}% Ramom / ${100-(appData.splitRamomPct??50)}% Monique`;}renderizarProdutos();renderizarFornecedores();renderizarPedidos();renderizarRepasses();atualizarDashboard();}
+    function renderizarTudo(){const u=document.getElementById('select-usuario-atual');if(u)u.value=appData.usuarioAtual||'Ramom';const s=document.getElementById('slider-split-socios');if(s){s.value=appData.splitRamomPct??50;document.getElementById('label-split-val').innerText=`${appData.splitRamomPct??50}% Ramom / ${100-(appData.splitRamomPct??50)}% Monique`;s.style.background=`linear-gradient(90deg,var(--herb-green) 0%,var(--herb-green) ${appData.splitRamomPct??50}%,#d8c6b5 ${appData.splitRamomPct??50}%,#d8c6b5 100%)`;}renderizarProdutos();renderizarFornecedores();renderizarPedidos();renderizarRepasses();atualizarDashboard();}
 
     window.addEventListener('online',()=>{const dot=document.getElementById('sync-dot');if(dot)dot.className='sync-dot';showToast('Conexão restaurada.');});
     window.addEventListener('offline',()=>{const dot=document.getElementById('sync-dot'),label=document.getElementById('sync-label'),detail=document.getElementById('sync-detail');if(dot)dot.className='sync-dot offline';if(label)label.textContent='Modo offline';if(detail)detail.textContent='as alterações podem sincronizar depois';showToast('Você está offline. Evite fechar a página antes de confirmar a sincronização.','warning');});
     document.addEventListener('keydown',e=>{if(e.key==='Escape'){document.querySelectorAll('.modal-backdrop').forEach(m=>m.style.display='none');}});
     window.addEventListener('load',()=>{const d=document.getElementById('compra-data');if(d)d.value=new Date().toISOString().slice(0,10);const od=document.getElementById('outra-compra-data');if(od)od.value=new Date().toISOString().slice(0,10);carregarDadosIniciais();const now=new Date(),m=document.getElementById('relatorio-mes'),a=document.getElementById('relatorio-ano');if(m)m.value=now.getMonth();if(a)a.value=now.getFullYear();});
+    if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',inicializarRadio);else inicializarRadio();
   </script>
+
+    <aside class="radio-player" id="radio-player" aria-label="Rádio ambiente">
+      <div class="radio-top">
+        <div class="radio-art" aria-hidden="true">☕</div>
+        <div class="radio-copy">
+          <div class="radio-kicker">Rádio da fábrica</div>
+          <div class="radio-name" id="radio-name">Lo-fi &amp; Chill</div>
+          <div class="radio-status" id="radio-status">Pronta para tocar</div>
+        </div>
+        <div class="radio-controls">
+          <button type="button" class="radio-btn primary" id="radio-play" onclick="alternarRadio()" aria-label="Tocar rádio" title="Tocar rádio">▶</button>
+          <button type="button" class="radio-btn" id="radio-mute" onclick="alternarMuteRadio()" aria-label="Silenciar rádio" title="Silenciar rádio">🔊</button>
+        </div>
+      </div>
+      <select class="radio-select" id="radio-station" onchange="trocarRadio(this.value)" aria-label="Escolher estação">
+        <option value="lofi">☕ Lo-fi &amp; Chill</option>
+        <option value="jazz">🎷 Lo-fi Jazz / Jazz moderno</option>
+        <option value="reggae">🌿 Reggae</option>
+      </select>
+      <div class="radio-bottom">
+        <span aria-hidden="true">🔉</span>
+        <input class="radio-volume" id="radio-volume" type="range" min="0" max="1" step="0.01" value="0.22" aria-label="Volume da rádio" oninput="ajustarVolumeRadio(this.value)">
+        <span class="radio-volume-label" id="radio-volume-label">22%</span>
+      </div>
+      <audio id="radio-audio" preload="none" crossorigin="anonymous"></audio>
+    </aside>
+
 </body>
 </html>
