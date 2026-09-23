@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -12,6 +11,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.48.0/dist/tabler-icons.min.css">
 
   <!-- SDKs do Firebase (Versão Compatível via CDN) -->
   <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
@@ -134,6 +134,40 @@
       box-shadow: 0 4px 15px rgba(74, 44, 29, 0.1);
     }
 
+
+
+    /* Ícones de navegação: presença sem virar decoração dominante. */
+    .tab-btn .ui-icon{width:27px;height:27px;border-radius:9px;background:rgba(239,227,214,.72);color:var(--choc-dark);font-size:1rem;margin-right:5px;box-shadow:0 2px 7px rgba(74,44,29,.06);transition:all .2s cubic-bezier(.4,0,.2,1)}
+    .tab-btn.active .ui-icon{background:rgba(232,239,227,.95);color:var(--herb-green);box-shadow:0 4px 10px rgba(77,104,58,.11)}
+    .tab-btn:hover .ui-icon{transform:translateY(-1px) scale(1.04)}
+    .form-section>h3>.ui-icon,.form-section>h3>span>.ui-icon{width:31px;height:31px;border-radius:10px;background:linear-gradient(145deg,#f0e1d2,#fffaf5);color:var(--choc-dark);display:inline-flex;align-items:center;justify-content:center;margin-right:7px;box-shadow:0 4px 10px rgba(74,44,29,.08)}
+    .partner-sales-kicker .icon-badge{width:28px;height:28px;border-radius:9px;margin-right:6px;box-shadow:0 3px 8px rgba(77,104,58,.08)}
+    .partner-sales-kicker{display:flex;align-items:center}
+    label{position:relative}
+    label>.info-hint-popover{top:calc(100% + 7px);left:0}
+
+    /* Ícones com presença visual: os ícones continuam limpos, mas ganham uma pequena âncora de cor. */
+    .icon-badge{width:34px;height:34px;border-radius:11px;display:inline-flex;align-items:center;justify-content:center;flex:0 0 auto;box-shadow:0 5px 12px rgba(74,44,29,.10);margin-right:8px;vertical-align:middle;transition:transform .2s cubic-bezier(.4,0,.2,1),box-shadow .2s ease}
+    .icon-badge i{font-size:1.08rem;line-height:1;color:currentColor}
+    .icon-badge-cocoa{background:linear-gradient(145deg,#f0e1d2,#fffaf5);color:var(--choc-dark);border:1px solid rgba(122,83,56,.13)}
+    .icon-badge-green{background:linear-gradient(145deg,#e8efe3,#f8fbf6);color:var(--herb-green);border:1px solid rgba(77,104,58,.16)}
+    .dash-card:hover .icon-badge,.form-section h3:hover .icon-badge{transform:translateY(-1px) scale(1.04);box-shadow:0 7px 15px rgba(74,44,29,.13)}
+    .dash-title{display:flex!important;align-items:center;justify-content:center;gap:1px}
+    .dash-title .icon-badge{margin-right:5px}
+    .info-hint{width:19px;height:19px;border-radius:50%;border:1px solid rgba(77,104,58,.28);background:rgba(232,239,227,.9);color:var(--herb-green);font:800 .72rem/1 'Plus Jakarta Sans',sans-serif;display:inline-flex;align-items:center;justify-content:center;vertical-align:middle;cursor:pointer;padding:0;margin-left:5px;transition:all .2s cubic-bezier(.4,0,.2,1)}
+    .info-hint:hover,.info-hint:focus-visible{background:var(--herb-green);color:#fff;transform:scale(1.06);outline:none}
+    .info-hint-popover{display:none;position:absolute;z-index:20;left:0;top:calc(100% + 8px);max-width:360px;padding:11px 12px;border-radius:12px;background:rgba(255,253,249,.96);border:1px solid rgba(122,83,56,.14);box-shadow:0 14px 34px rgba(74,44,29,.16);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);font-size:.74rem;line-height:1.5;color:var(--text-main);font-weight:500}
+    .info-hint-popover.is-open{display:block;animation:contentSoftIn .2s ease both}
+    .partnership-option-copy{position:relative;display:block;min-width:0}
+    .partnership-option-copy>strong{display:flex;align-items:center;flex-wrap:wrap;gap:2px}
+    .partnership-option-copy .icon-badge{width:27px;height:27px;border-radius:9px;margin-right:5px;box-shadow:none}
+    .partnership-option-copy .partnership-note{display:block;margin-top:6px;color:var(--herb-green);font-size:.7rem}
+    .partnership-option-copy .partnership-note i{margin-right:3px}
+    .empty-state{position:relative}
+    .empty-state>.info-hint-popover{top:calc(100% + 5px);left:auto;right:0}
+    @media(max-width:650px){.info-hint-popover{position:fixed;left:16px!important;right:16px!important;top:auto!important;bottom:18px;max-width:none}.dash-title{justify-content:flex-start;text-align:left}}
+    .ui-icon{font-size:1em;line-height:1;vertical-align:-.12em;display:inline-flex;align-items:center;justify-content:center;margin-right:.28em;color:currentColor}.ui-icon.ti{font-size:1.02em}.partner-sales-strip{margin:0 0 18px;padding:15px 17px;border:1px solid rgba(77,104,58,.18);border-radius:14px;background:rgba(255,253,249,.78);box-shadow:0 7px 20px rgba(74,44,29,.06);display:grid;grid-template-columns:minmax(0,1.4fr) repeat(3,minmax(110px,.65fr));gap:12px;align-items:center}.partner-sales-copy{min-width:0}.partner-sales-kicker{font-size:.68rem;text-transform:uppercase;letter-spacing:.09em;font-weight:800;color:var(--herb-green)}.partner-sales-title{font-size:.95rem;font-weight:800;color:var(--choc-dark);margin-top:2px}.partner-sales-note{font-size:.73rem;color:var(--text-muted);margin-top:3px}.partner-sales-stat{padding-left:12px;border-left:1px solid rgba(122,83,56,.12)}.partner-sales-stat span{display:block;font-size:.67rem;color:var(--text-muted)}.partner-sales-stat strong{display:block;margin-top:2px;font-size:1rem;color:var(--choc-dark);font-variant-numeric:tabular-nums}.supplier-integral-box{grid-column:1/-1;padding:13px 14px;border:1px solid rgba(77,104,58,.2);border-radius:12px;background:linear-gradient(135deg,rgba(232,239,227,.78),rgba(255,253,249,.86));display:flex;gap:12px;align-items:flex-start}.supplier-integral-box input{margin-top:3px}.supplier-integral-box strong{display:block;color:var(--choc-dark);font-size:.86rem}.supplier-integral-box small{display:block;color:var(--text-muted);font-size:.74rem;line-height:1.45;margin-top:3px}.supplier-integral-badge{display:inline-flex;align-items:center;gap:5px;margin-left:6px;padding:3px 7px;border-radius:999px;background:var(--green-soft);color:var(--herb-green);font-size:.62rem;font-weight:800;white-space:nowrap}.supplier-product-integral{border-color:rgba(77,104,58,.3)!important;background:linear-gradient(135deg,#f4f8f1,#fffdf9)!important}.partner-orders-table{margin-top:12px}.partner-orders-table .status-pill{white-space:nowrap}@media(max-width:820px){.partner-sales-strip{grid-template-columns:repeat(3,1fr)}.partner-sales-copy{grid-column:1/-1}.partner-sales-stat{border-left:0;border-top:1px solid rgba(122,83,56,.12);padding:10px 0 0}}@media(max-width:650px){.partner-sales-strip{grid-template-columns:1fr 1fr}.partner-sales-copy{grid-column:1/-1}.partner-sales-stat{border-top:1px solid rgba(122,83,56,.12);padding-top:9px}.partner-sales-stat:nth-child(2){border-top:0}.partner-sales-stat strong{font-size:.94rem}}
+
     /* PAINÉIS CLÁSSICOS DO DASHBOARD */
     .dashboard-3 {
       display: grid;
@@ -253,11 +287,13 @@
     @media(max-width:650px){.finance-action-strip{align-items:stretch;flex-direction:column}.finance-action-btn{width:100%}}
 
     /* MICROINTERAÇÕES SONORAS — leves, opcionais e sem arquivos externos */
-    .sound-toggle{display:inline-flex;align-items:center;gap:7px;border:1px solid var(--border-color);background:#fffaf5;color:var(--choc-dark);padding:7px 10px;border-radius:10px;font:inherit;font-size:.8rem;font-weight:700;cursor:pointer;transition:transform .18s ease,box-shadow .18s ease,border-color .18s ease,background .18s ease}
-    .sound-toggle:hover{transform:translateY(-1px);border-color:#cdb8a5;box-shadow:0 5px 14px rgba(74,44,29,.09);background:#fff}
+    .sound-toggle{display:inline-flex;align-items:center;justify-content:center;border:1px solid rgba(77,104,58,.18);background:#fffaf5;color:var(--herb-green);padding:5px;border-radius:12px;font:inherit;cursor:pointer;transition:transform .18s ease,box-shadow .18s ease,border-color .18s ease,background .18s ease;width:40px;height:40px}
+    .sound-toggle .sound-icon-badge{width:28px;height:28px;border-radius:9px;display:inline-flex;align-items:center;justify-content:center;background:linear-gradient(145deg,#6f8a5d,#4d683a);color:#fff;box-shadow:0 4px 10px rgba(77,104,58,.22);font-size:17px}
+    .sound-toggle .sound-icon-badge .ui-icon{margin:0;font-size:17px}
+    .sound-toggle:hover{transform:translateY(-1px);border-color:rgba(77,104,58,.35);box-shadow:0 5px 14px rgba(74,44,29,.09);background:#fff}
     .sound-toggle:focus-visible{outline:3px solid rgba(77,104,58,.22);outline-offset:2px}
-    .sound-toggle.is-off{color:var(--text-muted);background:#f7f3ee}
-    @media(max-width:650px){.sound-toggle .sound-label{display:none}.sound-toggle{padding:8px 9px}}
+    .sound-toggle.is-off{color:var(--text-muted);background:#f7f3ee;border-color:rgba(122,83,56,.18)}
+    .sound-toggle.is-off .sound-icon-badge{background:linear-gradient(145deg,#9b8879,#725d4e);box-shadow:0 4px 10px rgba(74,44,29,.14)}
 
     .tabs-nav {
       display: flex;
@@ -746,7 +782,8 @@
     @keyframes contentSoftIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
     .numeric,.tabular-nums,table td,table th{font-variant-numeric:tabular-nums}
     table{font-variant-numeric:tabular-nums}
-    .table-wrapper{border:1px solid rgba(122,83,56,.12);box-shadow:0 6px 20px rgba(74,44,29,.035)}
+    .table-wrapper{border:1px solid rgba(122,83,56,.12);box-shadow:0 6px 20px rgba(74,44,29,.035);overflow-x:auto;max-width:100%;-webkit-overflow-scrolling:touch}
+    .table-wrapper table{min-width:620px}
     table{border:0}
     th{padding:14px 16px;border:0;border-bottom:1px solid rgba(122,83,56,.13);background:rgba(249,245,239,.72)}
     td{padding:16px;border:0;border-bottom:1px solid rgba(122,83,56,.085)}
@@ -765,6 +802,14 @@
     .dash-card:hover,.purchase-card:hover{transform:translateY(-2px)}
     .summary-box:hover{transform:translateY(-1px)}
     .btn-action:hover,.btn-submit:hover,.btn-secondary:hover,.toolbar-btn:hover,.sound-toggle:hover{transform:translateY(-1px)}
+    .app-toolbar,.toolbar-actions,.partner-sales-strip,.rateio-countdown,.finance-action-strip,.radio-top{min-width:0}
+    .toolbar-status{overflow-wrap:anywhere}
+    .toolbar-actions{min-width:0}
+    .toolbar-btn,.sound-toggle{flex:0 0 auto}
+    .form-section,.dash-card,.summary-box,.purchase-card,.modal-card{min-width:0;overflow-wrap:anywhere}
+    @media(max-width:760px){.app-toolbar{align-items:flex-start;flex-direction:column}.toolbar-actions{width:100%;justify-content:flex-start}.partner-sales-strip{grid-template-columns:1fr 1fr}.partner-sales-copy{grid-column:1/-1}.partner-sales-stat:nth-last-child(-n+3){border-left:0;padding-left:0}.partner-sales-stat{border-top:1px solid rgba(122,83,56,.12);padding-top:9px}}
+    @media(max-width:430px){body{padding:10px 8px}.app-container{padding:18px 12px;border-radius:15px}.toolbar-actions{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));width:100%}.toolbar-btn{width:100%;justify-content:center}.sound-toggle{width:40px;justify-self:start}.partner-sales-strip{grid-template-columns:1fr}.partner-sales-stat{border-left:0!important}.rateio-timer{grid-template-columns:repeat(2,minmax(0,1fr))}}
+
     @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}.app-container,.tab-content.active,.tab-content.active>*{animation:none!important}.dash-card,.summary-box,.purchase-card,.form-section,.table-wrapper,button,a,input,select,textarea{transition:none!important}.dash-card:hover,.purchase-card:hover,.summary-box:hover,button:hover{transform:none!important}}
 
     /* Microanimações: suaves, funcionais e respeitando acessibilidade */
@@ -791,7 +836,7 @@
     <div class="user-select-bar">
       <span class="active-session-pill">● <span id="session-user-label">Entrando…</span></span>
       <button type="button" class="toolbar-btn" onclick="abrirLoginSocio()" title="Trocar o perfil desta sessão">Perfil</button>
-      <button type="button" class="toolbar-btn" onclick="abrirAuditoria()" title="Ver histórico de atividades">🧾 Atividade</button>
+      <button type="button" class="toolbar-btn" onclick="abrirAuditoria()" title="Ver histórico de atividades"><i class="ti ti-history ui-icon" aria-hidden="true"></i>Atividade</button>
     </div>
 
     <!-- LOGO OFICIAL -->
@@ -802,17 +847,17 @@
     <div class="app-toolbar" aria-label="Ferramentas rápidas">
       <div class="toolbar-status"><span id="sync-dot" class="sync-dot"></span><span><strong id="sync-label">Dados prontos</strong> · <span id="sync-detail">salvamento automático ativo</span></span></div>
       <div class="toolbar-actions">
-        <button type="button" class="sound-toggle" id="sound-toggle" onclick="alternarSons()" aria-pressed="true" title="Ativar ou desativar sons da interface"><span id="sound-icon">🔊</span><span class="sound-label" id="sound-label">Sons</span></button>
-        <button type="button" class="toolbar-btn" id="radio-open-btn" onclick="mostrarRadio()" aria-expanded="true" title="Mostrar rádio">🎵 Rádio</button>
-        <button type="button" class="toolbar-btn" onclick="exportarBackup()">💾 Backup</button>
-        <button type="button" class="toolbar-btn" onclick="document.getElementById('backup-file-input').click()">📂 Restaurar</button>
+        <button type="button" class="sound-toggle" id="sound-toggle" onclick="alternarSons()" aria-pressed="true" title="Ativar ou desativar sons da interface" aria-label="Ativar ou desativar sons da interface"><span class="sound-icon-badge"><span id="sound-icon"><i class="ti ti-volume ui-icon" aria-hidden="true"></i></span></span></button>
+        <button type="button" class="toolbar-btn" id="radio-open-btn" onclick="mostrarRadio()" aria-expanded="true" title="Mostrar rádio"><i class="ti ti-player-play ui-icon" aria-hidden="true"></i>Rádio</button>
+        <button type="button" class="toolbar-btn" onclick="exportarBackup()" title="Baixar uma cópia dos dados atuais em JSON"><i class="ti ti-database-export ui-icon" aria-hidden="true"></i>Backup</button>
+        <button type="button" class="toolbar-btn" onclick="document.getElementById('backup-file-input').click()" title="Substituir os dados atuais por um backup JSON"><i class="ti ti-database-import ui-icon" aria-hidden="true"></i>Restaurar</button>
       </div>
     </div>
     <input id="backup-file-input" class="data-file-input" type="file" accept="application/json" onchange="importarBackup(event)">
 
     <section class="rateio-countdown" aria-live="polite" aria-label="Contagem para o próximo rateio">
       <div class="rateio-countdown-copy">
-        <div class="rateio-kicker">🌿 Próximo rateio</div>
+        <div class="rateio-kicker"><i class="ti ti-leaf ui-icon" aria-hidden="true"></i>Próximo rateio</div>
         <div class="rateio-title" id="rateio-countdown-title">Calculando a próxima correria…</div>
         <div class="rateio-note" id="rateio-countdown-note">5º dia útil de Curitiba · Paraná</div>
       </div>
@@ -824,40 +869,51 @@
       </div>
     </section>
 
+    <section class="partner-sales-strip" aria-label="Vendas em parceria e parceiros">
+      <div class="partner-sales-copy">
+        <div class="partner-sales-kicker"><span class="icon-badge icon-badge-green"><i class="ti ti-arrows-exchange" aria-hidden="true"></i></span>Vendas em parceria</div>
+        <div class="partner-sales-title">Movimento dos parceiros</div>
+        <div class="partner-sales-note">A venda passa pela fábrica, mas o valor pertence a quem produziu e é destinado integralmente a esse parceiro.</div>
+      </div>
+      <div class="partner-sales-stat"><span>Itens vendidos</span><strong id="dash-parceiros-qtd">0</strong></div>
+      <div class="partner-sales-stat"><span>Vendido</span><strong id="dash-parceiros-vendido">R$ 0,00</strong></div>
+      <div class="partner-sales-stat"><span>Destino do valor</span><strong id="dash-parceiros-repasse">R$ 0,00</strong></div>
+    </section>
+
     <!-- DASHBOARD FINANCEIRO -->
     <section class="dashboard-stack" aria-label="Resumo financeiro da fábrica">
       <div class="dashboard-card-block">
         <div class="dash-card" data-panel="panel-faturar" tabindex="0" role="button" aria-expanded="false" aria-controls="panel-faturar" onclick="toggleDashPanel('panel-faturar')" onkeydown="if(event.key==='Enter'||event.key===' ')toggleDashPanel('panel-faturar')">
-          <div class="dash-title">💰 Quanto a fábrica faturou?</div>
+          <div class="dash-title"><span class="icon-badge icon-badge-cocoa"><i class="ti ti-cash" aria-hidden="true"></i></span>Quanto a fábrica faturou?</div>
           <div class="dash-value" id="dash-faturamento-total">R$ 0,00</div>
           <div class="dash-subtext" id="dash-faturamento-sub">R$ 0,00 recebido · R$ 0,00 pendente</div>
         <div id="panel-faturar" class="dash-detail-panel">
           <div class="section-kicker">Vendas</div>
-          <h4 style="color:var(--choc-dark);margin-bottom:10px;">💰 Como estão as vendas?</h4>
+          <h4 style="color:var(--choc-dark);margin-bottom:10px;"><i class="ti ti-cash ui-icon" aria-hidden="true"></i> Como estão as vendas?</h4>
           <div id="panel-faturar-conteudo"></div>
         </div></div>
         
       </div>
       <div class="dashboard-card-block">
         <div class="dash-card" data-panel="panel-fornecedores" tabindex="0" role="button" aria-expanded="false" aria-controls="panel-fornecedores" onclick="toggleDashPanel('panel-fornecedores')" onkeydown="if(event.key==='Enter'||event.key===' ')toggleDashPanel('panel-fornecedores')">
-          <div class="dash-title">📦 Pra quem a gente vai pagar?</div>
+          <div class="dash-title"><span class="icon-badge icon-badge-cocoa"><i class="ti ti-receipt" aria-hidden="true"></i></span>Pra quem a gente vai pagar?</div>
           <div class="dash-value" id="dash-repasses-pendentes">R$ 0,00</div>
           <div class="dash-subtext" id="dash-repasses-sub">0 repasses pendentes</div>
         <div id="panel-fornecedores" class="dash-detail-panel">
           <div class="section-kicker">Repasses</div>
-          <h4 style="color:var(--choc-dark);margin-bottom:10px;">📦 Pra quem a gente vai pagar?</h4>
+          <h4 style="color:var(--choc-dark);margin-bottom:10px;"><i class="ti ti-receipt ui-icon" aria-hidden="true"></i>Pra quem a gente vai pagar?</h4>
           <div id="panel-fornecedores-conteudo"></div>
         </div></div>
         
       </div>
       <div class="dashboard-card-block">
         <div class="dash-card" data-panel="panel-compras" tabindex="0" role="button" aria-expanded="false" aria-controls="panel-compras" onclick="toggleDashPanel('panel-compras')" onkeydown="if(event.key==='Enter'||event.key===' ')toggleDashPanel('panel-compras')">
-          <div class="dash-title">🛍️ O que a fábrica comprou?</div>
+          <div class="dash-title"><span class="icon-badge icon-badge-cocoa"><i class="ti ti-shopping-bag" aria-hidden="true"></i></span>O que a fábrica comprou?</div>
           <div class="dash-value" id="dash-compras-total">R$ 0,00</div>
           <div class="dash-subtext" id="dash-compras-sub">0 compras registradas</div>
         <div id="panel-compras" class="dash-detail-panel">
           <div class="section-kicker">Compras da fábrica</div>
-          <h4 style="color:var(--choc-dark);margin-bottom:10px;">🛍️ O que a fábrica comprou?</h4>
+          <h4 style="color:var(--choc-dark);margin-bottom:10px;"><i class="ti ti-shopping-bag ui-icon" aria-hidden="true"></i>O que a fábrica comprou?</h4>
           <div id="panel-compras-conteudo"></div>
         </div></div>
         
@@ -867,13 +923,13 @@
     <section class="dashboard-featured-profit" aria-label="Nossa parte do chocolate">
       <div class="dashboard-card-block">
         <div class="dash-card" data-panel="panel-lucro" tabindex="0" role="button" aria-expanded="false" aria-controls="panel-lucro" onclick="toggleDashPanel('panel-lucro')" onkeydown="if(event.key==='Enter'||event.key===' ')toggleDashPanel('panel-lucro')">
-          <div class="dash-title">🍫 Nossa parte do chocolate</div>
+          <div class="dash-title"><span class="icon-badge icon-badge-green"><i class="ti ti-chart-donut" aria-hidden="true"></i></span>Nossa parte do chocolate</div>
           <div class="dash-value" id="dash-lucro-liquido">R$ 0,00</div>
           <div class="dash-subtext" id="dash-lucro-divisao">Margem 0% · Ramom 50% · Monique 50%</div>
           <div class="profit-caption">Resultado da fábrica · toque para ver a divisão</div>
         <div id="panel-lucro" class="dash-detail-panel">
           <div class="section-kicker">Resultado</div>
-          <h4 style="color:var(--choc-dark);margin-bottom:10px;">🍫 Nossa parte do chocolate</h4>
+          <h4 style="color:var(--choc-dark);margin-bottom:10px;"><i class="ti ti-chart-donut ui-icon" aria-hidden="true"></i>Nossa parte do chocolate</h4>
           <div style="display:flex;flex-direction:column;gap:12px;font-size:.88rem;">
             <div><label style="font-weight:700;">Divisão entre os sócios</label><div style="display:flex;align-items:center;gap:10px;margin-top:5px;"><input type="range" id="slider-split-socios" min="0" max="100" value="50" oninput="atualizarDivisaoSocios(this.value)" style="flex:1;"><span id="label-split-val" style="font-weight:800;color:var(--choc-dark);">50% Ramom / 50% Monique</span></div></div>
             <div id="panel-lucro-conteudo"></div>
@@ -885,31 +941,31 @@
 
     <!-- NAVEGAÇÃO PRINCIPAL -->
     <div class="tabs-nav" role="tablist" aria-label="Módulos da fábrica">
-      <button class="tab-btn active" data-tab="pedidos" onclick="toggleTab('pedidos')">🛒 Pedidos</button>
-      <button class="tab-btn" data-tab="fornecedores" onclick="toggleTab('fornecedores')">📦 Fornecedores</button>
-      <button class="tab-btn" data-tab="produtos" onclick="toggleTab('produtos')">🍫 Produtos</button>
-      <button class="tab-btn" data-tab="relatorio" onclick="toggleTab('relatorio')">📊 Relatórios</button>
+      <button class="tab-btn active" data-tab="pedidos" onclick="toggleTab('pedidos')"><i class="ti ti-shopping-cart ui-icon" aria-hidden="true"></i>Pedidos</button>
+      <button class="tab-btn" data-tab="fornecedores" onclick="toggleTab('fornecedores')"><i class="ti ti-truck ui-icon" aria-hidden="true"></i>Fornecedores</button>
+      <button class="tab-btn" data-tab="produtos" onclick="toggleTab('produtos')"><i class="ti ti-package ui-icon" aria-hidden="true"></i>Produtos</button>
+      <button class="tab-btn" data-tab="relatorio" onclick="toggleTab('relatorio')"><i class="ti ti-chart-bar ui-icon" aria-hidden="true"></i>Relatórios</button>
     </div>
 
     <!-- ABA 1: PEDIDOS -->
     <div id="tab-pedidos" class="tab-content active">
       <div class="form-section">
         <h3 id="form-pedido-title">
-          <span>🛒 Pedidos</span>
+          <span><i class="ti ti-shopping-cart ui-icon" aria-hidden="true"></i>Pedidos</span>
           <button type="button" class="btn-secondary" onclick="abrirModalImportarWhatsApp()" style="background:var(--herb-green); color:#ffffff; border:none; padding:7px 14px; font-weight:700; border-radius:8px; cursor:pointer;">
-            📱 Importar do WhatsApp
+            <i class="ti ti-brand-whatsapp ui-icon" aria-hidden="true"></i> Importar do WhatsApp
           </button>
         </h3>
 
         <!-- CATEGORIA DO PEDIDO -->
         <div class="form-group full-width" style="margin-bottom:12px;">
-          <label>🏷️ Categoria do Pedido:</label>
+          <label><i class="ti ti-tag ui-icon" aria-hidden="true"></i> Categoria do Pedido:</label>
           <div class="categoria-selector-box">
             <button type="button" id="cat-btn-cliente" class="cat-btn active-cliente" onclick="selecionarCategoriaPedido('Cliente')">
-              🛒 Cliente (Venda Normal)
+              <i class="ti ti-shopping-cart ui-icon" aria-hidden="true"></i> Cliente (Venda Normal)
             </button>
             <button type="button" id="cat-btn-socio" class="cat-btn" onclick="selecionarCategoriaPedido('Socio')">
-              👑 Consumo Próprio (Sócios)
+              <i class="ti ti-crown ui-icon" aria-hidden="true"></i> Consumo Próprio (Sócios)
             </button>
           </div>
           <input type="hidden" id="pedido-categoria" value="Cliente">
@@ -938,7 +994,7 @@
 
             <!-- Lista Dinâmica de Dependentes/Rateio -->
             <div class="form-group full-width">
-              <label>👥 Pessoas do pedido</label>
+              <label><i class="ti ti-users ui-icon" aria-hidden="true"></i>Pessoas do pedido</label>
               <div id="dependentes-list" style="display:flex; flex-direction:column; gap:8px; margin-top:4px;"></div>
               <button type="button" class="btn-secondary" style="margin-top:6px;" onclick="adicionarLinhaDependente()">＋ Adicionar pessoas</button>
             </div>
@@ -949,7 +1005,7 @@
                 <label for="pedido-status">Status do Pagamento</label>
                 <select id="pedido-status">
                   <option value="Pendente">⏳ Pendente</option>
-                  <option value="Pago">🟢 Pago</option>
+                  <option value="Pago"><i class="ti ti-circle-check ui-icon" aria-hidden="true"></i> Pago</option>
                 </select>
               </div>
 
@@ -996,14 +1052,14 @@
 
       <!-- TABELA DE PEDIDOS -->
       <div class="form-section" style="background:#ffffff;">
-        <h3>📋 Pedidos Cadastrados</h3>
+        <h3><i class="ti ti-clipboard-list ui-icon" aria-hidden="true"></i> Pedidos Cadastrados</h3>
         <p style="font-size:0.82rem; color:var(--text-muted); margin-bottom:12px;">
-          💡 Clique em qualquer linha do pedido para abrir a ficha completa do cliente e ver as quantidades individuais e adicionais!
+          <i class="ti ti-info-circle ui-icon" aria-hidden="true"></i>Clique em qualquer linha do pedido para abrir a ficha completa do cliente e ver as quantidades individuais e adicionais!
         </p>
         <div class="orders-toolbar" aria-label="Filtros de pedidos">
           <div class="orders-search"><span>⌕</span><input id="pedidos-busca" type="search" placeholder="Buscar cliente, produto ou observação..." oninput="aplicarFiltrosPedidos()" aria-label="Buscar pedidos"></div>
-          <select id="pedidos-filtro-status" class="filter-select" onchange="aplicarFiltrosPedidos()" aria-label="Filtrar por pagamento"><option value="Todos">Todos os pagamentos</option><option value="Pago">🟢 Pagos</option><option value="Pendente">🟡 Pendentes</option></select>
-          <select id="pedidos-filtro-categoria" class="filter-select" onchange="aplicarFiltrosPedidos()" aria-label="Filtrar por categoria"><option value="Todos">Todas as categorias</option><option value="Cliente">🛒 Clientes</option><option value="Socio">👑 Sócios</option></select>
+          <select id="pedidos-filtro-status" class="filter-select" onchange="aplicarFiltrosPedidos()" aria-label="Filtrar por pagamento"><option value="Todos">Todos os pagamentos</option><option value="Pago"><i class="ti ti-circle-check ui-icon" aria-hidden="true"></i> Pagos</option><option value="Pendente"><i class="ti ti-clock ui-icon" aria-hidden="true"></i> Pendentes</option></select>
+          <select id="pedidos-filtro-categoria" class="filter-select" onchange="aplicarFiltrosPedidos()" aria-label="Filtrar por categoria"><option value="Todos">Todas as categorias</option><option value="Cliente">Clientes</option><option value="Socio">Sócios</option></select>
           <select id="pedidos-filtro-envio" class="filter-select" onchange="aplicarFiltrosPedidos()" aria-label="Filtrar por envio"><option value="Todos">Todos os envios</option><option value="Retirada">Retirada</option><option value="Entrega por Conta">Entrega</option></select>
           <div id="pedidos-resultados" class="results-count">0 pedidos</div>
         </div>
@@ -1014,8 +1070,8 @@
                 <th>Cliente / Sócio</th>
                 <th>Produto</th>
                 <th>Qtd Total</th>
-                <th>Custo Prod.</th>
-                <th>Valor Venda</th>
+                <th>Custo / Repasse</th>
+                <th>Valor da venda</th>
                 <th>Envio</th>
                 <th>Status</th>
                 <th>Ações</th>
@@ -1033,31 +1089,36 @@
     <!-- ABA 2: FORNECEDORES -->
     <div id="tab-fornecedores" class="tab-content">
       <div class="form-section">
-        <h3 id="form-fornecedor-title">📦 Fornecedores</h3>
+        <h3 id="form-fornecedor-title"><i class="ti ti-truck ui-icon" aria-hidden="true"></i>Fornecedores</h3><p id="fornecedor-help-copy" class="form-help">Cadastre quem fornece produtos à fábrica e defina se as vendas desse parceiro entram no resultado da fábrica ou são tratadas como parceria.</p>
         <form id="form-fornecedor" onsubmit="salvarFornecedor(event)">
           <input type="hidden" id="fornecedor-id">
 
           <div class="form-grid">
             <div class="form-group">
-              <label for="fornecedor-nome">Nome do Fornecedor</label>
+              <label for="fornecedor-nome">Nome do fornecedor</label>
               <input type="text" id="fornecedor-nome" placeholder="Ex: Cacau Brasil" required>
             </div>
 
             <div class="form-group">
-              <label for="fornecedor-frete">Frete de referência (R$)</label>
+              <label for="fornecedor-frete">Frete de referência (R$) <button type="button" class="info-hint" aria-label="O que é o frete de referência?" title="É apenas uma referência do fornecedor. O frete que entra em cada compra é registrado separadamente." onclick="event.preventDefault();event.stopPropagation();toggleInfoHint(this)">?</button><span class="info-hint-popover" role="note">Serve como referência geral. O valor real de cada compra é registrado no momento do repasse.</span></label>
               <input type="number" id="fornecedor-frete" step="0.01" min="0" value="0.00">
               <small style="display:block;color:var(--text-muted);margin-top:4px;">Serve só como referência. O frete real de cada compra é registrado no repasse.</small>
             </div>
 
+            <label class="supplier-integral-box">
+              <input type="checkbox" id="fornecedor-venda-parceria" onchange="atualizarModoRepasseFornecedor()">
+              <span class="partnership-option-copy"><strong><span class="icon-badge icon-badge-green"><i class="ti ti-arrows-exchange" aria-hidden="true"></i></span>Parceria <button type="button" class="info-hint" aria-label="O que é parceria?" title="O valor cadastrado para o produto é o mesmo valor cobrado do cliente. A venda fica fora do resultado da fábrica e é destinada integralmente ao parceiro." onclick="event.preventDefault();event.stopPropagation();toggleInfoHint(this)">?</button></strong><small>Use para a La Mãe Terra ou para qualquer fornecedor em que o valor do produto já seja o preço final cobrado do cliente.</small><small class="partnership-note"><i class="ti ti-info-circle" aria-hidden="true"></i> A fábrica registra a venda e mostra o movimento, mas não trata esse valor como receita própria.</small><span class="info-hint-popover" role="note">O preço cadastrado aqui é o preço final do cliente. A venda fica separada do resultado da fábrica e 100% do valor fica destinado ao parceiro.</span></span>
+            </label>
+
             <div class="form-group full-width">
-              <label>🍫 Produtos e custos</label>
+              <label><i class="ti ti-package ui-icon" aria-hidden="true"></i>Produtos e custos</label>
               <div id="container-produtos-fornecedor" style="display:flex; flex-direction:column; gap:12px; margin-top:8px;"></div>
               <button type="button" class="btn-secondary" style="margin-top:8px;" onclick="adicionarBlocoProdutoFornecedor()">＋ Adicionar produto</button>
             </div>
           </div>
 
           <div style="display:flex; gap:10px; margin-top:16px;">
-            <button type="submit" class="btn-submit" id="btn-fornecedor-submit">Salvar Fornecedor</button>
+            <button type="submit" class="btn-submit" id="btn-fornecedor-submit">Salvar fornecedor</button>
             <button type="button" class="btn-secondary" id="btn-fornecedor-cancel" style="display:none;" onclick="cancelarEdicaoFornecedor()">Cancelar</button>
           </div>
         </form>
@@ -1065,13 +1126,13 @@
 
       <div id="fornecedor-summary" class="summary-strip" aria-label="Resumo dos fornecedores"></div>
       <div class="form-section" style="background:#ffffff;">
-        <h3>📦 Lista de Fornecedores</h3>
+        <h3><i class="ti ti-list-details ui-icon" aria-hidden="true"></i>Lista de fornecedores</h3>
         <div class="table-wrapper">
           <table>
             <thead>
               <tr>
                 <th>Fornecedor</th>
-                <th>Produtos & Custos</th>
+                <th>Produtos e valores</th>
                 <th>Frete de referência</th>
                 <th>Ações</th>
               </tr>
@@ -1089,7 +1150,7 @@
     <div id="tab-produtos" class="tab-content">
       <div id="produto-summary" class="summary-strip" aria-label="Resumo dos produtos"></div>
       <div class="form-section">
-        <h3 id="form-produto-title">🍫 Produtos</h3>
+        <h3 id="form-produto-title"><i class="ti ti-package ui-icon" aria-hidden="true"></i>Produtos</h3>
         <form id="form-produto" onsubmit="salvarProduto(event)">
           <input type="hidden" id="produto-id">
 
@@ -1100,16 +1161,17 @@
             </div>
 
             <div class="form-group">
-              <label for="produto-fornecedor">Fornecedor Responsável</label>
+              <label for="produto-fornecedor">Quem fornece</label>
               <select id="produto-fornecedor" onchange="aoSelecionarProdutoParaPrecificar()" required>
                 <option value="">Selecione o fornecedor...</option>
               </select>
             </div>
 
             <div class="form-group full-width">
-              <label>Tabela de Preço ao Cliente (Faixas por Quantidade)</label>
+              <label><i class="ti ti-tag ui-icon" aria-hidden="true"></i>Preço de venda</label>
+              <div id="produto-preco-nota" class="empty-state" style="display:none;margin-top:6px;"><strong>Preço herdado do fornecedor <button type="button" class="info-hint" aria-label="Como funciona o preço herdado?" title="Neste modelo, o valor cadastrado no fornecedor já é o preço final cobrado do cliente." onclick="event.preventDefault();event.stopPropagation();toggleInfoHint(this)">?</button></strong><span>Este fornecedor está em venda em parceria. O valor cadastrado no fornecedor já é o preço cobrado do cliente.</span><span class="info-hint-popover" role="note">Não cadastre outro preço de venda para este produto: o valor do fornecedor já é o valor final da venda.</span></div>
               <div id="container-faixas-venda" style="display:flex; flex-direction:column; gap:8px; margin-top:6px;"></div>
-              <button type="button" class="btn-secondary" style="margin-top:6px;" onclick="adicionarLinhaFaixaVenda()">+ Adicionar Faixa de Preço</button>
+              <button type="button" id="btn-adicionar-faixa-venda" class="btn-secondary" style="margin-top:6px;" onclick="adicionarLinhaFaixaVenda()">Adicionar faixa de preço</button>
             </div>
           </div>
 
@@ -1121,7 +1183,7 @@
       </div>
 
       <div class="form-section" style="background:#ffffff;">
-        <h3>🍫 Catálogo de Produtos</h3>
+        <h3><i class="ti ti-package ui-icon" aria-hidden="true"></i> Catálogo de Produtos</h3>
         <div class="table-wrapper">
           <table>
             <thead>
@@ -1144,12 +1206,12 @@
     <!-- ABA 4: RELATÓRIO MENSAL & RATEIO -->
     <div id="tab-relatorio" class="tab-content">
       <div class="form-section">
-        <h3>📊 Relatórios & Rateio</h3>
+        <h3><i class="ti ti-chart-bar ui-icon" aria-hidden="true"></i>Relatórios & Rateio</h3>
         <p style="font-size:0.85rem; color:var(--text-muted); margin-bottom:14px;">
           Veja vendas, recebimentos, pendências, custos, ticket médio, resultado e rateio do período.
         </p>
         <div class="finance-action-strip" aria-label="Ações financeiras">
-          <div><strong>💼 Gestão de compras e repasses</strong><span>Registre pagamentos e compras sem ocupar a tela principal.</span></div>
+          <div><strong><i class="ti ti-briefcase ui-icon" aria-hidden="true"></i> Gestão de compras e repasses</strong><span>Registre pagamentos e compras sem ocupar a tela principal.</span></div>
           <button type="button" class="btn-secondary finance-action-btn" onclick="abrirModalFinanceiro()">＋ Registrar compra / repasse</button>
         </div>
 
@@ -1177,8 +1239,8 @@
             <input type="number" id="relatorio-ano" value="2026" style="padding:8px; width:90px; border-radius:6px; border:1px solid var(--border-color);">
           </div>
 
-          <button type="button" class="btn-submit" style="margin-top:16px;" onclick="gerarRelatorioRateio()">🔄 Gerar / Recalcular Mês</button>
-          <button type="button" class="btn-secondary" style="margin-top:16px; background:var(--herb-green); color:#fff; border:none;" onclick="baixarRelatorioPDF()">📥 Baixar Relatório em PDF</button>
+          <button type="button" class="btn-submit" style="margin-top:16px;" onclick="gerarRelatorioRateio()"><i class="ti ti-refresh ui-icon" aria-hidden="true"></i> Gerar / Recalcular Mês</button>
+          <button type="button" class="btn-secondary" style="margin-top:16px; background:var(--herb-green); color:#fff; border:none;" onclick="baixarRelatorioPDF()"><i class="ti ti-download ui-icon" aria-hidden="true"></i> Baixar Relatório em PDF</button>
         </div>
 
         <div id="area-relatorio-impressao">
@@ -1199,19 +1261,19 @@
   <!-- IDENTIFICAÇÃO DA SESSÃO -->
   <div id="modal-login-socio" class="modal-backdrop session-login-backdrop">
     <div class="modal-card session-login-card" role="dialog" aria-modal="true" aria-labelledby="login-socio-title">
-      <div class="session-login-brand">🍫</div>
+      <div class="session-login-brand"><i class="ti ti-building-factory-2"></i></div>
       <h2 id="login-socio-title">Quem está usando?</h2>
       <p>Escolha seu perfil para registrar as ações desta sessão. Os dados continuam compartilhados entre os dois sócios.</p>
       <div class="session-login-options">
-        <button type="button" class="session-user-btn" onclick="entrarComoSocio('Ramom')">👤 Ramom</button>
-        <button type="button" class="session-user-btn" onclick="entrarComoSocio('Monique')">👤 Monique</button>
+        <button type="button" class="session-user-btn" onclick="entrarComoSocio('Ramom')">Ramom</button>
+        <button type="button" class="session-user-btn" onclick="entrarComoSocio('Monique')">Monique</button>
       </div>
     </div>
   </div>
 
   <div id="modal-auditoria" class="modal-backdrop">
     <div class="modal-card audit-modal-card" role="dialog" aria-modal="true" aria-labelledby="auditoria-title">
-      <div class="modal-header"><h3 id="auditoria-title">🧾 Atividades</h3><button type="button" class="btn-secondary" onclick="fecharAuditoria()">Fechar</button></div>
+      <div class="modal-header"><h3 id="auditoria-title"><i class="ti ti-history ui-icon" aria-hidden="true"></i>Atividades</h3><button type="button" class="btn-secondary" onclick="fecharAuditoria()">Fechar</button></div>
       <p style="margin:-4px 0 14px;color:var(--text-muted);font-size:.82rem;">Registro compartilhado das ações feitas pelos dois sócios, com data, horário e detalhes do que aconteceu.</p>
       <div id="audit-lista" class="audit-list"></div>
     </div>
@@ -1219,18 +1281,18 @@
 
   <div id="modal-financeiro" class="modal-backdrop">
     <div class="modal-card finance-modal-card">
-      <div class="modal-header"><h3>💼 Compras e repasses</h3><button type="button" class="btn-close-modal" onclick="fecharModalFinanceiro()">✕</button></div>
+      <div class="modal-header"><h3><i class="ti ti-wallet ui-icon" aria-hidden="true"></i>Compras e repasses</h3><button type="button" class="btn-close-modal" onclick="fecharModalFinanceiro()" aria-label="Fechar compras e repasses" title="Fechar"><i class="ti ti-x ui-icon" aria-hidden="true"></i></button></div>
       <p style="font-size:.84rem;color:var(--text-muted);margin-bottom:14px;">Esses registros ficam fora das abas principais para não poluir a operação diária. O que você lançar aqui alimenta os relatórios e os valores de repasse.</p>
       <div class="finance-modal-section">
         <div class="section-kicker">Repasse de insumo</div>
-        <h4>📦 Registrar compra do fornecedor</h4>
+        <h4><i class="ti ti-package ui-icon" aria-hidden="true"></i> Registrar compra do fornecedor</h4>
         <form id="form-compra" onsubmit="salvarCompra(event)">
           <div class="form-grid">
             <div class="form-group"><label for="compra-fornecedor">Fornecedor</label><select id="compra-fornecedor" required><option value="">Selecione...</option></select></div>
             <div class="form-group"><label for="compra-data">Data da compra</label><input type="date" id="compra-data" required></div>
             <div class="form-group"><label for="compra-frete">Frete real (R$)</label><input type="number" id="compra-frete" step="0.01" min="0" value="0"></div>
-            <div class="form-group"><label for="compra-status">Repasse</label><select id="compra-status"><option value="Pendente">🟡 A pagar</option><option value="Repassado">🟢 Repassado</option></select></div>
-            <div class="form-group full-width"><label>🍫 Produtos comprados</label><div id="compra-itens" class="purchase-items"></div><button type="button" class="btn-secondary" onclick="adicionarItemCompra()">＋ Adicionar produto</button></div>
+            <div class="form-group"><label for="compra-status">Repasse</label><select id="compra-status"><option value="Pendente"><i class="ti ti-clock ui-icon" aria-hidden="true"></i> A pagar</option><option value="Repassado"><i class="ti ti-circle-check ui-icon" aria-hidden="true"></i> Repassado</option></select></div>
+            <div class="form-group full-width"><label><i class="ti ti-package ui-icon" aria-hidden="true"></i>Produtos comprados</label><div id="compra-itens" class="purchase-items"></div><button type="button" class="btn-secondary" onclick="adicionarItemCompra()">＋ Adicionar produto</button></div>
           </div>
           <div id="compra-total-preview" class="summary-box" style="margin-top:12px;">Total da compra: <strong>R$ 0,00</strong></div>
           <div style="display:flex;gap:10px;margin-top:12px;"><button type="submit" class="btn-submit">Registrar compra</button><button type="button" class="btn-secondary" onclick="cancelarCompra()">Limpar</button></div>
@@ -1238,7 +1300,7 @@
       </div>
       <div class="finance-modal-section">
         <div class="section-kicker">Compra operacional</div>
-        <h4>🛍️ O que a fábrica comprou?</h4>
+        <h4><i class="ti ti-shopping-bag ui-icon" aria-hidden="true"></i>O que a fábrica comprou?</h4>
         <p style="font-size:.8rem;color:var(--text-muted);margin-bottom:10px;">Embalagens, sacolas, etiquetas, equipamentos, manutenção e outras compras que não são insumos do fornecedor.</p>
         <form id="form-outra-compra" onsubmit="salvarOutraCompra(event)">
           <div class="form-grid">
@@ -1252,7 +1314,7 @@
       </div>
       <div class="finance-modal-section finance-history-section">
         <div class="section-kicker">Histórico</div>
-        <h4>📋 Repasses registrados</h4>
+        <h4><i class="ti ti-history ui-icon" aria-hidden="true"></i>Repasses registrados</h4>
         <div id="lista-repasses" class="purchase-list"></div>
       </div>
     </div>
@@ -1261,12 +1323,12 @@
   <!-- JANELA MODAL: IMPORTAR DO WHATSAPP -->
   <div id="modal-import-whatsapp" class="modal-backdrop">
     <div class="modal-card">
-      <div class="modal-header"><h3>📱 Importar Pedidos do WhatsApp</h3><button type="button" class="btn-close-modal" onclick="fecharModalImportarWhatsApp()">✕</button></div>
+      <div class="modal-header"><h3><i class="ti ti-brand-whatsapp ui-icon" aria-hidden="true"></i>Importar pedidos do WhatsApp</h3><button type="button" class="btn-close-modal" onclick="fecharModalImportarWhatsApp()" aria-label="Fechar importação do WhatsApp" title="Fechar"><i class="ti ti-x ui-icon" aria-hidden="true"></i></button></div>
       <p style="font-size:.85rem;color:var(--text-muted);margin-bottom:12px;">Cole listas no formato que vocês recebem. O sistema normaliza quantidade, pagamento e produto e não salva automaticamente quando houver dúvida.</p>
-      <div class="form-group full-width" style="margin-bottom:14px;"><label for="whatsapp-import-text">Texto do WhatsApp</label><textarea id="whatsapp-import-text" rows="8" placeholder="Exemplos:\nJoão / 100g Capulho / Pago\n🍫 Maria - Capulho 0,5kg - PIX OK\nPedro / Capulho 100g / pagar na entrega" oninput="processarTextoWhatsApp()"></textarea></div>
+      <div class="form-group full-width" style="margin-bottom:14px;"><label for="whatsapp-import-text">Texto do WhatsApp</label><textarea id="whatsapp-import-text" rows="8" placeholder="Exemplos:\nJoão / 100g Capulho / Pago\n<i class="ti ti-package ui-icon" aria-hidden="true"></i> Maria - Capulho 0,5kg - PIX OK\nPedro / Capulho 100g / pagar na entrega" oninput="processarTextoWhatsApp()"></textarea></div>
       <div id="whatsapp-parse-status"></div>
-      <div id="whatsapp-preview-area" style="margin:14px 0;display:none;"><h4 style="font-size:.9rem;color:var(--choc-dark);margin-bottom:8px;">🔍 Prévia</h4><div class="table-wrapper" style="max-height:280px;overflow:auto;"><table><thead><tr><th>Cliente</th><th>Produto</th><th>Qtd.</th><th>Pagamento</th><th>Observação</th></tr></thead><tbody id="whatsapp-preview-tbody"></tbody></table></div></div>
-      <div style="display:flex;justify-content:flex-end;gap:10px;"><button type="button" class="btn-secondary" onclick="fecharModalImportarWhatsApp()">Cancelar</button><button type="button" id="btn-confirmar-importacao" class="btn-submit" disabled onclick="confirmarImportacaoWhatsApp()">⚠️ Resolva os avisos para importar</button></div>
+      <div id="whatsapp-preview-area" style="margin:14px 0;display:none;"><h4 style="font-size:.9rem;color:var(--choc-dark);margin-bottom:8px;"><i class="ti ti-search ui-icon" aria-hidden="true"></i>Prévia</h4><div class="table-wrapper" style="max-height:280px;overflow:auto;"><table><thead><tr><th>Cliente</th><th>Produto</th><th>Qtd.</th><th>Pagamento</th><th>Observação</th></tr></thead><tbody id="whatsapp-preview-tbody"></tbody></table></div></div>
+      <div style="display:flex;justify-content:flex-end;gap:10px;"><button type="button" class="btn-secondary" onclick="fecharModalImportarWhatsApp()">Cancelar</button><button type="button" id="btn-confirmar-importacao" class="btn-submit" disabled onclick="confirmarImportacaoWhatsApp()"><i class="ti ti-alert-triangle ui-icon" aria-hidden="true"></i> Resolva os avisos para importar</button></div>
     </div>
   </div>
 
@@ -1278,10 +1340,10 @@
     // Autoplay com áudio continua sujeito à política do navegador.
     const RADIO_KEY='fabrica_radio_config_v3';
     const RADIO_STATIONS={
-      lofi:{name:'Lo-fi & Chill',icon:'☕',url:'https://open.spotify.com/playlist/37i9dQZF1DWWQRwui0ExPn'},
-      jazz:{name:'Jazz 60s / Standards',icon:'🎷',url:'https://open.spotify.com/playlist/0NqO69g7IPWSjuwe5YyOtj'},
-      reggae:{name:'Reggae Roots',icon:'🌿',url:'https://open.spotify.com/playlist/289I2aezKqMGKMXe1NQuXn'},
-      hitech:{name:'Hitech / Dark Psy',icon:'👽',url:'https://open.spotify.com/playlist/1DFMfDpk1Vk95Fz94SzbIx'}
+      lofi:{name:'Lo-fi & Chill',icon:'<i class="ti ti-coffee"></i>',url:'https://open.spotify.com/playlist/37i9dQZF1DWWQRwui0ExPn'},
+      jazz:{name:'Jazz 60s / Standards',icon:'<i class="ti ti-music"></i>',url:'https://open.spotify.com/playlist/0NqO69g7IPWSjuwe5YyOtj'},
+      reggae:{name:'Reggae Roots',icon:'<i class="ti ti-leaf"></i>',url:'https://open.spotify.com/playlist/289I2aezKqMGKMXe1NQuXn'},
+      hitech:{name:'Hitech / Dark Psy',icon:'<i class="ti ti-alien"></i>',url:'https://open.spotify.com/playlist/1DFMfDpk1Vk95Fz94SzbIx'}
     };
     const radioState={station:'lofi',autoplay:true,started:false,hidden:false,minimized:false,userInteracted:false};
     let spotifyAPIReady=false,spotifyAPILoading=false,spotifyController=null;
@@ -1291,10 +1353,10 @@
       const box=document.getElementById('radio-player'),sel=document.getElementById('radio-station'),play=document.getElementById('radio-play'),min=document.getElementById('radio-minimize-btn'),toggle=document.getElementById('radio-open-btn'),name=document.getElementById('radio-name'),art=document.getElementById('radio-art');
       const st=RADIO_STATIONS[radioState.station];
       if(sel)sel.value=radioState.station;
-      if(name)name.textContent=(st?.icon||'🎵')+' '+(st?.name||'Rádio');if(art)art.textContent=st?.icon||'🎵';
-      if(play){play.textContent=radioState.started?'❚❚':'▶';play.title=radioState.started?'Pausar rádio':'Tocar rádio';play.setAttribute('aria-label',radioState.started?'Pausar rádio':'Tocar rádio');}
+      if(name)name.innerHTML=(st?.icon||'<i class="ti ti-music"></i>')+' '+(st?.name||'Rádio');if(art)art.innerHTML=st?.icon||'<i class="ti ti-music"></i>';
+      if(play){play.innerHTML=radioState.started?'<i class="ti ti-player-pause" aria-hidden="true"></i>':'<i class="ti ti-player-play" aria-hidden="true"></i>';play.title=radioState.started?'Pausar rádio':'Tocar rádio';play.setAttribute('aria-label',radioState.started?'Pausar rádio':'Tocar rádio');}
       if(box){box.classList.toggle('is-hidden',radioState.hidden);box.classList.toggle('is-minimized',radioState.minimized===true);box.classList.toggle('is-playing',radioState.started);box.classList.toggle('is-error',false);}
-      if(min){min.textContent=radioState.minimized?'↗':'—';min.title=radioState.minimized?'Expandir rádio':'Minimizar rádio';min.setAttribute('aria-label',radioState.minimized?'Expandir rádio':'Minimizar rádio');}
+      if(min){min.innerHTML=radioState.minimized?'<i class="ti ti-arrows-maximize" aria-hidden="true"></i>':'<i class="ti ti-minus" aria-hidden="true"></i>';min.title=radioState.minimized?'Expandir rádio':'Minimizar rádio';min.setAttribute('aria-label',radioState.minimized?'Expandir rádio':'Minimizar rádio');}
       if(toggle)toggle.setAttribute('aria-expanded',String(!radioState.hidden));
     }
     function definirStatusRadio(t,erro=false){const el=document.getElementById('radio-status'),box=document.getElementById('radio-player');if(el){el.textContent=t;el.dataset.error=erro?'1':'0';}if(box)box.classList.toggle('is-error',erro);atualizarRadioUI();}
@@ -1387,7 +1449,7 @@
     function atualizarBotaoSom(){
       const b=document.getElementById('sound-toggle'),i=document.getElementById('sound-icon'),l=document.getElementById('sound-label'); if(!b)return;
       b.classList.toggle('is-off',!uiSound.enabled); b.setAttribute('aria-pressed',String(uiSound.enabled)); b.title=uiSound.enabled?'Desativar sons da interface':'Ativar sons da interface';
-      if(i)i.textContent=uiSound.enabled?'🔊':'🔇'; if(l)l.textContent=uiSound.enabled?'Sons':'Mudo';
+      if(i)i.innerHTML=uiSound.enabled?'<i class="ti ti-volume ui-icon" aria-hidden="true"></i>':'<i class="ti ti-volume-off ui-icon" aria-hidden="true"></i>'; b.setAttribute('aria-label',uiSound.enabled?'Desativar sons da interface':'Ativar sons da interface'); if(l)l.textContent='';
     }
     function inicializarSons(){
       atualizarBotaoSom();
@@ -1433,7 +1495,7 @@
 
     /* ESTADO GLOBAL DA APLICAÇÃO */
     let appData = {
-      schemaVersion: 3,
+      schemaVersion: 4,
       usuarioAtual: 'Ramom', splitRamomPct: 50,
       pedidos: [], fornecedores: [], produtos: [], historicoRateios: [],
       comprasFabrica: [], repasses: [], whatsappImportHistory: []
@@ -1482,8 +1544,12 @@
     function totalQtdPedido(p){ return num(p.qtdPrincipal)+(p.dependentes||[]).reduce((s,d)=>s+num(d.qtd),0); }
     function getProduct(id){ return (appData.produtos||[]).find(p=>p.id===id); }
     function getSupplier(id){ return (appData.fornecedores||[]).find(f=>f.id===id); }
+    function fornecedorTemRepasseIntegral(produtoId){const p=getProduct(produtoId),f=p&&getSupplier(p.fornecedorId);return !!f?.repasseIntegral;}
     function calcularPrecoVendaCliente(produto,qtd){
-      if(!produto) return 0; const faixas=[...(produto.faixasVenda||[])].sort((a,b)=>num(a.qtdMin)-num(b.qtdMin)); let faixa=faixas[0];
+      if(!produto) return 0;
+      const fornecedor=getSupplier(produto.fornecedorId);
+      if(fornecedor?.repasseIntegral){return obterCustoEfetivoProduto(produto.id,qtd).custoUnit;}
+      const faixas=[...(produto.faixasVenda||[])].sort((a,b)=>num(a.qtdMin)-num(b.qtdMin)); let faixa=faixas[0];
       faixas.forEach(f=>{if(qtd>=num(f.qtdMin)) faixa=f;}); return faixa?num(faixa.precoUnit):0;
     }
     function obterVolumeTotalGeralPorProduto(produtoId){
@@ -1507,15 +1573,18 @@
       if(d.splitRamomPct===undefined){d.splitRamomPct=50;changed=true;}
       // Snapshot histórico: custo no momento da migração, sem alterar o schema antigo.
       // Backfill de custo histórico. Em dados antigos, o valor é uma estimativa de migração; pedidos novos recebem snapshot real.
+      d.fornecedores=d.fornecedores.map(f=>{if(f.repasseIntegral===undefined){changed=true;return Object.assign({},f,{repasseIntegral:false});}return f;});
       d.pedidos=d.pedidos.map(p=>{
-        if(num(p.custoUnitSnapshot)>0) return p;
+        if(p.modeloRepasseSnapshot) return p;
         const prod=d.produtos.find(x=>x.id===p.produtoId), f=prod&&d.fornecedores.find(x=>x.id===prod.fornecedorId), item=f&&(f.produtos||[]).find(x=>x.produtoId===p.produtoId);
         let custo=item?num(item.custoBase):0; const qtd=totalQtdPedido(p); (item?.metas||[]).forEach(m=>{if(qtd>=num(m.qtdMin))custo=num(m.custoComDesconto);});
-        changed=true; return Object.assign({},p,{custoUnitSnapshot:custo,custoSnapshotOrigem:'migracao'});
+        const integral=!!f?.repasseIntegral;
+        changed=true;
+        return Object.assign({},p,{modeloRepasseSnapshot:integral?'integral':'fabrica',valorRepasseUnitSnapshot:integral?custo:0,custoUnitSnapshot:integral?0:(num(p.custoUnitSnapshot)||custo),custoSnapshotOrigem:p.custoSnapshotOrigem||'migracao'});
       });
       // Migração conservadora de despesas legadas, caso alguma versão futura já as possua.
       if(Array.isArray(d.despesas)&&d.despesas.length&&!d.comprasFabrica.length){d.comprasFabrica=d.despesas.map(x=>({id:uid('cmp'),data:x.data||new Date().toISOString().slice(0,10),categoria:x.categoria||'Outros',descricao:x.descricao||x.nome||'Despesa migrada',valor:num(x.valor),fornecedorId:x.fornecedorId||'',origem:'migração'}));changed=true;}
-      const versaoAtual=Math.max(3,num(d.schemaVersion)); if(d.schemaVersion!==versaoAtual){d.schemaVersion=versaoAtual;changed=true;} return {data:d,changed};
+      const versaoAtual=Math.max(4,num(d.schemaVersion)); if(d.schemaVersion!==versaoAtual){d.schemaVersion=versaoAtual;changed=true;} return {data:d,changed};
     }
 
     function carregarDadosIniciais(){
@@ -1545,6 +1614,18 @@
     function exportarBackup(){const payload={...appData,backupMeta:{exportadoEm:new Date().toISOString(),versaoSistema:appData.schemaVersion||3}};const blob=new Blob([JSON.stringify(payload,null,2)],{type:'application/json'}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download=`fabrica-backup-${new Date().toISOString().slice(0,10)}.json`;a.click();URL.revokeObjectURL(url);showToast('Backup JSON criado com sucesso.');}
     function importarBackup(e){const file=e.target.files?.[0];if(!file)return;const reader=new FileReader();reader.onload=()=>{try{const parsed=JSON.parse(reader.result);if(!parsed||typeof parsed!=='object'||!Array.isArray(parsed.pedidos)||!Array.isArray(parsed.produtos)||!Array.isArray(parsed.fornecedores))throw new Error('Formato inválido');if(!confirm('Isso substituirá os dados atuais desta fábrica pelos dados do backup. Continue?'))return;const r=migrarDados(parsed);appData=r.data;salvarDados('restauração',`Restaurou um backup JSON com ${appData.pedidos.length} pedidos`);renderizarTudo();showToast('Backup restaurado. Confira os dados antes de continuar.','warning');}catch(err){console.error(err);showToast('Arquivo de backup inválido ou corrompido.','error');}finally{e.target.value='';}};reader.readAsText(file);}
 
+    function toggleInfoHint(btn){
+      const parent=btn.closest('.partnership-option-copy,.empty-state');
+      if(!parent)return;
+      const pop=parent.querySelector('.info-hint-popover');
+      if(!pop)return;
+      document.querySelectorAll('.info-hint-popover.is-open').forEach(x=>{if(x!==pop)x.classList.remove('is-open');});
+      pop.classList.toggle('is-open');
+    }
+    document.addEventListener('click',e=>{
+      if(!e.target.closest('.info-hint') && !e.target.closest('.info-hint-popover')) document.querySelectorAll('.info-hint-popover.is-open').forEach(x=>x.classList.remove('is-open'));
+    });
+
     function salvarUsuarioAtual(nome){entrarComoSocio(nome);}
 
     function abrirModalFinanceiro(){const m=document.getElementById('modal-financeiro');if(!m)return;m.style.display='flex';document.body.style.overflow='hidden';renderizarRepasses();renderizarProdutos();const d=document.getElementById('compra-data');if(d&&!d.value)d.value=new Date().toISOString().slice(0,10);const od=document.getElementById('outra-compra-data');if(od&&!od.value)od.value=new Date().toISOString().slice(0,10);if(!document.querySelector('#compra-itens .purchase-row'))adicionarItemCompra();}
@@ -1569,7 +1650,7 @@
     function agoraCuritiba(){return new Date(new Date().toLocaleString('en-US',{timeZone:CURITIBA_TZ}));}
     function proximoRateioCuritiba(){const agora=agoraCuritiba(),hoje=chaveDataLocal(agora),quintoMes=quintoDiaUtilCuritiba(agora.getFullYear(),agora.getMonth());if(hoje===chaveDataLocal(quintoMes)){const fim=new Date(agora);fim.setHours(23,59,59,999);if(agora<=fim)return {data:quintoMes,hoje:true};}let m=agora.getMonth()+1,a=agora.getFullYear();if(m>11){m=0;a++;}return {data:quintoDiaUtilCuritiba(a,m),hoje:false};}
     function formatarDataRateio(d){return d.toLocaleDateString('pt-BR',{weekday:'long',day:'2-digit',month:'long'}).replace(/^./,c=>c.toUpperCase());}
-    function atualizarContadorRateio(){const title=document.getElementById('rateio-countdown-title');if(!title)return;const dEl=document.getElementById('rateio-days'),hEl=document.getElementById('rateio-hours'),mEl=document.getElementById('rateio-minutes'),sEl=document.getElementById('rateio-seconds'),note=document.getElementById('rateio-countdown-note');const agora=agoraCuritiba(),alvo=proximoRateioCuritiba();if(alvo.hoje){title.textContent='É hoje. A correria do rateio tá liberada 🌿🍫';note.textContent=`5º dia útil · ${formatarDataRateio(alvo.data)}`;dEl.textContent='00';hEl.textContent=String(23-agora.getHours()).padStart(2,'0');mEl.textContent=String(59-agora.getMinutes()).padStart(2,'0');sEl.textContent=String(59-agora.getSeconds()).padStart(2,'0');return;}const diff=Math.max(0,alvo.data.getTime()-agora.getTime());const total=Math.floor(diff/1000),dias=Math.floor(total/86400),horas=Math.floor((total%86400)/3600),mins=Math.floor((total%3600)/60),secs=total%60;title.textContent=`Faltam ${dias} dia${dias===1?'':'s'} pra próxima correria 🍫🌿`;note.textContent=`${formatarDataRateio(alvo.data)} · 5º dia útil de Curitiba`;dEl.textContent=String(dias).padStart(2,'0');hEl.textContent=String(horas).padStart(2,'0');mEl.textContent=String(mins).padStart(2,'0');sEl.textContent=String(secs).padStart(2,'0');}
+    function atualizarContadorRateio(){const title=document.getElementById('rateio-countdown-title');if(!title)return;const dEl=document.getElementById('rateio-days'),hEl=document.getElementById('rateio-hours'),mEl=document.getElementById('rateio-minutes'),sEl=document.getElementById('rateio-seconds'),note=document.getElementById('rateio-countdown-note');const agora=agoraCuritiba(),alvo=proximoRateioCuritiba();if(alvo.hoje){title.textContent='É hoje. A correria do rateio tá liberada.';note.textContent=`5º dia útil · ${formatarDataRateio(alvo.data)}`;dEl.textContent='00';hEl.textContent=String(23-agora.getHours()).padStart(2,'0');mEl.textContent=String(59-agora.getMinutes()).padStart(2,'0');sEl.textContent=String(59-agora.getSeconds()).padStart(2,'0');return;}const diff=Math.max(0,alvo.data.getTime()-agora.getTime());const total=Math.floor(diff/1000),dias=Math.floor(total/86400),horas=Math.floor((total%86400)/3600),mins=Math.floor((total%3600)/60),secs=total%60;title.textContent=`Faltam ${dias} dia${dias===1?'':'s'} pra próxima correria.`;note.textContent=`${formatarDataRateio(alvo.data)} · 5º dia útil de Curitiba`;dEl.textContent=String(dias).padStart(2,'0');hEl.textContent=String(horas).padStart(2,'0');mEl.textContent=String(mins).padStart(2,'0');sEl.textContent=String(secs).padStart(2,'0');}
     let rateioTimerId=null;
     function iniciarContadorRateio(){atualizarContadorRateio();if(rateioTimerId)clearInterval(rateioTimerId);rateioTimerId=setInterval(atualizarContadorRateio,1000);}
 
@@ -1608,12 +1689,17 @@
     function atualizarDivisaoSocios(val){if(!exigirSessao())return;appData.splitRamomPct=num(val);const l=document.getElementById('label-split-val');if(l)l.innerText=`${appData.splitRamomPct}% Ramom / ${100-appData.splitRamomPct}% Monique`;const r=document.getElementById('slider-split-socios');if(r)r.style.background=`linear-gradient(90deg,var(--herb-green) 0%,var(--herb-green) ${appData.splitRamomPct}%,#d8c6b5 ${appData.splitRamomPct}%,#d8c6b5 100%)`;salvarDados('alteração',`Alterou a divisão dos sócios para ${appData.splitRamomPct}% Ramom / ${100-appData.splitRamomPct}% Monique`);atualizarDashboard();}
 
     function resumoFinanceiro(){
-      let faturamento=0,pendente=0,custo=0,pedidos=0,recebido=0,volume=0;
-      (appData.pedidos||[]).forEach(p=>{const prod=getProduct(p.produtoId),q=totalQtdPedido(p);volume+=q;custo+=q*custoSnapshotPedido(p);if(p.categoria!=='Socio'&&prod){pedidos++;const venda=q*calcularPrecoVendaCliente(prod,q);faturamento+=venda;if(p.status==='Pago')recebido+=venda;else pendente+=venda;}});
+      let faturamento=0,pendente=0,custo=0,pedidos=0,recebido=0,volume=0,parceirosVendido=0,parceirosQtd=0;
+      (appData.pedidos||[]).forEach(p=>{
+        const prod=getProduct(p.produtoId),q=totalQtdPedido(p),integral=p.modeloRepasseSnapshot==='integral';
+        if(p.categoria==='Socio'){volume+=q;custo+=q*custoSnapshotPedido(p);return;}
+        if(integral){parceirosQtd+=q;const unit=num(p.valorRepasseUnitSnapshot)||calcularPrecoVendaCliente(prod,q);const venda=q*unit;parceirosVendido+=venda;return;}
+        volume+=q;custo+=q*custoSnapshotPedido(p);
+        if(p.categoria!=='Socio'&&prod){pedidos++;const venda=q*calcularPrecoVendaCliente(prod,q);faturamento+=venda;if(p.status==='Pago')recebido+=venda;else pendente+=venda;}
+      });
       const compras=(appData.comprasFabrica||[]).reduce((s,x)=>s+num(x.valor),0);
-      // Compras operacionais não são automaticamente somadas ao custo de insumos dos pedidos para evitar dupla contagem; ficam como categoria separada.
       const lucro=faturamento-custo-comprasNaoDuplicadas();
-      return {faturamento,pendente,recebido,custo,pedidos,volume,compras,lucro};
+      return {faturamento,pendente,recebido,custo,pedidos,volume,compras,lucro,parceirosQtd,parceirosVendido};
     }
     function comprasNaoDuplicadas(){return (appData.comprasFabrica||[]).filter(c=>c.impactoResultado!==false&&c.tipo!=='Insumo já incorporado').reduce((s,c)=>s+num(c.valor),0);}
     function atualizarDashboard(){
@@ -1621,21 +1707,21 @@
       const el=(id,v)=>{const e=document.getElementById(id);if(e)e.innerText=v;};
       el('dash-faturamento-total',formatarMoeda(r.faturamento));el('dash-faturamento-sub',`${formatarMoeda(r.recebido)} recebido · ${formatarMoeda(r.pendente)} pendente`);
       el('dash-repasses-pendentes',formatarMoeda(repPend));el('dash-repasses-sub',`${repCount} ${repCount===1?'repasse pendente':'repasses pendentes'}`);
-      el('dash-compras-total',formatarMoeda(r.compras));el('dash-compras-sub',`${(appData.comprasFabrica||[]).length} compras registradas`);
+      el('dash-compras-total',formatarMoeda(r.compras));el('dash-compras-sub',`${(appData.comprasFabrica||[]).filter(x=>x.tipo!=='Insumo já incorporado').length} compras registradas`);
+      el('dash-parceiros-qtd',`${r.parceirosQtd.toLocaleString('pt-BR')} g/un`);el('dash-parceiros-vendido',formatarMoeda(r.parceirosVendido));el('dash-parceiros-repasse',formatarMoeda(r.parceirosVendido));
       const margem=r.faturamento?((r.lucro/r.faturamento)*100):0,pct=num(appData.splitRamomPct||50);el('dash-lucro-liquido',formatarMoeda(r.lucro));el('dash-lucro-divisao',`Margem ${margem.toFixed(1)}% · Ramom ${pct}% · Monique ${100-pct}%`);
       const lr=r.lucro*pct/100,lm=r.lucro*(100-pct)/100;
       const f=document.getElementById('panel-faturar-conteudo');if(f)f.innerHTML=`<div class="detail-grid"><div class="detail-stat"><span>Recebido</span><strong>${formatarMoeda(r.recebido)}</strong></div><div class="detail-stat"><span>Pendente</span><strong>${formatarMoeda(r.pendente)}</strong></div><div class="detail-stat"><span>Pedidos</span><strong>${r.pedidos}</strong></div><div class="detail-stat"><span>Volume</span><strong>${r.volume.toLocaleString('pt-BR')} g/un</strong></div></div>`;
       const fp=document.getElementById('panel-fornecedores-conteudo');if(fp){const groups={};(appData.repasses||[]).filter(x=>x.status!=='Repassado').forEach(x=>{const g=groups[x.fornecedorId]??={total:0,produtos:0,frete:0,itens:[]};g.total+=num(x.total);g.frete+=num(x.frete);g.produtos+=num(x.total)-num(x.frete);g.itens.push(x);});const rows=Object.entries(groups);fp.innerHTML=rows.length?`<div class="purchase-list">${rows.map(([fid,g])=>`<div class="purchase-card"><div class="purchase-card-head"><strong>${escapeHtml(getSupplier(fid)?.nome||'Fornecedor')}</strong><span class="purchase-total">${formatarMoeda(g.total)}</span></div><div class="detail-grid" style="margin-top:8px"><div class="detail-stat"><span>Produtos</span><strong>${formatarMoeda(g.produtos)}</strong></div><div class="detail-stat"><span>Frete</span><strong>${formatarMoeda(g.frete)}</strong></div><div class="detail-stat"><span>Compras pendentes</span><strong>${g.itens.length}</strong></div></div><div class="purchase-meta" style="margin-top:8px">${g.itens.map(x=>`${escapeHtml(x.data||'')} · produtos ${formatarMoeda(num(x.total)-num(x.frete))} · frete ${formatarMoeda(x.frete)}`).join('<br>')}</div></div>`).join('')}</div>`:'<div class="whatsapp-ok">Nenhum repasse pendente.</div>';}
-
       const pc=document.getElementById('panel-compras-conteudo');if(pc){const comprasOp=(appData.comprasFabrica||[]).filter(x=>x.tipo!=='Insumo já incorporado');pc.innerHTML=comprasOp.length?`<div class="purchase-list">${comprasOp.slice().sort((a,b)=>String(b.data||'').localeCompare(String(a.data||''))).map(x=>`<div class="purchase-card"><div class="purchase-card-head"><strong>${escapeHtml(x.descricao||'Compra')}</strong><span class="purchase-total">${formatarMoeda(x.valor)}</span></div><div class="purchase-meta">${escapeHtml(x.data||'')} · ${escapeHtml(x.categoria||'Outros')}</div></div>`).join('')}</div>`:'<div class="empty-state"><strong>Nenhuma compra registrada</strong><span>Quando a fábrica comprar algo, registre aqui para manter o histórico organizado.</span></div>';}
       const fl=document.getElementById('panel-lucro-conteudo');if(fl)fl.innerHTML=`<div class="detail-grid"><div class="detail-stat"><span>Resultado</span><strong>${formatarMoeda(r.lucro)}</strong></div><div class="detail-stat"><span>Margem</span><strong>${margem.toFixed(1)}%</strong></div><div class="detail-stat"><span>Ramom</span><strong>${formatarMoeda(lr)}</strong></div><div class="detail-stat"><span>Monique</span><strong>${formatarMoeda(lm)}</strong></div></div>`;
     }
     function selecionarCategoriaPedido(categoria){document.getElementById('pedido-categoria').value=categoria;document.getElementById('cat-btn-cliente').className='cat-btn'+(categoria==='Cliente'?' active-cliente':'');document.getElementById('cat-btn-socio').className='cat-btn'+(categoria==='Socio'?' active-socio':'');document.getElementById('container-campos-cliente').style.display=categoria==='Socio'?'none':'grid';atualizarCalculoPedido();}
     function alternarCamposEnvio(){const e=document.getElementById('pedido-envio'),c=document.getElementById('container-detalhes-entrega');if(c)c.style.display=e.value==='Entrega por Conta'?'grid':'none';}
-    function adicionarLinhaDependente(nome='',qtd=''){const list=document.getElementById('dependentes-list'),div=document.createElement('div');div.className='faixa-row';div.style.cssText='display:flex;gap:8px;align-items:center';div.innerHTML=`<input type="text" class="dep-nome" placeholder="Nome" value="${escapeHtml(nome)}" style="flex:1"><input type="number" class="dep-qtd" placeholder="Qtd" min="1" value="${num(qtd)||''}" oninput="atualizarCalculoPedido()"><button type="button" class="btn-action btn-delete" onclick="this.parentElement.remove();atualizarCalculoPedido()">✕</button>`;list.appendChild(div);atualizarCalculoPedido();}
-    function atualizarCalculoPedido(){const cat=document.getElementById('pedido-categoria').value,prod=getProduct(document.getElementById('pedido-produto').value),q=num(document.getElementById('pedido-qtd-principal').value)+[...document.querySelectorAll('#dependentes-list .dep-qtd')].reduce((s,e)=>s+num(e.value),0),box=document.getElementById('pedido-calc-preview');if(cat==='Socio'){box.innerHTML=`<strong>👑 Consumo dos sócios:</strong> ${q} g/un registrados no estoque`;return;}if(!prod){box.innerText='Cálculo estimado: R$ 0,00';return;}const pu=calcularPrecoVendaCliente(prod,q);box.innerHTML=`Cálculo estimado: <strong>${formatarMoeda(q*pu)}</strong> · ${q} g/un × ${formatarMoeda(pu)}/g`;}
-    function salvarPedido(e){if(!exigirSessao())return;e.preventDefault();const id=document.getElementById('pedido-id').value,cat=document.getElementById('pedido-categoria').value,prodId=document.getElementById('pedido-produto').value,prod=getProduct(prodId),q=num(document.getElementById('pedido-qtd-principal').value);if(!prodId||!prod){alert('Selecione um produto válido.');return;}const deps=[...document.querySelectorAll('#dependentes-list .faixa-row')].map(r=>({nome:r.querySelector('.dep-nome').value.trim()||'Pessoa',qtd:num(r.querySelector('.dep-qtd').value)})).filter(x=>x.qtd>0);const total=q+deps.reduce((s,x)=>s+x.qtd,0);const old=id&&(appData.pedidos||[]).find(p=>p.id===id);const obj={id:id||uid('ped'),categoria:cat,cliente:document.getElementById('pedido-cliente').value.trim()||'Cliente',produtoId:prodId,qtdPrincipal:q,dependentes:deps,status:cat==='Socio'?'Pago':document.getElementById('pedido-status').value,tipoEnvio:cat==='Socio'?'Retirada':document.getElementById('pedido-envio').value,endereco:cat==='Socio'?'':document.getElementById('pedido-endereco').value.trim(),dia:cat==='Socio'?'':document.getElementById('pedido-dia').value.trim(),horario:cat==='Socio'?'':document.getElementById('pedido-horario').value.trim(),observacoes:cat==='Socio'?'':document.getElementById('pedido-obs').value.trim(),dataCriacao:old?.dataCriacao||new Date().toISOString(),custoUnitSnapshot:num(old?.custoUnitSnapshot)||obterCustoEfetivoProduto(prodId,total).custoUnit};if(id){const i=appData.pedidos.findIndex(p=>p.id===id);if(i>=0)appData.pedidos[i]=obj;}else appData.pedidos.push(obj);salvarDados(id?'alteração':'adição',`${id?'Atualizou':'Adicionou'} pedido de ${obj.cliente} · ${total} g`);cancelarEdicaoPedido();renderizarTudo();}
-    function cancelarEdicaoPedido(){document.getElementById('pedido-id').value='';document.getElementById('form-pedido').reset();document.getElementById('dependentes-list').innerHTML='';document.getElementById('form-pedido-title').innerHTML='<span>🛒 Pedidos</span><button type="button" class="btn-secondary" onclick="abrirModalImportarWhatsApp()" style="background:var(--herb-green);color:#fff;border:none;padding:7px 14px;font-weight:700;border-radius:8px;cursor:pointer">📱 Importar do WhatsApp</button>';document.getElementById('btn-pedido-submit').innerText='Salvar Pedido';document.getElementById('btn-pedido-cancel').style.display='none';selecionarCategoriaPedido('Cliente');}
+    function adicionarLinhaDependente(nome='',qtd=''){const list=document.getElementById('dependentes-list'),div=document.createElement('div');div.className='faixa-row';div.style.cssText='display:flex;gap:8px;align-items:center';div.innerHTML=`<input type="text" class="dep-nome" placeholder="Nome" value="${escapeHtml(nome)}" style="flex:1"><input type="number" class="dep-qtd" placeholder="Qtd" min="1" value="${num(qtd)||''}" oninput="atualizarCalculoPedido()"><button type="button" class="btn-action btn-delete" onclick="this.parentElement.remove();atualizarCalculoPedido()" aria-label="Remover pessoa" title="Remover pessoa"><i class="ti ti-x ui-icon" aria-hidden="true"></i></button>`;list.appendChild(div);atualizarCalculoPedido();}
+    function atualizarCalculoPedido(){const cat=document.getElementById('pedido-categoria').value,prod=getProduct(document.getElementById('pedido-produto').value),q=num(document.getElementById('pedido-qtd-principal').value)+[...document.querySelectorAll('#dependentes-list .dep-qtd')].reduce((s,e)=>s+num(e.value),0),box=document.getElementById('pedido-calc-preview');if(cat==='Socio'){box.innerHTML=`<strong><i class="ti ti-crown ui-icon" aria-hidden="true"></i> Consumo dos sócios:</strong> ${q} g/un registrados no estoque`;return;}if(!prod){box.innerText='Cálculo estimado: R$ 0,00';return;}const pu=calcularPrecoVendaCliente(prod,q);box.innerHTML=`Cálculo estimado: <strong>${formatarMoeda(q*pu)}</strong> · ${q} g/un × ${formatarMoeda(pu)}/g`;}
+    function salvarPedido(e){if(!exigirSessao())return;e.preventDefault();const id=document.getElementById('pedido-id').value,cat=document.getElementById('pedido-categoria').value,prodId=document.getElementById('pedido-produto').value,prod=getProduct(prodId),q=num(document.getElementById('pedido-qtd-principal').value);if(!prodId||!prod){alert('Selecione um produto válido.');return;}const deps=[...document.querySelectorAll('#dependentes-list .faixa-row')].map(r=>({nome:r.querySelector('.dep-nome').value.trim()||'Pessoa',qtd:num(r.querySelector('.dep-qtd').value)})).filter(x=>x.qtd>0);const total=q+deps.reduce((s,x)=>s+x.qtd,0);const old=id&&(appData.pedidos||[]).find(p=>p.id===id);const obj={id:id||uid('ped'),categoria:cat,cliente:document.getElementById('pedido-cliente').value.trim()||'Cliente',produtoId:prodId,qtdPrincipal:q,dependentes:deps,status:cat==='Socio'?'Pago':document.getElementById('pedido-status').value,tipoEnvio:cat==='Socio'?'Retirada':document.getElementById('pedido-envio').value,endereco:cat==='Socio'?'':document.getElementById('pedido-endereco').value.trim(),dia:cat==='Socio'?'':document.getElementById('pedido-dia').value.trim(),horario:cat==='Socio'?'':document.getElementById('pedido-horario').value.trim(),observacoes:cat==='Socio'?'':document.getElementById('pedido-obs').value.trim(),dataCriacao:old?.dataCriacao||new Date().toISOString(),modeloRepasseSnapshot:old?.modeloRepasseSnapshot|| (fornecedorTemRepasseIntegral(prodId)?'integral':'fabrica'),valorRepasseUnitSnapshot:num(old?.valorRepasseUnitSnapshot)||(fornecedorTemRepasseIntegral(prodId)?calcularPrecoVendaCliente(prod,total):0),custoUnitSnapshot:old?.modeloRepasseSnapshot==='integral'?0:(num(old?.custoUnitSnapshot)||obterCustoEfetivoProduto(prodId,total).custoUnit)};if(id){const i=appData.pedidos.findIndex(p=>p.id===id);if(i>=0)appData.pedidos[i]=obj;}else appData.pedidos.push(obj);salvarDados(id?'alteração':'adição',`${id?'Atualizou':'Adicionou'} pedido de ${obj.cliente} · ${total} g`);cancelarEdicaoPedido();renderizarTudo();}
+    function cancelarEdicaoPedido(){document.getElementById('pedido-id').value='';document.getElementById('form-pedido').reset();document.getElementById('dependentes-list').innerHTML='';document.getElementById('form-pedido-title').innerHTML='<span><i class="ti ti-shopping-cart ui-icon" aria-hidden="true"></i>Pedidos</span><button type="button" class="btn-secondary" onclick="abrirModalImportarWhatsApp()" style="background:var(--herb-green);color:#fff;border:none;padding:7px 14px;font-weight:700;border-radius:8px;cursor:pointer"><i class="ti ti-brand-whatsapp ui-icon" aria-hidden="true"></i> Importar do WhatsApp</button>';document.getElementById('btn-pedido-submit').innerText='Salvar Pedido';document.getElementById('btn-pedido-cancel').style.display='none';selecionarCategoriaPedido('Cliente');}
     function editarPedido(id){const p=(appData.pedidos||[]).find(x=>x.id===id);if(!p)return;document.getElementById('pedido-id').value=p.id;selecionarCategoriaPedido(p.categoria||'Cliente');document.getElementById('pedido-cliente').value=p.cliente||'';document.getElementById('pedido-produto').value=p.produtoId||'';document.getElementById('pedido-qtd-principal').value=p.qtdPrincipal||1;if(p.categoria!=='Socio'){document.getElementById('pedido-status').value=p.status||'Pendente';document.getElementById('pedido-envio').value=p.tipoEnvio||'Retirada';document.getElementById('pedido-endereco').value=p.endereco||'';document.getElementById('pedido-dia').value=p.dia||'';document.getElementById('pedido-horario').value=p.horario||'';document.getElementById('pedido-obs').value=p.observacoes||'';alternarCamposEnvio();}const c=document.getElementById('dependentes-list');c.innerHTML='';(p.dependentes||[]).forEach(d=>adicionarLinhaDependente(d.nome,d.qtd));document.getElementById('form-pedido-title').innerText='Editar Pedido';document.getElementById('btn-pedido-submit').innerText='Atualizar Pedido';document.getElementById('btn-pedido-cancel').style.display='inline-block';document.getElementById('form-pedido').scrollIntoView({behavior:'smooth'});}
     function excluirPedido(id){if(confirm('Deseja realmente excluir este pedido?')){appData.pedidos=appData.pedidos.filter(p=>p.id!==id);salvarDados('remoção',`Removeu pedido ${id}`);renderizarTudo();}}
     function pedidoPassaFiltro(p){
@@ -1657,12 +1743,12 @@
       if(!tbody)return; tbody.innerHTML=''; if(mobile)mobile.innerHTML='';
       const lista=(appData.pedidos||[]).filter(pedidoPassaFiltro).slice().sort((a,b)=>String(b.dataCriacao||'').localeCompare(String(a.dataCriacao||'')));
       const total=appData.pedidos?.length||0; const rc=document.getElementById('pedidos-resultados'); if(rc)rc.textContent=`${lista.length} de ${total} ${total===1?'pedido':'pedidos'}`;
-      if(!lista.length){tbody.innerHTML=`<tr><td colspan="8"><div class="empty-state"><strong>${total?'🔎 Nenhum pedido encontrado':'🛒 Nenhum pedido cadastrado'}</strong><span>${total?'Tente mudar a busca ou os filtros.':'Cadastre uma venda ou importe uma lista do WhatsApp.'}</span></div></td></tr>`;return;}
+      if(!lista.length){tbody.innerHTML=`<tr><td colspan="8"><div class="empty-state"><strong>${total?'<i class="ti ti-search ui-icon" aria-hidden="true"></i> Nenhum pedido encontrado':'<i class="ti ti-shopping-cart ui-icon" aria-hidden="true"></i> Nenhum pedido cadastrado'}</strong><span>${total?'Tente mudar a busca ou os filtros.':'Cadastre uma venda ou importe uma lista do WhatsApp.'}</span></div></td></tr>`;return;}
       lista.forEach(p=>{
-        const prod=getProduct(p.produtoId),q=totalQtdPedido(p),v=p.categoria==='Socio'?0:q*calcularPrecoVendaCliente(prod,q),c=q*custoSnapshotPedido(p),status=p.categoria==='Socio'?'<span class="status-pill info">👑 Sócio</span>':(p.status==='Pago'?'<span class="status-pill done">🟢 Pago</span>':'<span class="status-pill pending">🟡 Pendente</span>');
-        const tr=document.createElement('tr');tr.className='order-row-clickable';tr.innerHTML=`<td><strong>${escapeHtml(p.cliente)}</strong>${p.dependentes?.length?` <small>(+${p.dependentes.length} pessoas)</small>`:''}</td><td>${escapeHtml(prod?.nome||'Produto removido')}</td><td><strong>${q} g/un</strong></td><td>${formatarMoeda(c)}</td><td><strong>${formatarMoeda(v)}</strong></td><td>${escapeHtml(p.categoria==='Socio'?'Consumo dos sócios':p.tipoEnvio||'Retirada')}</td><td>${status}</td><td><button class="btn-action btn-edit" onclick="event.stopPropagation();editarPedido('${p.id}')" aria-label="Editar pedido">✏️</button><button class="btn-action btn-delete" onclick="event.stopPropagation();excluirPedido('${p.id}')" aria-label="Excluir pedido">🗑️</button></td>`;
+        const prod=getProduct(p.produtoId),q=totalQtdPedido(p),integral=p.modeloRepasseSnapshot==='integral',v=p.categoria==='Socio'?0:q*(integral?num(p.valorRepasseUnitSnapshot):calcularPrecoVendaCliente(prod,q)),c=integral?0:q*custoSnapshotPedido(p),status=p.categoria==='Socio'?'<span class="status-pill info">Sócio</span>':(integral?'<span class="status-pill info">Parceria</span>':(p.status==='Pago'?'<span class="status-pill done">Pago</span>':'<span class="status-pill pending">Pendente</span>'));
+        const tr=document.createElement('tr');tr.className='order-row-clickable';tr.innerHTML=`<td><strong>${escapeHtml(p.cliente)}</strong>${p.dependentes?.length?` <small>(+${p.dependentes.length} pessoas)</small>`:''}</td><td>${escapeHtml(prod?.nome||'Produto removido')}</td><td><strong>${q} g/un</strong></td><td>${formatarMoeda(c)}</td><td><strong>${formatarMoeda(v)}</strong></td><td>${escapeHtml(p.categoria==='Socio'?'Consumo dos sócios':p.tipoEnvio||'Retirada')}</td><td>${status}</td><td><button class="btn-action btn-edit" onclick="event.stopPropagation();editarPedido('${p.id}')" aria-label="Editar pedido" title="Editar pedido"><i class="ti ti-pencil ui-icon" aria-hidden="true"></i></button><button class="btn-action btn-delete" onclick="event.stopPropagation();excluirPedido('${p.id}')" aria-label="Excluir pedido"><i class="ti ti-trash ui-icon" aria-hidden="true"></i></button></td>`;
         const d=document.createElement('tr');d.style.display='none';d.id='details-ped-'+p.id;d.innerHTML=`<td colspan="8" style="background:#fdfaf8;padding:14px 20px">${detalhesPedidoHtml(p,prod)}</td>`;tr.onclick=()=>d.style.display=d.style.display==='none'?'table-row':'none';tbody.appendChild(tr);tbody.appendChild(d);
-        if(mobile){const card=document.createElement('article');card.className='order-mobile-card';card.innerHTML=`<div class="order-mobile-top"><div><div class="order-mobile-name">${escapeHtml(p.cliente)}</div><div class="order-mobile-meta">${escapeHtml(prod?.nome||'Produto removido')} · ${q} g/un · ${escapeHtml(p.categoria==='Socio'?'Consumo dos sócios':p.tipoEnvio||'Retirada')}</div></div><div>${status}</div></div><div class="order-mobile-money"><span>Custo ${formatarMoeda(c)}</span><strong>${formatarMoeda(v)}</strong></div><div class="order-mobile-detail">${detalhesPedidoHtml(p,prod)}</div><div class="order-mobile-actions"><button type="button" class="btn-action btn-edit" onclick="editarPedido('${p.id}')">✏️ Editar</button><button type="button" class="btn-action btn-delete" onclick="excluirPedido('${p.id}')">🗑️ Excluir</button><button type="button" class="btn-action" onclick="this.closest('.order-mobile-card').classList.toggle('open')">👁️ Detalhes</button></div>`;mobile.appendChild(card);}
+        if(mobile){const card=document.createElement('article');card.className='order-mobile-card';card.innerHTML=`<div class="order-mobile-top"><div><div class="order-mobile-name">${escapeHtml(p.cliente)}</div><div class="order-mobile-meta">${escapeHtml(prod?.nome||'Produto removido')} · ${q} g/un · ${escapeHtml(p.categoria==='Socio'?'Consumo dos sócios':p.tipoEnvio||'Retirada')}</div></div><div>${status}</div></div><div class="order-mobile-money"><span>Custo ${formatarMoeda(c)}</span><strong>${formatarMoeda(v)}</strong></div><div class="order-mobile-detail">${detalhesPedidoHtml(p,prod)}</div><div class="order-mobile-actions"><button type="button" class="btn-action btn-edit" onclick="editarPedido('${p.id}')"><i class="ti ti-pencil ui-icon" aria-hidden="true"></i> Editar</button><button type="button" class="btn-action btn-delete" onclick="excluirPedido('${p.id}')"><i class="ti ti-trash ui-icon" aria-hidden="true"></i> Excluir</button><button type="button" class="btn-action" onclick="this.closest('.order-mobile-card').classList.toggle('open')"><i class="ti ti-eye ui-icon" aria-hidden="true"></i> Detalhes</button></div>`;mobile.appendChild(card);}
       });
     }
     function aplicarFiltrosPedidos(){clearTimeout(filtroPedidosTimer);filtroPedidosTimer=setTimeout(renderizarPedidos,80);}
@@ -1677,73 +1763,81 @@
     function processarTextoWhatsApp(){const text=document.getElementById('whatsapp-import-text').value||'',tbody=document.getElementById('whatsapp-preview-tbody'),area=document.getElementById('whatsapp-preview-area'),status=document.getElementById('whatsapp-parse-status'),btn=document.getElementById('btn-confirmar-importacao');pedidosWhatsAppParsed=[];tbody.innerHTML='';area.style.display='none';btn.disabled=true;btn.style.opacity=.5;if(!text.trim()){status.innerHTML='';return;}const lines=text.split(/\r?\n/).map(x=>x.trim()).filter(Boolean);let contextProduct=null;let warnings=[];const parsed=[];
       lines.forEach((line,idx)=>{const clean=line.replace(/^[-•*]\s*/,'').trim();const found=encontrarProdutoNoTexto(clean);if(found.produto)contextProduct=found.produto;const qs=extrairQuantidades(clean);const looksLikeOrder=/\d+(?:[.,]\d+)?\s*(kg|kgs|quilo|quilos|g|gr|gramas|un|unid|unidades)?/i.test(clean)&&!/^\d/.test(clean);if(!looksLikeOrder&&(!qs.length||found.produto))return;let prod=found.produto||contextProduct;const nameData=limparNomeCliente(clean,prod);if(!prod){warnings.push(`Linha ${idx+1}: produto não identificado.`);return;}if(found.ambiguous){warnings.push(`Linha ${idx+1}: há mais de um produto possível.`);return;}const qtds=nameData.qs.length?nameData.qs:qs;if(!qtds.length){warnings.push(`Linha ${idx+1}: quantidade não identificada.`);return;}const cliente=nameData.nome;const dependentes=qtds.slice(1).map((q,i)=>({nome:`Pessoa ${i+2}`,qtd:q}));parsed.push({cliente,produtoId:prod.id,qtdPrincipal:qtds[0],dependentes,status:interpretarPagamento(clean),observacoes:'Importado do WhatsApp'});});
       pedidosWhatsAppParsed=parsed; if(parsed.length){area.style.display='block';parsed.forEach(p=>{const tr=document.createElement('tr');tr.innerHTML=`<td>${escapeHtml(p.cliente)}</td><td>${escapeHtml(getProduct(p.produtoId)?.nome||'')}</td><td>${p.qtdPrincipal}${p.dependentes.length?` + ${p.dependentes.map(x=>x.qtd).join(' + ')}`:''}</td><td>${p.status}</td><td>${warnings.length?'Verifique os avisos':'OK'}</td>`;tbody.appendChild(tr);});}
-      if(warnings.length){status.innerHTML=`<div class="whatsapp-warning"><strong>⚠️ Importação bloqueada:</strong><br>${warnings.map(escapeHtml).join('<br>')}<br><small>Revise as linhas ambíguas antes de salvar.</small></div>`;}else if(parsed.length){status.innerHTML=`<div class="whatsapp-ok">✅ ${parsed.length} pedido(s) reconhecido(s). Nenhum palpite ambíguo foi encontrado.</div>`;btn.disabled=false;btn.style.opacity=1;btn.innerText=`✅ Confirmar ${parsed.length} pedido(s)`;}else{status.innerHTML='<div class="whatsapp-warning">Não encontrei pedidos reconhecíveis. Confira o formato e os produtos cadastrados.</div>';}}
+      if(warnings.length){status.innerHTML=`<div class="whatsapp-warning"><strong><i class="ti ti-alert-triangle ui-icon" aria-hidden="true"></i> Importação bloqueada:</strong><br>${warnings.map(escapeHtml).join('<br>')}<br><small>Revise as linhas ambíguas antes de salvar.</small></div>`;}else if(parsed.length){status.innerHTML=`<div class="whatsapp-ok"><i class="ti ti-circle-check ui-icon" aria-hidden="true"></i> ${parsed.length} pedido(s) reconhecido(s). Nenhum palpite ambíguo foi encontrado.</div>`;btn.disabled=false;btn.style.opacity=1;btn.innerHTML=`<i class="ti ti-circle-check ui-icon" aria-hidden="true"></i> Confirmar ${parsed.length} pedido(s)`;}else{status.innerHTML='<div class="whatsapp-warning">Não encontrei pedidos reconhecíveis. Confira o formato e os produtos cadastrados.</div>';}}
     function abrirModalImportarWhatsApp(){document.getElementById('modal-import-whatsapp').style.display='flex';document.getElementById('whatsapp-import-text').focus();}
     function fecharModalImportarWhatsApp(){document.getElementById('modal-import-whatsapp').style.display='none';}
-    function confirmarImportacaoWhatsApp(){if(!exigirSessao())return;if(!pedidosWhatsAppParsed.length)return;const ids=new Set((appData.pedidos||[]).map(p=>`${normalizarTexto(p.cliente)}|${p.produtoId}|${totalQtdPedido(p)}|${p.dataCriacao?.slice(0,10)||''}`));let added=0,dups=0;(pedidosWhatsAppParsed||[]).forEach(p=>{const key=`${normalizarTexto(p.cliente)}|${p.produtoId}|${totalQtdPedido(p)}|${new Date().toISOString().slice(0,10)}`;if(ids.has(key)){dups++;return;}appData.pedidos.push({id:uid('ped'),categoria:'Cliente',cliente:p.cliente,produtoId:p.produtoId,qtdPrincipal:p.qtdPrincipal,dependentes:p.dependentes,status:p.status,tipoEnvio:'Retirada',endereco:'',dia:'',horario:'',observacoes:p.observacoes,dataCriacao:new Date().toISOString(),custoUnitSnapshot:obterCustoEfetivoProduto(p.produtoId,totalQtdPedido(p)).custoUnit});ids.add(key);added++;});appData.whatsappImportHistory.push({id:uid('wpp'),data:new Date().toISOString(),quantidade:added,duplicados:dups});salvarDados('importação',`Importou pedidos do WhatsApp · ${added} adicionados · ${dups} duplicados ignorados`);fecharModalImportarWhatsApp();renderizarTudo();showToast(`Importação concluída: ${added} pedido(s).${dups?` ${dups} duplicado(s) ignorado(s).`:''}`);}
+    function confirmarImportacaoWhatsApp(){if(!exigirSessao())return;if(!pedidosWhatsAppParsed.length)return;const ids=new Set((appData.pedidos||[]).map(p=>`${normalizarTexto(p.cliente)}|${p.produtoId}|${totalQtdPedido(p)}|${p.dataCriacao?.slice(0,10)||''}`));let added=0,dups=0;(pedidosWhatsAppParsed||[]).forEach(p=>{const key=`${normalizarTexto(p.cliente)}|${p.produtoId}|${totalQtdPedido(p)}|${new Date().toISOString().slice(0,10)}`;if(ids.has(key)){dups++;return;}const prodImportado=getProduct(p.produtoId),integralImportado=fornecedorTemRepasseIntegral(p.produtoId),totalImportado=totalQtdPedido(p),custoImportado=obterCustoEfetivoProduto(p.produtoId,totalImportado).custoUnit;appData.pedidos.push({id:uid('ped'),categoria:'Cliente',cliente:p.cliente,produtoId:p.produtoId,qtdPrincipal:p.qtdPrincipal,dependentes:p.dependentes,status:p.status,tipoEnvio:'Retirada',endereco:'',dia:'',horario:'',observacoes:p.observacoes,dataCriacao:new Date().toISOString(),modeloRepasseSnapshot:integralImportado?'integral':'fabrica',valorRepasseUnitSnapshot:integralImportado?calcularPrecoVendaCliente(prodImportado,totalImportado):0,custoUnitSnapshot:integralImportado?0:custoImportado,custoSnapshotOrigem:'whatsapp'});ids.add(key);added++;});appData.whatsappImportHistory.push({id:uid('wpp'),data:new Date().toISOString(),quantidade:added,duplicados:dups});salvarDados('importação',`Importou pedidos do WhatsApp · ${added} adicionados · ${dups} duplicados ignorados`);fecharModalImportarWhatsApp();renderizarTudo();showToast(`Importação concluída: ${added} pedido(s).${dups?` ${dups} duplicado(s) ignorado(s).`:''}`);}
 
     // Fornecedores
-    function adicionarBlocoProdutoFornecedor(prodId='',custoBase='',metas=[]){const c=document.getElementById('container-produtos-fornecedor'),id=uid('fitem'),div=document.createElement('div');div.id=id;div.style.cssText='border:1px solid var(--border-color);border-radius:10px;padding:12px;margin-bottom:8px;background:var(--card-sub-bg)';const opts=(appData.produtos||[]).map(p=>`<option value="${p.id}" ${p.id===prodId?'selected':''}>${escapeHtml(p.nome)}</option>`).join('');div.innerHTML=`<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px"><strong>Item fornecido</strong><button type="button" class="btn-action btn-delete" onclick="document.getElementById('${id}').remove()">✕</button></div><div class="form-grid"><div class="form-group"><label>Produto</label><select class="fornec-prod-id"><option value="">Selecione...</option>${opts}</select></div><div class="form-group"><label>Custo base (R$/g)</label><input type="number" step="0.01" min="0" class="fornec-prod-custo" value="${custoBase}"></div></div><div style="margin-top:8px"><label style="font-size:.8rem;font-weight:700">📉 Preços por volume</label><div class="metas-container" style="display:flex;flex-direction:column;gap:6px;margin-top:4px"></div><button type="button" class="btn-secondary" style="margin-top:6px;font-size:.78rem" onclick="adicionarMetaVolumeEmBloco('${id}')">＋ Adicionar faixa</button></div>`;c.appendChild(div);metas.forEach(m=>adicionarMetaVolumeEmBloco(id,m.qtdMin,m.custoComDesconto));}
-    function adicionarMetaVolumeEmBloco(id,qtd='',custo=''){const b=document.getElementById(id);if(!b)return;const d=document.createElement('div');d.style.cssText='display:flex;gap:8px;align-items:center';d.innerHTML=`<input type="number" class="meta-qtd" placeholder="A partir de (g)" min="1" value="${qtd}" style="flex:1"><input type="number" step="0.01" class="meta-custo" placeholder="Custo (R$/g)" min="0" value="${custo}" style="flex:1"><button type="button" class="btn-action btn-delete" onclick="this.parentElement.remove()">✕</button>`;b.querySelector('.metas-container').appendChild(d);}
-    function salvarFornecedor(e){if(!exigirSessao())return;e.preventDefault();const id=document.getElementById('fornecedor-id').value,nome=document.getElementById('fornecedor-nome').value.trim();if(!nome)return;const produtos=[...document.querySelectorAll('#container-produtos-fornecedor>div')].map(b=>{const pid=b.querySelector('.fornec-prod-id').value;if(!pid)return null;const metas=[...b.querySelectorAll('.metas-container>div')].map(r=>({qtdMin:num(r.querySelector('.meta-qtd').value),custoComDesconto:num(r.querySelector('.meta-custo').value)})).filter(x=>x.qtdMin>0);return {produtoId:pid,custoBase:num(b.querySelector('.fornec-prod-custo').value),metas};}).filter(Boolean);const obj={id:id||uid('fornec'),nome,frete:num(document.getElementById('fornecedor-frete').value),produtos};if(id){const i=appData.fornecedores.findIndex(f=>f.id===id);if(i>=0)appData.fornecedores[i]=obj;}else appData.fornecedores.push(obj);salvarDados(id?'alteração':'adição',`${id?'Atualizou':'Adicionou'} fornecedor ${nome}`);cancelarEdicaoFornecedor();renderizarTudo();}
-    function cancelarEdicaoFornecedor(){document.getElementById('fornecedor-id').value='';document.getElementById('form-fornecedor').reset();document.getElementById('container-produtos-fornecedor').innerHTML='';document.getElementById('form-fornecedor-title').innerText='📦 Fornecedores';document.getElementById('btn-fornecedor-submit').innerText='Salvar Fornecedor';document.getElementById('btn-fornecedor-cancel').style.display='none';}
-    function editarFornecedor(id){const f=getSupplier(id);if(!f)return;document.getElementById('fornecedor-id').value=f.id;document.getElementById('fornecedor-nome').value=f.nome||'';document.getElementById('fornecedor-frete').value=f.frete||0;const c=document.getElementById('container-produtos-fornecedor');c.innerHTML='';(f.produtos||[]).forEach(p=>adicionarBlocoProdutoFornecedor(p.produtoId,p.custoBase,p.metas||[]));document.getElementById('form-fornecedor-title').innerText='Editar fornecedor';document.getElementById('btn-fornecedor-submit').innerText='Atualizar fornecedor';document.getElementById('btn-fornecedor-cancel').style.display='inline-block';document.getElementById('form-fornecedor').scrollIntoView({behavior:'smooth'});}
+    function adicionarBlocoProdutoFornecedor(prodId='',custoBase='',metas=[]){const c=document.getElementById('container-produtos-fornecedor'),id=uid('fitem'),div=document.createElement('div');div.id=id;div.className='supplier-product-block';const opts=(appData.produtos||[]).map(p=>`<option value="${p.id}" ${p.id===prodId?'selected':''}>${escapeHtml(p.nome)}</option>`).join('');div.innerHTML=`<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px"><strong>Produto fornecido</strong><button type="button" class="btn-action btn-delete" onclick="document.getElementById('${id}').remove()" aria-label="Remover produto">Remover</button></div><div class="form-grid"><div class="form-group"><label>Produto</label><select class="fornec-prod-id" onchange="atualizarModoProdutoFornecedor('${id}')"><option value="">Selecione...</option>${opts}</select></div><div class="form-group"><label class="fornec-custo-label">Custo por unidade (R$/g)</label><input type="number" step="0.01" min="0" class="fornec-prod-custo" value="${custoBase}"></div></div><div style="margin-top:8px"><label style="font-size:.8rem;font-weight:700"><i class="ti ti-chart-bar-popular ui-icon" aria-hidden="true"></i>Faixas de preço</label><div class="metas-container" style="display:flex;flex-direction:column;gap:6px;margin-top:4px"></div><button type="button" class="btn-secondary" style="margin-top:6px;font-size:.78rem" onclick="adicionarMetaVolumeEmBloco('${id}')">Adicionar faixa</button></div>`;c.appendChild(div);metas.forEach(m=>adicionarMetaVolumeEmBloco(id,m.qtdMin,m.custoComDesconto));atualizarModoProdutoFornecedor(id);}
+    function adicionarMetaVolumeEmBloco(id,qtd='',custo=''){const b=document.getElementById(id);if(!b)return;const d=document.createElement('div');d.style.cssText='display:flex;gap:8px;align-items:center';d.innerHTML=`<input type="number" class="meta-qtd" placeholder="A partir de (g)" min="1" value="${qtd}" style="flex:1"><input type="number" step="0.01" class="meta-custo" placeholder="Custo (R$/g)" min="0" value="${custo}" style="flex:1"><button type="button" class="btn-action btn-delete" onclick="this.parentElement.remove()" aria-label="Remover faixa" title="Remover faixa"><i class="ti ti-x ui-icon" aria-hidden="true"></i></button>`;b.querySelector('.metas-container').appendChild(d);}
+    function atualizarModoProdutoFornecedor(id){const b=document.getElementById(id),integral=document.getElementById('fornecedor-venda-parceria')?.checked;if(!b)return;b.classList.toggle('supplier-product-integral',!!integral);const l=b.querySelector('.fornec-custo-label');if(l)l.textContent=integral?'Preço da parceria (R$/g)':'Custo por unidade (R$/g)';const metas=b.querySelector('.metas-container');if(metas)metas.querySelectorAll('.meta-custo').forEach(i=>{i.placeholder=integral?'Preço da parceria (R$/g)':'Custo (R$/g)';});}
+    function atualizarModoRepasseFornecedor(){document.querySelectorAll('#container-produtos-fornecedor>div').forEach(b=>atualizarModoProdutoFornecedor(b.id));}
+    function salvarFornecedor(e){if(!exigirSessao())return;e.preventDefault();const id=document.getElementById('fornecedor-id').value,nome=document.getElementById('fornecedor-nome').value.trim();if(!nome)return;const repasseIntegral=!!document.getElementById('fornecedor-venda-parceria')?.checked;const produtos=[...document.querySelectorAll('#container-produtos-fornecedor>div')].map(b=>{const pid=b.querySelector('.fornec-prod-id').value;if(!pid)return null;const metas=[...b.querySelectorAll('.metas-container>div')].map(r=>({qtdMin:num(r.querySelector('.meta-qtd').value),custoComDesconto:num(r.querySelector('.meta-custo').value)})).filter(x=>x.qtdMin>0);return {produtoId:pid,custoBase:num(b.querySelector('.fornec-prod-custo').value),metas};}).filter(Boolean);const obj={id:id||uid('fornec'),nome,frete:num(document.getElementById('fornecedor-frete').value),repasseIntegral,produtos};if(id){const i=appData.fornecedores.findIndex(f=>f.id===id);if(i>=0)appData.fornecedores[i]=obj;}else appData.fornecedores.push(obj);salvarDados(id?'alteração':'adição',`${id?'Atualizou':'Adicionou'} fornecedor ${nome}${repasseIntegral?' · parceria':''}`);cancelarEdicaoFornecedor();renderizarTudo();}
+    function cancelarEdicaoFornecedor(){document.getElementById('fornecedor-id').value='';document.getElementById('form-fornecedor').reset();document.getElementById('container-produtos-fornecedor').innerHTML='';document.getElementById('form-fornecedor-title').innerHTML='<i class="ti ti-truck ui-icon" aria-hidden="true"></i>Fornecedores';document.getElementById('btn-fornecedor-submit').innerText='Salvar fornecedor';document.getElementById('btn-fornecedor-cancel').style.display='none';}
+    function editarFornecedor(id){const f=getSupplier(id);if(!f)return;document.getElementById('fornecedor-id').value=f.id;document.getElementById('fornecedor-nome').value=f.nome||'';document.getElementById('fornecedor-frete').value=f.frete||0;const chk=document.getElementById('fornecedor-venda-parceria');if(chk)chk.checked=!!f.repasseIntegral;const c=document.getElementById('container-produtos-fornecedor');c.innerHTML='';(f.produtos||[]).forEach(p=>adicionarBlocoProdutoFornecedor(p.produtoId,p.custoBase,p.metas||[]));atualizarModoRepasseFornecedor();document.getElementById('form-fornecedor-title').innerText='Editar fornecedor';document.getElementById('btn-fornecedor-submit').innerText='Atualizar fornecedor';document.getElementById('btn-fornecedor-cancel').style.display='inline-block';document.getElementById('form-fornecedor').scrollIntoView({behavior:'smooth'});}
     function excluirFornecedor(id){const linked=(appData.produtos||[]).filter(p=>p.fornecedorId===id).length,pending=(appData.repasses||[]).some(r=>r.fornecedorId===id&&r.status!=='Repassado');const msg=linked||pending?`Este fornecedor possui ${linked} produto(s) ligado(s) e ${pending?'repasses pendentes. ':''}Excluir pode quebrar referências históricas. Deseja continuar?`:'Deseja excluir este fornecedor?';if(confirm(msg)){appData.fornecedores=appData.fornecedores.filter(f=>f.id!==id);salvarDados('remoção',`Removeu fornecedor ${id}`);renderizarTudo();}}
-    function renderizarFornecedores(){const tb=document.getElementById('lista-fornecedores');tb.innerHTML='';const sum=document.getElementById('fornecedor-summary');if(sum){const produtos=new Set((appData.fornecedores||[]).flatMap(f=>(f.produtos||[]).map(x=>x.produtoId)));const freteRef=(appData.fornecedores||[]).reduce((s,f)=>s+num(f.frete),0);sum.innerHTML=`<div class="summary-box"><strong>🏢 ${appData.fornecedores.length}</strong><span>fornecedores cadastrados</span></div><div class="summary-box"><strong>🍫 ${produtos.size}</strong><span>produtos vinculados</span></div><div class="summary-box"><strong>🚚 ${formatarMoeda(freteRef)}</strong><span>fretes de referência</span></div>`;}if(!appData.fornecedores.length){tb.innerHTML='<tr><td colspan="4" style="text-align:center;padding:20px;color:var(--text-muted)">Nenhum fornecedor cadastrado.</td></tr>';return;}appData.fornecedores.forEach(f=>{const tr=document.createElement('tr');tr.innerHTML=`<td><strong>${escapeHtml(f.nome)}</strong></td><td>${(f.produtos||[]).map(x=>{const p=getProduct(x.produtoId);return `<strong>${escapeHtml(p?.nome||'Produto')}</strong>: ${formatarMoeda(x.custoBase)}/g · ${(x.metas||[]).length} faixa(s)`}).join('<br>')||'Nenhum produto'}</td><td>Ref.: ${formatarMoeda(f.frete||0)}</td><td><button class="btn-action btn-edit" onclick="editarFornecedor('${f.id}')">✏️ Editar</button><button class="btn-action btn-delete" onclick="excluirFornecedor('${f.id}')">🗑️</button></td>`;tb.appendChild(tr);});}
+    function renderizarFornecedores(){const tb=document.getElementById('lista-fornecedores');tb.innerHTML='';const sum=document.getElementById('fornecedor-summary');if(sum){const produtos=new Set((appData.fornecedores||[]).flatMap(f=>(f.produtos||[]).map(x=>x.produtoId)));const freteRef=(appData.fornecedores||[]).reduce((s,f)=>s+num(f.frete),0);const integrais=(appData.fornecedores||[]).filter(f=>f.repasseIntegral).length;sum.innerHTML=`<div class="summary-box"><strong>${appData.fornecedores.length}</strong><span>fornecedores cadastrados</span></div><div class="summary-box"><strong>${produtos.size}</strong><span>produtos vinculados</span></div><div class="summary-box"><strong>${integrais}</strong><span>fornecedores em parceria</span></div><div class="summary-box"><strong>${formatarMoeda(freteRef)}</strong><span>fretes de referência</span></div>`;}if(!appData.fornecedores.length){tb.innerHTML='<tr><td colspan="4" style="text-align:center;padding:20px;color:var(--text-muted)">Nenhum fornecedor cadastrado.</td></tr>';return;}appData.fornecedores.forEach(f=>{const tr=document.createElement('tr');const badge=f.repasseIntegral?'<span class="supplier-integral-badge"><i class="ti ti-arrows-exchange" aria-hidden="true"></i> parceria</span>':'';tr.innerHTML=`<td><strong>${escapeHtml(f.nome)}</strong>${badge}</td><td>${(f.produtos||[]).map(x=>{const p=getProduct(x.produtoId);return `<strong>${escapeHtml(p?.nome||'Produto')}</strong>: ${formatarMoeda(x.custoBase)}/g · ${(x.metas||[]).length} faixa(s)`}).join('<br>')||'Nenhum produto'}</td><td>Ref.: ${formatarMoeda(f.frete||0)}</td><td><button class="btn-action btn-edit" onclick="editarFornecedor('${f.id}')">Editar</button><button class="btn-action btn-delete" onclick="excluirFornecedor('${f.id}')" aria-label="Excluir fornecedor">Excluir</button></td>`;tb.appendChild(tr);});}
 
     // Produtos
-    function aoSelecionarProdutoParaPrecificar(){}
-    function adicionarLinhaFaixaVenda(qtd='',preco=''){const c=document.getElementById('container-faixas-venda'),d=document.createElement('div');d.style.cssText='display:flex;gap:8px;align-items:center';d.innerHTML=`<input type="number" class="faixa-qtd" placeholder="A partir de (g)" min="1" value="${qtd}" style="flex:1" required><input type="number" step="0.01" class="faixa-preco" placeholder="Preço (R$/g)" min="0" value="${preco}" style="flex:1" required><button type="button" class="btn-action btn-delete" onclick="this.parentElement.remove()">✕</button>`;c.appendChild(d);}
-    function salvarProduto(e){if(!exigirSessao())return;e.preventDefault();const id=document.getElementById('produto-id').value,nome=document.getElementById('produto-nome').value.trim(),fornecedorId=document.getElementById('produto-fornecedor').value;if(!nome||!fornecedorId){alert('Preencha nome e fornecedor.');return;}const faixasVenda=[...document.querySelectorAll('#container-faixas-venda>div')].map(r=>({qtdMin:num(r.querySelector('.faixa-qtd').value),precoUnit:num(r.querySelector('.faixa-preco').value)})).filter(x=>x.qtdMin>0).sort((a,b)=>a.qtdMin-b.qtdMin);const obj={id:id||uid('prod'),nome,fornecedorId,faixasVenda};if(id){const i=appData.produtos.findIndex(p=>p.id===id);if(i>=0)appData.produtos[i]=obj;}else appData.produtos.push(obj);salvarDados(id?'alteração':'adição',`${id?'Atualizou':'Adicionou'} produto ${nome}`);cancelarEdicaoProduto();renderizarTudo();}
-    function cancelarEdicaoProduto(){document.getElementById('produto-id').value='';document.getElementById('form-produto').reset();document.getElementById('container-faixas-venda').innerHTML='';document.getElementById('form-produto-title').innerText='🍫 Produtos';document.getElementById('btn-produto-submit').innerText='Salvar Produto';document.getElementById('btn-produto-cancel').style.display='none';}
-    function editarProduto(id){const p=getProduct(id);if(!p)return;document.getElementById('produto-id').value=p.id;document.getElementById('produto-nome').value=p.nome||'';document.getElementById('produto-fornecedor').value=p.fornecedorId||'';const c=document.getElementById('container-faixas-venda');c.innerHTML='';(p.faixasVenda||[]).forEach(f=>adicionarLinhaFaixaVenda(f.qtdMin,f.precoUnit));document.getElementById('form-produto-title').innerText='Editar produto';document.getElementById('btn-produto-submit').innerText='Atualizar produto';document.getElementById('btn-produto-cancel').style.display='inline-block';document.getElementById('form-produto').scrollIntoView({behavior:'smooth'});}
+    function aoSelecionarProdutoParaPrecificar(){const fid=document.getElementById('produto-fornecedor')?.value,f=getSupplier(fid),integral=!!f?.repasseIntegral,c=document.getElementById('container-faixas-venda'),b=document.getElementById('btn-adicionar-faixa-venda'),n=document.getElementById('produto-preco-nota');if(c)c.style.display=integral?'none':'flex';if(b)b.style.display=integral?'none':'inline-flex';if(n)n.style.display=integral?'block':'none';}
+    function adicionarLinhaFaixaVenda(qtd='',preco=''){const c=document.getElementById('container-faixas-venda'),d=document.createElement('div');d.style.cssText='display:flex;gap:8px;align-items:center';d.innerHTML=`<input type="number" class="faixa-qtd" placeholder="A partir de (g)" min="1" value="${qtd}" style="flex:1" required><input type="number" step="0.01" class="faixa-preco" placeholder="Preço (R$/g)" min="0" value="${preco}" style="flex:1" required><button type="button" class="btn-action btn-delete" onclick="this.parentElement.remove()" aria-label="Remover faixa" title="Remover faixa"><i class="ti ti-x ui-icon" aria-hidden="true"></i></button>`;c.appendChild(d);}
+    function salvarProduto(e){if(!exigirSessao())return;e.preventDefault();const id=document.getElementById('produto-id').value,nome=document.getElementById('produto-nome').value.trim(),fornecedorId=document.getElementById('produto-fornecedor').value;if(!nome||!fornecedorId){alert('Preencha nome e fornecedor.');return;}const faixasVenda=fornecedorTemRepasseIntegral(fornecedorId)?[]:[...document.querySelectorAll('#container-faixas-venda>div')].map(r=>({qtdMin:num(r.querySelector('.faixa-qtd').value),precoUnit:num(r.querySelector('.faixa-preco').value)})).filter(x=>x.qtdMin>0).sort((a,b)=>a.qtdMin-b.qtdMin);const obj={id:id||uid('prod'),nome,fornecedorId,faixasVenda};if(id){const i=appData.produtos.findIndex(p=>p.id===id);if(i>=0)appData.produtos[i]=obj;}else appData.produtos.push(obj);salvarDados(id?'alteração':'adição',`${id?'Atualizou':'Adicionou'} produto ${nome}`);cancelarEdicaoProduto();renderizarTudo();}
+    function cancelarEdicaoProduto(){document.getElementById('produto-id').value='';document.getElementById('form-produto').reset();document.getElementById('container-faixas-venda').innerHTML='';document.getElementById('form-produto-title').innerHTML='<i class="ti ti-package ui-icon" aria-hidden="true"></i>Produtos';document.getElementById('btn-produto-submit').innerText='Salvar Produto';document.getElementById('btn-produto-cancel').style.display='none';}
+    function editarProduto(id){const p=getProduct(id);if(!p)return;document.getElementById('produto-id').value=p.id;document.getElementById('produto-nome').value=p.nome||'';document.getElementById('produto-fornecedor').value=p.fornecedorId||'';aoSelecionarProdutoParaPrecificar();const c=document.getElementById('container-faixas-venda');c.innerHTML='';(p.faixasVenda||[]).forEach(f=>adicionarLinhaFaixaVenda(f.qtdMin,f.precoUnit));document.getElementById('form-produto-title').innerText='Editar produto';document.getElementById('btn-produto-submit').innerText='Atualizar produto';document.getElementById('btn-produto-cancel').style.display='inline-block';document.getElementById('form-produto').scrollIntoView({behavior:'smooth'});}
     function excluirProduto(id){const linked=(appData.pedidos||[]).some(p=>p.produtoId===id),rep=(appData.repasses||[]).some(r=>(r.produtosComprados||[]).some(x=>x.produtoId===id));if((linked||rep)&&!confirm('Este produto aparece em histórico de pedidos/compras. Excluir manterá o histórico, mas o nome poderá aparecer como removido. Continuar?'))return;if(confirm('Deseja excluir este produto?')){appData.produtos=appData.produtos.filter(p=>p.id!==id);salvarDados('remoção',`Removeu produto ${id}`);renderizarTudo();}}
-    function renderizarProdutos(){const tb=document.getElementById('lista-produtos'),sf=document.getElementById('produto-fornecedor'),sp=document.getElementById('pedido-produto'),sc=document.getElementById('compra-fornecedor');tb.innerHTML='';const sum=document.getElementById('produto-summary');if(sum){let faixas=0,mar={total:0,n:0};(appData.produtos||[]).forEach(p=>{faixas+=(p.faixasVenda||[]).length;const custo=obterCustoEfetivoProduto(p.id).custoUnit;const venda=calcularPrecoVendaCliente(p,Math.max(1,((p.faixasVenda||[])[0]?.qtdMin||1)));if(custo>0&&venda>0){mar.total+=(venda-custo)/venda*100;mar.n++;}});sum.innerHTML=`<div class="summary-box"><strong>🍫 ${appData.produtos.length}</strong><span>produtos cadastrados</span></div><div class="summary-box"><strong>🏢 ${new Set((appData.produtos||[]).map(p=>p.fornecedorId).filter(Boolean)).size}</strong><span>fornecedores ligados</span></div><div class="summary-box"><strong>📊 ${faixas}</strong><span>faixas de venda</span></div><div class="summary-box"><strong>${mar.n?mar.total/mar.n:0}%</strong><span>margem média estimada</span></div>`;}sf.innerHTML='<option value="">Selecione o fornecedor...</option>';sp.innerHTML='<option value="">Selecione um produto...</option>';if(sc)sc.innerHTML='<option value="">Selecione...</option>';appData.fornecedores.forEach(f=>{sf.innerHTML+=`<option value="${f.id}">${escapeHtml(f.nome)}</option>`;if(sc)sc.innerHTML+=`<option value="${f.id}">${escapeHtml(f.nome)}</option>`;});appData.produtos.forEach(p=>{sp.innerHTML+=`<option value="${p.id}">${escapeHtml(p.nome)}</option>`;const f=getSupplier(p.fornecedorId),c=obterCustoEfetivoProduto(p.id).custoUnit,faixas=(p.faixasVenda||[]).map(x=>`≥ ${x.qtdMin}g: <strong>${formatarMoeda(x.precoUnit)}/g</strong>`).join('<br>')||'Sem tabela';const tr=document.createElement('tr');tr.innerHTML=`<td><strong>${escapeHtml(p.nome)}</strong></td><td>${escapeHtml(f?.nome||'Sem fornecedor')}</td><td>${formatarMoeda(c)}/g</td><td>${faixas}</td><td><button class="btn-action btn-edit" onclick="editarProduto('${p.id}')">✏️</button><button class="btn-action btn-delete" onclick="excluirProduto('${p.id}')">🗑️</button></td>`;tb.appendChild(tr);});if(!appData.produtos.length)tb.innerHTML='<tr><td colspan="5" style="text-align:center;padding:20px;color:var(--text-muted)">Nenhum produto cadastrado.</td></tr>';}
+    function renderizarProdutos(){const tb=document.getElementById('lista-produtos'),sf=document.getElementById('produto-fornecedor'),sp=document.getElementById('pedido-produto'),sc=document.getElementById('compra-fornecedor');tb.innerHTML='';const sum=document.getElementById('produto-summary');if(sum){let faixas=0,mar={total:0,n:0};(appData.produtos||[]).forEach(p=>{faixas+=(p.faixasVenda||[]).length;const custo=obterCustoEfetivoProduto(p.id).custoUnit;const venda=calcularPrecoVendaCliente(p,Math.max(1,((p.faixasVenda||[])[0]?.qtdMin||1)));if(!getSupplier(p.fornecedorId)?.repasseIntegral&&custo>0&&venda>0){mar.total+=(venda-custo)/venda*100;mar.n++;}});sum.innerHTML=`<div class="summary-box"><strong><i class="ti ti-package ui-icon" aria-hidden="true"></i> ${appData.produtos.length}</strong><span>produtos cadastrados</span></div><div class="summary-box"><strong><i class="ti ti-building ui-icon" aria-hidden="true"></i> ${new Set((appData.produtos||[]).map(p=>p.fornecedorId).filter(Boolean)).size}</strong><span>fornecedores ligados</span></div><div class="summary-box"><strong><i class="ti ti-chart-bar ui-icon" aria-hidden="true"></i> ${faixas}</strong><span>faixas de venda</span></div><div class="summary-box"><strong>${mar.n?mar.total/mar.n:0}%</strong><span>margem média estimada</span></div>`;}sf.innerHTML='<option value="">Selecione o fornecedor...</option>';sp.innerHTML='<option value="">Selecione um produto...</option>';if(sc)sc.innerHTML='<option value="">Selecione...</option>';appData.fornecedores.forEach(f=>{sf.innerHTML+=`<option value="${f.id}">${escapeHtml(f.nome)}</option>`;if(sc)sc.innerHTML+=`<option value="${f.id}" ${f.repasseIntegral?'disabled':''}>${escapeHtml(f.nome)}${f.repasseIntegral?' · parceria':''}</option>`;});appData.produtos.forEach(p=>{sp.innerHTML+=`<option value="${p.id}">${escapeHtml(p.nome)}</option>`;const f=getSupplier(p.fornecedorId),integral=!!f?.repasseIntegral,c=obterCustoEfetivoProduto(p.id).custoUnit,faixas=integral?`<strong>${formatarMoeda(c)}/g</strong> · preço de parceria`:((p.faixasVenda||[]).map(x=>`≥ ${x.qtdMin}g: <strong>${formatarMoeda(x.precoUnit)}/g</strong>`).join('<br>')||'Sem tabela');const tr=document.createElement('tr');tr.innerHTML=`<td><strong>${escapeHtml(p.nome)}</strong></td><td>${escapeHtml(f?.nome||'Sem fornecedor')}</td><td>${formatarMoeda(c)}/g</td><td>${faixas}</td><td><button class="btn-action btn-edit" onclick="editarProduto('${p.id}')" aria-label="Editar produto" title="Editar produto"><i class="ti ti-pencil ui-icon" aria-hidden="true"></i></button><button class="btn-action btn-delete" onclick="excluirProduto('${p.id}')"><i class="ti ti-trash ui-icon" aria-hidden="true"></i></button></td>`;tb.appendChild(tr);});if(!appData.produtos.length)tb.innerHTML='<tr><td colspan="5" style="text-align:center;padding:20px;color:var(--text-muted)">Nenhum produto cadastrado.</td></tr>';}
 
     // Compras / Repasse
-    function adicionarItemCompra(produtoId='',qtd='',custo=''){const c=document.getElementById('compra-itens'),d=document.createElement('div');d.className='purchase-row';const id=uid('citem');d.dataset.id=id;const opts=appData.produtos.map(p=>`<option value="${p.id}" ${p.id===produtoId?'selected':''}>${escapeHtml(p.nome)}</option>`).join('');d.innerHTML=`<div class="form-group"><label>Produto</label><select class="compra-produto"><option value="">Selecione...</option>${opts}</select></div><div class="form-group"><label>Quantidade</label><input type="number" class="compra-qtd" min="0.01" step="0.01" value="${qtd}" oninput="atualizarTotalCompra()"></div><div class="form-group"><label>Custo (R$/g)</label><input type="number" class="compra-custo" min="0" step="0.01" value="${custo}" oninput="atualizarTotalCompra()"></div><button type="button" class="btn-action btn-delete purchase-remove" onclick="this.parentElement.remove();atualizarTotalCompra()">✕ Remover</button>`;c.appendChild(d);atualizarTotalCompra();}
+    function adicionarItemCompra(produtoId='',qtd='',custo=''){const c=document.getElementById('compra-itens'),d=document.createElement('div');d.className='purchase-row';const id=uid('citem');d.dataset.id=id;const opts=appData.produtos.map(p=>`<option value="${p.id}" ${p.id===produtoId?'selected':''}>${escapeHtml(p.nome)}</option>`).join('');d.innerHTML=`<div class="form-group"><label>Produto</label><select class="compra-produto"><option value="">Selecione...</option>${opts}</select></div><div class="form-group"><label>Quantidade</label><input type="number" class="compra-qtd" min="0.01" step="0.01" value="${qtd}" oninput="atualizarTotalCompra()"></div><div class="form-group"><label>Custo (R$/g)</label><input type="number" class="compra-custo" min="0" step="0.01" value="${custo}" oninput="atualizarTotalCompra()"></div><button type="button" class="btn-action btn-delete purchase-remove" onclick="this.parentElement.remove();atualizarTotalCompra()" aria-label="Remover item da compra" title="Remover item"><i class="ti ti-x ui-icon" aria-hidden="true"></i> Remover</button>`;c.appendChild(d);atualizarTotalCompra();}
     function atualizarTotalCompra(){let total=num(document.getElementById('compra-frete')?.value);document.querySelectorAll('#compra-itens .purchase-row').forEach(r=>total+=num(r.querySelector('.compra-qtd').value)*num(r.querySelector('.compra-custo').value));const box=document.getElementById('compra-total-preview');if(box)box.innerHTML=`Total da compra: <strong>${formatarMoeda(total)}</strong>`;}
-    function salvarCompra(e){if(!exigirSessao())return;e.preventDefault();const fornecedorId=document.getElementById('compra-fornecedor').value;if(!fornecedorId){alert('Selecione um fornecedor.');return;}const itens=[...document.querySelectorAll('#compra-itens .purchase-row')].map(r=>({produtoId:r.querySelector('.compra-produto').value,quantidade:num(r.querySelector('.compra-qtd').value),custoUnit:num(r.querySelector('.compra-custo').value)})).filter(x=>x.produtoId&&x.quantidade>0);if(!itens.length){alert('Adicione ao menos um produto comprado.');return;}const frete=num(document.getElementById('compra-frete').value),total=frete+itens.reduce((s,x)=>s+x.quantidade*x.custoUnit,0),data=document.getElementById('compra-data').value||new Date().toISOString().slice(0,10),status=document.getElementById('compra-status').value;const compra={id:uid('rep'),fornecedorId,data,produtosComprados:itens,frete,total,status,criadoEm:new Date().toISOString()};appData.repasses.push(compra);appData.comprasFabrica.push({id:compra.id,fornecedorId,data,categoria:'Insumos',descricao:`Compra de ${itens.map(x=>getProduct(x.produtoId)?.nome||'produto').join(', ')}`,valor:total,tipo:'Insumo já incorporado',impactoResultado:false,repasseId:compra.id});salvarDados('adição',`Registrou compra/repasse de ${formatarMoeda(total)}`);cancelarCompra();renderizarTudo();}
+    function salvarCompra(e){if(!exigirSessao())return;e.preventDefault();const fornecedorId=document.getElementById('compra-fornecedor').value;if(!fornecedorId){alert('Selecione um fornecedor.');return;}const fornecedor=getSupplier(fornecedorId);if(fornecedor?.repasseIntegral){alert('Este fornecedor está configurado como venda em parceria. As vendas dele não são compras da fábrica e não devem ser lançadas como insumo.');return;}const itens=[...document.querySelectorAll('#compra-itens .purchase-row')].map(r=>({produtoId:r.querySelector('.compra-produto').value,quantidade:num(r.querySelector('.compra-qtd').value),custoUnit:num(r.querySelector('.compra-custo').value)})).filter(x=>x.produtoId&&x.quantidade>0);if(!itens.length){alert('Adicione ao menos um produto comprado.');return;}const frete=num(document.getElementById('compra-frete').value),total=frete+itens.reduce((s,x)=>s+x.quantidade*x.custoUnit,0),data=document.getElementById('compra-data').value||new Date().toISOString().slice(0,10),status=document.getElementById('compra-status').value;const compra={id:uid('rep'),fornecedorId,data,produtosComprados:itens,frete,total,status,criadoEm:new Date().toISOString()};appData.repasses.push(compra);appData.comprasFabrica.push({id:compra.id,fornecedorId,data,categoria:'Insumos',descricao:`Compra de ${itens.map(x=>getProduct(x.produtoId)?.nome||'produto').join(', ')}`,valor:total,tipo:'Insumo já incorporado',impactoResultado:false,repasseId:compra.id});salvarDados('adição',`Registrou compra/repasse de ${formatarMoeda(total)}`);cancelarCompra();renderizarTudo();}
     function cancelarCompra(){const f=document.getElementById('form-compra');if(f)f.reset();document.getElementById('compra-itens').innerHTML='';const d=document.getElementById('compra-data');if(d)d.value=new Date().toISOString().slice(0,10);atualizarTotalCompra();}
     function salvarOutraCompra(e){if(!exigirSessao())return;e.preventDefault();const data=document.getElementById('outra-compra-data').value||new Date().toISOString().slice(0,10),categoria=document.getElementById('outra-compra-categoria').value,descricao=document.getElementById('outra-compra-descricao').value.trim(),valor=num(document.getElementById('outra-compra-valor').value);if(!descricao||valor<0)return;appData.comprasFabrica.push({id:uid('cmp'),data,categoria,descricao,valor,tipo:'Operacional',impactoResultado:true});salvarDados('adição',`Registrou compra operacional: ${descricao} · ${formatarMoeda(valor)}`);document.getElementById('form-outra-compra').reset();document.getElementById('outra-compra-data').value=new Date().toISOString().slice(0,10);renderizarTudo();}
-    function renderizarRepasses(){const c=document.getElementById('lista-repasses');if(!c)return;c.innerHTML='';const arr=[...(appData.repasses||[])].sort((a,b)=>String(b.data).localeCompare(String(a.data)));if(!arr.length){c.innerHTML='<div style="color:var(--text-muted);padding:12px">Nenhum repasse registrado.</div>';return;}arr.forEach(r=>{const f=getSupplier(r.fornecedorId);const div=document.createElement('div');div.className='purchase-card';div.innerHTML=`<div class="purchase-card-head"><div><strong>${escapeHtml(f?.nome||'Fornecedor removido')}</strong><div class="purchase-meta">${escapeHtml(r.data||'')} · ${(r.produtosComprados||[]).map(x=>`${escapeHtml(getProduct(x.produtoId)?.nome||'Produto removido')} ${num(x.quantidade)}g × ${formatarMoeda(x.custoUnit)}/g`).join(' · ')} · frete ${formatarMoeda(r.frete)}</div></div><div style="text-align:right"><span class="status-pill ${r.status==='Repassado'?'done':'pending'}">${r.status==='Repassado'?'🟢 Repassado':'🟡 A pagar'}</span><div class="purchase-total">${formatarMoeda(r.total)}</div></div></div><div style="margin-top:8px"><button class="btn-action" onclick="alternarStatusRepasse('${r.id}')">${r.status==='Repassado'?'↩️ Voltar a pagar':'💸 Marcar como repassado'}</button></div>`;c.appendChild(div);});}
+    function renderizarRepasses(){const c=document.getElementById('lista-repasses');if(!c)return;c.innerHTML='';const arr=[...(appData.repasses||[])].sort((a,b)=>String(b.data).localeCompare(String(a.data)));if(!arr.length){c.innerHTML='<div style="color:var(--text-muted);padding:12px">Nenhum repasse registrado.</div>';return;}arr.forEach(r=>{const f=getSupplier(r.fornecedorId);const div=document.createElement('div');div.className='purchase-card';div.innerHTML=`<div class="purchase-card-head"><div><strong>${escapeHtml(f?.nome||'Fornecedor removido')}</strong><div class="purchase-meta">${escapeHtml(r.data||'')} · ${(r.produtosComprados||[]).map(x=>`${escapeHtml(getProduct(x.produtoId)?.nome||'Produto removido')} ${num(x.quantidade)}g × ${formatarMoeda(x.custoUnit)}/g`).join(' · ')} · frete ${formatarMoeda(r.frete)}</div></div><div style="text-align:right"><span class="status-pill ${r.status==='Repassado'?'done':'pending'}">${r.status==='Repassado'?'<i class="ti ti-circle-check ui-icon" aria-hidden="true"></i> Repassado':'<i class="ti ti-clock ui-icon" aria-hidden="true"></i> A pagar'}</span><div class="purchase-total">${formatarMoeda(r.total)}</div></div></div><div style="margin-top:8px"><button class="btn-action" onclick="alternarStatusRepasse('${r.id}')">${r.status==='Repassado'?'↩️ Voltar a pagar':'<i class="ti ti-cash ui-icon" aria-hidden="true"></i> Marcar como repassado'}</button></div>`;c.appendChild(div);});}
     function alternarStatusRepasse(id){if(!exigirSessao())return;const r=appData.repasses.find(x=>x.id===id);if(!r)return;r.status=r.status==='Repassado'?'Pendente':'Repassado';salvarDados('alteração',`Alterou status do repasse ${id} para ${r.status}`);renderizarTudo();}
 
     // Relatórios: período mensal + ticket médio, vendas por produto, custos por fornecedor e rateio.
     function gerarRelatorioRateio(){
       const mes=num(document.getElementById('relatorio-mes').value),ano=num(document.getElementById('relatorio-ano').value),c=document.getElementById('container-relatorio-geral');if(!c)return;
       const ps=(appData.pedidos||[]).filter(p=>{const d=parseDataLocal(String(p.dataCriacao||'').slice(0,10));return d.getMonth()===mes&&d.getFullYear()===ano;});
-      let faturamento=0,recebido=0,pendente=0,custo=0,volume=0;const porProd={},porFornec={};
+      let faturamento=0,recebido=0,pendente=0,custo=0,volume=0,parceirosQtd=0,parceirosVendido=0;
+      const porProd={},porFornec={},porParceiro={};
       ps.forEach(p=>{
-        const q=totalQtdPedido(p),prod=getProduct(p.produtoId),cu=custoSnapshotPedido(p);volume+=q;custo+=q*cu;
+        const q=totalQtdPedido(p),prod=getProduct(p.produtoId),integral=p.modeloRepasseSnapshot==='integral';
+        if(p.categoria==='Socio'){volume+=q;return;}
+        if(integral){parceirosQtd+=q;
+          const unit=num(p.valorRepasseUnitSnapshot)||calcularPrecoVendaCliente(prod,q),venda=q*unit;
+          parceirosVendido+=venda;
+          const fid=prod?.fornecedorId||'sem-fornecedor',g=porParceiro[fid]??={nome:getSupplier(fid)?.nome||'Fornecedor removido',qtd:0,venda:0};g.qtd+=q;g.venda+=venda;
+          return;
+        }
+        const cu=custoSnapshotPedido(p);volume+=q;custo+=q*cu;
         if(!prod||p.categoria==='Socio')return;
-        const venda=q*calcularPrecoVendaCliente(prod,q);faturamento+=venda;
-        if(p.status==='Pago')recebido+=venda;else pendente+=venda;
+        const venda=q*calcularPrecoVendaCliente(prod,q);faturamento+=venda;if(p.status==='Pago')recebido+=venda;else pendente+=venda;
         const key=prod.id;porProd[key]??={nome:prod.nome,qtd:0,venda:0,custo:0};porProd[key].qtd+=q;porProd[key].venda+=venda;porProd[key].custo+=q*cu;
       });
       const comprasDoMes=(appData.comprasFabrica||[]).filter(x=>{const d=parseDataLocal(x.data);return d.getMonth()===mes&&d.getFullYear()===ano;});
       const comprasOper=comprasDoMes.filter(x=>x.impactoResultado!==false&&x.tipo!=='Insumo já incorporado').reduce((s,x)=>s+num(x.valor),0);
-      (appData.repasses||[]).filter(x=>{const d=parseDataLocal(x.data);return d.getMonth()===mes&&d.getFullYear()===ano;}).forEach(r=>{
-        const g=porFornec[r.fornecedorId]??={nome:getSupplier(r.fornecedorId)?.nome||'Fornecedor removido',produtos:0,frete:0,total:0};
-        g.produtos+=Math.max(0,num(r.total)-num(r.frete));g.frete+=num(r.frete);g.total+=num(r.total);
-      });
-      const clientesMes=ps.filter(p=>p.categoria!=='Socio'&&getProduct(p.produtoId)).length;
+      (appData.repasses||[]).filter(x=>{const d=parseDataLocal(x.data);return d.getMonth()===mes&&d.getFullYear()===ano;}).forEach(r=>{const g=porFornec[r.fornecedorId]??={nome:getSupplier(r.fornecedorId)?.nome||'Fornecedor removido',produtos:0,frete:0,total:0};g.produtos+=Math.max(0,num(r.total)-num(r.frete));g.frete+=num(r.frete);g.total+=num(r.total);});
+      const clientesMes=ps.filter(p=>p.categoria!=='Socio'&&p.modeloRepasseSnapshot!=='integral'&&getProduct(p.produtoId)).length;
       const ticket=clientesMes?faturamento/clientesMes:0;
       const lucro=faturamento-custo-comprasOper,pct=num(appData.splitRamomPct||50),margem=faturamento?lucro/faturamento*100:0;
       const meses=['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'];
       c.innerHTML=`<div style="background:#fff;border:1px solid var(--border-color);border-radius:12px;padding:18px">
-        <h3 style="color:var(--choc-dark);margin-bottom:14px">🍫 ${meses[mes]} / ${ano}</h3>
+        <h3 style="color:var(--choc-dark);margin-bottom:14px"><i class="ti ti-chart-bar ui-icon" aria-hidden="true"></i>${meses[mes]} / ${ano}</h3>
         <div class="summary-strip">
-          <div class="summary-box"><span>Total vendido</span><strong>${formatarMoeda(faturamento)}</strong></div>
+          <div class="summary-box"><span>Total vendido pela fábrica</span><strong>${formatarMoeda(faturamento)}</strong></div>
           <div class="summary-box"><span>Recebido</span><strong>${formatarMoeda(recebido)}</strong></div>
           <div class="summary-box"><span>Pendente</span><strong>${formatarMoeda(pendente)}</strong></div>
           <div class="summary-box"><span>Ticket médio</span><strong>${formatarMoeda(ticket)}</strong></div>
           <div class="summary-box"><span>Custos de produtos</span><strong>${formatarMoeda(custo)}</strong></div>
-          <div class="summary-box"><span>Resultado</span><strong>${formatarMoeda(lucro)}</strong></div>
+          <div class="summary-box"><span>Resultado da fábrica</span><strong>${formatarMoeda(lucro)}</strong></div>
         </div>
-        <div class="form-section" style="padding:12px;margin-top:12px"><h4>🍫 Vendas por produto</h4><div class="table-wrapper"><table><thead><tr><th>Produto</th><th>Qtd.</th><th>Venda</th><th>Custo</th><th>Resultado</th></tr></thead><tbody>${Object.values(porProd).map(x=>`<tr><td>${escapeHtml(x.nome)}</td><td>${x.qtd}</td><td>${formatarMoeda(x.venda)}</td><td>${formatarMoeda(x.custo)}</td><td>${formatarMoeda(x.venda-x.custo)}</td></tr>`).join('')||'<tr><td colspan="5">Nenhuma venda no período.</td></tr>'}</tbody></table></div></div>
-        <div class="form-section" style="padding:12px;margin-top:12px"><h4>📦 Compras de insumos por fornecedor</h4><p style="font-size:.8rem;color:var(--text-muted);margin-bottom:10px">Estas são as compras/repasse registrados no período. Elas não são subtraídas novamente do resultado, porque o custo dos produtos vendidos já vem dos snapshots dos pedidos.</p><div class="table-wrapper"><table><thead><tr><th>Fornecedor</th><th>Produtos</th><th>Frete</th><th>Total comprado</th></tr></thead><tbody>${Object.values(porFornec).map(x=>`<tr><td>${escapeHtml(x.nome)}</td><td>${formatarMoeda(x.produtos)}</td><td>${formatarMoeda(x.frete)}</td><td>${formatarMoeda(x.total)}</td></tr>`).join('')||'<tr><td colspan="4">Nenhuma compra de insumo no período.</td></tr>'}</tbody></table></div></div>
-        <div class="form-section" style="padding:12px;margin-top:12px"><h4>🤝 Rateio</h4><p>Ramom (${pct}%): <strong>${formatarMoeda(lucro*pct/100)}</strong></p><p>Monique (${100-pct}%): <strong>${formatarMoeda(lucro*(100-pct)/100)}</strong></p><p style="margin-top:8px;color:var(--text-muted);font-size:.82rem">Margem do período: ${margem.toFixed(1)}% · Volume: ${volume.toLocaleString('pt-BR')} g/un · Compras operacionais: ${formatarMoeda(comprasOper)}</p></div>
+        <div class="form-section" style="padding:12px;margin-top:12px"><h4><i class="ti ti-package ui-icon" aria-hidden="true"></i>Vendas por produto da fábrica</h4><div class="table-wrapper"><table><thead><tr><th>Produto</th><th>Qtd.</th><th>Venda</th><th>Custo</th><th>Resultado</th></tr></thead><tbody>${Object.values(porProd).map(x=>`<tr><td>${escapeHtml(x.nome)}</td><td>${x.qtd}</td><td>${formatarMoeda(x.venda)}</td><td>${formatarMoeda(x.custo)}</td><td>${formatarMoeda(x.venda-x.custo)}</td></tr>`).join('')||'<tr><td colspan="5">Nenhuma venda da fábrica no período.</td></tr>'}</tbody></table></div></div>
+        <div class="form-section" style="padding:12px;margin-top:12px"><h4><i class="ti ti-arrows-exchange ui-icon" aria-hidden="true"></i>Parcerias</h4><p style="font-size:.8rem;color:var(--text-muted);margin-bottom:10px">Essas vendas ficam separadas do faturamento e do resultado da fábrica. O valor vendido é destinado integralmente ao parceiro.</p><div class="summary-strip"><div class="summary-box"><span>Itens vendidos</span><strong>${parceirosQtd.toLocaleString('pt-BR')}</strong></div><div class="summary-box"><span>Vendido</span><strong>${formatarMoeda(parceirosVendido)}</strong></div><div class="summary-box"><span>Destino do valor</span><strong>${formatarMoeda(parceirosVendido)}</strong></div></div><div class="table-wrapper partner-orders-table"><table><thead><tr><th>Parceiro</th><th>Qtd.</th><th>Vendido</th><th>Destino</th></tr></thead><tbody>${Object.values(porParceiro).map(x=>`<tr><td>${escapeHtml(x.nome)}</td><td>${x.qtd}</td><td>${formatarMoeda(x.venda)}</td><td>100% destinado ao parceiro</td></tr>`).join('')||'<tr><td colspan="4">Nenhuma venda em parceria no período.</td></tr>'}</tbody></table></div></div>
+        <div class="form-section" style="padding:12px;margin-top:12px"><h4><i class="ti ti-truck ui-icon" aria-hidden="true"></i>Compras de insumos por fornecedor</h4><p style="font-size:.8rem;color:var(--text-muted);margin-bottom:10px">Compras da fábrica continuam separadas das vendas de parceiros e não são subtraídas novamente do resultado quando o custo já está registrado nos pedidos.</p><div class="table-wrapper"><table><thead><tr><th>Fornecedor</th><th>Produtos</th><th>Frete</th><th>Total comprado</th></tr></thead><tbody>${Object.values(porFornec).map(x=>`<tr><td>${escapeHtml(x.nome)}</td><td>${formatarMoeda(x.produtos)}</td><td>${formatarMoeda(x.frete)}</td><td>${formatarMoeda(x.total)}</td></tr>`).join('')||'<tr><td colspan="4">Nenhuma compra de insumo no período.</td></tr>'}</tbody></table></div></div>
+        <div class="form-section" style="padding:12px;margin-top:12px"><h4><i class="ti ti-scale ui-icon" aria-hidden="true"></i>Rateio</h4><p>Ramom (${pct}%): <strong>${formatarMoeda(lucro*pct/100)}</strong></p><p>Monique (${100-pct}%): <strong>${formatarMoeda(lucro*(100-pct)/100)}</strong></p><p style="margin-top:8px;color:var(--text-muted);font-size:.82rem">Margem do período: ${margem.toFixed(1)}% · Volume da fábrica: ${volume.toLocaleString('pt-BR')} g/un · Compras operacionais: ${formatarMoeda(comprasOper)}</p></div>
       </div>`;
     }
     function baixarRelatorioPDF(){const el=document.getElementById('area-relatorio-impressao');if(!el)return;if(typeof html2pdf==='undefined'){alert('A biblioteca de PDF ainda está carregando.');return;}html2pdf().set({margin:10,filename:`relatorio_${document.getElementById('relatorio-mes').value}_${document.getElementById('relatorio-ano').value}.pdf`,image:{type:'jpeg',quality:.98},html2canvas:{scale:2},jsPDF:{unit:'mm',format:'a4',orientation:'portrait'}}).from(el).save();}
@@ -1760,23 +1854,23 @@
     <div class="radio-shell">
       <aside class="radio-player" id="radio-player" aria-label="Rádio ambiente">
         <div class="radio-top">
-          <div class="radio-art" id="radio-art" aria-hidden="true">☕</div>
+          <div class="radio-art" id="radio-art" aria-hidden="true"><i class="ti ti-coffee"></i></div>
           <div class="radio-copy">
             <div class="radio-kicker">Rádio da fábrica</div>
-            <div class="radio-name" id="radio-name">☕ Lo-fi &amp; Chill</div>
+            <div class="radio-name" id="radio-name"><i class="ti ti-coffee"></i> Lo-fi &amp; Chill</div>
             <div class="radio-status" id="radio-status">Pronta para tocar</div>
           </div>
           <div class="radio-controls">
-            <button type="button" class="radio-btn primary" id="radio-play" onclick="alternarRadio()" aria-label="Tocar rádio" title="Tocar rádio">▶</button>
-            <button type="button" class="radio-btn" id="radio-minimize-btn" onclick="minimizarRadio()" aria-label="Minimizar rádio" title="Minimizar rádio">—</button>
+            <button type="button" class="radio-btn primary" id="radio-play" onclick="alternarRadio()" aria-label="Tocar rádio" title="Tocar rádio"><i class="ti ti-player-play" aria-hidden="true"></i></button>
+            <button type="button" class="radio-btn" id="radio-minimize-btn" onclick="minimizarRadio()" aria-label="Minimizar rádio" title="Minimizar rádio"><i class="ti ti-minus" aria-hidden="true"></i></button>
           </div>
         </div>
         <div class="radio-details">
           <select class="radio-select" id="radio-station" onchange="trocarRadio(this.value)" aria-label="Escolher estação">
-            <option value="lofi">☕ Lo-fi &amp; Chill</option>
-            <option value="jazz">🎷 Jazz 60s / Standards</option>
-            <option value="reggae">🌿 Reggae Roots</option>
-            <option value="hitech">👽 Hitech / Dark Psy</option>
+            <option value="lofi">Lo-fi &amp; Chill</option>
+            <option value="jazz">Jazz 60s / Standards</option>
+            <option value="reggae">Reggae Roots</option>
+            <option value="hitech">Hitech / Dark Psy</option>
           </select>
           <div class="radio-bottom">
             <span class="radio-help">Player Spotify integrado</span>
