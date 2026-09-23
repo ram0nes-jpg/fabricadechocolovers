@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -207,52 +208,35 @@
       margin-top: 4px;
     }
 
-    /* DETALHES FLUTUANTES DOS CARDS DO DASHBOARD */
-    .dashboard-card-block{position:relative;min-width:0}
-    .dash-detail-panel {
-      position:absolute;
-      z-index:120;
-      top:calc(100% + 10px);
-      left:50%;
-      width:min(460px,calc(100vw - 32px));
-      max-height:min(62vh,520px);
-      overflow:auto;
-      transform:translate(-50%,8px);
-      background:rgba(255,253,249,.96);
-      border:1px solid rgba(122,83,56,.18);
-      border-radius:16px;
-      padding:18px;
-      box-shadow:0 18px 48px rgba(74,44,29,.16),0 3px 12px rgba(74,44,29,.08);
-      backdrop-filter:blur(14px);
-      -webkit-backdrop-filter:blur(14px);
-      display:none;
-      opacity:0;
-      pointer-events:none;
+    /* DETALHES EXPANSÍVEIS DENTRO DOS CARDS */
+    .dashboard-card-block{min-width:0}
+    .dash-card{position:relative;overflow:hidden}
+    .dash-card .dash-detail-panel{
+      position:static;width:auto;max-height:0;overflow:hidden;margin:0;padding:0;
+      background:transparent;border:0;box-shadow:none;backdrop-filter:none;-webkit-backdrop-filter:none;
+      opacity:0;pointer-events:none;transform:translateY(-6px);
+      transition:max-height .32s cubic-bezier(.22,1,.36,1),opacity .2s ease,transform .32s ease,padding .32s ease,margin-top .32s ease;
     }
-    .dash-detail-panel::before{
-      content:'';position:absolute;top:-6px;left:50%;width:11px;height:11px;
-      background:rgba(255,253,249,.96);border-left:1px solid rgba(122,83,56,.18);
-      border-top:1px solid rgba(122,83,56,.18);transform:translateX(-50%) rotate(45deg);
+    .dash-card .dash-detail-panel::before{display:none}
+    .dash-card .dash-detail-panel.is-open{
+      display:block;max-height:520px;overflow:auto;margin-top:16px;padding-top:15px;
+      border-top:1px solid rgba(122,83,56,.14);opacity:1;pointer-events:auto;transform:translateY(0);
     }
-    .dash-detail-panel.is-open{
-      display:block;
-      animation:dashPanelIn .22s cubic-bezier(.22,1,.36,1) both;
-      pointer-events:auto;
-    }
-    @keyframes dashPanelIn{from{opacity:0;transform:translate(-50%,8px)}to{opacity:1;transform:translate(-50%,0)}}
-    .dash-card[aria-expanded="true"]{border-color:rgba(77,104,58,.48);box-shadow:0 8px 24px rgba(74,44,29,.11)}
-    .dash-card[aria-expanded="true"] .profit-caption::after{content:' · fechar detalhes'}
+    .dash-card .dash-detail-panel::-webkit-scrollbar{width:6px}
+    .dash-card .dash-detail-panel::-webkit-scrollbar-thumb{background:rgba(122,83,56,.18);border-radius:99px}
+    .dash-card .dash-detail-panel{scrollbar-width:thin;overscroll-behavior:contain}
+    .dash-card[aria-expanded="true"]{border-color:rgba(77,104,58,.48);box-shadow:0 10px 28px rgba(74,44,29,.12)}
+    .dash-card[aria-expanded="true"] .profit-caption::after{content:' · fechar'}
+    .dash-card[aria-expanded="true"] .dash-detail-panel{animation:dashDetailIn .28s cubic-bezier(.22,1,.36,1) both}
+    @keyframes dashDetailIn{from{opacity:0;transform:translateY(-7px)}to{opacity:1;transform:translateY(0)}}
+    @media(max-width:650px){.dash-card .dash-detail-panel.is-open{max-height:460px}}
+    @media(prefers-reduced-motion:reduce){.dash-card .dash-detail-panel{transition:none!important}.dash-card[aria-expanded="true"] .dash-detail-panel{animation:none!important}}
 
-    .dash-detail-panel{overscroll-behavior:contain;scrollbar-width:thin}
-    .dash-detail-panel::-webkit-scrollbar{width:7px}.dash-detail-panel::-webkit-scrollbar-thumb{background:rgba(122,83,56,.18);border-radius:99px}
-    @media(min-width:761px){.dashboard-stack .dashboard-card-block:nth-child(3) .dash-detail-panel{right:0;left:auto;transform:translateY(8px)}.dashboard-stack .dashboard-card-block:nth-child(3) .dash-detail-panel.is-open{transform:translateY(0)}.dashboard-stack .dashboard-card-block:nth-child(3) .dash-detail-panel::before{left:auto;right:34px;transform:rotate(45deg)}}
-    @media(max-width:760px){
-      .dash-detail-panel{position:fixed;left:16px;right:16px;bottom:16px;top:auto;width:auto;max-height:min(72vh,620px);transform:none;border-radius:18px}
-      .dash-detail-panel::before{display:none}
-      .dash-detail-panel.is-open{animation:dashPanelMobileIn .22s cubic-bezier(.22,1,.36,1) both}
-      @keyframes dashPanelMobileIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
-    }
-    @media(prefers-reduced-motion:reduce){.dash-detail-panel.is-open{animation:none!important}}
+    /* CONTADOR DO RATEIO */
+    .rateio-countdown{margin:0 0 18px;padding:16px 18px;border:1px solid rgba(77,104,58,.22);border-radius:14px;background:linear-gradient(135deg,#f4eee5 0%,#fffaf5 58%,#e8efe3 100%);display:flex;align-items:center;justify-content:space-between;gap:18px;box-shadow:0 8px 24px rgba(74,44,29,.07)}
+    .rateio-countdown-copy{min-width:0}.rateio-kicker{font-size:.7rem;text-transform:uppercase;letter-spacing:.08em;font-weight:800;color:var(--herb-green);margin-bottom:4px}.rateio-title{font-size:1rem;font-weight:800;color:var(--choc-dark)}.rateio-note{font-size:.76rem;color:var(--text-muted);margin-top:3px}
+    .rateio-timer{display:grid;grid-template-columns:repeat(4,minmax(52px,1fr));gap:6px;min-width:260px}.rateio-unit{background:rgba(255,253,249,.72);border:1px solid rgba(122,83,56,.12);border-radius:10px;padding:7px 6px;text-align:center}.rateio-number{display:block;font-size:1.15rem;font-weight:800;line-height:1.1;font-variant-numeric:tabular-nums;color:var(--choc-dark)}.rateio-label{display:block;margin-top:3px;font-size:.61rem;text-transform:uppercase;letter-spacing:.06em;color:var(--text-muted)}
+    @media(max-width:650px){.rateio-countdown{align-items:stretch;flex-direction:column}.rateio-timer{min-width:0;width:100%}.rateio-number{font-size:1.05rem}}
 
 
     .session-login-card{max-width:430px;padding:26px 24px;text-align:center}
@@ -826,6 +810,20 @@
     </div>
     <input id="backup-file-input" class="data-file-input" type="file" accept="application/json" onchange="importarBackup(event)">
 
+    <section class="rateio-countdown" aria-live="polite" aria-label="Contagem para o próximo rateio">
+      <div class="rateio-countdown-copy">
+        <div class="rateio-kicker">🌿 Próximo rateio</div>
+        <div class="rateio-title" id="rateio-countdown-title">Calculando a próxima correria…</div>
+        <div class="rateio-note" id="rateio-countdown-note">5º dia útil de Curitiba · Paraná</div>
+      </div>
+      <div class="rateio-timer" id="rateio-countdown-timer">
+        <div class="rateio-unit"><span class="rateio-number" id="rateio-days">00</span><span class="rateio-label">dias</span></div>
+        <div class="rateio-unit"><span class="rateio-number" id="rateio-hours">00</span><span class="rateio-label">horas</span></div>
+        <div class="rateio-unit"><span class="rateio-number" id="rateio-minutes">00</span><span class="rateio-label">min</span></div>
+        <div class="rateio-unit"><span class="rateio-number" id="rateio-seconds">00</span><span class="rateio-label">seg</span></div>
+      </div>
+    </section>
+
     <!-- DASHBOARD FINANCEIRO -->
     <section class="dashboard-stack" aria-label="Resumo financeiro da fábrica">
       <div class="dashboard-card-block">
@@ -833,36 +831,36 @@
           <div class="dash-title">💰 Quanto a fábrica faturou?</div>
           <div class="dash-value" id="dash-faturamento-total">R$ 0,00</div>
           <div class="dash-subtext" id="dash-faturamento-sub">R$ 0,00 recebido · R$ 0,00 pendente</div>
-        </div>
         <div id="panel-faturar" class="dash-detail-panel">
           <div class="section-kicker">Vendas</div>
           <h4 style="color:var(--choc-dark);margin-bottom:10px;">💰 Como estão as vendas?</h4>
           <div id="panel-faturar-conteudo"></div>
-        </div>
+        </div></div>
+        
       </div>
       <div class="dashboard-card-block">
         <div class="dash-card" data-panel="panel-fornecedores" tabindex="0" role="button" aria-expanded="false" aria-controls="panel-fornecedores" onclick="toggleDashPanel('panel-fornecedores')" onkeydown="if(event.key==='Enter'||event.key===' ')toggleDashPanel('panel-fornecedores')">
           <div class="dash-title">📦 Pra quem a gente vai pagar?</div>
           <div class="dash-value" id="dash-repasses-pendentes">R$ 0,00</div>
           <div class="dash-subtext" id="dash-repasses-sub">0 repasses pendentes</div>
-        </div>
         <div id="panel-fornecedores" class="dash-detail-panel">
           <div class="section-kicker">Repasses</div>
           <h4 style="color:var(--choc-dark);margin-bottom:10px;">📦 Pra quem a gente vai pagar?</h4>
           <div id="panel-fornecedores-conteudo"></div>
-        </div>
+        </div></div>
+        
       </div>
       <div class="dashboard-card-block">
         <div class="dash-card" data-panel="panel-compras" tabindex="0" role="button" aria-expanded="false" aria-controls="panel-compras" onclick="toggleDashPanel('panel-compras')" onkeydown="if(event.key==='Enter'||event.key===' ')toggleDashPanel('panel-compras')">
           <div class="dash-title">🛍️ O que a fábrica comprou?</div>
           <div class="dash-value" id="dash-compras-total">R$ 0,00</div>
           <div class="dash-subtext" id="dash-compras-sub">0 compras registradas</div>
-        </div>
         <div id="panel-compras" class="dash-detail-panel">
           <div class="section-kicker">Compras da fábrica</div>
           <h4 style="color:var(--choc-dark);margin-bottom:10px;">🛍️ O que a fábrica comprou?</h4>
           <div id="panel-compras-conteudo"></div>
-        </div>
+        </div></div>
+        
       </div>
     </section>
 
@@ -873,7 +871,6 @@
           <div class="dash-value" id="dash-lucro-liquido">R$ 0,00</div>
           <div class="dash-subtext" id="dash-lucro-divisao">Margem 0% · Ramom 50% · Monique 50%</div>
           <div class="profit-caption">Resultado da fábrica · toque para ver a divisão</div>
-        </div>
         <div id="panel-lucro" class="dash-detail-panel">
           <div class="section-kicker">Resultado</div>
           <h4 style="color:var(--choc-dark);margin-bottom:10px;">🍫 Nossa parte do chocolate</h4>
@@ -881,7 +878,8 @@
             <div><label style="font-weight:700;">Divisão entre os sócios</label><div style="display:flex;align-items:center;gap:10px;margin-top:5px;"><input type="range" id="slider-split-socios" min="0" max="100" value="50" oninput="atualizarDivisaoSocios(this.value)" style="flex:1;"><span id="label-split-val" style="font-weight:800;color:var(--choc-dark);">50% Ramom / 50% Monique</span></div></div>
             <div id="panel-lucro-conteudo"></div>
           </div>
-        </div>
+        </div></div>
+        
       </div>
     </section>
 
@@ -1470,6 +1468,7 @@
     function abrirAuditoria(){if(!exigirSessao())return;const m=document.getElementById('modal-auditoria');if(m)m.style.display='flex';renderizarAuditoria();registrarAuditoria('consulta','Abriu as atividades');}
     function fecharAuditoria(){const m=document.getElementById('modal-auditoria');if(m)m.style.display='none';}
     function inicializarSessao(){atualizarSessaoUI();abrirLoginSocio();}
+    document.addEventListener('DOMContentLoaded',iniciarContadorRateio);
 
     let pedidosWhatsAppParsed = [];
     let ultimoSalvamento=null;
@@ -1561,11 +1560,24 @@
       if(tabName==='fornecedores') renderizarRepasses();
       registrarAuditoria('navegação',`Abriu a aba ${tabName}`);
     }
+    const CURITIBA_TZ='America/Sao_Paulo';
+    function pascoaDomingo(ano){const a=ano%19,b=Math.floor(ano/100),c=ano%100,d=Math.floor(b/4),e=b%4,f=Math.floor((b+8)/25),g=Math.floor((b-f+1)/3),h=(19*a+b-d-g+15)%30,i=Math.floor(c/4),k=c%4,l=(32+2*e+2*i-h-k)%7,m=Math.floor((a+11*h+22*l)/451),mes=Math.floor((h+l-7*m+114)/31),dia=((h+l-7*m+114)%31)+1;return new Date(ano,mes-1,dia);}
+    function chaveDataLocal(d){return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;}
+    function feriadosCuritiba(ano){const easter=pascoaDomingo(ano),sexta=new Date(easter);sexta.setDate(easter.getDate()-2);const corpus=new Date(easter);corpus.setDate(easter.getDate()+60);return new Set([`${ano}-01-01`,`${ano}-04-21`,`${ano}-05-01`,`${ano}-09-07`,`${ano}-10-12`,`${ano}-11-02`,`${ano}-11-15`,`${ano}-11-20`,`${ano}-12-25`,chaveDataLocal(sexta),chaveDataLocal(corpus),`${ano}-09-08`]);}
+    function eDiaUtilCuritiba(d){const dia=d.getDay();if(dia===0||dia===6)return false;return !feriadosCuritiba(d.getFullYear()).has(chaveDataLocal(d));}
+    function quintoDiaUtilCuritiba(ano,mes){const d=new Date(ano,mes,1);let cont=0;while(true){if(eDiaUtilCuritiba(d)){cont++;if(cont===5)return new Date(d);}d.setDate(d.getDate()+1);}}
+    function agoraCuritiba(){return new Date(new Date().toLocaleString('en-US',{timeZone:CURITIBA_TZ}));}
+    function proximoRateioCuritiba(){const agora=agoraCuritiba(),hoje=chaveDataLocal(agora),quintoMes=quintoDiaUtilCuritiba(agora.getFullYear(),agora.getMonth());if(hoje===chaveDataLocal(quintoMes)){const fim=new Date(agora);fim.setHours(23,59,59,999);if(agora<=fim)return {data:quintoMes,hoje:true};}let m=agora.getMonth()+1,a=agora.getFullYear();if(m>11){m=0;a++;}return {data:quintoDiaUtilCuritiba(a,m),hoje:false};}
+    function formatarDataRateio(d){return d.toLocaleDateString('pt-BR',{weekday:'long',day:'2-digit',month:'long'}).replace(/^./,c=>c.toUpperCase());}
+    function atualizarContadorRateio(){const title=document.getElementById('rateio-countdown-title');if(!title)return;const dEl=document.getElementById('rateio-days'),hEl=document.getElementById('rateio-hours'),mEl=document.getElementById('rateio-minutes'),sEl=document.getElementById('rateio-seconds'),note=document.getElementById('rateio-countdown-note');const agora=agoraCuritiba(),alvo=proximoRateioCuritiba();if(alvo.hoje){title.textContent='É hoje. A correria do rateio tá liberada 🌿🍫';note.textContent=`5º dia útil · ${formatarDataRateio(alvo.data)}`;dEl.textContent='00';hEl.textContent=String(23-agora.getHours()).padStart(2,'0');mEl.textContent=String(59-agora.getMinutes()).padStart(2,'0');sEl.textContent=String(59-agora.getSeconds()).padStart(2,'0');return;}const diff=Math.max(0,alvo.data.getTime()-agora.getTime());const total=Math.floor(diff/1000),dias=Math.floor(total/86400),horas=Math.floor((total%86400)/3600),mins=Math.floor((total%3600)/60),secs=total%60;title.textContent=`Faltam ${dias} dia${dias===1?'':'s'} pra próxima correria 🍫🌿`;note.textContent=`${formatarDataRateio(alvo.data)} · 5º dia útil de Curitiba`;dEl.textContent=String(dias).padStart(2,'0');hEl.textContent=String(horas).padStart(2,'0');mEl.textContent=String(mins).padStart(2,'0');sEl.textContent=String(secs).padStart(2,'0');}
+    let rateioTimerId=null;
+    function iniciarContadorRateio(){atualizarContadorRateio();if(rateioTimerId)clearInterval(rateioTimerId);rateioTimerId=setInterval(atualizarContadorRateio,1000);}
+
     function toggleDashPanel(panelId){
       if(!exigirSessao())return;
       const panel=document.getElementById(panelId); if(!panel)return;
       const visible=panel.classList.contains('is-open');
-      document.querySelectorAll('.dash-detail-panel').forEach(p=>{p.classList.remove('is-open');p.style.display='none';});
+      document.querySelectorAll('.dash-detail-panel').forEach(p=>{p.classList.remove('is-open');p.style.display='';});
       document.querySelectorAll('.dash-card[data-panel]').forEach(c=>{c.setAttribute('aria-expanded','false');});
       if(!visible){
         panel.classList.add('is-open');
