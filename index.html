@@ -246,7 +246,7 @@
     .dashboard-card-block{min-width:0}
     .dash-card{position:relative;overflow:hidden}
     .dash-card .dash-detail-panel{
-      position:static;width:auto;max-height:0;overflow:hidden;margin:0;padding:0;
+      position:static;width:100%;max-width:100%;align-self:stretch;box-sizing:border-box;max-height:0;overflow:hidden;margin:0;padding:0;
       background:transparent;border:0;box-shadow:none;backdrop-filter:none;-webkit-backdrop-filter:none;
       opacity:0;pointer-events:none;transform:translateY(-6px);
       transition:max-height .32s cubic-bezier(.22,1,.36,1),opacity .2s ease,transform .32s ease,padding .32s ease,margin-top .32s ease;
@@ -1764,7 +1764,31 @@
     function salvarFornecedor(e){if(!exigirSessao())return;e.preventDefault();const id=document.getElementById('fornecedor-id').value,nome=document.getElementById('fornecedor-nome').value.trim();if(!nome)return;const repasseIntegral=!!document.getElementById('fornecedor-venda-parceria')?.checked;const produtos=[...document.querySelectorAll('#container-produtos-fornecedor>div')].map(b=>{const pid=b.querySelector('.fornec-prod-id').value;if(!pid)return null;const metas=[...b.querySelectorAll('.metas-container>div')].map(r=>({qtdMin:num(r.querySelector('.meta-qtd').value),custoComDesconto:num(r.querySelector('.meta-custo').value)})).filter(x=>x.qtdMin>0);return {produtoId:pid,custoBase:num(b.querySelector('.fornec-prod-custo').value),metas};}).filter(Boolean);const obj={id:id||uid('fornec'),nome,frete:num(document.getElementById('fornecedor-frete').value),repasseIntegral,produtos};if(id){const i=appData.fornecedores.findIndex(f=>f.id===id);if(i>=0)appData.fornecedores[i]=obj;}else appData.fornecedores.push(obj);salvarDados(id?'alteração':'adição',`${id?'Atualizou':'Adicionou'} fornecedor ${nome}${repasseIntegral?' · parceria':''}`);cancelarEdicaoFornecedor();renderizarTudo();}
     function cancelarEdicaoFornecedor(){document.getElementById('fornecedor-id').value='';document.getElementById('form-fornecedor').reset();document.getElementById('container-produtos-fornecedor').innerHTML='';document.getElementById('form-fornecedor-title').innerHTML='<i class="ti ti-truck ui-icon" aria-hidden="true"></i>Fornecedores';document.getElementById('btn-fornecedor-submit').innerText='Salvar fornecedor';document.getElementById('btn-fornecedor-cancel').style.display='none';}
     function editarFornecedor(id){const f=getSupplier(id);if(!f)return;document.getElementById('fornecedor-id').value=f.id;document.getElementById('fornecedor-nome').value=f.nome||'';document.getElementById('fornecedor-frete').value=f.frete||0;const chk=document.getElementById('fornecedor-venda-parceria');if(chk)chk.checked=!!f.repasseIntegral;const c=document.getElementById('container-produtos-fornecedor');c.innerHTML='';(f.produtos||[]).forEach(p=>adicionarBlocoProdutoFornecedor(p.produtoId,p.custoBase,p.metas||[]));atualizarModoRepasseFornecedor();document.getElementById('form-fornecedor-title').innerText='Editar fornecedor';document.getElementById('btn-fornecedor-submit').innerText='Atualizar fornecedor';document.getElementById('btn-fornecedor-cancel').style.display='inline-block';document.getElementById('form-fornecedor').scrollIntoView({behavior:'smooth'});}
-    function excluirFornecedor(id){const linked=(appData.produtos||[]).filter(p=>p.fornecedorId===id).length,pending=(appData.repasses||[]).some(r=>r.fornecedorId===id&&r.status!=='Repassado');const msg=linked||pending?`Este fornecedor possui ${linked} produto(s) ligado(s) e ${pending?'repasses pendentes. ':''}Excluir pode quebrar referências históricas. Deseja continuar?`:'Deseja excluir este fornecedor?';if(confirm(msg)){appData.fornecedores=appData.fornecedores.filter(f=>f.id!==id);salvarDados('remoção',`Removeu fornecedor ${id}`);renderizarTudo();}}
+    function excluirFornecedor(id){
+      const fornecedor=appData.fornecedores.find(f=>f.id===id);if(!fornecedor)return;
+      const linkedProdutos=(appData.produtos||[]).filter(p=>p.fornecedorId===id);
+      const pending=(appData.repasses||[]).some(r=>r.fornecedorId===id&&r.status!=='Repassado');
+      const outros=(appData.fornecedores||[]).filter(f=>f.id!==id);
+      if(linkedProdutos.length&&!outros.length){alert('Este fornecedor possui produtos ligados. Antes de excluir, cadastre ou mantenha outro fornecedor para reassociar esses produtos.');return;}
+      if(!confirm(`Excluir o fornecedor “${fornecedor.nome}”?${linkedProdutos.length?`\n\n${linkedProdutos.length} produto(s) serão reassociados a outro fornecedor.`:''}${pending?'\n\nHá repasses pendentes. O histórico será preservado.':''}`))return;
+      if(linkedProdutos.length){
+        const opcoes=outros.map((f,i)=>`${i+1}. ${f.nome}${f.repasseIntegral?' · parceria':''}`).join('\n');
+        const resposta=prompt(`Escolha o novo fornecedor para ${linkedProdutos.length===1?'o produto':'os produtos'} ligado(s) a “${fornecedor.nome}”:\n\n${opcoes}\n\nDigite o número correspondente:`);
+        const idx=parseInt(resposta,10)-1;
+        if(!Number.isInteger(idx)||idx<0||idx>=outros.length){alert('Exclusão cancelada. Os produtos continuam vinculados ao fornecedor atual.');return;}
+        const destino=outros[idx];
+        const produtosDestino=Array.isArray(destino.produtos)?destino.produtos:[ ];
+        linkedProdutos.forEach(prod=>{
+          const vinculo=Array.isArray(fornecedor.produtos)?fornecedor.produtos.find(x=>x.produtoId===prod.id):null;
+          prod.fornecedorId=destino.id;
+          const existente=produtosDestino.find(x=>x.produtoId===prod.id);
+          if(!existente){produtosDestino.push(vinculo?JSON.parse(JSON.stringify(vinculo)):{produtoId:prod.id,custoBase:0,metas:[]});}
+        });
+        destino.produtos=produtosDestino;
+      }
+      appData.fornecedores=appData.fornecedores.filter(f=>f.id!==id);
+      salvarDados('remoção',`Removeu fornecedor ${fornecedor.nome}${linkedProdutos.length?' e reassociou produtos':' '}`);registrarAuditoria('remoção',`Fornecedor ${fornecedor.nome} removido${linkedProdutos.length?' · produtos reassociados':''}`);renderizarTudo();
+    }
     function renderizarFornecedores(){const tb=document.getElementById('lista-fornecedores');tb.innerHTML='';const sum=document.getElementById('fornecedor-summary');if(sum){const produtos=new Set((appData.fornecedores||[]).flatMap(f=>(f.produtos||[]).map(x=>x.produtoId)));const freteRef=(appData.fornecedores||[]).reduce((s,f)=>s+num(f.frete),0);const integrais=(appData.fornecedores||[]).filter(f=>f.repasseIntegral).length;sum.innerHTML=`<div class="summary-box"><strong>${appData.fornecedores.length}</strong><span>fornecedores cadastrados</span></div><div class="summary-box"><strong>${produtos.size}</strong><span>produtos vinculados</span></div><div class="summary-box"><strong>${integrais}</strong><span>fornecedores em parceria</span></div><div class="summary-box"><strong>${formatarMoeda(freteRef)}</strong><span>fretes de referência</span></div>`;}if(!appData.fornecedores.length){tb.innerHTML='<tr><td colspan="4" style="text-align:center;padding:20px;color:var(--text-muted)">Nenhum fornecedor cadastrado.</td></tr>';return;}appData.fornecedores.forEach(f=>{const tr=document.createElement('tr');const badge=f.repasseIntegral?'<span class="supplier-integral-badge"><i class="ti ti-arrows-exchange" aria-hidden="true"></i> parceria</span>':'';tr.innerHTML=`<td><strong>${escapeHtml(f.nome)}</strong>${badge}</td><td>${(f.produtos||[]).map(x=>{const p=getProduct(x.produtoId);return `<strong>${escapeHtml(p?.nome||'Produto')}</strong>: ${formatarMoeda(x.custoBase)}/g · ${(x.metas||[]).length} faixa(s)`}).join('<br>')||'Nenhum produto'}</td><td>Ref.: ${formatarMoeda(f.frete||0)}</td><td><button class="btn-action btn-edit" onclick="editarFornecedor('${f.id}')">Editar</button><button class="btn-action btn-delete" onclick="excluirFornecedor('${f.id}')" aria-label="Excluir fornecedor">Excluir</button></td>`;tb.appendChild(tr);});}
 
     // Produtos
