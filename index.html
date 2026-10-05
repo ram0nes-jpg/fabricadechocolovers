@@ -698,41 +698,6 @@
     }
 
 
-    /* Rádio ambiente — flutuante, integrada e minimizável */
-    .radio-shell{position:fixed;right:22px;bottom:22px;z-index:1200;display:block;pointer-events:none}
-    .radio-player{width:min(382px,calc(100vw - 28px));background:linear-gradient(145deg,#fffdf9 0%,#f4ece3 100%);border:1px solid rgba(122,83,56,.20);border-radius:24px;box-shadow:0 22px 55px rgba(74,44,29,.18),0 5px 16px rgba(74,44,29,.08);padding:14px;color:var(--choc-dark);transition:opacity .2s ease,transform .22s cubic-bezier(.2,.75,.2,1),visibility .2s ease;pointer-events:auto;backdrop-filter:blur(14px)}
-    .radio-player.is-hidden{display:none}
-    .radio-player.is-minimized{width:auto;padding:8px 10px;border-radius:18px}
-    .radio-player.is-minimized .radio-details,.radio-player.is-minimized .radio-embed,.radio-player.is-minimized .radio-note{display:none}
-    .radio-player.is-minimized .radio-top{margin:0}
-    .radio-player.is-minimized .radio-copy{max-width:170px}
-    .radio-top{display:flex;align-items:center;gap:10px}
-    .radio-art{width:42px;height:42px;border-radius:15px;display:grid;place-items:center;background:linear-gradient(145deg,#efe3d6,#e8efe3);font-size:19px;flex:0 0 auto;border:1px solid rgba(122,83,56,.14);box-shadow:inset 0 1px rgba(255,255,255,.75)}
-    .radio-copy{min-width:0;flex:1}
-    .radio-kicker{font-size:.61rem;text-transform:uppercase;letter-spacing:.12em;color:var(--text-muted);font-weight:800}
-    .radio-name{font-size:.88rem;font-weight:800;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:1px;letter-spacing:-.015em}
-    .radio-status{font-size:.68rem;color:var(--text-muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:2px}
-    .radio-controls{display:flex;align-items:center;gap:6px}
-    .radio-btn{border:1px solid rgba(122,83,56,.18);background:#fff;color:var(--choc-dark);width:34px;height:34px;border-radius:11px;display:grid;place-items:center;cursor:pointer;font:inherit;font-weight:800;transition:transform .16s ease,background .16s ease,border-color .16s ease,box-shadow .16s ease}
-    .radio-btn:hover{transform:translateY(-1px);background:#fffaf5;border-color:#cdb8a5;box-shadow:0 5px 12px rgba(74,44,29,.08)}
-    .radio-btn:focus-visible{outline:3px solid rgba(77,104,58,.22);outline-offset:2px}
-    .radio-btn.primary{background:var(--choc-dark);color:#fff;border-color:var(--choc-dark);font-size:15px;box-shadow:0 5px 14px rgba(74,44,29,.14)}
-    .radio-btn.primary:hover{background:#5b3928}
-    .radio-select{margin-top:11px;width:100%;border:1px solid rgba(122,83,56,.18);background:rgba(255,255,255,.84);color:var(--choc-dark);border-radius:12px;padding:9px 10px;font:inherit;font-size:.76rem;font-weight:700;cursor:pointer;outline:none;transition:border-color .16s ease,box-shadow .16s ease}
-    .radio-select:focus{border-color:rgba(77,104,58,.45);box-shadow:0 0 0 3px rgba(77,104,58,.10)}
-    .radio-bottom{display:flex;align-items:center;justify-content:flex-end;gap:8px;margin-top:8px}
-    .radio-help{font-size:.64rem;color:var(--text-muted);margin-right:auto}
-    .radio-hide{font-size:.68rem;font-weight:800;color:var(--text-muted);background:transparent;border:0;cursor:pointer;padding:5px 3px}
-    .radio-hide:hover{color:var(--choc-dark);text-decoration:underline}
-    .radio-player.is-playing .radio-art{animation:radioPulse 2.6s ease-in-out infinite}
-    .radio-player.is-error .radio-status{color:#8b5b47}
-    .radio-embed{margin-top:12px;border-radius:16px;overflow:hidden;background:#181412;border:1px solid rgba(74,44,29,.10);box-shadow:inset 0 0 0 1px rgba(255,255,255,.12)}
-    .radio-embed-host{width:100%;height:152px}
-    .radio-embed-host iframe{display:block;width:100%!important;height:152px!important;border:0}
-    .radio-note{font-size:.62rem;color:var(--text-muted);text-align:center;margin-top:6px;line-height:1.35}
-    @keyframes radioPulse{0%,100%{transform:scale(1);box-shadow:inset 0 1px rgba(255,255,255,.75)}50%{transform:scale(1.045);box-shadow:0 7px 18px rgba(77,104,58,.12),inset 0 1px rgba(255,255,255,.85)}}
-    @media(max-width:650px){.radio-shell{right:12px;bottom:12px}.radio-player{padding:10px;width:min(360px,calc(100vw - 24px));border-radius:20px}.radio-art{width:36px;height:36px;border-radius:13px}.radio-name{font-size:.82rem}.radio-hide{font-size:.66rem}}
-    @media(prefers-reduced-motion:reduce){.radio-player,.radio-btn,.radio-select{transition:none}.radio-player.is-playing .radio-art{animation:none}}
 
     /* ===================================================
        REFINAMENTO GLOBAL — SaaS tátil, leve e consistente
@@ -746,7 +711,7 @@
     a:hover{color:var(--choc-dark);text-decoration-color:var(--choc-dark)}
     :where(input,select,textarea){border-radius:12px!important;box-shadow:none!important}
     :where(input,select,textarea):focus{border-color:rgba(77,104,58,.58)!important;box-shadow:0 0 0 3px rgba(77,104,58,.10)!important}
-    :where(.btn-submit,.btn-secondary,.btn-action,.toolbar-btn,.sound-toggle,.tab-btn,.cat-btn,.radio-btn,.radio-select,.radio-hide){border-radius:12px}
+    :where(.btn-submit,.btn-secondary,.btn-action,.toolbar-btn,.sound-toggle,.tab-btn,.cat-btn){border-radius:12px}
     :where(.form-section,.purchase-card,.summary-box,.table-wrapper,.order-mobile-card,.dash-card){border-radius:12px}
     .tab-content.active{animation:contentSoftIn .34s cubic-bezier(.22,1,.36,1) both}
     .tab-content.active>*{animation:contentSoftIn .38s cubic-bezier(.22,1,.36,1) both}
@@ -764,7 +729,7 @@
     .order-row-clickable:hover{background:rgba(244,238,229,.72)!important}
     .table-wrapper table td:first-child,.table-wrapper table th:first-child{padding-left:18px}
     .table-wrapper table td:last-child,.table-wrapper table th:last-child{padding-right:18px}
-    .glass-surface,.modal-card,.radio-player,.user-select-bar{background:rgba(255,253,249,.82);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px)}
+    .glass-surface,.modal-card,.user-select-bar{background:rgba(255,253,249,.82);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px)}
     .modal-card{border-radius:12px}
     .user-select-bar{border-radius:12px}
     .app-container{animation:pageRise .5s cubic-bezier(.22,1,.36,1) both}
@@ -773,7 +738,7 @@
     .dash-card:hover,.purchase-card:hover{transform:translateY(-2px)}
     .summary-box:hover{transform:translateY(-1px)}
     .btn-action:hover,.btn-submit:hover,.btn-secondary:hover,.toolbar-btn:hover,.sound-toggle:hover{transform:translateY(-1px)}
-    .app-toolbar,.toolbar-actions,.rateio-countdown,.finance-action-strip,.radio-top{min-width:0}
+    .app-toolbar,.toolbar-actions,.rateio-countdown,.finance-action-strip{min-width:0}
     .toolbar-status{overflow-wrap:anywhere}
     .toolbar-actions{min-width:0}
     .toolbar-btn,.sound-toggle{flex:0 0 auto}
@@ -815,7 +780,7 @@
     .jcraft-sidebar{position:sticky;top:20px;min-height:calc(100vh - 40px);display:flex;flex-direction:column;padding:22px 14px 15px 8px;border-right:1px solid var(--jc-line)}
     .jcraft-brand{display:grid;grid-template-columns:38px minmax(0,1fr);grid-template-rows:auto auto;column-gap:10px;align-items:center;padding:3px 10px 18px;border-bottom:1px solid var(--jc-line);margin-bottom:16px}.jcraft-brand-mark{grid-column:1;grid-row:1;width:38px;height:38px;display:flex;align-items:center;justify-content:center;color:var(--jc-green);font-size:1.2rem;border:1px solid var(--jc-line);border-radius:50%;background:rgba(250,247,240,.72);box-shadow:inset 0 0 0 4px rgba(255,255,255,.36)}.jcraft-brand-name{grid-column:2;grid-row:1;font:600 1.3rem/1.04 'Noto Serif',Georgia,serif;letter-spacing:-.035em;color:var(--jc-ink);min-width:0}.jcraft-brand-name em{font-style:normal;color:var(--jc-cocoa)}.jcraft-brand-motto{grid-column:1/-1;grid-row:2;margin-top:11px;font-size:.49rem;letter-spacing:.15em;color:var(--jc-muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
     .jcraft-nav{display:flex;flex-direction:column;gap:3px}.jcraft-nav-item{width:100%;border:0;background:transparent;color:#4b4941;display:flex;align-items:center;gap:12px;text-align:left;padding:11px 13px;border-radius:9px;font:500 .84rem/1.2 'DM Sans',sans-serif;cursor:pointer;transition:background .18s ease,color .18s ease,transform .18s ease}.jcraft-nav-item i{font-size:1.08rem;width:20px;text-align:center;color:#656158}.jcraft-nav-item:hover{background:rgba(255,253,248,.72);color:var(--jc-green);transform:translateX(2px)}.jcraft-nav-item.active{background:var(--jc-green);color:#fff;box-shadow:0 6px 15px rgba(77,104,58,.12)}.jcraft-nav-item.active i{color:#fff}
-    .jcraft-sidebar-spacer{flex:1;min-height:25px}.jcraft-sidebar-note{position:relative;padding:14px 17px 8px;color:#6c675d;font:italic .85rem/1.55 'Noto Serif',Georgia,serif}.jcraft-sidebar-note p{margin:0}.jcraft-sidebar-note>i{position:absolute;right:17px;bottom:2px;color:var(--jc-green);font-size:1rem}.jcraft-brush-line{display:block;width:68px;height:1px;background:linear-gradient(90deg,var(--jc-cocoa),transparent);margin-bottom:11px;transform:rotate(-3deg);transform-origin:left}.jcraft-sidebar-mascot{height:175px;margin:0 4px;overflow:hidden;display:flex;align-items:flex-end;justify-content:center}.jcraft-sidebar-mascot img{width:215px;height:auto;display:block;filter:saturate(.92);transform:translateY(16px)}.jcraft-sidebar-footer{display:flex;justify-content:space-between;gap:10px;padding:9px 12px 0;border-top:1px solid var(--jc-line);font-size:.62rem;color:var(--jc-muted)}.jcraft-sidebar-footer span:first-child{color:var(--jc-green);font-weight:700}
+    .jcraft-sidebar-spacer{flex:1;min-height:25px}.jcraft-sidebar-note{position:relative;padding:14px 17px 8px;color:#6c675d;font:italic .85rem/1.55 'Noto Serif',Georgia,serif}.jcraft-sidebar-note p{margin:0}.jcraft-sidebar-note>i{position:absolute;right:17px;bottom:2px;color:var(--jc-green);font-size:1rem}.jcraft-brush-line{display:block;width:68px;height:1px;background:linear-gradient(90deg,var(--jc-cocoa),transparent);margin-bottom:11px;transform:rotate(-3deg);transform-origin:left}.jcraft-sidebar-mascot{height:175px;margin:0 4px;overflow:hidden;display:flex;align-items:flex-end;justify-content:center}.jcraft-sidebar-footer{display:flex;justify-content:space-between;gap:10px;padding:9px 12px 0;border-top:1px solid var(--jc-line);font-size:.62rem;color:var(--jc-muted)}.jcraft-sidebar-footer span:first-child{color:var(--jc-green);font-weight:700}
     .jcraft-main{min-width:0;padding:0 0 40px}.jcraft-rail{position:sticky;top:20px;min-width:0;padding:0 0 20px}.jcraft-main>.user-select-bar{position:relative;right:auto;top:auto;z-index:20;margin:0 0 5px;padding:0;background:transparent;border:0;border-radius:0;box-shadow:none;width:100%;justify-content:flex-end}.jcraft-main>.user-select-bar .toolbar-btn{border:0;background:transparent;padding:6px 8px;color:var(--jc-muted);font-size:.72rem}.jcraft-main>header{height:82px;margin:0 0 18px;padding:0 4px;border-bottom:1px solid var(--jc-line);display:flex;align-items:center;justify-content:space-between;text-align:left;position:relative;gap:20px}.jcraft-main>header::before,.jcraft-main>header::after{content:none}.jcraft-header .jcraft-greeting{min-width:0;display:flex;flex-direction:column;gap:6px}.jcraft-header .jcraft-greeting>span{font:600 2rem/1 'Noto Serif',Georgia,serif;color:var(--jc-ink);letter-spacing:-.035em}.jcraft-header .jcraft-greeting>span strong{font-weight:600;color:var(--jc-cocoa)}.jcraft-header .jcraft-greeting small{color:var(--jc-muted);font-size:.74rem;line-height:1.3}.jcraft-header-art{display:flex;align-items:center;gap:9px;color:var(--jc-muted);margin-left:auto;white-space:nowrap}.jcraft-header-art>span{display:block;width:38px;height:1px;background:linear-gradient(90deg,transparent,var(--jc-line));}.jcraft-header-art>i{color:var(--jc-green);font-size:1rem}.jcraft-header-art>b{font:500 .7rem 'Noto Serif',serif;letter-spacing:.08em;color:var(--jc-cocoa)}.jcraft-header-meta{display:flex;align-items:center;gap:9px;color:var(--jc-muted);font-size:.62rem;white-space:nowrap}.jcraft-header-meta span+span::before{content:'·';margin-right:9px;color:var(--jc-line)}.jcraft-header-meta i{color:var(--jc-green);font-size:.95rem}.header-logo-img{display:none!important}
     .app-toolbar{display:flex;justify-content:space-between;align-items:center;gap:16px;margin:0 0 13px;padding:7px 0;border-bottom:1px solid rgba(221,213,198,.72);background:transparent;box-shadow:none}.toolbar-status{font-size:.69rem;color:var(--jc-muted)}.toolbar-status strong{color:var(--jc-ink)}.toolbar-actions{display:flex;gap:5px;align-items:center}.toolbar-btn,.sound-toggle{border:1px solid transparent;background:transparent;color:var(--jc-muted);box-shadow:none;border-radius:7px;min-height:31px;padding:5px 8px;font-size:.7rem}.toolbar-btn:hover,.sound-toggle:hover{background:rgba(255,255,255,.62);border-color:var(--jc-line);color:var(--jc-green);transform:none;box-shadow:none}.sound-toggle{width:32px;height:32px;padding:2px}.sound-toggle .sound-icon-badge{width:25px;height:25px;border-radius:7px;background:var(--jc-green);box-shadow:none}
     .rateio-countdown{margin:0 0 18px;padding:9px 13px;border:0;border-top:1px solid var(--jc-line);border-bottom:1px solid var(--jc-line);border-radius:0;background:rgba(255,253,248,.35);box-shadow:none;display:flex;align-items:center;justify-content:space-between;gap:14px}.rateio-kicker{color:var(--jc-green);font-size:.6rem;letter-spacing:.12em}.rateio-title{font:600 .83rem/1.2 'Noto Serif',Georgia,serif;color:var(--jc-ink)}.rateio-note{font-size:.63rem;color:var(--jc-muted)}.rateio-timer{min-width:235px;grid-template-columns:repeat(4,1fr);gap:2px}.rateio-unit{background:transparent;border:0;border-left:1px solid var(--jc-line);border-radius:0;padding:3px 7px}.rateio-number{font-size:.82rem;color:var(--jc-ink)}.rateio-label{font-size:.5rem;color:var(--jc-muted)}
@@ -831,7 +796,7 @@
     @media(max-width:560px){.toolbar-status{display:none}.toolbar-actions{width:100%;justify-content:flex-end}.overview-card{min-height:116px!important;padding:13px 11px!important}.overview-card .dash-value{font-size:1.12rem}.overview-card .dash-title{font-size:.61rem}.overview-card .dash-subtext{font-size:.55rem}.dashboard-featured-profit .dash-value{font-size:1.2rem}.jcraft-line-chart{height:185px}.jcraft-donut{width:135px;height:135px}.jcraft-donut::after{inset:23px}.jcraft-order-row{grid-template-columns:48px minmax(0,1fr) 74px!important}.jcraft-order-row time{display:none}.jcraft-order-client small{max-width:150px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}}
 
 
-/* V2.1.3 (haxixinho mascote) / V2.1.2 (databaseURL regional) / V2.1.1 (hotfix de abas + showToast sobre a V2.1.0) — V2.1.0 — unificação visual dos modos + dashboard por contexto + haxixinho passeando */
+/* V2.1.4 (barra lateral, sem rádio/companheiro) / V2.1.3 (haxixinho mascote) / V2.1.2 (databaseURL regional) / V2.1.1 (hotfix de abas + showToast sobre a V2.1.0) — V2.1.0 — unificação visual dos modos + dashboard por contexto + haxixinho passeando */
 .jcraft-app{position:relative}
 .jcraft-main{position:relative}
 .jcraft-brand-motto{overflow:visible;text-overflow:clip;white-space:nowrap}
@@ -870,21 +835,20 @@
 .toast{display:flex;align-items:center;gap:9px}.toast .haxi{--w:38px}.toast.error .haxi{animation:haxiShake .4s}
 .haxi-vazio{display:flex;justify-content:center;margin:2px auto 6px}.haxi-vazio .haxi{--w:96px}
 .session-login-brand{display:flex;justify-content:center;margin:0 auto 4px}
-.haxi-companion{position:fixed;left:14px;bottom:10px;z-index:90;pointer-events:none;transition:left 2.4s cubic-bezier(.45,.05,.3,1)}
-.haxi-companion[hidden]{display:none!important}
-.haxi-btn{all:unset;display:block;cursor:pointer;pointer-events:auto;border-radius:10px}.haxi-btn:focus-visible{outline:2px solid var(--herb-green,#4d683a);outline-offset:3px}
-.haxi-companion .haxi{--w:74px;scale:var(--face,1) 1;transform-origin:50% 100%;animation:haxiBob 3.2s ease-in-out infinite}
-.haxi-companion.walking .haxi{animation:haxiWalk .5s ease-in-out infinite}
-.haxi-companion.hop .haxi{animation:haxiHop .5s ease-out}.haxi-companion.shake .haxi{animation:haxiShake .45s}
-.haxi-bubble{position:absolute;left:50%;bottom:calc(100% + 6px);transform:translateX(-50%);white-space:nowrap;background:#fff;border:1px solid var(--border-color,#e5dccb);border-radius:10px;padding:6px 10px;font:700 .72rem/1.2 'DM Sans',sans-serif;color:var(--choc-dark,#3b2418);box-shadow:0 8px 18px rgba(45,28,20,.16);opacity:0;pointer-events:none;transition:opacity .2s}
-.haxi-companion.fala .haxi-bubble{opacity:1}
-@keyframes haxiBob{0%,100%{translate:0 0}50%{translate:0 -2px}}
-@keyframes haxiWalk{0%,100%{translate:0 0;rotate:0deg}25%{translate:0 -5px;rotate:-3deg}75%{translate:0 -5px;rotate:3deg}}
-@keyframes haxiHop{0%,100%{translate:0 0}40%{translate:0 -14px}}
 @keyframes haxiShake{0%,100%{translate:0 0}25%{translate:-4px 0}75%{translate:4px 0}}
-@media(max-width:860px){.haxi-companion .haxi{--w:54px}}
-@media print{.haxi-companion{display:none!important}}
-@media(prefers-reduced-motion:reduce){.haxi i,.haxi-companion .haxi,.toast .haxi{animation:none!important}.haxi-companion{transition:none}}
+/* V2.1.4 — barra lateral: marca centralizada, lema ajustado à largura, mascote inteiro e rodapé só com a versão. */
+@media(min-width:861px){
+.jcraft-app:not(.nav-top) .jcraft-brand{display:flex;flex-direction:column;align-items:center;gap:9px;padding:4px 6px 18px;text-align:center}
+.jcraft-app:not(.nav-top) .jcraft-brand-mark{width:44px;height:44px;font-size:1.35rem;margin:0}
+.jcraft-app:not(.nav-top) .jcraft-brand-name{text-align:center;margin:0}
+.jcraft-app:not(.nav-top) .jcraft-brand-motto{margin:0;text-align:center;letter-spacing:.11em;white-space:nowrap;overflow:visible}
+.jcraft-app:not(.nav-top) .jcraft-sidebar-note{text-align:center}
+.jcraft-app:not(.nav-top) .jcraft-sidebar-note .jcraft-brush-line{margin-left:auto;margin-right:auto}
+}
+.jcraft-sidebar-mascot{height:auto;margin:0;padding:2px 0 6px;overflow:visible;align-items:center}
+.jcraft-sidebar-mascot .haxi{--w:176px}
+.jcraft-sidebar-footer{justify-content:center;opacity:.7;letter-spacing:.06em}
+@media(prefers-reduced-motion:reduce){.haxi i,.toast .haxi{animation:none!important}}
 @media(max-width:1100px){.jcraft-app.nav-top .jcraft-sidebar{grid-template-columns:1fr;grid-template-areas:"brand" "nav" "toggle" "footer";gap:10px}.jcraft-app.nav-top .jcraft-brand{width:auto;min-width:0}.jcraft-app.nav-top .jcraft-brand-motto{font-size:.48rem}}
 
 /* V19 — alternância de navegação + detalhes botânicos */
@@ -919,7 +883,6 @@
         <button type="button" class="jcraft-nav-item tab-btn" data-tab="fornecedores" onclick="toggleTab('fornecedores')"><i class="ti ti-truck" aria-hidden="true"></i><span>Fornecedores</span></button>
         <button type="button" class="jcraft-nav-item jcraft-nav-action" onclick="abrirModalFinanceiro()"><i class="ti ti-wallet" aria-hidden="true"></i><span>Financeiro</span></button>
         <button type="button" class="jcraft-nav-item tab-btn" data-tab="relatorio" onclick="toggleTab('relatorio')"><i class="ti ti-chart-bar" aria-hidden="true"></i><span>Relatórios</span></button>
-        <button type="button" class="jcraft-nav-item jcraft-nav-action" onclick="abrirFerramentas()"><i class="ti ti-adjustments" aria-hidden="true"></i><span>Ferramentas</span></button>
       </nav>
       <div class="jcraft-nav-layout">
         <button type="button" id="jcraft-nav-layout-toggle" class="jcraft-nav-layout-btn" onclick="alternarLayoutNavegacao()" aria-pressed="false" title="Alternar entre navegação lateral e superior">
@@ -932,8 +895,8 @@
         <p>Disciplina<br><em>também é liberdade.</em></p>
         <div class="jcraft-herb-trio" aria-hidden="true"><i class="ti ti-leaf-2"></i><i class="ti ti-smoking"></i><i class="ti ti-leaf"></i></div>
       </div>
-      <div class="jcraft-sidebar-mascot" aria-hidden="true"><img src="data:image/webp;base64,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" alt=""></div>
-      <div class="jcraft-sidebar-footer"><span id="jcraft-session-mini">● Entrando…</span><span>v2.1.3</span></div>
+      <div class="jcraft-sidebar-mascot" aria-hidden="true"><span class="haxi"><i class="haxi-lid l"></i><i class="haxi-lid r"></i><i class="haxi-ember"></i><i class="haxi-smoke s1"></i><i class="haxi-smoke s2"></i><i class="haxi-smoke s3"></i></span></div>
+      <div class="jcraft-sidebar-footer"><span>v2.1.4</span></div>
     </aside>
     <main class="jcraft-main">
 
@@ -956,8 +919,6 @@
       <div class="toolbar-status"><span id="sync-dot" class="sync-dot"></span><span><strong id="sync-label">Dados prontos</strong> · <span id="sync-detail">salvamento automático ativo</span></span></div>
       <div class="toolbar-actions">
         <button type="button" class="sound-toggle" id="sound-toggle" onclick="alternarSons()" aria-pressed="true" title="Ativar ou desativar sons da interface" aria-label="Ativar ou desativar sons da interface"><span class="sound-icon-badge"><span id="sound-icon"><i class="ti ti-volume ui-icon" aria-hidden="true"></i></span></span></button>
-        <button type="button" class="toolbar-btn" id="radio-open-btn" onclick="mostrarRadio()" aria-expanded="true" title="Mostrar rádio"><i class="ti ti-player-play ui-icon" aria-hidden="true"></i>Rádio</button>
-        <button type="button" class="toolbar-btn" id="mascote-toggle" onclick="alternarMascote()" aria-pressed="true" title="Mostrar ou esconder o haxixinho"><i class="ti ti-leaf ui-icon" aria-hidden="true"></i>Haxixinho</button>
 <button type="button" class="toolbar-btn" onclick="exportarBackup()" title="Baixar uma cópia dos dados atuais em JSON"><i class="ti ti-database-export ui-icon" aria-hidden="true"></i>Backup</button>
         <button type="button" class="toolbar-btn" onclick="document.getElementById('backup-file-input').click()" title="Substituir os dados atuais por um backup JSON"><i class="ti ti-database-import ui-icon" aria-hidden="true"></i>Restaurar</button>
       </div>
@@ -1506,82 +1467,6 @@
   <script>
     // Sistema sonoro da interface: pequenos tons sintéticos, sem arquivos externos.
 
-    // Rádio da fábrica via Spotify Embed/iFrame API.
-    // Autoplay com áudio continua sujeito à política do navegador.
-    const RADIO_KEY='fabrica_radio_config_v3';
-    const RADIO_STATIONS={
-      lofi:{name:'Lo-fi & Chill',icon:'<i class="ti ti-coffee"></i>',url:'https://open.spotify.com/playlist/37i9dQZF1DWWQRwui0ExPn'},
-      jazz:{name:'Jazz 60s / Standards',icon:'<i class="ti ti-music"></i>',url:'https://open.spotify.com/playlist/0NqO69g7IPWSjuwe5YyOtj'},
-      reggae:{name:'Reggae Roots',icon:'<i class="ti ti-leaf"></i>',url:'https://open.spotify.com/playlist/289I2aezKqMGKMXe1NQuXn'},
-      hitech:{name:'Hitech / Dark Psy',icon:'<i class="ti ti-alien"></i>',url:'https://open.spotify.com/playlist/1DFMfDpk1Vk95Fz94SzbIx'}
-    };
-    const radioState={station:'lofi',autoplay:true,started:false,hidden:false,minimized:false,userInteracted:false};
-    let spotifyAPIReady=false,spotifyAPILoading=false,spotifyController=null;
-    function carregarRadioConfig(){try{const raw=localStorage.getItem(RADIO_KEY);if(raw){const x=JSON.parse(raw);if(x.station&&RADIO_STATIONS[x.station])radioState.station=x.station;radioState.autoplay=x.autoplay!==false;radioState.hidden=x.hidden===true;radioState.minimized=x.minimized===true;}}catch(e){}}
-    function salvarRadioConfig(){try{localStorage.setItem(RADIO_KEY,JSON.stringify({station:radioState.station,autoplay:radioState.autoplay,hidden:radioState.hidden,minimized:radioState.minimized}));}catch(e){}}
-    function atualizarRadioUI(){
-      const box=document.getElementById('radio-player'),sel=document.getElementById('radio-station'),play=document.getElementById('radio-play'),min=document.getElementById('radio-minimize-btn'),toggle=document.getElementById('radio-open-btn'),name=document.getElementById('radio-name'),art=document.getElementById('radio-art');
-      const st=RADIO_STATIONS[radioState.station];
-      if(sel)sel.value=radioState.station;
-      if(name)name.innerHTML=(st?.icon||'<i class="ti ti-music"></i>')+' '+(st?.name||'Rádio');if(art)art.innerHTML=st?.icon||'<i class="ti ti-music"></i>';
-      if(play){play.innerHTML=radioState.started?'<i class="ti ti-player-pause" aria-hidden="true"></i>':'<i class="ti ti-player-play" aria-hidden="true"></i>';play.title=radioState.started?'Pausar rádio':'Tocar rádio';play.setAttribute('aria-label',radioState.started?'Pausar rádio':'Tocar rádio');}
-      if(box){box.classList.toggle('is-hidden',radioState.hidden);box.classList.toggle('is-minimized',radioState.minimized===true);box.classList.toggle('is-playing',radioState.started);box.classList.toggle('is-error',false);}
-      if(min){min.innerHTML=radioState.minimized?'<i class="ti ti-arrows-maximize" aria-hidden="true"></i>':'<i class="ti ti-minus" aria-hidden="true"></i>';min.title=radioState.minimized?'Expandir rádio':'Minimizar rádio';min.setAttribute('aria-label',radioState.minimized?'Expandir rádio':'Minimizar rádio');}
-      if(toggle)toggle.setAttribute('aria-expanded',String(!radioState.hidden));
-    }
-    function definirStatusRadio(t,erro=false){const el=document.getElementById('radio-status'),box=document.getElementById('radio-player');if(el){el.textContent=t;el.dataset.error=erro?'1':'0';}if(box)box.classList.toggle('is-error',erro);atualizarRadioUI();}
-    function garantirSpotifyAPI(){
-      if(spotifyAPIReady||spotifyAPILoading)return;
-      spotifyAPILoading=true;
-      if(window.SpotifyIframeApi){spotifyAPIReady=true;criarPlayerSpotify();return;}
-      const s=document.createElement('script');s.src='https://open.spotify.com/embed/iframe-api/v1';s.async=true;document.head.appendChild(s);
-    }
-    window.onSpotifyIframeApiReady=function(IFrameAPI){window.SpotifyIframeApi=IFrameAPI;spotifyAPIReady=true;criarPlayerSpotify();};
-    function criarPlayerSpotify(){
-      if(spotifyController||!spotifyAPIReady)return;
-      const host=document.getElementById('radio-spotify-host');if(!host)return;
-      try{
-        const options={width:'100%',height:152,url:RADIO_STATIONS[radioState.station].url};
-        window.SpotifyIframeApi.createController(host,options,controller=>{
-          spotifyController=controller;
-          controller.addListener('ready',()=>{definirStatusRadio('Pronta · '+RADIO_STATIONS[radioState.station].name);if(radioState.autoplay&&radioState.userInteracted&&!radioState.started)setTimeout(tocarRadio,80);});
-          controller.addListener('playback_started',()=>{radioState.started=true;definirStatusRadio('Tocando · '+RADIO_STATIONS[radioState.station].name);salvarRadioConfig();});
-          controller.addListener('playback_update',e=>{if(e?.data?.isPaused){radioState.started=false;definirStatusRadio('Pausada');}else if(e?.data?.isBuffering){definirStatusRadio('Carregando · '+RADIO_STATIONS[radioState.station].name);}});
-          definirStatusRadio('Carregando estação…');
-        });
-      }catch(e){definirStatusRadio('Não foi possível carregar o Spotify.',true);}
-    }
-    function carregarEstacaoSpotify(){
-      if(!spotifyController){garantirSpotifyAPI();return;}
-      const st=RADIO_STATIONS[radioState.station];
-      try{spotifyController.loadEntity(st.url);definirStatusRadio('Carregando · '+st.name);}
-      catch(e){definirStatusRadio('Não foi possível trocar a estação.',true);}
-    }
-    function tocarRadio(){
-      radioState.userInteracted=true;
-      garantirSpotifyAPI();
-      if(!spotifyController){definirStatusRadio('Carregando o Spotify…');return;}
-      try{spotifyController.resume();definirStatusRadio('Iniciando · '+RADIO_STATIONS[radioState.station].name);}
-      catch(e){definirStatusRadio('Clique novamente para começar.',true);}
-    }
-    function pausarRadio(){if(!spotifyController)return;try{spotifyController.pause();}catch(e){}radioState.started=false;definirStatusRadio('Pausada');salvarRadioConfig();}
-    function alternarRadio(){if(radioState.started)pausarRadio();else tocarRadio();}
-    function trocarRadio(id){if(!RADIO_STATIONS[id])return; if(typeof registrarAuditoria==='function'&&sessionUser)registrarAuditoria('preferência',`Trocou a rádio para ${RADIO_STATIONS[id].name}`);const tocando=radioState.started;radioState.station=id;salvarRadioConfig();atualizarRadioUI();if(spotifyController){carregarEstacaoSpotify();if(tocando)setTimeout(tocarRadio,180);}else{garantirSpotifyAPI();}}
-    function minimizarRadio(){radioState.minimized=!radioState.minimized;salvarRadioConfig();atualizarRadioUI();}
-    function ocultarRadio(){radioState.hidden=true;salvarRadioConfig();atualizarRadioUI();}
-    function mostrarRadio(){radioState.hidden=false;salvarRadioConfig();atualizarRadioUI();garantirSpotifyAPI();}
-    function iniciarRadioAposInteracao(){
-      if(!radioState.autoplay||radioState.started)return;
-      const iniciar=()=>{radioState.userInteracted=true;if(!radioState.started)tocarRadio();document.removeEventListener('pointerdown',iniciar);document.removeEventListener('keydown',iniciar);};
-      document.addEventListener('pointerdown',iniciar,{once:true,passive:true});document.addEventListener('keydown',iniciar,{once:true});
-    }
-    function inicializarRadio(){
-      carregarRadioConfig();
-      const abrir=document.getElementById('radio-open-btn');
-      if(abrir){abrir.onclick=mostrarRadio;}
-      atualizarRadioUI();garantirSpotifyAPI();
-      if(radioState.autoplay)iniciarRadioAposInteracao();
-    }
 
     const UI_SOUND_KEY = 'fabrica_ui_sons';
     const uiSound = { enabled: true, ctx: null, master: null };
@@ -1678,7 +1563,7 @@
 
     function escaparTextoAuditoria(v){return escapeHtml(v).replace(/\n/g,' ');}
     function obterSessaoSalva(){try{return sessionStorage.getItem('fabricaUsuarioSessao')||'';}catch(e){return '';}}
-    function atualizarSessaoUI(){const nome=sessionUser||'Nenhum sócio';const el=document.getElementById('session-user-label');if(el)el.textContent=nome;const greet=document.getElementById('jcraft-greeting-name');if(greet)greet.textContent=sessionUser||'fábrica';const mini=document.getElementById('jcraft-session-mini');if(mini)mini.textContent=`● ${nome}`;const d=document.getElementById('jcraft-header-date'),t=document.getElementById('jcraft-header-time');if(d||t){const agora=agoraCuritiba();if(d)d.textContent=agora.toLocaleDateString('pt-BR',{day:'2-digit',month:'2-digit',year:'numeric'});if(t)t.textContent=agora.toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'});}}
+    function atualizarSessaoUI(){const nome=sessionUser||'Nenhum sócio';const el=document.getElementById('session-user-label');if(el)el.textContent=nome;const greet=document.getElementById('jcraft-greeting-name');if(greet)greet.textContent=sessionUser||'fábrica';const d=document.getElementById('jcraft-header-date'),t=document.getElementById('jcraft-header-time');if(d||t){const agora=agoraCuritiba();if(d)d.textContent=agora.toLocaleDateString('pt-BR',{day:'2-digit',month:'2-digit',year:'numeric'});if(t)t.textContent=agora.toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'});}}
     function abrirLoginSocio(){const m=document.getElementById('modal-login-socio');if(m){m.style.display='flex';m.classList.add('session-login-backdrop');}}
     function fecharLoginSocio(){const m=document.getElementById('modal-login-socio');if(m)m.style.display='none';}
     function entrarComoSocio(nome){if(!['Ramom','Monique'].includes(nome))return;const anterior=sessionUser;sessionUser=nome;try{sessionStorage.setItem('fabricaUsuarioSessao',nome);}catch(e){}atualizarSessaoUI();fecharLoginSocio();registrarAuditoria('login',`Entrou como ${nome}${anterior&&anterior!==nome?` e trocou de ${anterior}`:''}`);showToast(`Sessão ativa: ${nome}.`);}
@@ -1826,7 +1711,7 @@ Esta ação não pode ser desfeita pelo sistema. Confirme somente se este é o a
     function fecharModalFinanceiro(){const m=document.getElementById('modal-financeiro');if(m)m.style.display='none';document.body.style.overflow='';}
     document.addEventListener('keydown',e=>{if(e.key==='Escape'){fecharModalFinanceiro();}});
 
-    function showToast(msg,tipo='success'){const stack=document.getElementById('toast-stack');if(!stack)return;const el=document.createElement('div');el.className='toast'+(tipo==='warning'?' warning':tipo==='error'?' error':'');el.insertAdjacentHTML('afterbegin',haxiHTML('haxi-sm'));const tx=document.createElement('span');tx.textContent=msg;el.appendChild(tx);stack.appendChild(el);try{haxiReagir(tipo);}catch(e){}setTimeout(()=>{el.style.opacity='0';el.style.transform='translateY(6px)';setTimeout(()=>el.remove(),180)},3200);}
+    function showToast(msg,tipo='success'){const stack=document.getElementById('toast-stack');if(!stack)return;const el=document.createElement('div');el.className='toast'+(tipo==='warning'?' warning':tipo==='error'?' error':'');el.insertAdjacentHTML('afterbegin',haxiHTML('haxi-sm'));const tx=document.createElement('span');tx.textContent=msg;el.appendChild(tx);stack.appendChild(el);setTimeout(()=>{el.style.opacity='0';el.style.transform='translateY(6px)';setTimeout(()=>el.remove(),180)},3200);}
     function toggleTab(tabName){
       if(!exigirSessao())return;
       const target=document.getElementById('tab-'+tabName); if(!target)return;
@@ -1965,7 +1850,6 @@ Esta ação não pode ser desfeita pelo sistema. Confirme somente se este é o a
     }
 
     function renderizarJcraftHome(r,margem){
-      const mini=document.getElementById('jcraft-session-mini'),sessionLabel=document.getElementById('session-user-label');if(mini)mini.textContent=`● ${sessionLabel?.textContent||'Sessão'}`;
       const result=document.getElementById('jcraft-result-value');if(result)result.textContent=formatarMoeda(r.lucro);const resultMeta=document.getElementById('jcraft-result-meta');if(resultMeta){const pct=num(appData.splitRamomPct||50);resultMeta.textContent=`Margem ${margem.toFixed(1)}% · Ramom ${pct}% · Monique ${100-pct}%`;}
       const railPartner=document.getElementById('jcraft-rail-partner-value');if(railPartner)railPartner.textContent=formatarMoeda(r.parceirosVendido);const railPartnerMeta=document.getElementById('jcraft-rail-partner-meta');if(railPartnerMeta)railPartnerMeta.textContent=`${r.parceirosQtd.toLocaleString('pt-BR')} itens · 100% destinado ao parceiro`;
       const orders=(appData.pedidos||[]).slice().sort((a,b)=>String(b.dataCriacao||'').localeCompare(String(a.dataCriacao||'')));const recent=orders.slice(0,3);
@@ -1981,7 +1865,6 @@ Esta ação não pode ser desfeita pelo sistema. Confirme somente se este é o a
 
     function voltarInicio(){if(!exigirSessao())return;document.querySelector('.jcraft-app')?.classList.remove('is-tab-open');document.querySelectorAll('.tab-content').forEach(c=>c.classList.remove('active'));document.querySelectorAll('.tab-btn').forEach(b=>{b.classList.remove('active');b.removeAttribute('aria-current');});document.querySelectorAll('.jcraft-nav-action').forEach(b=>{b.classList.remove('active');b.removeAttribute('aria-current');});document.querySelectorAll('.jcraft-nav-home').forEach(b=>{b.classList.add('active');b.setAttribute('aria-current','page');});document.querySelector('.dashboard-overview')?.scrollIntoView({behavior:'smooth',block:'start'});registrarAuditoria('navegação','Voltou ao início');}
     function abrirAtalhoJcraft(tab){if(!exigirSessao())return;toggleTab(tab);const map={pedidos:'form-pedido',produtos:'form-produto',fornecedores:'form-fornecedor'},el=document.getElementById(map[tab]);if(el)el.scrollIntoView({behavior:'smooth',block:'start'});}
-    function abrirFerramentas(){if(!exigirSessao())return;document.querySelector('.jcraft-app')?.classList.remove('is-tab-open');document.querySelectorAll('.tab-content').forEach(c=>c.classList.remove('active'));document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));document.querySelectorAll('.jcraft-nav-home').forEach(b=>b.classList.remove('active'));document.querySelectorAll('.jcraft-nav-action').forEach(b=>b.classList.remove('active'));document.querySelector('.app-toolbar')?.scrollIntoView({behavior:'smooth',block:'start'});document.querySelectorAll('.jcraft-nav-action').forEach(b=>{if(b.textContent.includes('Ferramentas')){b.classList.add('active');b.setAttribute('aria-current','page');}});registrarAuditoria('navegação','Abriu as ferramentas da fábrica');}
 
     function selecionarCategoriaPedido(categoria){document.getElementById('pedido-categoria').value=categoria;document.getElementById('cat-btn-cliente').className='cat-btn'+(categoria==='Cliente'?' active-cliente':'');document.getElementById('cat-btn-socio').className='cat-btn'+(categoria==='Socio'?' active-socio':'');document.getElementById('container-campos-cliente').style.display=categoria==='Socio'?'none':'grid';atualizarCalculoPedido();}
     function alternarCamposEnvio(){const e=document.getElementById('pedido-envio'),c=document.getElementById('container-detalhes-entrega');if(c)c.style.display=e.value==='Entrega por Conta'?'grid':'none';}
@@ -2151,23 +2034,12 @@ Esta ação não pode ser desfeita pelo sistema. Confirme somente se este é o a
     }
     function alternarLayoutNavegacao(){const app=document.querySelector('.jcraft-app');aplicarLayoutNavegacao(app&&app.classList.contains('nav-top')?'lateral':'superior');}
     (function(){try{aplicarLayoutNavegacao('lateral')}catch(e){aplicarLayoutNavegacao('lateral')}})();
-/* Haxixinho mascote: companheiro que acompanha o usuário, reage aos avisos e decora telas vazias. */
-const HAXI_KEY='fabrica_mascote';let haxiUltimoClique=0,haxiAgendado=false;
+/* Haxixinho: componente reutilizável (avisos, telas vazias, login e barra lateral). */
+let haxiAgendado=false;
 function haxiHTML(cls){return '<span class="haxi'+(cls?' '+cls:'')+'" aria-hidden="true"><i class="haxi-lid l"></i><i class="haxi-lid r"></i><i class="haxi-ember"></i><i class="haxi-smoke s1"></i><i class="haxi-smoke s2"></i><i class="haxi-smoke s3"></i></span>';}
-function haxiReagir(tipo){const c=document.getElementById('haxi-companion');if(!c||c.hidden)return;const k=tipo==='error'?'shake':'hop';c.classList.remove('hop','shake');void c.offsetWidth;c.classList.add(k);setTimeout(()=>c.classList.remove(k),650);}
-function haxiFalar(txt){const c=document.getElementById('haxi-companion');if(!c)return;c.querySelector('.haxi-bubble').textContent=txt;c.classList.add('fala');clearTimeout(c._falaT);c._falaT=setTimeout(()=>c.classList.remove('fala'),3400);}
-function haxiSeguir(ev){const c=document.getElementById('haxi-companion');if(!c||c.hidden)return;if(ev.target.closest&&ev.target.closest('#haxi-companion'))return;const agora=Date.now();if(agora-haxiUltimoClique<1500)return;haxiUltimoClique=agora;const w=c.offsetWidth||74,atual=c.getBoundingClientRect().left,lado=ev.clientX>innerWidth/2?-(w+40):40,alvo=Math.max(8,Math.min(innerWidth-w-8,ev.clientX+lado));const dist=Math.abs(alvo-atual);if(dist<24)return;c.style.setProperty('--face',alvo<atual?-1:1);c.style.transitionDuration=Math.min(3.2,Math.max(1.2,dist/220))+'s';c.classList.add('walking');c.style.left=alvo+'px';clearTimeout(c._walkT);c._walkT=setTimeout(()=>c.classList.remove('walking'),3400);}
-function atualizarBotaoMascote(){const c=document.getElementById('haxi-companion'),b=document.getElementById('mascote-toggle');if(b)b.setAttribute('aria-pressed',String(!!c&&!c.hidden));}
-function alternarMascote(){const c=document.getElementById('haxi-companion');if(!c)return;c.hidden=!c.hidden;try{localStorage.setItem(HAXI_KEY,c.hidden?'off':'on');}catch(e){}atualizarBotaoMascote();}
 function decorarVazios(){document.querySelectorAll('td[colspan],.empty-state').forEach(el=>{if(el.dataset.haxi||el.id==='produto-preco-nota')return;if(el.tagName==='TD'&&el.querySelector('.empty-state'))return;const t=(el.textContent||'').trim();if(t.length>160||!/^(Nenhum|Nenhuma|Ainda não)\b/i.test(t))return;el.dataset.haxi='1';el.insertAdjacentHTML('afterbegin','<span class="haxi-vazio">'+haxiHTML()+'</span>');});}
-function inicializarMascote(){if(document.getElementById('haxi-companion'))return;const c=document.createElement('div');c.id='haxi-companion';c.className='haxi-companion';c.innerHTML='<div class="haxi-bubble" role="status" aria-live="polite"></div><button type="button" class="haxi-btn" title="Haxixinho — clique para ver os pedidos pendentes" aria-label="Haxixinho: ver pedidos pendentes">'+haxiHTML()+'</button>';let off=false;try{off=localStorage.getItem(HAXI_KEY)==='off';}catch(e){}c.hidden=off;c.style.left=(innerWidth>860?256:12)+'px';document.body.appendChild(c);
-c.querySelector('.haxi-btn').addEventListener('click',()=>{const n=((typeof appData!=='undefined'&&appData.pedidos)||[]).filter(p=>p.status==='Pendente').length;haxiFalar(n?n+(n>1?' pedidos pendentes':' pedido pendente'):'Nenhum pedido pendente');haxiReagir('ok');});
-c.addEventListener('transitionend',e=>{if(e.propertyName==='left')c.classList.remove('walking');});
-document.addEventListener('pointerdown',haxiSeguir,{passive:true});
-new MutationObserver(()=>{if(haxiAgendado)return;haxiAgendado=true;requestAnimationFrame(()=>{haxiAgendado=false;decorarVazios();});}).observe(document.body,{childList:true,subtree:true});
-atualizarBotaoMascote();decorarVazios();}
-if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',inicializarMascote);else inicializarMascote();
-    if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',inicializarRadio);else inicializarRadio();
+function inicializarVazios(){decorarVazios();new MutationObserver(()=>{if(haxiAgendado)return;haxiAgendado=true;requestAnimationFrame(()=>{haxiAgendado=false;decorarVazios();});}).observe(document.body,{childList:true,subtree:true});}
+if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',inicializarVazios);else inicializarVazios();
 
     function auditoriaEstruturalV20(){
       const ids=[...document.querySelectorAll('[id]')].map(x=>x.id);const dup=ids.filter((x,i)=>ids.indexOf(x)!==i);
@@ -2177,38 +2049,6 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
     window.__FabricaV20Audit=auditoriaEstruturalV20;
   </script>
 
-    <div class="radio-shell">
-      <aside class="radio-player" id="radio-player" aria-label="Rádio ambiente">
-        <div class="radio-top">
-          <div class="radio-art" id="radio-art" aria-hidden="true"><i class="ti ti-coffee"></i></div>
-          <div class="radio-copy">
-            <div class="radio-kicker">Rádio da fábrica</div>
-            <div class="radio-name" id="radio-name"><i class="ti ti-coffee"></i> Lo-fi &amp; Chill</div>
-            <div class="radio-status" id="radio-status">Pronta para tocar</div>
-          </div>
-          <div class="radio-controls">
-            <button type="button" class="radio-btn primary" id="radio-play" onclick="alternarRadio()" aria-label="Tocar rádio" title="Tocar rádio"><i class="ti ti-player-play" aria-hidden="true"></i></button>
-            <button type="button" class="radio-btn" id="radio-minimize-btn" onclick="minimizarRadio()" aria-label="Minimizar rádio" title="Minimizar rádio"><i class="ti ti-minus" aria-hidden="true"></i></button>
-          </div>
-        </div>
-        <div class="radio-details">
-          <select class="radio-select" id="radio-station" onchange="trocarRadio(this.value)" aria-label="Escolher estação">
-            <option value="lofi">Lo-fi &amp; Chill</option>
-            <option value="jazz">Jazz 60s / Standards</option>
-            <option value="reggae">Reggae Roots</option>
-            <option value="hitech">Hitech / Dark Psy</option>
-          </select>
-          <div class="radio-bottom">
-            <span class="radio-help">Player Spotify integrado</span>
-            <button type="button" class="radio-hide" onclick="ocultarRadio()" title="Ocultar rádio sem pausar">Ocultar</button>
-          </div>
-        </div>
-        <div class="radio-embed" id="radio-embed" aria-label="Player Spotify">
-          <div class="radio-embed-host" id="radio-spotify-host"></div>
-        </div>
-        <div class="radio-note">O Spotify mantém os controles de reprodução dentro do player.</div>
-      </aside>
-    </div>
 
 </body>
 </html>
